@@ -15,6 +15,13 @@
     <Implicit_KindOfTask>{389097bf-f6d6-4627-b6d5-d8c58254b8a9}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{9571b800-3cbb-4490-9af6-a1013ff71bd1}</Implicit_Jitter_Distribution>
     <LibraryReferences>{1c1d8a93-1736-437e-b538-e21ada2f6c38}</LibraryReferences>
+    <Company>SLAC - LCLS</Company>
+    <Released>false</Released>
+    <Title>Photon Machine Protection System Library</Title>
+    <ProjectVersion>0.0.0</ProjectVersion>
+    <Author>A. Wallace</Author>
+    <Description>Collection of PMPS functionality for LCLS PLCs</Description>
+    <CombineIds>false</CombineIds>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\ST_BeamParams.TcDUT">
@@ -211,11 +218,6 @@
     <SubObject Include="FB_SafeBPCompare_Test.BeamOffIsSafe" />
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
     <SubObject Include="FB_UsualSuspects.M_Register" />
-  </ItemGroup>
-  <ItemGroup>
-    <LibraryReference Include="UML Statechart Types,4.0.5.0,3S - Smart Software Solutions GmbH">
-      <Namespace>UML_SC</Namespace>
-    </LibraryReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library.tmc">
