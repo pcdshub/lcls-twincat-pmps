@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_BPRequestor" Id="{936fd650-d613-49d0-b979-ce2a79a2ad53}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BPRequestor
+VAR_INPUT
+	stReqBP	:	ST_BeamParams;
+END_VAR
+VAR_OUTPUT
+	q_stReqBP :	ST_BeamParams;
+	q_ReqAtt  : REAL;
+END_VAR
+VAR
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[q_stReqBP := stReqBP;
+q_ReqAtt := stReqBP.fAtt;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

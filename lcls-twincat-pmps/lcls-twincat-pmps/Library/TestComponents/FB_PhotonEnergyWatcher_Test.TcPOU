@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_PhotonEnergyWatcher_Test" Id="{e76e3f02-a717-47db-b27b-f0213e4a9384}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_PhotonEnergyWatcher_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[PEWatcherBasicFunction();]]></ST>
+    </Implementation>
+    <Method Name="PEWatcherBasicFunction" Id="{9882a49a-9895-425c-a199-feec81d853df}">
+      <Declaration><![CDATA[METHOD PEWatcherBasicFunction
+VAR_INPUT
+END_VAR
+VAR
+	fbPEW	:	FB_PhotonEnergyWatcher;
+	fbFFO	:	FB_HardwareFFOutput;
+	q_Output	:	BOOL;
+	
+	stCurBeamParams	:	ST_BeamParams;
+	stMachineTargetBeamParams	:	ST_BeamParams;
+	stReqBeamParams	:	ST_BeamParams;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('PEWatcherBasicFunction');
+
+//Clear FFO fault to start
+fbFFO(i_xReset:=TRUE);
+
+//All eV OK
+stCurBeamParams.reV := 800;
+	
+stMachineTargetBeamParams.reV := 800;
+
+stReqBeamParams.neVRange := 2#1111_1111_1111_1111;	
+
+fbFFO(i_xReset:=FALSE); //Reset request released
+	
+fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+	i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+	i_stRequestedBeamParams := stReqBeamParams,
+	io_fbFFHWO := fbFFO,
+	i_xReset := TRUE); //Clear local FF within PEW
+	
+fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output); //This simulates a completed PLC cycle
+//Evaluate output should be called once at the end of a PLC cycle.
+
+AssertTrue(q_Output,
+	'Beam within limits, FFO should be true');
+	
+	
+//Req eV moved out of range
+stCurBeamParams.reV := 800;
+	
+stMachineTargetBeamParams.reV := 800;
+
+stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+fbPEW.i_xReset := FALSE; //release local FF reset req	
+fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+	i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+	i_stRequestedBeamParams := stReqBeamParams,
+	io_fbFFHWO := fbFFO);
+	
+fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+AssertFalse(q_Output,
+	'Limits moved beyond current and target beam, should produce a fault.');
+
+//Beam and target eV moved back within permitted ranges, reset clears fault
+stCurBeamParams.reV := 300;
+	
+stMachineTargetBeamParams.reV := 300;
+
+stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+fbFFO(i_xReset:=TRUE); //New reset request
+
+fbPEW.i_xReset := TRUE; //New reset request
+
+fbPEW(i_stCurrentBeamParams := stCurBeamParams, //Beam params are now within spec
+	i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+	i_stRequestedBeamParams := stReqBeamParams,
+	io_fbFFHWO := fbFFO);
+	
+fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+AssertTrue(q_Output,
+	'Beam within limits after reset, FFO should be true');
+	
+//At this point, the fast fault would be cleared
+
+//Current beam eV moved out of range
+stCurBeamParams.reV := 800; //Moved out of range
+	
+stMachineTargetBeamParams.reV := 300; //Still within range
+
+stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+	i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+	i_stRequestedBeamParams := stReqBeamParams,
+	io_fbFFHWO := fbFFO);
+	
+fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+AssertFalse(q_Output,
+	'Current beam moved beyond set limits, should produce a fault');
+
+//Target beam eV moved out of range
+fbFFO(i_xReset:=FALSE); //Reset released
+fbFFO(i_xReset:=TRUE); //New reset request comes in at the top of a cycle, but will be overridden
+
+stCurBeamParams.reV := 300; //Now within range
+	
+stMachineTargetBeamParams.reV := 800; //Moved out of range
+
+stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+fbPEW.i_xReset := TRUE; //Attempt to reset local FF will fail
+fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+	i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+	i_stRequestedBeamParams := stReqBeamParams,
+	io_fbFFHWO := fbFFO);
+	
+fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+AssertFalse(q_Output,
+	'Target beam moved beyond set limits, should produce a fault');
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

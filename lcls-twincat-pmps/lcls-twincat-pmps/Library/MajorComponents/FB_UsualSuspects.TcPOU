@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_UsualSuspects" Id="{5e4db811-dc52-47fb-8b26-428ab0ea2398}" SpecialFunc="None">
+    <Declaration><![CDATA[//Used to register fast faults
+FUNCTION_BLOCK FB_UsualSuspects
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	asList	:	ARRAY[0..cMaxList] OF T_MaxString;
+	nIndex	:	INT;
+END_VAR
+VAR CONSTANT
+	cMaxList	:	INT := 99;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="M_Register" Id="{6496e1b3-0bfe-4081-843b-f88cadd99795}">
+      <Declaration><![CDATA[METHOD M_Register : BOOL
+VAR_INPUT
+	i_sFFName	:	STRING; //Fast fault FB variable name to register
+END_VAR
+
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^.nIndex <= THIS^.cMaxList THEN
+	THIS^.asList[MIN(THIS^.nIndex,THIS^.cMaxList)]:=i_sFFName;
+	THIS^.nIndex := THIS^.nIndex + 1;
+	M_Register := TRUE; //Add successful
+ELSE
+	M_Register := FALSE; //failed to add name to list
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

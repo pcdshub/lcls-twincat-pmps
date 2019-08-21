@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_FastFault" Id="{4f87b098-c3de-4b74-a706-919749bcb97f}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'reflection'}
+FUNCTION_BLOCK FB_FastFault
+VAR_INPUT
+	i_xOK		:	BOOL;
+	i_xReset	:	BOOL; //resets when i_xOK is true and this is true
+END_VAR
+VAR_OUTPUT
+	o_xFFLine	:	BOOL; //Connect to HW output or another FF input if you like
+END_VAR
+VAR_IN_OUT
+	io_fbFFHWO		:	FB_HardwareFFOutput;
+END_VAR
+VAR
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	sPath	:	T_MaxString;
+	
+	xInit	:	BOOL :=TRUE;
+	bsFF	:	RS;
+	rtReset	:	R_TRIG;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xInit	THEN
+	io_fbFFHWO.Register(i_sFFName:=sPath);
+	//<TODO> if registration doesn't succeed, send warning to diagnostic
+	xInit := FALSE;
+END_IF
+
+
+rtReset(CLK:=i_xReset);
+bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK);
+o_xFFLine := bsFF.Q1;
+io_fbFFHWO.CheckIn(bsFF.Q1);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

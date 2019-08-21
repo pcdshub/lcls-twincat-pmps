@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_Arbiter" Id="{7464182c-a23a-4d85-9b4a-38e22935bfb9}" SpecialFunc="None">
+    <Declaration><![CDATA[(* FB Arbiter
+
+The arbiter primary objectives are:
+- Provide a simple interface for devices to request beam parameter sets
+- Provide a way for devices to verify their BPS is active in the arbiter
+- Provide a way for devices remove their requests from evaluation
+- Evaluate all active beam parameter requests registered with the aribiter,
+to determine the safest combination of all sets, provide this set as an output.
+- Do all of this with minimal overhead
+
+To these ends, the arbiter uses a hash-table, the rows being a state-id as the key, and a corresponding
+ beam parameter set to be evaluated against all the other sets (or rows), in the table.
+ 
+The hash table can be thought of as an array on steriods, they are worth reading about, suffice to say
+the hash table will tell you when you reach the end of all the entries, and enables us to find entries quickly.
+
+These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
+
+An important thing to pay attention to is the A_Arbitrate action. This action implements the evaluation of beam parameter
+sets against each other.
+
+*)
+
+FUNCTION_BLOCK FB_Arbiter
+VAR_INPUT
+	i_nStateID	:	UDINT; //Set to the stateID of the state requesting the beam parameter set
+	i_stAssertBeamParams	:	ST_BeamParams; //Set to the beam parameter set of the state required
+END_VAR
+VAR_OUTPUT
+	q_stBeamParams	:	ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+	
+	q_xStateIDFound	:	BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
+END_VAR
+VAR
+	
+	fbBPAssertionPool	:	FB_BeamParamAssertionPool; //Table of active beam parameter assertions
+	
+	getPosPtr	: POINTER TO T_HashTableEntry := 0; 
+	getBPStruct	:	ST_BeamParams;
+	stOutputBP	:	ST_BeamParams; //Safest beam parameters from all in the assertion pool
+	
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Action Name="A_Init" Id="{d90d3096-acfe-43c2-8972-df061ff37015}">
+      <Implementation>
+        <ST><![CDATA[// Clears the entire beam parameter assertion pool (hashtable).
+
+fbBPAssertionPool.A_Reset();]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="AddRequest" Id="{f6e392d1-3a4a-4d38-b38d-86d9847b5a7a}">
+      <Declaration><![CDATA[METHOD AddRequest : BOOL
+VAR_INPUT
+	nReqID	:	DWORD; //StateID of state requesting beam parameter set
+	stReqBP		:	ST_BeamParams; //Requested beam params
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^.CheckRequest(nReqID) THEN
+	AddRequest := FALSE;
+	RETURN;
+END_IF
+
+IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+	THIS^.fbBPAssertionPool.A_Add(
+		key := nReqID,
+		putValue := stReqBP
+	);
+END_IF
+	
+IF NOT THIS^.fbBPAssertionPool.bOk THEN
+	; //Overflow <TODO>
+END_IF
+
+AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
+      <Declaration><![CDATA[METHOD ArbitrateBP : ST_BeamParams
+VAR_INPUT
+	stBP1	:	ST_BeamParams;
+	stBP2	:	ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
+
+//Attenuation
+ArbitrateBP.fAtt := MAX(stBP1.fAtt, stBP2.fAtt);
+
+//Pulse energy
+ArbitrateBP.fPP_mJ := MIN(stBP1.fPP_mJ, stBP2.fPP_mJ);
+
+//Photon energy ranges
+ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
+
+//Rate
+ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckRequest" Id="{a64ed6c5-2c93-405e-97a2-fa37d439d3b2}">
+      <Declaration><![CDATA[(* Searches state assertion pool for a state-id, and sets q_xStateIDFound true if found.
+
+Use like so:
+
+fbArbiter.A_VerifyAssertion(
+i_nStateId := nStateIDAssertionToCheck
+);
+
+IF fbArbiter.q_xStateIDFound THEN:
+	Do something
+ELSE:
+	Don't do something
+
+*)
+METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	:	DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.fbBPAssertionPool.A_Lookup(key := nReqID);
+
+CheckRequest := THIS^.fbBPAssertionPool.bOk;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetArbitratedBP" Id="{aa6541e9-3c4b-40dc-96cf-1afc4ec47cdb}">
+      <Declaration><![CDATA[METHOD GetArbitratedBP : ST_BeamParams
+VAR_INPUT
+END_VAR
+VAR
+	getPosPtr	: POINTER TO T_HashTableEntry := 0;
+	getBPStruct	:	ST_BeamParams;
+	
+	stOutputBP	:	ST_BeamParams; //Holding struct for arbitration process
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Arbitrate
+(*
+This step cycles through every hash table entry, comparing
+the beam parameters from each assertion to what we're planning
+to assert.
+
+The safer of the two parameters is kept so at the end we may
+have a mix of beam parameters, the composition being safe for
+all asserters.
+
+*)
+
+THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStruct );
+IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
+	
+	//The first entry in the hash table is taken as the setting to arbitrate against
+	stOutputBP := F_SetBeamParams(
+		fAtt := getBPStruct.fAtt,
+		fPP_mJ := getBPStruct.fPP_mJ,
+		neVRange	:= getBPStruct.neVRange,
+		nRate := getBPStruct.nRate
+	);
+
+	REPEAT
+		THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStruct );
+		IF THIS^.fbBPAssertionPool.bOk THEN
+			stOutputBP := ArbitrateBP(stOutputBP, getBPStruct);
+		END_IF
+	UNTIL NOT fbBPAssertionPool.bOk
+	END_REPEAT
+ELSE
+	//Safest parameters to start
+	stOutputBP := PMPS_GVL.cstSafeBeam;
+END_IF
+
+THIS^.q_stBeamParams := stOutputBP;
+
+GetArbitratedBP.fAtt := stOutputBP.fAtt;
+GetArbitratedBP.fPP_mJ := stOutputBP.fPP_mJ;
+GetArbitratedBP.nBeamClass := stOutputBP.nBeamClass;
+GetArbitratedBP.neVRange := stOutputBP.neVRange;
+GetArbitratedBP.nRate := stOutputBP.nRate;
+GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveRequest" Id="{79807308-416c-48f2-9db0-385196c0e213}">
+      <Declaration><![CDATA[(* Searches for a state-id, and removes it from the assertion pool.
+
+Use like so:
+fbArbiter.A_RemoveAssertion(
+i_nStateId := nStateIDAssertionToRemove
+);
+
+*)
+METHOD RemoveRequest : BOOL
+VAR_INPUT
+	nReqId	:	DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+	THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
+	
+	IF THIS^.fbBPAssertionPool.bOk THEN
+		;
+	ELSE
+		;
+	END_IF
+END_IF
+
+RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

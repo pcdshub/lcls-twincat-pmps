@@ -17,18 +17,134 @@
     <LibraryReferences>{1c1d8a93-1736-437e-b538-e21ada2f6c38}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\ST_BeamParams.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\PMPS_GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\F_DeviceState_To_DeviceStateExt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_DiffBeamParamsRB.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_DifferentBeamParams.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_DiffReqBeamParams.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_eVRangeCalculator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_eVWithinSpec.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_SafeBPCompare.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_SetBeamParams.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_Arbiter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_BeamClassOutputs.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_BeamParamAssertionPool.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_BeamParamFanout.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_BPRequestor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_FastFault.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_HardwareFFOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_LinearDeviceStateTable.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_LinearGovernor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_PhotonEnergyWatcher.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_UsualSuspects.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\MAIN.TcPOU">
+    <Compile Include="TestComponents\eBPTMTestStates.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_Arbiter_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_AttenuatorSimulator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_BeamParamFanout_Test.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="TestComponents\FB_BPRequestor_Test.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_evRangeCalculator_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_eVWithinSpec_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_FastFault_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_MachineSimulator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_PhotonEnergyWatcher_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_SafeBPCompare_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_SolidAttenuator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
+    <Folder Include="HelperFunctions" />
+    <Folder Include="MajorComponents" />
+    <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
-    <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="Tc2_Standard">
@@ -39,18 +155,95 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="TcUnit">
+      <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
+      <Namespace>TcUnit</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="UML State Chart Types">
+      <DefaultResolution>UML Statechart Types, 4.0.5.0 (3S - Smart Software Solutions GmbH)</DefaultResolution>
+      <Namespace>UML_SC</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>d9a6b70a-92f0-4827-8ca3-8ce8a61652d9</ResolverGuid>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SubObject Include="FB_Arbiter.AddRequest" />
+    <SubObject Include="FB_Arbiter.ArbitrateBP" />
+    <SubObject Include="FB_Arbiter.A_Init" />
+    <SubObject Include="FB_Arbiter.CheckRequest" />
+    <SubObject Include="FB_Arbiter.GetArbitratedBP" />
+    <SubObject Include="FB_Arbiter.RemoveRequest" />
+    <SubObject Include="FB_Arbiter_Test.Arbitration" />
+    <SubObject Include="FB_Arbiter_Test.RequestCheckRemoveBP" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_Add" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_Count" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_GetFirst" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_GetNext" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_Lookup" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_Remove" />
+    <SubObject Include="FB_BeamParamAssertionPool.A_Reset" />
+    <SubObject Include="FB_BeamParamFanout_Test.BPFanoutSafeguard" />
+    <SubObject Include="FB_BPRequestor_Test.BPRequestorSafeGuardFunctionality" />
+    <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
+    <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
+    <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
+    <SubObject Include="FB_FastFault_Test.FFCombinedFunctionality" />
+    <SubObject Include="FB_FastFault_Test.FFRegistration" />
+    <SubObject Include="FB_HardwareFFOutput.CheckIn" />
+    <SubObject Include="FB_HardwareFFOutput.EvaluateOutput" />
+    <SubObject Include="FB_HardwareFFOutput.Register" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_Add" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_Count" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_GetFirst" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_GetNext" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_Lookup" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_Remove" />
+    <SubObject Include="FB_LinearDeviceStateTable.A_Reset" />
+    <SubObject Include="FB_PhotonEnergyWatcher_Test.PEWatcherBasicFunction" />
+    <SubObject Include="FB_SafeBPCompare_Test.BeamOffIsSafe" />
+    <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
+    <SubObject Include="FB_UsualSuspects.M_Register" />
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="UML Statechart Types,4.0.5.0,3S - Smart Software Solutions GmbH">
+      <Namespace>UML_SC</Namespace>
+    </LibraryReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Library.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
+        <o>
+          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="String">
+            <v>CurrentUmlCompilerVersion</v>
+            <v>4.0.5.1</v>
+          </d>
+        </o>
+        <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
+        <o>
+          <v n="Name">"{8F99A816-E488-41E4-9FA3-846536012284}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
         <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
         <o>
           <v n="Name">"{40450F57-0AA3-4216-96F3-5444ECB29763}"</v>
@@ -60,22 +253,16 @@
             <v>IR0whWr8bwfwBwAAhiaVXgAAAABVAgAAWdTSaQAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsAZgA5ADUAYgBiADQAMgA2AC0ANQA1ADIANAAtADQAYgA0ADUALQA5ADQAMAAwAC0AZgBiADAAZgAyAGUANwA3AGUANQAxAGIAfQADCE4AYQBtAGUABDBUAHcAaQBuAEMAQQBUACAAMwAuADEAIABCAHUAaQBsAGQAIAA0ADAAMgA0AC4AMAAFFlAAcgBvAGYAaQBsAGUARABhAHQAYQAGTHsAMQA2AGUANQA1AGIANgAwAC0ANwAwADQAMwAtADQAYQA2ADMALQBiADYANQBiAC0ANgAxADQANwAxADMAOAA3ADgAZAA0ADIAfQAHEkwAaQBiAHIAYQByAGkAZQBzAAhMewAzAGIAZgBkADUANAA1ADkALQBiADAANwBmAC0ANABkADYAZQAtAGEAZQAxAGEALQBhADgAMwAzADUANgBhADUANQAxADQAMgB9AAlMewA5AGMAOQA1ADgAOQA2ADgALQAyAGMAOAA1AC0ANAAxAGIAYgAtADgAOAA3ADEALQA4ADkANQBmAGYAMQBmAGUAZABlADEAYQB9AAoOVgBlAHIAcwBpAG8AbgALBmkAbgB0AAwKVQBzAGEAZwBlAA0KVABpAHQAbABlAA4aVgBpAHMAdQBFAGwAZQBtAE0AZQB0AGUAcgAPDkMAbwBtAHAAYQBuAHkAEAxTAHkAcwB0AGUAbQARElYAaQBzAHUARQBsAGUAbQBzABIwVgBpAHMAdQBFAGwAZQBtAHMAUwBwAGUAYwBpAGEAbABDAG8AbgB0AHIAbwBsAHMAEyhWAGkAcwB1AEUAbABlAG0AcwBXAGkAbgBDAG8AbgB0AHIAbwBsAHMAFCRWAGkAcwB1AEUAbABlAG0AVABlAHgAdABFAGQAaQB0AG8AcgAVIlYAaQBzAHUATgBhAHQAaQB2AGUAQwBvAG4AdAByAG8AbAAWFHYAaQBzAHUAaQBuAHAAdQB0AHMAFwxzAHkAcwB0AGUAbQAYGFYAaQBzAHUARQBsAGUAbQBCAGEAcwBlABkmRABlAHYAUABsAGEAYwBlAGgAbwBsAGQAZQByAHMAVQBzAGUAZAAaCGIAbwBvAGwAGyJQAGwAdQBnAGkAbgBDAG8AbgBzAHQAcgBhAGkAbgB0AHMAHEx7ADQAMwBkADUAMgBiAGMAZQAtADkANAAyAGMALQA0ADQAZAA3AC0AOQBlADkANAAtADEAYgBmAGQAZgAzADEAMABlADYAMwBjAH0AHRxBAHQATABlAGEAcwB0AFYAZQByAHMAaQBvAG4AHhRQAGwAdQBnAGkAbgBHAHUAaQBkAB8WUwB5AHMAdABlAG0ALgBHAHUAaQBkACBIYQBmAGMAZAA1ADQANAA2AC0ANAA5ADEANAAtADQAZgBlADcALQBiAGIANwA4AC0AOQBiAGYAZgBlAGIANwAwAGYAZAAxADcAIRRVAHAAZABhAHQAZQBJAG4AZgBvACJMewBiADAAMwAzADYANgBhADgALQBiADUAYwAwAC0ANABiADkAYQAtAGEAMAAwAGUALQBlAGIAOAA2ADAAMQAxADEAMAA0AGMAMwB9ACMOVQBwAGQAYQB0AGUAcwAkTHsAMQA4ADYAOABmAGYAYwA5AC0AZQA0AGYAYwAtADQANQAzADIALQBhAGMAMAA2AC0AMQBlADMAOQBiAGIANQA1ADcAYgA2ADkAfQAlTHsAYQA1AGIAZAA0ADgAYwAzAC0AMABkADEANwAtADQAMQBiADUALQBiADEANgA0AC0ANQBmAGMANgBhAGQAMgBiADkANgBiADcAfQAmFk8AYgBqAGUAYwB0AHMAVAB5AHAAZQAnVFUAcABkAGEAdABlAEwAYQBuAGcAdQBhAGcAZQBNAG8AZABlAGwARgBvAHIAQwBvAG4AdgBlAHIAdABpAGIAbABlAEwAaQBiAHIAYQByAGkAZQBzACgQTABpAGIAVABpAHQAbABlACkUTABpAGIAQwBvAG0AcABhAG4AeQAqHlUAcABkAGEAdABlAFAAcgBvAHYAaQBkAGUAcgBzACs4UwB5AHMAdABlAG0ALgBDAG8AbABsAGUAYwB0AGkAbwBuAHMALgBIAGEAcwBoAHQAYQBiAGwAZQAsEnYAaQBzAHUAZQBsAGUAbQBzAC1INgBjAGIAMQBjAGQAZQAxAC0AZAA1AGQAYwAtADQAYQAzAGIALQA5ADAANQA0AC0AMgAxAGYAYQA3ADUANgBhADMAZgBhADQALihJAG4AdABlAHIAZgBhAGMAZQBWAGUAcgBzAGkAbwBuAEkAbgBmAG8AL0x7AGMANgAxADEAZQA0ADAAMAAtADcAZgBiADkALQA0AGMAMwA1AC0AYgA5AGEAYwAtADQAZQAzADEANABiADUAOQA5ADYANAAzAH0AMBhNAGEAagBvAHIAVgBlAHIAcwBpAG8AbgAxGE0AaQBuAG8AcgBWAGUAcgBzAGkAbwBuADIMTABlAGcAYQBjAHkAMzBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAFYAZQByAHMAaQBvAG4ASQBuAGYAbwA0MEwAbwBhAGQATABpAGIAcgBhAHIAaQBlAHMASQBuAHQAbwBQAHIAbwBqAGUAYwB0ADUaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaA9ADAS0E0AUGGgfQBwgaAUUHCQjQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtDtAPAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAFQAAANAMC60BAAAA0A0BLRHQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0S0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAUAAAA0AwLrQIAAADQDQEtE9APAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAAAAAANAMC60CAAAA0A0BLRTQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0V0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtFtAPAS0X0AAJGgRFCgsEAwAAAAUAAAANAAAAFQAAANAMC60EAAAA0A0BLRjQDwEtENAZGq0BRRscAdAAHBoCRR0LBAMAAAAFAAAADQAAAAAAAADQHh8tINAhIhoCRSMkAtAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAAAAANADAS0n0CgBLRHQKQEtENAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAQAAANADAS0n0CgBLRHQKQEtEJoqKwFFAAEC0AABLSzQAAEtF9AAHy0t0C4vGgPQMAutAQAAANAxC60XAAAA0DIarQDQMy8aA9AwC60CAAAA0DELrQMAAADQMhqtANA0Gq0A0DUarQA=</v>
           </d>
         </o>
-        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
-        <o>
-          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
-          <d n="SubKeys" t="Hashtable" />
-          <d n="Values" t="Hashtable" />
-        </o>
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

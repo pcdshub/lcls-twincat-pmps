@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_BeamParamFanout_Test" Id="{dd1576e3-6a47-480f-9d83-ec18ad48a9df}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_BeamParamFanout_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="BPFanoutSafeguard" Id="{67cbccc4-d34a-47bc-9756-48abe5d35bab}">
+      <Declaration><![CDATA[METHOD PRIVATE BPFanoutSafeguard
+VAR_INPUT
+END_VAR
+VAR
+	fbBPF	:	FB_BeamParamFanout;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Reset validity bool if interface invalid');
+fbBPF.xTxPDO_state := 0; //OP
+fbBPF();
+AssertTrue(fbBPF.stBP.xValidToggle,
+	'Does not start valid');
+	
+fbBPF.xTxPDO_state := 1; // Not op	
+	
+AssertFalse(fbBPF.stBP.xValidToggle,
+	'Does not indicate invalid after IF goes non-op');
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

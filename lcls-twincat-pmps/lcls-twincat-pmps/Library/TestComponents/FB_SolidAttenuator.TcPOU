@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_SolidAttenuator" Id="{cd5d4e65-a9f8-4b0e-8a86-0aae33fd9f06}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SolidAttenuator
+VAR_INPUT
+	i_rRequestedAttenuation	:	REAL;
+END_VAR
+VAR_OUTPUT
+	q_xFault	:	BOOL;
+	q_rCurrentAttenuation	:	REAL;
+END_VAR
+VAR_IN_OUT
+	Arbiter	:	FB_Arbiter; //Higher level arbiter from which upstream attenuation can be requested
+END_VAR
+VAR
+	stAttenuator	:	ST_BinarySolidAttenuator;
+	nSearchStart: INT;
+	nArrayLength: INT;
+	axNewBladeStates	:	ARRAY [0..9]	OF	BOOL;
+	nTryIndex: INT;
+	rCurrentAccumulatedAttenuation: REAL;
+	rTryFilter: REAL;
+	rTryAttenuation: REAL;
+	rRequestedAttenuation: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+//
+
+//Assuming the blades are ordered thickest to thinnest 
+REPEAT
+	rTryAttenuation := rCurrentAccumulatedAttenuation + stAttenuator.axBlades[nTryIndex].rThickness;
+	IF rRequestedAttenuation >= rTryAttenuation THEN
+		rCurrentAccumulatedAttenuation := rTryAttenuation;
+		axNewBladeStates[nTryIndex] := TRUE;
+	ELSE
+		axNewBladeStates[nTryIndex] := FALSE;
+	END_IF
+UNTIL
+	nTryIndex >= nArrayLength
+END_REPEAT
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

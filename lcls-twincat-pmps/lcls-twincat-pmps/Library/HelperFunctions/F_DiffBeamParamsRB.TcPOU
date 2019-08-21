@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="F_DiffBeamParamsRB" Id="{a8b7ddf4-d06f-4a7f-bc43-0fc6995161fa}" SpecialFunc="None">
+    <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
+the result will be true *)
+FUNCTION F_DiffBeamParamsRB : BOOL
+VAR_INPUT
+	BeamParam1	:	ST_BeamParams;
+	BeamParam2	:	ST_BeamParams;
+END_VAR
+VAR
+	// Internal Attenuation OK boolean
+	xAttOK: BOOL := FALSE;
+	// Internal Per-pulse energy OK boolean
+	xPPmjOK: BOOL := FALSE;
+	// Internal photon energy OK boolean
+	xEvOK: BOOL := FALSE;
+	xRateOK: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[xAttOK := BeamParam1.fAtt <> BeamParam2.fAtt;
+xPPmjOK := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
+xEvOK := BeamParam1.reV <> BeamParam2.reV;
+xRateOK	 := BeamParam1.nRate <> BeamParam2.nRate;
+
+
+F_DiffBeamParamsRB := xAttOK OR xPPmjOK OR xEvOK OR xRateOK;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_BPRequestor_Test" Id="{c6d3581a-a6af-4d48-bb2e-09f77a3f9bdd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_BPRequestor_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="BPRequestorSafeGuardFunctionality" Id="{7127eb59-b63a-41f4-ac69-34ca4a2c3b46}">
+      <Declaration><![CDATA[METHOD PRIVATE BPRequestorSafeGuardFunctionality
+VAR_INPUT
+END_VAR
+VAR
+	fbBPR	:	FB_BPRequestor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('Reset Beam to Safe if Arbiter Faulted');
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_LinearGovernor" Id="{07e517ca-7850-4f18-a618-982393f377e9}" SpecialFunc="None">
+    <Declaration><![CDATA[
+(* The governor is meant to check your work and keep you from making mistakes.
+
+Checks:
+Does your state match the device position and visa versa?
+Are the beam parameters safe for the device state?
+Did you properly assert the transition and final beam parameters?
+
+*)
+FUNCTION_BLOCK FB_LinearGovernor
+VAR_INPUT
+	i_stCurrentBeamParams	:	ST_BeamParams; //Link to global beam params
+	i_xMPSOverride			:	BOOL; //True releases MPS limits after a delay
+	i_xTransitionRequested	:	BOOL; //Set true to request a transition
+	i_xResetMPSFault	:	BOOL; //Set true to clear MPS fault 
+END_VAR
+VAR_OUTPUT
+	 //True when governor has released restrictions
+	q_xTransitionPermitted	:	BOOL;
+	//Set if MC_Power has an error, or override mode is requested
+	q_xFault	:	BOOL; 
+	// Indicates override mode is active
+	q_xMPSLimitsOverridden: BOOL;
+END_VAR
+VAR_IN_OUT
+	stDevice	:	ST_Device; //The governed
+	Arbiter	:	FB_Arbiter;
+	FastFaultOutput	:	FB_HardwareFFOutput;
+END_VAR
+VAR
+	mcPower	:	MC_Power;
+	
+	xActuatorPositiveEnable: BOOL;
+	xActuatorNegativeEnable: BOOL;
+	
+	xMPSPositiveEnable	:	BOOL;
+	xMPSNegativeEnable	:	BOOL;
+	lrPosition: LREAL;
+	
+	lrLatchedTargetPosition	:	LREAL;
+	lrLatchedTargetTolerance	:	LREAL;
+	stLatchedTargetState	:	ST_DeviceStateExt;
+	
+	lrMPSUpperLimit: LREAL;
+	lrMPSLowerLimit: LREAL;
+	rtNewState: R_TRIG;
+	xTransitionOK: BOOL;
+	
+	tonMPSOverrideMode	:	TON := (
+		PT := T#5S
+	);
+	
+	srMPSFault	:	SR;
+	// Actuator out of bounds fault
+	xActuatorOOB: BOOL;
+	//Beam parameters out of spec
+	xBeamParamsOOS: BOOL;
+	//Beam parameters of currently latched state
+	
+	stLatchedBeamParams: ST_BeamParams;
+	stTargetState: ST_DeviceStateExt;
+	
+	rtLatchNewState	:	R_TRIG;
+	xInit: BOOL := TRUE;
+	
+	stInitDeviceState: ST_DeviceStateExt;
+	// Indicates an error with initialization
+	xInitFault: BOOL;
+	// Indicates the state could not be found in the state table. There may be something wrong in the device state machine implementation or state table instantiation.
+	xStateLookupError: BOOL;
+	// A transition needs to be requested at least once before we start latching any state.
+	xTransitionHasBeenRequested: BOOL := FALSE;
+	ffBeamParamsOK : FB_FastFault;
+	ffActuatorBoundsOK	:	FB_FastFault;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+lrPosition := stDevice.stAxis.NcToPlc.ActPos; //Actuator position
+
+stDevice.stAxis.ReadStatus();
+//Init
+(* The init strategy is:
+If the device is restored and it's residing at the safe position,
+no PMPS faults. *)
+////////////////////////////////
+	IF xInit THEN
+		xInit := FALSE;
+		//Use nSafeSate for initialization. 
+		stDevice.StateTable.A_Lookup(key := stDevice.nSafeState);
+		IF stDevice.StateTable.bOk THEN
+			stInitDeviceState := F_DeviceState_To_DeviceStateExt(stDevice.StateTable.getValue, TRUE);
+			xInitFault := FALSE;
+		ELSE
+			xInitFault := TRUE;
+			stInitDeviceState.xValid := FALSE;
+		END_IF
+		lrLatchedTargetPosition := stInitDeviceState.rPosition;
+		lrLatchedTargetTolerance := stInitDeviceState.rTolerance;
+		stLatchedBeamParams := stInitDeviceState.stReqBeamParam;
+	END_IF
+
+// The governor will permit transitions once it verifies the transition assertion is active
+// Note the governor does not verify the target state beam params are asserted, perhaps it should <TODO>
+////////////////////////////////
+	IF i_xTransitionRequested THEN
+		xTransitionHasBeenRequested	:= TRUE;
+		
+		xTransitionOK := Arbiter.CheckRequest( stDevice.stTransitionState.nStateRef) AND F_SafeBPCompare(i_stCurrentBeamParams, stDevice.stTransitionState.stReqBeamParam);
+		
+		//Set the target state for evaluation in further logic
+		stdevice.StateTable.A_Lookup(key := stDevice.nTargetState);
+		IF stDevice.StateTable.bOk THEN
+			stTargetState := F_DeviceState_To_DeviceStateExt(stDevice.StateTable.getValue, TRUE);
+			xStateLookupError := FALSE;
+		ELSE
+			xStateLookupError := TRUE;
+			stTargetState.xValid := FALSE;
+		END_IF
+	ELSE
+		xTransitionOK := FALSE;
+	END_IF
+
+(* Note about TransitionRequested
+
+If TransitionRequested goes false during a transition, an MPS fault may be induced. This occurs
+because the Actuator Out of Bounds fault will go back to using the original state limits, which
+the axis may have already moved beyond.
+
+To avoid this transient fault, make sure your device state machine is implemented such that the 
+transition request to the governor block remains high until the target position is reached.
+*)
+
+//Determine if a transition is complete and latch the new state
+(* A transition is complete when:
+
+Axis at standstill.
+Axis within tolerance.
+No transition req.
+
+Once these conditions are met, the MPS limits shall re-engage to restrict the
+axis motion to the tolerance around the state position and the MPS fault monitors
+shall evaluate based on the newly latched target state.
+*)
+
+rtLatchNewState(CLK := stDevice.stAxis.Status.StandStill AND
+	lrPosition <= stTargetState.rPosition + stTargetState.rTolerance AND
+	lrPosition >= stTargetState.rPosition - stTargetState.rTolerance AND
+	NOT i_xTransitionRequested AND xTransitionHasBeenRequested);
+	
+IF rtLatchNewState.Q THEN
+	lrLatchedTargetPosition := stTargetState.rPosition;
+	lrLatchedTargetTolerance := stTargetState.rTolerance;
+	stLatchedBeamParams := stTargetState.stReqBeamParam;
+	stLatchedTargetState := stTargetState;
+END_IF
+
+//Let other blocks know the governor won't interfer with transitions
+q_xTransitionPermitted := xTransitionOK;
+
+//Adjust limit ranges based on active state and current target
+IF xTransitionOK THEN
+	//Extend range to include target state
+	lrMPSUpperLimit := MAX(lrMPSUpperLimit, stTargetState.rPosition + stTargetState.rTolerance);
+	lrMPSLowerLimit := MIN(lrMPSLowerLimit, stTargetState.rPosition - stTargetState.rTolerance);
+ELSE
+	//Calculate the limit positions for MPS based on current state
+	lrMPSUpperLimit := lrLatchedTargetPosition + lrLatchedTargetTolerance;
+	lrMPSLowerLimit := lrLatchedTargetPosition - lrLatchedTargetTolerance;
+END_IF
+
+
+//MPS override
+(* In override mode, the device will be free to move anywhere within it's travel range *)
+//Permit motion after a small delay
+tonMPSOverrideMode(IN:=i_xMPSOverride OR stDevice.xOverrideMPSLimits, Q=>q_xMPSLimitsOverridden);
+
+//Virtual limit switch evaluation
+xActuatorPositiveEnable	:= stDevice.i_xHiLim AND lrPosition <= stDevice.lrUpperPositionLimit;
+xActuatorNegativeEnable	:= stDevice.i_xLoLim AND lrPosition >= stDevice.lrLowerPositionLimit;
+
+//Evaluate MPS limit states
+xMPSPositiveEnable := lrPosition <= lrMPSUpperLimit;
+xMPSNegativeEnable := lrPosition >= lrMPSLowerLimit;
+
+//Final Limit switch evaluation
+mcPower.Enable_Positive := xActuatorPositiveEnable AND (tonMPSOverrideMode.Q OR xMPSPositiveEnable);
+mcPower.Enable_Negative := xActuatorNegativeEnable AND (tonMPSOverrideMode.Q OR xMPSNegativeEnable);
+
+mcPower(
+	Axis := stDevice.stAxis,
+	Enable := stDevice.xEnable //link to device enable <TODO>
+);
+
+
+
+//MPS Faults
+//Fault if the beam is unsafe for current state
+ffBeamParamsOK(i_xOK:=F_SafeBPCompare(i_stCurrentBeamParams, stLatchedBeamParams), 
+				i_xReset:=i_xResetMPSFault,
+				io_fbFFHWO := FastFaultOutput);
+
+//Fault if the position is outside of the permitted range
+ffActuatorBoundsOK(i_xOK := (lrPosition <= lrMPSUpperLimit AND lrPosition >= lrMPSLowerLimit), 
+					i_xReset:=i_xResetMPSFault,
+				io_fbFFHWO := FastFaultOutput);
+
+
+	
+//Collect all other faults
+q_xFault := NOT ffBeamParamsOK.o_xFFLine OR
+	NOT ffActuatorBoundsOK.o_xFFLine OR
+	mcPower.Error	OR
+	i_xMPSOverride	OR
+	xInitFault;
+
+//Any faults trip the fast fault line for this FB	
+FastFaultOutput.CheckIn(NOT q_xFault);
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

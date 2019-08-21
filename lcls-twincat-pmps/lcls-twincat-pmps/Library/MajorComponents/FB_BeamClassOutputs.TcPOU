@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_BeamClassOutputs" Id="{4a29fded-500d-49a8-af9c-1a0c32a74d5a}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Sets the beam class assertion lines for a given beam class.
+*)
+FUNCTION_BLOCK FB_BeamClassOutputs
+VAR_INPUT
+	i_ArbiterBP	:	ST_BeamParams;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	wBeamClass	:	BYTE;
+	q_BC_ASSERTION_LINES	AT	%Q*	: ARRAY [1..16] OF	BOOL;
+	InitCounter: INT;
+	counter	:	INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//Beam Class
+////////////////////////////////////
+//0x0 = 0000 0000 0000 0000
+//0x1 = 0000 0000 0000 0001
+//0xF = 1111 1111 1111 1111
+
+//Initialize BC lines to zero on every pass
+FOR InitCounter := 1 TO 16 DO
+	q_BC_ASSERTION_LINES[InitCounter] := FALSE;
+END_FOR
+
+//Set BC lines according to beam class
+//A BC of 0x0 would pass over this loop, setting none of the lines high
+// , as FOR loops check the initialized variable at the top to see if it's >
+// than the "TO" variable.
+FOR wBeamClass:=1 TO i_ArbiterBP.nBeamClass DO
+	q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
+END_FOR
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

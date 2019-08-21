@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_eVWithinSpec_Test" Id="{5e87281d-9fdb-4ef5-acce-a04e585b28ee}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_eVWithinSpec_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[evWithinRangeChecks();]]></ST>
+    </Implementation>
+    <Method Name="evWithinRangeChecks" Id="{f5c98f80-0db1-4516-a281-6aaf1f206004}">
+      <Declaration><![CDATA[METHOD evWithinRangeChecks
+VAR_INPUT
+END_VAR
+VAR
+
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('evWithinRangeChecks');
+	
+//Upper limit equal
+AssertTrue(
+	F_eVWithinSpec(300, 2#0000_0000_0000_0010),
+	'Upper limit not inclusive');
+//Lower limit equal
+AssertTrue(
+	F_eVWithinSpec(300, 2#0000_0000_0000_0100),
+	'Lower limit not inclusive');
+//Out of range
+AssertFalse(
+	F_eVWithinSpec(300.1, 2#0000_0000_0000_0010),
+	'Out of range failed, whatever you did, it broke this really bad.');
+//Negative eV
+AssertFalse(
+	F_eVWithinSpec(-300, 16#FFFF),
+	'Working with antimatter? Negative eV should not be acceptable.');
+//Upper unallocated range
+AssertFalse(
+	F_eVWithinSpec(1701, 2#1000_0000_0000_0000),
+	'eV range should not evaluate past 1.7keV');
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

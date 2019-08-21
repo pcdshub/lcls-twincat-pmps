@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_MachineSimulator" Id="{02a1fb96-2edd-41f3-ad53-9a758bd2eac7}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Simulates the machine responding to requests by adding a bit of delay/ ramps
+*)
+FUNCTION_BLOCK FB_MachineSimulator
+VAR_INPUT
+	i_stAssertedParams	:	ST_BeamParams;
+	i_reV	:	REAL;
+	i_xFault	:	BOOL;
+END_VAR
+VAR_OUTPUT
+	q_stMachineParams	:	ST_BeamParams;
+END_VAR
+VAR
+	fTargetAtt: REAL;
+	tonAttTimer	:	TON := (
+		PT := T#2S
+		);
+	fTargetPP_mJ: REAL;
+	tonPPETimer: TON := (
+		PT := T#2S
+	);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//Attenuation
+IF i_stAssertedParams.fAtt <> fTargetAtt THEN
+	tonAttTimer(IN:=FALSE);
+	fTargetAtt := i_stAssertedParams.fAtt;
+ELSIF NOT tonAttTimer.Q THEN
+	tonAttTimer(IN:=TRUE);
+ELSE
+	q_stMachineParams.fAtt := fTargetAtt;
+END_IF
+
+//Pulse Energy
+IF i_stAssertedParams.fPP_mJ <> fTargetPP_mJ THEN
+	tonPPETimer(IN:=FALSE);
+	fTargetPP_mJ := i_stAssertedParams.fPP_mJ;
+ELSIF NOT tonAttTimer.Q THEN
+	tonPPETimer(IN:=TRUE);
+ELSE
+	q_stMachineParams.fPP_mJ := fTargetPP_mJ;
+END_IF
+
+//Photon Energy is set arbitrarily, beyond our control.
+q_stMachineParams.reV := i_reV;
+
+//Rate
+IF i_xFault THEN
+	q_stMachineParams.nRate := 0;
+ELSE
+	q_stMachineParams.nRate := i_stAssertedParams.nRate;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
