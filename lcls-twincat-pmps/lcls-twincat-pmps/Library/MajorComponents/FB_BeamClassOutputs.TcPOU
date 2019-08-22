@@ -6,15 +6,15 @@ Sets the beam class assertion lines for a given beam class.
 *)
 FUNCTION_BLOCK FB_BeamClassOutputs
 VAR_INPUT
-	i_ArbiterBP	:	ST_BeamParams;
+    i_ArbiterBP    :    ST_BeamParams;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	wBeamClass	:	BYTE;
-	q_BC_ASSERTION_LINES	AT	%Q*	: ARRAY [1..16] OF	BOOL;
-	InitCounter: INT;
-	counter	:	INT;
+    wBeamClass    :    BYTE;
+    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
+    InitCounter: INT;
+    counter    :    INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -27,7 +27,7 @@ END_VAR
 
 //Initialize BC lines to zero on every pass
 FOR InitCounter := 1 TO 16 DO
-	q_BC_ASSERTION_LINES[InitCounter] := FALSE;
+    q_BC_ASSERTION_LINES[InitCounter] := FALSE;
 END_FOR
 
 //Set BC lines according to beam class
@@ -35,7 +35,7 @@ END_FOR
 // , as FOR loops check the initialized variable at the top to see if it's >
 // than the "TO" variable.
 FOR wBeamClass:=1 TO i_ArbiterBP.nBeamClass DO
-	q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
+    q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
 END_FOR
 ]]></ST>
     </Implementation>

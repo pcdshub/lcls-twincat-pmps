@@ -19,7 +19,7 @@ END_VAR
 VAR_INPUT
 END_VAR
 VAR
-	fbBPR	:	FB_BPRequestor;
+    fbBPR    :    FB_BPRequestor;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('Reset Beam to Safe if Arbiter Faulted');

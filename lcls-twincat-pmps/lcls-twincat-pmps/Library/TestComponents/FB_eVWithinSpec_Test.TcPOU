@@ -22,28 +22,28 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('evWithinRangeChecks');
-	
+    
 //Upper limit equal
 AssertTrue(
-	F_eVWithinSpec(300, 2#0000_0000_0000_0010),
-	'Upper limit not inclusive');
+    F_eVWithinSpec(300, 2#0000_0000_0000_0010),
+    'Upper limit not inclusive');
 //Lower limit equal
 AssertTrue(
-	F_eVWithinSpec(300, 2#0000_0000_0000_0100),
-	'Lower limit not inclusive');
+    F_eVWithinSpec(300, 2#0000_0000_0000_0100),
+    'Lower limit not inclusive');
 //Out of range
 AssertFalse(
-	F_eVWithinSpec(300.1, 2#0000_0000_0000_0010),
-	'Out of range failed, whatever you did, it broke this really bad.');
+    F_eVWithinSpec(300.1, 2#0000_0000_0000_0010),
+    'Out of range failed, whatever you did, it broke this really bad.');
 //Negative eV
 AssertFalse(
-	F_eVWithinSpec(-300, 16#FFFF),
-	'Working with antimatter? Negative eV should not be acceptable.');
+    F_eVWithinSpec(-300, 16#FFFF),
+    'Working with antimatter? Negative eV should not be acceptable.');
 //Upper unallocated range
 AssertFalse(
-	F_eVWithinSpec(1701, 2#1000_0000_0000_0000),
-	'eV range should not evaluate past 1.7keV');
-	
+    F_eVWithinSpec(1701, 2#1000_0000_0000_0000),
+    'eV range should not evaluate past 1.7keV');
+    
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>

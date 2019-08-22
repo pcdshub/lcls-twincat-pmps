@@ -5,13 +5,13 @@
 {attribute 'strict'}
 TYPE eBPTMTestStates :
 (
-	Init := 0,
-	WaitingForValidID := 50,
-	WaitingForTransitionAssertion := 100,
-	WaitingForFinalAssertion	:= 200,
-	Transitioning	:= 300,
-	CleaningUp	:= 400,
-	AnotherState := 500
+    Init := 0,
+    WaitingForValidID := 50,
+    WaitingForTransitionAssertion := 100,
+    WaitingForFinalAssertion    := 200,
+    Transitioning    := 300,
+    CleaningUp    := 400,
+    AnotherState := 500
 );
 END_TYPE
 ]]></Declaration>

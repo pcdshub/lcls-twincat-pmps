@@ -20,9 +20,9 @@ FFRegistration();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-	fbFF	:	FB_FastFault;
-	fbFFO	:	FB_HardwareFFOutput;
-	
+    fbFF    :    FB_FastFault;
+    fbFFO    :    FB_HardwareFFOutput;
+    
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFCombinedFunctionality');
@@ -31,13 +31,13 @@ END_VAR]]></Declaration>
 fbFFO(i_xReset:=TRUE); //Reset requested at start of cycle
 
 fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
-	i_xOK := TRUE,
-	i_xReset := TRUE);
+    i_xOK := TRUE,
+    i_xReset := TRUE);
 
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
-	
+    
 AssertTrue(fbFFO.q_xFastFaultOut,
-	'Fast fault did not clear');
+    'Fast fault did not clear');
 
 
 //Induce fault with FF
@@ -45,14 +45,14 @@ AssertTrue(fbFFO.q_xFastFaultOut,
 fbFFO(i_xReset := FALSE); //Reset released at start of cycle
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
-	i_xOK := FALSE); //Reset is still set true from last call.
-	
+    i_xOK := FALSE); //Reset is still set true from last call.
+    
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
-	'Fast fault did not trip the beam');
-	
-	
+    'Fast fault did not trip the beam');
+    
+    
 //FFO remains faulted until local (FF) and FFO receieve fresh reset request, and faults
 //are actually cleared
 
@@ -60,27 +60,27 @@ AssertFalse(fbFFO.q_xFastFaultOut,
 fbFFO(i_xReset := TRUE); //Reset requested
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
-	i_xOK := FALSE,
-	i_xReset := FALSE);
-	
+    i_xOK := FALSE,
+    i_xReset := FALSE);
+    
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
-	'Fast fault output cleared while fault remains, very bad');
-	
+    'Fast fault output cleared while fault remains, very bad');
+    
 //Attempt to clear FF while fault remains fails
 fbFFO(i_xReset := FALSE);
 fbFFO(i_xReset := TRUE); //Reset requested
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
-	i_xOK := FALSE,
-	i_xReset := TRUE); //This reset should fail.
-	
+    i_xOK := FALSE,
+    i_xReset := TRUE); //This reset should fail.
+    
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
-	'Fast fault cleared while fault remains, very bad');
-	
+    'Fast fault cleared while fault remains, very bad');
+    
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
@@ -89,8 +89,8 @@ TEST_FINISHED();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-	fbFF	:	FB_FastFault;
-	fbFFO	:	FB_HardwareFFOutput;
+    fbFF    :    FB_FastFault;
+    fbFFO    :    FB_HardwareFFOutput;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFRegistration');
@@ -98,7 +98,7 @@ END_VAR]]></Declaration>
 fbFF(io_fbFFHWO := fbFFO);
 
 AssertEquals_STRING(fbFF.sPath, fbFFO.asList[fbFFO.nIndex-1],
-	'FF registration with FFO did not succeed');
+    'FF registration with FFO did not succeed');
 
 TEST_FINISHED();]]></ST>
       </Implementation>

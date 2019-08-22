@@ -3,17 +3,17 @@
   <POU Name="F_SetStateParams" Id="{f9611d23-4bb5-422d-9f11-2cc94e61fc9e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_SetStateParams : BOOL;
 VAR_INPUT
-	nStateRef	:	UDINT;
-	rPosition	:	REAL;
-	rTolerance: REAL;
-	stBeamParams	:	ST_BeamParams;
+    nStateRef    :    UDINT;
+    rPosition    :    REAL;
+    rTolerance: REAL;
+    stBeamParams    :    ST_BeamParams;
 END_VAR
 VAR_IN_OUT
-	Table	:	FB_LinearDeviceStateTable;
+    Table    :    FB_LinearDeviceStateTable;
 END_VAR
 VAR
-	stDeviceState	:	ST_DeviceState;
-	
+    stDeviceState    :    ST_DeviceState;
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -23,8 +23,8 @@ stDeviceState.rTolerance := rTolerance;
 stDeviceState.stReqBeamParam := stBeamParams;
 
 Table.A_Add(
-	key := nStateRef,
-	putValue := stDeviceState
+    key := nStateRef,
+    putValue := stDeviceState
 );
 
 F_SetStateParams := Table.bOk;]]></ST>

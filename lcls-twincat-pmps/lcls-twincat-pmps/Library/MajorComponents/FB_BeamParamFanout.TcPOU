@@ -6,13 +6,13 @@ VAR_INPUT
 
 END_VAR
 VAR_OUTPUT
-	stBP	:	ST_BeamParams;
+    stBP    :    ST_BeamParams;
 END_VAR
 VAR
-	i_stBP	AT %I* :	ST_BeamParams;
-	
-	xTxPDO_toggle	AT 	%I* :	BIT;
-	xTxPDO_state	AT	%I*	:	BIT;
+    i_stBP    AT %I* :    ST_BeamParams;
+    
+    xTxPDO_toggle    AT     %I* :    BIT;
+    xTxPDO_state    AT    %I*    :    BIT;
 END_VAR
 ]]></Declaration>
     <Implementation>

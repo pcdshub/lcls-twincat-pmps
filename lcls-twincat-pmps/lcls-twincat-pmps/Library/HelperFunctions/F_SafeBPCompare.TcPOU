@@ -5,22 +5,22 @@
 the result will be true. *)
 FUNCTION F_SafeBPCompare : BOOL
 VAR_INPUT
-	BeamParam1	:	ST_BeamParams; //Must be more conservative than 2
-	BeamParam2	:	ST_BeamParams;
+    BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
+    BeamParam2    :    ST_BeamParams;
 END_VAR
 VAR
-	// Internal Attenuation OK boolean
-	xAttOK: BOOL := FALSE;
-	// Internal Per-pulse energy OK boolean
-	xPPmjOK: BOOL := FALSE;
-	// Internal photon energy OK boolean
-	xEvOK: BOOL := FALSE;
-	// Internal Beam Rate OK boolean
-	xRateOK: BOOL;
-	// Beam-rate is zero, masks all others considerations.
-	xZeroRate: BOOL;
-	
-	foo : __SYSTEM.VAR_INFO;
+    // Internal Attenuation OK boolean
+    xAttOK: BOOL := FALSE;
+    // Internal Per-pulse energy OK boolean
+    xPPmjOK: BOOL := FALSE;
+    // Internal photon energy OK boolean
+    xEvOK: BOOL := FALSE;
+    // Internal Beam Rate OK boolean
+    xRateOK: BOOL;
+    // Beam-rate is zero, masks all others considerations.
+    xZeroRate: BOOL;
+    
+    foo : __SYSTEM.VAR_INFO;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,8 +29,8 @@ END_VAR
 xAttOK := BeamParam1.fAtt >= BeamParam2.fAtt;
 xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
-xZeroRate	:= BeamParam1.nRate = 0;
-xRateOK	:= BeamParam1.nRate <= BeamParam2.nRate;
+xZeroRate    := BeamParam1.nRate = 0;
+xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 
 F_SafeBPCompare := xZeroRate OR (xAttOK AND xPPmjOK AND xEvOK AND xRateOK);]]></ST>
     </Implementation>

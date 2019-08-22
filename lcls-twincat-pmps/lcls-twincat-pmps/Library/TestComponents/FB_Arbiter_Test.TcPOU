@@ -19,22 +19,22 @@ RequestCheckRemoveBP();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-	fbArbiter	:	FB_Arbiter;
-	
- 	nAttReqID	:	UDINT	:= 1;
-	stAttReqBP	:	ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
-	nPPEReqID	:	UDINT	:= 2;
-	stPPEReqBP	:	ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
-	nEVReqID	:	UDINT	:= 3;
-	stEVReqBP	:	ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
-	nRateReqID	:	UDINT	:= 4;
-	stRateReqBP	:	ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
-	stArbitratedBP	:	ST_BeamParams;
-	stExpectedBP	:	ST_BeamParams;
+    fbArbiter    :    FB_Arbiter;
+    
+     nAttReqID    :    UDINT    := 1;
+    stAttReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    
+    nPPEReqID    :    UDINT    := 2;
+    stPPEReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    
+    nEVReqID    :    UDINT    := 3;
+    stEVReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    
+    nRateReqID    :    UDINT    := 4;
+    stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    
+    stArbitratedBP    :    ST_BeamParams;
+    stExpectedBP    :    ST_BeamParams;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('Arbitration');
@@ -49,29 +49,29 @@ stRateReqBP.nRate := 120;
 
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nAttReqID, stAttReqBP),
-					'Safest attenuation request failed to load');
-					
+                    'Safest attenuation request failed to load');
+                    
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nPPEReqID, stPPEReqBP),
-					'Safest PPE request failed to load');
-					
+                    'Safest PPE request failed to load');
+                    
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP),
-					'Safest stEVReqBP request failed to load');
-					
+                    'Safest stEVReqBP request failed to load');
+                    
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP),
-					'Safest stEVReqBP request failed to load');
+                    'Safest stEVReqBP request failed to load');
 
-stExpectedBP.fAtt 	:= 	stAttReqBP.fAtt;
-stExpectedBP.fPP_mJ	:=  stPPEReqBP.fPP_mJ;
+stExpectedBP.fAtt     :=     stAttReqBP.fAtt;
+stExpectedBP.fPP_mJ    :=  stPPEReqBP.fPP_mJ;
 stExpectedBP.neVRange := stEVReqBP.neVRange;
 stExpectedBP.nRate := stRateReqBP.nRate;
 
 stArbitratedBP := fbArbiter.GetArbitratedBP();
 
 AssertFalse(F_DiffReqBeamParams(stExpectedBP, stArbitratedBP),
-				'Arbitrated BP does not match expected.');
+                'Arbitrated BP does not match expected.');
 
 TEST_FINISHED();]]></ST>
       </Implementation>
@@ -81,44 +81,44 @@ TEST_FINISHED();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-	fbArbiter	:	FB_Arbiter;
-	
-	nId	:	DWORD := 1;
-	stReq	:	ST_BeamParams;
+    fbArbiter    :    FB_Arbiter;
+    
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbArbiter.A_Init();
 
 TEST('RequestBP');
 AssertTrue(fbArbiter.AddRequest(nId, stReq),
-	'Request failed');
+    'Request failed');
 
 TEST_FINISHED();
-	
+    
 TEST('DuplicateID');
 AssertFalse(fbArbiter.AddRequest(nId, stReq),
-	'Duplicate request accepted, not good.');
+    'Duplicate request accepted, not good.');
 
 TEST_FINISHED();
-	
+    
 TEST('CheckBP');
 AssertTrue(fbArbiter.CheckRequest(nId),
-	'Check failed');
+    'Check failed');
 
-TEST_FINISHED();	
-	
+TEST_FINISHED();    
+    
 TEST('IDDoesNotExist');
 AssertFalse(fbArbiter.CheckRequest(nId+1),
-	'Check returned true when ID does not exist');
+    'Check returned true when ID does not exist');
 
 TEST_FINISHED();
-	
+    
 TEST('RemoveBP');
 AssertTrue(fbArbiter.RemoveRequest(nId),
-	'Remove failed');
+    'Remove failed');
 AssertFalse(fbArbiter.CheckRequest(nId),
-	'Remove did not remove request');
-	
+    'Remove did not remove request');
+    
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>

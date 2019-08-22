@@ -19,19 +19,19 @@ END_VAR
 VAR_INPUT
 END_VAR
 VAR
-	fbBPF	:	FB_BeamParamFanout;
+    fbBPF    :    FB_BeamParamFanout;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('Reset validity bool if interface invalid');
 fbBPF.xTxPDO_state := 0; //OP
 fbBPF();
 AssertTrue(fbBPF.stBP.xValidToggle,
-	'Does not start valid');
-	
-fbBPF.xTxPDO_state := 1; // Not op	
-	
+    'Does not start valid');
+    
+fbBPF.xTxPDO_state := 1; // Not op    
+    
 AssertFalse(fbBPF.stBP.xValidToggle,
-	'Does not indicate invalid after IF goes non-op');
+    'Does not indicate invalid after IF goes non-op');
 
 ]]></ST>
       </Implementation>
