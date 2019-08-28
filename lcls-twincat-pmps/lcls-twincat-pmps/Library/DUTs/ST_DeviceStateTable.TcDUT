@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <DUT Name="ST_DeviceStateTable" Id="{03fca704-e94f-069c-15d5-ec1df795b0de}">
+    <Declaration><![CDATA[TYPE ST_DeviceStateTable :
+STRUCT
+	iDeviceID:DINT;
+	iStateID:DINT;
+	rTargetPosition: REAL;
+	rTolerance: REAL;
+	rTransmission: REAL;
+	iBeamClass : DINT;
+	iPulseRate: DINT;
+	rPerPulseEnergy:REAL;
+	rUpper_eV: REAL;
+	rLower_eV: REAL;
+	rPhotonEnergy: REAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

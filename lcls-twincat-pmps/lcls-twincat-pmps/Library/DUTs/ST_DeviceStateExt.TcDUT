@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <DUT Name="ST_DeviceStateExt" Id="{5cd60f9f-dadd-0ea0-1a1b-6a46a8d3dc5a}">
+    <Declaration><![CDATA[//Use when working with states in code
+//Extended with a valid boolean to indicate the structure was loaded
+//properly
+TYPE ST_DeviceStateExt EXTENDS ST_DeviceState :
+STRUCT
+	xValid	:	BOOL := FALSE;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
