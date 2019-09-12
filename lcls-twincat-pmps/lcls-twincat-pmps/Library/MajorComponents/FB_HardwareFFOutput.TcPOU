@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_HardwareFFOutput" Id="{4c5345fc-1911-455c-a3d8-14bade73dcd8}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK FB_HardwareFFOutput
@@ -25,8 +25,7 @@ VAR CONSTANT
     cMaxList    :    INT := 99;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[rtReset(CLK:=i_xReset);
-xOK S= rtReset.Q;
+      <ST><![CDATA[xOK := True;
 // <TODO> latch off beam if DI card status goes bad]]></ST>
     </Implementation>
     <Method Name="CheckIn" Id="{a62d20dc-2f83-47a3-8377-2fd77eff32f0}">
@@ -45,7 +44,10 @@ END_IF
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
         <ST><![CDATA[//<TODO> add diagnostic for success or failure of reset
-q_xFastFaultOut := xOK OR i_xVeto;]]></ST>
+rtReset(CLK:=i_xReset AND xOK);
+
+q_xFastFaultOut S= rtReset.Q OR i_xVeto;
+q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;]]></ST>
       </Implementation>
     </Action>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
