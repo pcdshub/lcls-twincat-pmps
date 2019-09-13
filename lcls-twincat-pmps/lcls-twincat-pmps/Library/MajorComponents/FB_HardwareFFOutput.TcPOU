@@ -4,14 +4,32 @@
     <Declaration><![CDATA[
 FUNCTION_BLOCK FB_HardwareFFOutput
 VAR_INPUT
+    {attribute 'pytmc' := '
+        pv: ClearFault
+        io: o
+     '}
     i_xReset    :    BOOL;
+    {attribute 'pytmc' := '
+        pv: EnableVeto
+        io: o
+     '}
     i_xVeto    :    BOOL;    
 END_VAR
 VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: FaultHWO
+        io: i
+     '}
     q_xFastFaultOut    AT %Q*    :    BOOL;
 END_VAR
 VAR
+	{attribute 'pytmc' := '
+        pv: OK
+        io: i
+     '}
     xOK    :    BOOL;
+    
+    
     rtReset    :    R_TRIG;
     
     //Fault registration list

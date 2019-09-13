@@ -1,17 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_FastFault" Id="{4f87b098-c3de-4b74-a706-919749bcb97f}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'reflection'}
+    <Declaration><![CDATA[(* Fast Fault
+2019-9-13 A. Wallace
+
+Use this block to generate a beam-off fault. Connects to a fast fault hardware output 
+function block to contribute to the state of the fast fault output (FFO).
+
+If the i_xOK goes false, the associated FFO will go false, despite the state of any other
+contributing fast faults, unless the FFO is currently vetoed.
+
+*)
+{attribute 'reflection'}
 FUNCTION_BLOCK FB_FastFault
 VAR_INPUT
-    i_xOK        :    BOOL;
-    i_xReset    :    BOOL; //resets when i_xOK is true and this is true
+    {attribute 'pytmc' := '
+        pv: FastFaultInput
+        io: i
+     '}
+    i_xOK        :    BOOL; //Connect to fast-fault condition (false produces fault)
+    {attribute 'pytmc' := '
+        pv: ResetFault
+        io: o
+     '}
+    i_xReset    :    BOOL; //Resets when i_xOK is true and this is true
+    {attribute 'pytmc' := '
+        pv: EnableVeto
+        io: o
+     '}
+    i_xVeto    :    BOOL; // Veto input
 END_VAR
 VAR_OUTPUT
-    o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like
+    {attribute 'pytmc' := '
+        pv: FastFaultOK
+        io: i
+     '}
+    o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like (Optional)
 END_VAR
 VAR_IN_OUT
-    io_fbFFHWO        :    FB_HardwareFFOutput;
+    io_fbFFHWO        :    FB_HardwareFFOutput; //Point to FB_HardwareFFOutput of your choice
 END_VAR
 VAR
     {attribute 'instance-path'}
@@ -22,6 +49,17 @@ VAR
     bsFF    :    RS;
     rtReset    :    R_TRIG;
     
+    {attribute 'pytmc' := '
+        pv: VetoDuration
+        io: o
+     '}
+    VetoDuration : TIME;
+    Veto    :   TOF;
+    {attribute 'pytmc' := '
+        pv: VetoActive
+        io: i
+     '} 
+	VetoActive: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -31,9 +69,10 @@ END_VAR
     xInit := FALSE;
 END_IF
 
+Veto(IN:=i_xVeto, PT:=VetoDuration, Q=>VetoActive); //might want to reset duration when veto expires
 
 rtReset(CLK:=i_xReset);
-bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK);
+bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK AND NOT VetoActive);
 o_xFFLine := bsFF.Q1;
 io_fbFFHWO.CheckIn(bsFF.Q1);
 ]]></ST>
