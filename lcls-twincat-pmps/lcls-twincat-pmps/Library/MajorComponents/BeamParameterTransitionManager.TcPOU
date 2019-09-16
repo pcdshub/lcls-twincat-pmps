@@ -6,38 +6,38 @@ Implements the procedure for safely transitioning between device states by asser
 the state *)
 FUNCTION_BLOCK BeamParameterTransitionManager
 VAR_IN_OUT
-	
-	fbArbiter	:	FB_Arbiter; //Connect to local arbiter
-	
+    
+    fbArbiter    :    FB_Arbiter; //Connect to local arbiter
+    
 END_VAR
 VAR_INPUT
-	i_TransitionAssertionID	:	UDINT := 0;
-	i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cstSafeBeam; //Assertion required during transition (always safer than anything inbetween)
-	
-	i_nRequestedAssertionID	:	UDINT := 0;
-	i_stRequestedAssertion	:	ST_BeamParams := PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
-	
-	i_xMoving	:	BOOL := FALSE; //Provide rising edge when device begins moving <remove>
-	i_xDoneMoving	:	BOOL := FALSE; //Provide rising edge when device is done with a move
-	
-	stCurrentBeamParameters	:	ST_BeamParams := PMPS_GVL.cstFullBeam; //Connect to current beam parameters
-	
+    i_TransitionAssertionID    :    UDINT := 0;
+    i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cstSafeBeam; //Assertion required during transition (always safer than anything inbetween)
+    
+    i_nRequestedAssertionID    :    UDINT := 0;
+    i_stRequestedAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+    
+    i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
+    i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
+    
+    stCurrentBeamParameters    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Connect to current beam parameters
+    
 END_VAR
 VAR_OUTPUT
 
-	q_xTransitionAuthorized	:	BOOL := FALSE; //Rising edge indicating the device is safe to move, use as input to move execute (which requires a rising edge)
+    q_xTransitionAuthorized    :    BOOL := FALSE; //Rising edge indicating the device is safe to move, use as input to move execute (which requires a rising edge)
 
 END_VAR
 
 VAR
-	nTargetAssertionID	:	UDINT := 0;
-	stTargetAssertion	:	ST_BeamParams; //Current target assertion
-	nCurrentAssertionID	:	UDINT := 0;
-	
-	xNewBP	:	BOOL;
-	xTranBP	:	BOOL;
-	xFinalBP	:	BOOL;
-	
+    nTargetAssertionID    :    UDINT := 0;
+    stTargetAssertion    :    ST_BeamParams; //Current target assertion
+    nCurrentAssertionID    :    UDINT := 0;
+    
+    xNewBP    :    BOOL;
+    xTranBP    :    BOOL;
+    xFinalBP    :    BOOL;
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -1368,8 +1368,8 @@ fbArbiter.RemoveRequest( nCurrentAssertionID );
 
 //Asserting target parameters
 fbArbiter.AddRequest(
-	nTargetAssertionID,
-	stTargetAssertion
+    nTargetAssertionID,
+    stTargetAssertion
 );
 
 //Remembering final assertionID for removal later
@@ -1380,10 +1380,10 @@ nCurrentAssertionID := nTargetAssertionID;]]></ST>
       <Implementation>
         <ST><![CDATA[
 fbArbiter.AddRequest(
-	i_TransitionAssertionID,
-	i_stTransitionAssertion
+    i_TransitionAssertionID,
+    i_stTransitionAssertion
 );
-	]]></ST>
+    ]]></ST>
       </Implementation>
     </Action>
     <Action Name="AuthorizeTransition" Id="{b727a18e-e395-0e7a-074b-b778698df218}">
@@ -1426,11 +1426,11 @@ fbArbiter.RemoveRequest( i_TransitionAssertionID );
     <Action Name="SetNewTarget" Id="{cb54fd73-aaf3-0c05-2881-782da729c59b}">
       <Implementation>
         <ST><![CDATA[IF i_nRequestedAssertionID <> 0 AND
-	i_nRequestedAssertionID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
-	
-	stTargetAssertion := i_stRequestedAssertion;
-	nTargetAssertionID := i_nRequestedAssertionID;
-	xNewBP := TRUE;
+    i_nRequestedAssertionID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+    
+    stTargetAssertion := i_stRequestedAssertion;
+    nTargetAssertionID := i_nRequestedAssertionID;
+    xNewBP := TRUE;
 END_IF
 ]]></ST>
       </Implementation>
@@ -1440,7 +1440,7 @@ END_IF
         <ST><![CDATA[//Final Assertion Verification
 
 xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion) AND
-	fbArbiter.CheckRequest( i_nRequestedAssertionID);;]]></ST>
+    fbArbiter.CheckRequest( i_nRequestedAssertionID);;]]></ST>
       </Implementation>
     </Action>
     <Action Name="WaitingForFinalAssertion_EXIT" Id="{841774c7-aa1a-0f81-0d11-1d67419288e5}">
@@ -1452,8 +1452,8 @@ xFinalBP := FALSE;]]></ST>
     <Action Name="WaitingForTransitionAssertion_DO" Id="{b28d9b59-2c93-0121-2340-e3e699a9fa4a}">
       <Implementation>
         <ST><![CDATA[//Transition Assertion Verification
-xTranBP	:= F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) AND
-	fbArbiter.CheckRequest(i_TransitionAssertionID);]]></ST>
+xTranBP    := F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) AND
+    fbArbiter.CheckRequest(i_TransitionAssertionID);]]></ST>
       </Implementation>
     </Action>
     <Action Name="WaitingForTransitionAssertion_EXIT" Id="{07d13c2b-9514-064a-3d0d-409feea20c70}">

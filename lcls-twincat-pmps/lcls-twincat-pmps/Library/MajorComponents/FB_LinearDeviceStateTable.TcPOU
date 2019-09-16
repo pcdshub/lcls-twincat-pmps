@@ -4,23 +4,23 @@
     <Declaration><![CDATA[(* This function block implements simple database. Data element values are stored in the hash table.  *)
 FUNCTION_BLOCK FB_LinearDeviceStateTable
 VAR_INPUT
-	key 		: DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
-	putPosPtr	: POINTER TO T_HashTableEntry := 0;(* Hash table entry position pointer (used by A_Find, A_GetNext, A_GetPrev) *)
-	putValue 	: ST_DeviceState;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
+    key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
+    putPosPtr    : POINTER TO T_HashTableEntry := 0;(* Hash table entry position pointer (used by A_Find, A_GetNext, A_GetPrev) *)
+    putValue     : ST_DeviceState;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
 END_VAR
 VAR_OUTPUT
-	bOk			: BOOL := FALSE;(* TRUE = Success, FALSE = Failed *)
-	getPosPtr	: POINTER TO T_HashTableEntry := 0;(* Returned hash table entry position pointer *)
-	getValue 	: ST_DeviceState;(* Returned hash table entry value *)
-	nCount		: UDINT := 0;(* Hash table size (number of used entries, used by A_Count) *)
+    bOk            : BOOL := FALSE;(* TRUE = Success, FALSE = Failed *)
+    getPosPtr    : POINTER TO T_HashTableEntry := 0;(* Returned hash table entry position pointer *)
+    getValue     : ST_DeviceState;(* Returned hash table entry value *)
+    nCount        : UDINT := 0;(* Hash table size (number of used entries, used by A_Count) *)
 END_VAR
 VAR
-	dataPool	: ARRAY[0..MAX_DEVICE_STATES] OF ST_DeviceState;(* Structured data element pool *)
-	entries		: ARRAY[0..MAX_DEVICE_STATES] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
-	fbTable 	: FB_HashTableCtrl;(* basic hash table control function block *)
-	hTable 		: T_HHASHTABLE;(* hash table handle *)
-	pRefPtr		: POINTER TO ST_DeviceState := 0;
-	indexOfElem	: ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
+    dataPool    : ARRAY[0..PMPS_GVL.MAX_DEVICE_STATES] OF ST_DeviceState;(* Structured data element pool *)
+    entries        : ARRAY[0..PMPS_GVL.MAX_DEVICE_STATES] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
+    fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
+    hTable         : T_HHASHTABLE;(* hash table handle *)
+    pRefPtr        : POINTER TO ST_DeviceState := 0;
+    indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,17 +34,17 @@ getPosPtr := 0;
 
 fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(PMPS_GVL.cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
 IF fbTable.bOk THEN(* Success *)
-	fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
-	IF fbTable.bOk THEN(* Success *)
-		pRefPtr 	:= ADR( dataPool[indexOfElem] );(* Get pointer to the data element *)
+    fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
+    IF fbTable.bOk THEN(* Success *)
+        pRefPtr     := ADR( dataPool[indexOfElem] );(* Get pointer to the data element *)
 
-		pRefPtr^ := putValue;(* copy application value *)
+        pRefPtr^ := putValue;(* copy application value *)
 
-		fbTable.A_Add( hTable := hTable, key := key, putValue := pRefPtr, bOk=>bOk );(* Assign the entry value = pointer to the data element *)
-		IF fbTable.bOk THEN(* Success *)
-			getValue := putValue;
-		END_IF
-	END_IF
+        fbTable.A_Add( hTable := hTable, key := key, putValue := pRefPtr, bOk=>bOk );(* Assign the entry value = pointer to the data element *)
+        IF fbTable.bOk THEN(* Success *)
+            getValue := putValue;
+        END_IF
+    END_IF
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -63,7 +63,7 @@ getPosPtr := 0;
 
 fbTable.A_GetFirst( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
 IF fbTable.bOk THEN
-	getValue := pRefPtr^;
+    getValue := pRefPtr^;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -75,12 +75,12 @@ getPosPtr := 0;
 bOk := FALSE;
 
 IF putPosPtr = 0 THEN
-	RETURN;
+    RETURN;
 END_IF
 
 fbTable.A_GetNext( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
 IF fbTable.bOk THEN
-	getValue := pRefPtr^;
+    getValue := pRefPtr^;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -92,7 +92,7 @@ getPosPtr := 0;
 
 fbTable.A_Lookup( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
 IF fbTable.bOk THEN
-	getValue := pRefPtr^;
+    getValue := pRefPtr^;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -104,7 +104,7 @@ getPosPtr := 0;
 
 fbTable.A_Remove( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
 IF fbTable.bOk THEN
-	getValue := pRefPtr^;
+    getValue := pRefPtr^;
 END_IF]]></ST>
       </Implementation>
     </Action>

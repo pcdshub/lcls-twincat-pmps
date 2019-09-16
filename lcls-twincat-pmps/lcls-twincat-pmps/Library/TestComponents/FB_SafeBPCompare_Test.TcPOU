@@ -21,28 +21,28 @@ METHOD BeamOffIsSafe
 VAR_INPUT
 END_VAR
 VAR
-	stBeamOn	:	ST_BeamParams;
-	stBeamOff	:	ST_BeamParams;
-	
+    stBeamOn    :    ST_BeamParams;
+    stBeamOff    :    ST_BeamParams;
+    
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[stBeamOn := F_SetBeamParams(
-	50, //50% attenuation is more conservative than 0
-	10,
-	16#FFFF,
-	120);
+    50, //50% attenuation is more conservative than 0
+    10,
+    16#FFFF,
+    120);
 
 stBeamOff := F_SetBeamParams(
-	0, //0% attenuation
-	10,
-	16#FFFF,
-	0); //0 beam rate means this bps is actually safer than BeamOn
+    0, //0% attenuation
+    10,
+    16#FFFF,
+    0); //0 beam rate means this bps is actually safer than BeamOn
 
 TEST('BeamOffIsSafe');
-	
+    
 AssertTrue(
-	F_SafeBPCompare(stBeamOff, stBeamOn),
-	'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
+    F_SafeBPCompare(stBeamOff, stBeamOn),
+    'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
@@ -52,8 +52,8 @@ METHOD BPComparisonCheck
 VAR_INPUT
 END_VAR
 VAR
-	stSafer	:	ST_BeamParams;
-	stNotSoSafe	:	ST_BeamParams;
+    stSafer    :    ST_BeamParams;
+    stNotSoSafe    :    ST_BeamParams;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('BPComparisonCheck');
@@ -61,93 +61,89 @@ END_VAR]]></Declaration>
 
 //Attenuation
 stSafer := F_SetBeamParams(
-	1, //
-	10,
-	16#FFFF,
-	1);
+    1, //
+    10,
+    16#FFFF,
+    1);
 
 stNotSoSafe := F_SetBeamParams(
-	0, //
-	10,
-	16#FFFF,
-	1); 
-	
+    0, //
+    10,
+    16#FFFF,
+    1); 
+    
 AssertTrue(
-	F_SafeBPCompare(stSafer, stNotSoSafe),
-	'Attenuation eval is broken (True)'); 
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Attenuation eval is broken (True)'); 
 
 AssertFalse(
-	F_SafeBPCompare(stNotSoSafe, stSafer),
-	'Attenuation eval is broken (False)');
-	
-	
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Attenuation eval is broken (False)');
+    
+    
 //Rate
 stSafer := F_SetBeamParams(
-	0,
-	10,
-	16#FFFF,
-	1); //
+    0,
+    10,
+    16#FFFF,
+    1); //
 
 stNotSoSafe := F_SetBeamParams(
-	0,
-	10,
-	16#FFFF,
-	10); //
-	
+    0,
+    10,
+    16#FFFF,
+    10); //
+    
 AssertTrue(
-	F_SafeBPCompare(stSafer, stNotSoSafe),
-	'Rate eval is broken (True)'); 
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Rate eval is broken (True)'); 
 
 AssertFalse(
-	F_SafeBPCompare(stNotSoSafe, stSafer),
-	'Rate eval is broken (False)');
-	
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Rate eval is broken (False)');
+    
 //Pulse energy
 stSafer := F_SetBeamParams(
-	0, 
-	1, //
-	16#FFFF,
-	1);
+    0, 
+    1, //
+    16#FFFF,
+    1);
 
 stNotSoSafe := F_SetBeamParams(
-	0, 
-	10, //
-	16#FFFF,
-	1); 
-	
+    0, 
+    10, //
+    16#FFFF,
+    1); 
+    
 AssertTrue(
-	F_SafeBPCompare(stSafer, stNotSoSafe),
-	'Pulse energy eval is broken (True)'); 
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Pulse energy eval is broken (True)'); 
 
 AssertFalse(
-	F_SafeBPCompare(stNotSoSafe, stSafer),
-	'Pulse energy eval is broken (False)');	
-	
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Pulse energy eval is broken (False)');    
+    
 //Photon energy
 //More extensive tests elsewhere
 stSafer := F_SetBeamParams(
-	0, 
-	1, 
-	2#0000_0000_0000_0110, //200-400eV
-	1);
-	
-stSafer.reV := 300; //
+    0, 
+    1, 
+    2#0000_0000_0000_0010,
+    1);
 
 stNotSoSafe := F_SetBeamParams(
-	0, 
-	1, 
-	2#0000_0000_0000_0110, //200-400ev
-	1);
-	
-stNotSoSafe.reV := 401;
-	
+    0, 
+    1, 
+    2#0000_0000_0000_0110,
+    1);
+    
 AssertTrue(
-	F_SafeBPCompare(stSafer, stNotSoSafe),
-	'Photon energy eval is broken (True)'); 
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Photon energy eval is broken (True)'); 
 
 AssertFalse(
-	F_SafeBPCompare(stNotSoSafe, stSafer),
-	'Photon energy eval is broken (False)');	
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Photon energy eval is broken (False)');    
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>

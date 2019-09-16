@@ -2,7 +2,7 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1357c0c5-6965-43f8-9b9e-b7b0184a3df6}</ProjectGuid>
+    <ProjectGuid>{6fc7ddd1-8859-4c23-b1e8-b673326dd2a2}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
@@ -19,12 +19,24 @@
     <Released>false</Released>
     <Title>Photon Machine Protection System Library</Title>
     <ProjectVersion>0.0.0</ProjectVersion>
-    <Author>A. Wallace</Author>
+    <Author>Alex Wallace and contributors</Author>
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\ST_BeamParams.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_Device.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_DeviceState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_DeviceStateExt.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_DeviceStateTable.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
@@ -143,6 +155,7 @@
     </Compile>
     <Compile Include="TestComponents\FB_SolidAttenuator.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +167,10 @@
     <Folder Include="VISUs" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Tc2_MC2">
+      <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_MC2</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>

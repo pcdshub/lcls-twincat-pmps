@@ -4,16 +4,16 @@
     <Declaration><![CDATA[//reV must be within permitted range.
 FUNCTION F_eVWithinSpec : BOOL
 VAR_INPUT
-	reV	:	REAL;	//Photon energy to check if within permitted range
-	nPermittedRange	:	WORD; //Permitted range
+    reV    :    REAL;    //Photon energy to check if within permitted range
+    nPermittedRange    :    WORD; //Permitted range
 END_VAR
 VAR
-	//Holding register for permitted ranges
-	nPermittedRangeHolding	:	WORD; 
-	//For loop counter
-	nIndex	:	INT;
-	// Lower boundary for range check 
-	rPreviousBoundary: REAL := 0;
+    //Holding register for permitted ranges
+    nPermittedRangeHolding    :    WORD; 
+    //For loop counter
+    nIndex    :    INT;
+    // Lower boundary for range check 
+    rPreviousBoundary: REAL := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,15 +29,15 @@ and shift the holding register right, which moves the next bit to the zero posit
 nPermittedRangeHolding := nPermittedRange;
 
 FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
-		
-	F_eVWithinSpec S= nPermittedRangeHolding.0 AND( 
-		(reV <= PMPS_GVL.g_areVBoundaries[nIndex]*1000) AND
-		(reV >= rPreviousBoundary*1000) );
-		
-	IF F_eVWithinSpec THEN RETURN; END_IF
-	
-	rPreviousBoundary := PMPS_GVL.g_areVBoundaries[nIndex];
-	nPermittedRangeHolding := SHR(nPermittedRangeHolding, 1);
+        
+    F_eVWithinSpec S= nPermittedRangeHolding.0 AND( 
+        (reV <= PMPS_GVL.g_areVBoundaries[nIndex]*1000) AND
+        (reV >= rPreviousBoundary*1000) );
+        
+    IF F_eVWithinSpec THEN RETURN; END_IF
+    
+    rPreviousBoundary := PMPS_GVL.g_areVBoundaries[nIndex];
+    nPermittedRangeHolding := SHR(nPermittedRangeHolding, 1);
 END_FOR
 ]]></ST>
     </Implementation>

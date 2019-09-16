@@ -20,28 +20,28 @@ regardless of current beam-rate.
 *)
 FUNCTION_BLOCK FB_PhotonEnergyWatcher
 VAR_INPUT
-	i_stCurrentBeamParams	:	ST_BeamParams; //Link to global beam params
-	i_stMachineTargetBeamParams	:	ST_BeamParams; //Link to global machine target beam params
-	i_stRequestedBeamParams	:	ST_BeamParams; //Link to arbiter output or beam param. requestor
-	// Reset fault
-	i_xReset: BOOL;
+    i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
+    i_stMachineTargetBeamParams    :    ST_BeamParams; //Link to global machine target beam params
+    i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
+    // Reset fault
+    i_xReset: BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	io_fbFFHWO	:	FB_HardwareFFOutput;
+    io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR
-	xPhotonEnergyWithinBounds	:	BOOL;
-	fbFF	:	FB_FastFault;
+    xPhotonEnergyWithinBounds    :    BOOL;
+    fbFF    :    FB_FastFault;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[xPhotonEnergyWithinBounds := (i_stCurrentBeamParams.neVRange AND i_stRequestedBeamParams.neVRange) = i_stCurrentBeamParams.neVRange;
 
 fbFF(i_xOK := xPhotonEnergyWithinBounds,
-	i_xReset := i_xReset,
-	io_fbFFHWO := io_fbFFHWO);
+    i_xReset := i_xReset,
+    io_fbFFHWO := io_fbFFHWO);
 ]]></ST>
     </Implementation>
   </POU>

@@ -26,23 +26,23 @@ sets against each other.
 
 FUNCTION_BLOCK FB_Arbiter
 VAR_INPUT
-	i_nStateID	:	UDINT; //Set to the stateID of the state requesting the beam parameter set
-	i_stAssertBeamParams	:	ST_BeamParams; //Set to the beam parameter set of the state required
+    i_nStateID    :    UDINT; //Set to the stateID of the state requesting the beam parameter set
+    i_stAssertBeamParams    :    ST_BeamParams; //Set to the beam parameter set of the state required
 END_VAR
 VAR_OUTPUT
-	q_stBeamParams	:	ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
-	
-	q_xStateIDFound	:	BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
+    q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+    
+    q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
 END_VAR
 VAR
-	
-	fbBPAssertionPool	:	FB_BeamParamAssertionPool; //Table of active beam parameter assertions
-	
-	getPosPtr	: POINTER TO T_HashTableEntry := 0; 
-	getBPStruct	:	ST_BeamParams;
-	stOutputBP	:	ST_BeamParams; //Safest beam parameters from all in the assertion pool
-	
-	
+    
+    fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
+    
+    getPosPtr    : POINTER TO T_HashTableEntry := 0; 
+    getBPStruct    :    ST_BeamParams;
+    stOutputBP    :    ST_BeamParams; //Safest beam parameters from all in the assertion pool
+    
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -58,25 +58,25 @@ fbBPAssertionPool.A_Reset();]]></ST>
     <Method Name="AddRequest" Id="{f6e392d1-3a4a-4d38-b38d-86d9847b5a7a}">
       <Declaration><![CDATA[METHOD AddRequest : BOOL
 VAR_INPUT
-	nReqID	:	DWORD; //StateID of state requesting beam parameter set
-	stReqBP		:	ST_BeamParams; //Requested beam params
+    nReqID    :    DWORD; //StateID of state requesting beam parameter set
+    stReqBP        :    ST_BeamParams; //Requested beam params
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF THIS^.CheckRequest(nReqID) THEN
-	AddRequest := FALSE;
-	RETURN;
+    AddRequest := FALSE;
+    RETURN;
 END_IF
 
 IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
-	THIS^.fbBPAssertionPool.A_Add(
-		key := nReqID,
-		putValue := stReqBP
-	);
+    THIS^.fbBPAssertionPool.A_Add(
+        key := nReqID,
+        putValue := stReqBP
+    );
 END_IF
-	
+    
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
-	; //Overflow <TODO>
+    ; //Overflow <TODO>
 END_IF
 
 AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
@@ -85,8 +85,8 @@ AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
       <Declaration><![CDATA[METHOD ArbitrateBP : ST_BeamParams
 VAR_INPUT
-	stBP1	:	ST_BeamParams;
-	stBP2	:	ST_BeamParams;
+    stBP1    :    ST_BeamParams;
+    stBP2    :    ST_BeamParams;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -115,14 +115,14 @@ i_nStateId := nStateIDAssertionToCheck
 );
 
 IF fbArbiter.q_xStateIDFound THEN:
-	Do something
+    Do something
 ELSE:
-	Don't do something
+    Don't do something
 
 *)
 METHOD CheckRequest : BOOL
 VAR_INPUT
-	nReqID	:	DWORD;
+    nReqID    :    DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -137,10 +137,10 @@ CheckRequest := THIS^.fbBPAssertionPool.bOk;
 VAR_INPUT
 END_VAR
 VAR
-	getPosPtr	: POINTER TO T_HashTableEntry := 0;
-	getBPStruct	:	ST_BeamParams;
-	
-	stOutputBP	:	ST_BeamParams; //Holding struct for arbitration process
+    getPosPtr    : POINTER TO T_HashTableEntry := 0;
+    getBPStruct    :    ST_BeamParams;
+    
+    stOutputBP    :    ST_BeamParams; //Holding struct for arbitration process
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//Arbitrate
@@ -157,25 +157,25 @@ all asserters.
 
 THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStruct );
 IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
-	
-	//The first entry in the hash table is taken as the setting to arbitrate against
-	stOutputBP := F_SetBeamParams(
-		fAtt := getBPStruct.fAtt,
-		fPP_mJ := getBPStruct.fPP_mJ,
-		neVRange	:= getBPStruct.neVRange,
-		nRate := getBPStruct.nRate
-	);
+    
+    //The first entry in the hash table is taken as the setting to arbitrate against
+    stOutputBP := F_SetBeamParams(
+        fAtt := getBPStruct.fAtt,
+        fPP_mJ := getBPStruct.fPP_mJ,
+        neVRange    := getBPStruct.neVRange,
+        nRate := getBPStruct.nRate
+    );
 
-	REPEAT
-		THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStruct );
-		IF THIS^.fbBPAssertionPool.bOk THEN
-			stOutputBP := ArbitrateBP(stOutputBP, getBPStruct);
-		END_IF
-	UNTIL NOT fbBPAssertionPool.bOk
-	END_REPEAT
+    REPEAT
+        THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStruct );
+        IF THIS^.fbBPAssertionPool.bOk THEN
+            stOutputBP := ArbitrateBP(stOutputBP, getBPStruct);
+        END_IF
+    UNTIL NOT fbBPAssertionPool.bOk
+    END_REPEAT
 ELSE
-	//Safest parameters to start
-	stOutputBP := PMPS_GVL.cstSafeBeam;
+    //Safest parameters to start
+    stOutputBP := PMPS_GVL.cstSafeBeam;
 END_IF
 
 THIS^.q_stBeamParams := stOutputBP;
@@ -199,18 +199,18 @@ i_nStateId := nStateIDAssertionToRemove
 *)
 METHOD RemoveRequest : BOOL
 VAR_INPUT
-	nReqId	:	DWORD;
+    nReqId    :    DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
-	THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
-	
-	IF THIS^.fbBPAssertionPool.bOk THEN
-		;
-	ELSE
-		;
-	END_IF
+    THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
+    
+    IF THIS^.fbBPAssertionPool.bOk THEN
+        ;
+    ELSE
+        ;
+    END_IF
 END_IF
 
 RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>

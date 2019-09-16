@@ -3,20 +3,20 @@
   <POU Name="FB_AttenuatorSimulator" Id="{4b69d24e-94d2-432d-a592-4257cd3ec395}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AttenuatorSimulator
 VAR_INPUT
-	i_rRequestedAttenuation	:	REAL;
-	i_stBPReadback	:	ST_BeamParams;
+    i_rRequestedAttenuation    :    REAL;
+    i_stBPReadback    :    ST_BeamParams;
 END_VAR
 VAR_OUTPUT
-	q_xFault	:	BOOL;
-	q_rCurrentAttenuation	:	REAL;
+    q_xFault    :    BOOL;
+    q_rCurrentAttenuation    :    REAL;
 END_VAR
 VAR_IN_OUT
-	Arbiter	:	FB_Arbiter; //Higher level arbiter from which upstream attenuation can be requested
+    Arbiter    :    FB_Arbiter; //Higher level arbiter from which upstream attenuation can be requested
 END_VAR
 VAR
-	tonDelay	:	TON := (
-		PT := T#3S
-		);
+    tonDelay    :    TON := (
+        PT := T#3S
+        );
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,7 +24,7 @@ END_VAR
 tonDelay(IN := i_rRequestedAttenuation <> q_rCurrentAttenuation);
 
 IF tonDelay.Q THEN
-	q_rCurrentAttenuation := i_rRequestedAttenuation;
+    q_rCurrentAttenuation := i_rRequestedAttenuation;
 END_IF]]></ST>
     </Implementation>
   </POU>

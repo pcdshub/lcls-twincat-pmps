@@ -18,58 +18,58 @@ END_VAR
 VAR_INPUT
 END_VAR
 VAR
-	LastWord : WORD := 2#0000_0000_0000_0010;
+    LastWord : WORD := 2#0000_0000_0000_0010;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('CheckRanges');
 //Upper limit equal
 AssertTrue(
-	F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
-	'Upper limit not inclusive');
+    F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
+    'Upper limit not inclusive');
 //Lower limit equal
 AssertTrue(
-	F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
-	'Upper limit not inclusive');
+    F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
+    'Upper limit not inclusive');
 //Mid range
 AssertTrue(
-	F_eVRangeCalculator(251, 0) = 2#0000_0000_0000_0010,
-	'In range failed, whatever you did, it broke this really bad.');
+    F_eVRangeCalculator(251, 0) = 2#0000_0000_0000_0010,
+    'In range failed, whatever you did, it broke this really bad.');
 //Out of range
 AssertFalse(
-	F_eVRangeCalculator(300.1, 0) = 2#0000_0000_0000_0010,
-	'Out of range failed, whatever you did, it broke this really bad.');
+    F_eVRangeCalculator(300.1, 0) = 2#0000_0000_0000_0010,
+    'Out of range failed, whatever you did, it broke this really bad.');
 
 TEST_FINISHED();
 
 TEST('Negative eV failsafes');
 //Negative eV
 AssertTrue(
-	F_eVRangeCalculator(-300, 0) = 16#FFFF,
-	'Working with antimatter? Negative eV should failsafe to FFFF.');	
+    F_eVRangeCalculator(-300, 0) = 16#FFFF,
+    'Working with antimatter? Negative eV should failsafe to FFFF.');    
 
 TEST_FINISHED();
 
 TEST('Check hyst keeps');
 
 AssertTrue(
-	F_eVRangeCalculator(350, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0110,
-	'Moving up does not stick.');
-	
+    F_eVRangeCalculator(350, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0110,
+    'Moving up does not stick.');
+    
 AssertTrue(
-	F_eVRangeCalculator(150, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0011,
-	'Moving down does not stick.');
+    F_eVRangeCalculator(150, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0011,
+    'Moving down does not stick.');
 
 TEST_FINISHED();
 
 TEST('Check hyst drops');
 
 AssertTrue(
-	F_eVRangeCalculator(351, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0100,
-	'Moving up does not drop.');
-	
+    F_eVRangeCalculator(351, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0100,
+    'Moving up does not drop.');
+    
 AssertTrue(
-	F_eVRangeCalculator(149, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0001,
-	'Moving down does not drop.');
+    F_eVRangeCalculator(149, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0001,
+    'Moving down does not drop.');
 
 TEST_FINISHED();
 
