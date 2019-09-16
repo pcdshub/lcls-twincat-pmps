@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
-  <DUT Name="ST_BeamParams" Id="{4274b4a0-cc52-437a-96df-edb3f6e662cc}">
-    <Declaration><![CDATA[TYPE ST_BeamParams : 
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_BeamParams_WC" Id="{4274b4a0-cc52-437a-96df-edb3f6e662cc}">
+    <Declaration><![CDATA[TYPE ST_BeamParams_WC : 
     STRUCT
         (* Requested attenuation % *)
         fAtt : REAL := 100;

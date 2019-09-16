@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Arbiter" Id="{7464182c-a23a-4d85-9b4a-38e22935bfb9}" SpecialFunc="None">
     <Declaration><![CDATA[(* FB Arbiter
 
@@ -26,8 +26,6 @@ sets against each other.
 
 FUNCTION_BLOCK FB_Arbiter
 VAR_INPUT
-    i_nStateID    :    UDINT; //Set to the stateID of the state requesting the beam parameter set
-    i_stAssertBeamParams    :    ST_BeamParams; //Set to the beam parameter set of the state required
 END_VAR
 VAR_OUTPUT
     q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
@@ -35,7 +33,10 @@ VAR_OUTPUT
     q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
 END_VAR
 VAR
-    
+    {attribute 'pytmc' := '
+        pv: AssertionPool
+        io: i
+     '}
     fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
     
     getPosPtr    : POINTER TO T_HashTableEntry := 0; 

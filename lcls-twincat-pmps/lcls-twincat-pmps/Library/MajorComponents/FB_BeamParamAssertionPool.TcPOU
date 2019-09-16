@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_BeamParamAssertionPool" Id="{f4decfdf-ca0a-4e3b-aae3-b33f686ae70e}" SpecialFunc="None">
     <Declaration><![CDATA[(* This function block implements simple database. Data element values are stored in the hash table.  *)
 FUNCTION_BLOCK FB_BeamParamAssertionPool
@@ -16,6 +16,10 @@ VAR_OUTPUT
 END_VAR
 VAR
     dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERIONS] OF ST_BeamParams;(* Structured data element pool *)
+    {attribute 'pytmc' := '
+        pv: Entries
+        io: i
+     '}
     entries        : ARRAY[0..PMPS_GVL.MAX_ASSERIONS] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
     fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
     hTable         : T_HHASHTABLE;(* hash table handle *)
