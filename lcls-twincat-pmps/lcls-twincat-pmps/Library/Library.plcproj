@@ -2,7 +2,7 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6fc7ddd1-8859-4c23-b1e8-b673326dd2a2}</ProjectGuid>
+    <ProjectGuid>{12553481-002f-4f4e-a6cc-b95ac65f55ff}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
@@ -134,10 +134,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_UsualSuspects.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -257,7 +253,6 @@
     <SubObject Include="FB_PhotonEnergyWatcher_Test.PEWatcherBasicFunction" />
     <SubObject Include="FB_SafeBPCompare_Test.BeamOffIsSafe" />
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
-    <SubObject Include="FB_UsualSuspects.M_Register" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library.tmc">
