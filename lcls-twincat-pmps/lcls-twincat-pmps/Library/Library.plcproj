@@ -17,11 +17,12 @@
     <LibraryReferences>{1c1d8a93-1736-437e-b538-e21ada2f6c38}</LibraryReferences>
     <Company>SLAC - LCLS</Company>
     <Released>false</Released>
-    <Title>Photon Machine Protection System Library</Title>
     <ProjectVersion>0.0.0</ProjectVersion>
     <Author>Alex Wallace and contributors</Author>
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
+    <Title>PMPS</Title>
+    <DocFormat>reStructuredText</DocFormat>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\ST_BeamParams_WC.TcDUT">
