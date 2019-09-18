@@ -17,29 +17,34 @@
     <LibraryReferences>{1c1d8a93-1736-437e-b538-e21ada2f6c38}</LibraryReferences>
     <Company>SLAC - LCLS</Company>
     <Released>false</Released>
-    <Title>Photon Machine Protection System Library</Title>
     <ProjectVersion>0.0.0</ProjectVersion>
     <Author>Alex Wallace and contributors</Author>
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
+    <Title>PMPS</Title>
+    <DocFormat>reStructuredText</DocFormat>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\ST_BeamParams.TcDUT">
+    <Compile Include="DUTs\ST_BeamParams_WC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_Device.TcDUT">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="DUTs\ST_DeviceState.TcDUT">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="DUTs\ST_DeviceStateExt.TcDUT">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="DUTs\ST_DeviceStateTable.TcDUT">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
+    <Compile Include="DUTs\T_HashTableEntry.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GVLs\PMPS_GVL.TcGVL">
@@ -48,69 +53,90 @@
     </Compile>
     <Compile Include="HelperFunctions\F_DeviceState_To_DeviceStateExt.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_DiffBeamParamsRB.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_DifferentBeamParams.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_DiffReqBeamParams.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_eVRangeCalculator.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_eVWithinSpec.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_SafeBPCompare.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_SetBeamParams.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_Arbiter.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_BeamClassOutputs.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_BeamParamAssertionPool.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_BeamParamFanout.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_BPRequestor.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_HardwareFFOutput.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_LinearDeviceStateTable.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_LinearGovernor.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_PhotonEnergyWatcher.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FB_UsualSuspects.TcPOU">
       <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
@@ -221,9 +247,6 @@
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
     <SubObject Include="FB_FastFault_Test.FFCombinedFunctionality" />
     <SubObject Include="FB_FastFault_Test.FFRegistration" />
-    <SubObject Include="FB_HardwareFFOutput.CheckIn" />
-    <SubObject Include="FB_HardwareFFOutput.EvaluateOutput" />
-    <SubObject Include="FB_HardwareFFOutput.Register" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Add" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Count" />
     <SubObject Include="FB_LinearDeviceStateTable.A_GetFirst" />
@@ -240,6 +263,10 @@
     <None Include="Library.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PinnedGlobalDataType Include="ST_BeamParams" />
+    <PinnedGlobalDataType Include="ST_PMPS_Attenuator" />
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
