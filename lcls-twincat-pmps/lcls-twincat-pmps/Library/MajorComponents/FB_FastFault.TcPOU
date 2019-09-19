@@ -30,8 +30,8 @@ VAR_INPUT
      '}
     i_xVeto    :    BOOL; // Veto input
     
-    i_DevName : T_MaxString := ""; // Device name for diagnostic
-    i_Desc : T_MaxString := ""; // Description of fast fault (you should set at init)
+    i_DevName : T_MaxString := ''; // Device name for diagnostic
+    i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
