@@ -44,6 +44,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="DUTs\ST_FFInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\T_HashTableEntry.TcDUT">
       <SubType>Code</SubType>
     </Compile>

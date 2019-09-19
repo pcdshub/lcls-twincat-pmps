@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_FFInfo" Id="{08ec9521-6652-4b3e-81e8-b83ee8052a30}">
+    <Declaration><![CDATA[TYPE ST_FFInfo :
+STRUCT
+    sPath   :    T_MaxString; // Full PLC path to FF object
+    InUse   :   BOOL := FALSE; // If this FF is currently in-use
+    Desc    :   T_MaxString; // Set at instantiation to a helpful description of the fast fault purpose
+    State   :   BOOL; // May be container of FF state...
+    DevName :   T_MaxString; // Component name, used in diagnostic to help narrow down where beam faults are coming from
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
