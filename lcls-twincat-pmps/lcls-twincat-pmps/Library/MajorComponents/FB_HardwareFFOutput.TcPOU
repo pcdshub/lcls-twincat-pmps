@@ -45,6 +45,8 @@ VAR
     nIndex    :    INT;
     
     astFFInfo : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FFInfo;
+	EvalIdx: INT;
+	IdxOK: BOOL;
 END_VAR
 VAR CONSTANT
     cMaxList    :    INT := 99;
@@ -67,7 +69,17 @@ END_IF
     </Method>
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
-        <ST><![CDATA[//<TODO> add diagnostic for success or failure of reset
+        <ST><![CDATA[
+IdxOK := True;
+FOR EvalIdx := 1 TO PMPS_GVL.MAX_FAST_FAULTS DO
+    IF NOT astFFInfo[EvalIdx].InUse THEN 
+        CONTINUE;
+    ELSE
+        IdxOK := IdxOK AND astFFInfo[EvalIdx].State;
+    END_IF    
+END_FOR
+
+//<TODO> add diagnostic for success or failure of reset
 rtReset(CLK:=i_xReset AND xOK);
 
 q_xFastFaultOut S= rtReset.Q OR i_xVeto;
@@ -77,6 +89,17 @@ q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;
 xOK := True;]]></ST>
       </Implementation>
     </Action>
+    <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
+      <Declaration><![CDATA[METHOD IdxCheckIn : BOOL
+VAR_INPUT
+    Idx : UINT;
+    OK : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.astFFInfo[Idx].State := OK;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
       <Declaration><![CDATA[METHOD Register : BOOL
 VAR_INPUT

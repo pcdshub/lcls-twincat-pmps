@@ -50,6 +50,8 @@ VAR
     
     FFInfo : ST_FFInfo;
     
+    RegistrationIdx : UINT; // The index this FF was registered in the FFO
+    
     xInit    :    BOOL :=TRUE;
     bsFF    :    RS;
     rtReset    :    R_TRIG;
