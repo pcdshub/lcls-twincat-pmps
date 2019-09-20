@@ -34,7 +34,6 @@ VAR
      '}
     xOK    :    BOOL; // Current internal state of FFO, indicates if FFO will accept a reset
     
-    
     rtReset    :    R_TRIG;
     
     //Fault registration list
@@ -42,14 +41,12 @@ VAR
     //"check in" to indicate their status with this fast
     //fault output. ie. They may be a culprit of beam off.
     asList    :    ARRAY[0..99] OF T_MaxString;
-    nIndex    :    INT;
+    nIndex    :    UINT;
     
     astFFInfo : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FFInfo;
-	EvalIdx: INT;
+	EvalIdx: UINT;
 	IdxOK: BOOL;
-END_VAR
-VAR CONSTANT
-    cMaxList    :    INT := 99;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// <TODO> latch off beam if DI card status goes bad]]></ST>
@@ -97,7 +94,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.astFFInfo[Idx].State := OK;]]></ST>
+        <ST><![CDATA[THIS^.astFFInfo[LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS)].State := OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
@@ -113,16 +110,18 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     FFOName : T_MaxString;
+    Idx : UINT;
 END_VAR
 VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[FFOName := THIS^.sPath;
+Idx := THIS^.nIndex;
 
-IF THIS^.nIndex <= THIS^.cMaxList THEN
+IF THIS^.nIndex <= PMPS_GVL.MAX_FAST_FAULTS THEN
     
-    THIS^.asList[MIN(THIS^.nIndex,THIS^.cMaxList)]:=i_sFFName;
-    THIS^.astFFInfo[MIN(THIS^.nIndex,THIS^.cMaxList)]:=stFFInfo;
+    THIS^.asList[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)]:=i_sFFName;
+    THIS^.astFFInfo[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)]:=stFFInfo;
     
     THIS^.nIndex := THIS^.nIndex + 1;
     

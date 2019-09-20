@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="BeamParameterTransitionManager" Id="{843312b6-3630-0fa6-1e20-da1ce4aaad4c}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 Implements the procedure for safely transitioning between device states by asserting the correct beam parameters for 
@@ -89,9 +89,9 @@ WaitingForFinalAssertion:INT:=9;
               <n n="StateNamesInitString" />
               <v n="ForceActionRemove">false</v>
               <d n="RegionsWithStartStatesTable" t="Hashtable" ckt="Guid" cvt="Int32">
-                <v>6f7e44ba-88b2-43d7-909b-74059e90ad45</v>
-                <v>1</v>
                 <v>00000000-0000-0000-0000-000000000000</v>
+                <v>1</v>
+                <v>6f7e44ba-88b2-43d7-909b-74059e90ad45</v>
                 <v>1</v>
               </d>
               <d n="RegionsWithHistoryStatesTable" t="Hashtable" ckt="Guid" cvt="Int32">
@@ -326,7 +326,7 @@ WaitingForFinalAssertion:INT:=9;
                 </o>
                 <v>e79867e7-2b3a-47aa-af42-f5e58ca1d69c</v>
                 <o t="UMLStateChartElement">
-                  <v n="StateChartGuid">{6c96fc2d-5036-4d98-8cd4-c5e5ec510912}</v>
+                  <v n="StateChartGuid">{843312b6-3630-0fa6-1e20-da1ce4aaad4c}</v>
                   <v n="ImplicitStartStateType" t="ImplicitStartStateTypes">None</v>
                   <v n="EntryLocalVariableName">""</v>
                   <v n="EntryActionName">"AssertFinalBP"</v>
@@ -607,7 +607,7 @@ WaitingForFinalAssertion:INT:=9;
                 </o>
                 <v>01317ed0-894f-4589-9ddd-582e6efa85a7</v>
                 <o t="UMLStateChartElement">
-                  <v n="StateChartGuid">{6c96fc2d-5036-4d98-8cd4-c5e5ec510912}</v>
+                  <v n="StateChartGuid">{843312b6-3630-0fa6-1e20-da1ce4aaad4c}</v>
                   <v n="ImplicitStartStateType" t="ImplicitStartStateTypes">None</v>
                   <v n="EntryLocalVariableName">""</v>
                   <v n="EntryActionName">"AssertTransitionBP"</v>
@@ -1446,7 +1446,8 @@ xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion) AND
     <Action Name="WaitingForFinalAssertion_EXIT" Id="{841774c7-aa1a-0f81-0d11-1d67419288e5}">
       <Implementation>
         <ST><![CDATA[//Set this bool false so we can get a rising edge on the next try
-xFinalBP := FALSE;]]></ST>
+xFinalBP := FALSE;
+PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
       </Implementation>
     </Action>
     <Action Name="WaitingForTransitionAssertion_DO" Id="{b28d9b59-2c93-0121-2340-e3e699a9fa4a}">
@@ -1458,7 +1459,8 @@ xTranBP    := F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) 
     </Action>
     <Action Name="WaitingForTransitionAssertion_EXIT" Id="{07d13c2b-9514-064a-3d0d-409feea20c70}">
       <Implementation>
-        <ST><![CDATA[xTranBP := FALSE;]]></ST>
+        <ST><![CDATA[xTranBP := FALSE;
+PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
       </Implementation>
     </Action>
   </POU>

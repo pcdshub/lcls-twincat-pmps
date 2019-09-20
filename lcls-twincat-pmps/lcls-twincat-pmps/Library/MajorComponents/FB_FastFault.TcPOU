@@ -67,6 +67,8 @@ VAR
         io: i
      '} 
 	VetoActive: BOOL;
+    
+    ftCountFault : F_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -75,7 +77,7 @@ END_VAR
     FFInfo.InUse := True;
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
-    io_fbFFHWO.Register(i_sFFName:=sPath, stFFInfo:=FFInfo);
+    io_fbFFHWO.Register(i_sFFName:=sPath, stFFInfo:=FFInfo, Idx=>RegistrationIdx);
     //<TODO> if registration doesn't succeed, send warning to diagnostic
     xInit := FALSE;
 END_IF
@@ -86,7 +88,11 @@ rtReset(CLK:=i_xReset);
 bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK AND NOT VetoActive);
 o_xFFLine := bsFF.Q1;
 io_fbFFHWO.CheckIn(bsFF.Q1);
-]]></ST>
+
+io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := bsFF.Q1);
+
+ftCountFault(CLK:=bsFF.Q1);
+IF ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

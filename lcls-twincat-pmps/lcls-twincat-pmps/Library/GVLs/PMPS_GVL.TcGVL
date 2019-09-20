@@ -7,6 +7,11 @@ VAR_GLOBAL
     stReqMethBeamParamSum    :    ST_BeamParams;
     stCurrentBeamParameters    :    ST_BeamParams;
 END_VAR
+VAR_GLOBAL RETAIN    
+    // Statistics
+    SuccessfulPreemption : ULINT; // Any time BPTM applies a new BP request which is confirmed
+    AccumulatedFF : ULINT; // Any time a FF occurs
+END_VAR
 VAR_GLOBAL CONSTANT
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
@@ -29,7 +34,7 @@ VAR_GLOBAL CONSTANT
 );
     cnMaxStateArrayLen : INT := 20;
     
-    MAX_ASSERIONS    :    UDINT := 100; //Maximum number of assertions permitted in the arbiter
+    MAX_ASSERTIONS    :    UDINT := 100; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
     g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
