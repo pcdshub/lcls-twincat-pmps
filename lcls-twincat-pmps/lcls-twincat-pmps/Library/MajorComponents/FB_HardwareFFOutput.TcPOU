@@ -40,11 +40,14 @@ VAR
     //Fast faults add their name here to indicate they
     //"check in" to indicate their status with this fast
     //fault output. ie. They may be a culprit of beam off.
-    asList    :    ARRAY[0..99] OF T_MaxString;
-    nIndex    :    UINT;
-    
+    asList    :    ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF T_MaxString;
+    nIndex    :    UINT := 1;
+        {attribute 'pytmc' := '
+        pv: FFArray
+        io: i
+     '}
     astFFInfo : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FFInfo;
-	EvalIdx: UINT;
+	EvalIdx: UINT := 1;
 	IdxOK: BOOL;
 
 END_VAR]]></Declaration>

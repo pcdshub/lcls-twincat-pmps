@@ -109,7 +109,7 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_BeamParamFanout.TcPOU">
+    <Compile Include="MajorComponents\FB_BPFanout.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>

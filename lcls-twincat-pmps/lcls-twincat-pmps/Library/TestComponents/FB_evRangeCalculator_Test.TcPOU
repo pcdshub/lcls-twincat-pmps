@@ -22,14 +22,10 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('CheckRanges');
-//Upper limit equal
-AssertTrue(
-    F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
-    'Upper limit not inclusive');
 //Lower limit equal
 AssertTrue(
-    F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0110,
-    'Upper limit not inclusive');
+    F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0100,
+    'Lower limit not inclusive');
 //Mid range
 AssertTrue(
     F_eVRangeCalculator(251, 0) = 2#0000_0000_0000_0010,

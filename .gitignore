@@ -26,3 +26,4 @@ dbd
 
 # Output from scope ignores
 *.csv
+*.tmcRefac
