@@ -47,6 +47,12 @@
     <Compile Include="DUTs\ST_FFInfo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ST_FF.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_FFVeto.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\T_HashTableEntry.TcDUT">
       <SubType>Code</SubType>
     </Compile>

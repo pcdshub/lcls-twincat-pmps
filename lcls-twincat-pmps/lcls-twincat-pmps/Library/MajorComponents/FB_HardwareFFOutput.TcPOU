@@ -43,10 +43,9 @@ VAR
     asList    :    ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF T_MaxString;
     nIndex    :    UINT := 1;
         {attribute 'pytmc' := '
-        pv: FFArray
-        io: i
+        pv: FF
      '}
-    astFFInfo : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FFInfo;
+    astFF : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FF;
 	EvalIdx: UINT := 1;
 	IdxOK: BOOL;
 
@@ -72,10 +71,10 @@ END_IF
         <ST><![CDATA[
 IdxOK := True;
 FOR EvalIdx := 1 TO PMPS_GVL.MAX_FAST_FAULTS DO
-    IF NOT astFFInfo[EvalIdx].InUse THEN 
+    IF NOT astFF[EvalIdx].Info.InUse THEN 
         CONTINUE;
     ELSE
-        IdxOK := IdxOK AND astFFInfo[EvalIdx].State;
+        IdxOK := IdxOK AND astFF[EvalIdx].BeamPermitted;
     END_IF    
 END_FOR
 
@@ -94,22 +93,47 @@ xOK := True;]]></ST>
 VAR_INPUT
     Idx : UINT;
     OK : BOOL;
+    Reset : BOOL;
 END_VAR
-]]></Declaration>
+VAR
+    stFF : ST_FF;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.astFFInfo[LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS)].State := OK;]]></ST>
+        <ST><![CDATA[stFF := THIS^.astFF[LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS)];
+
+// Veto timer
+stFF.Veto.Timer(
+    IN := stFF.Veto.Activate,
+    PT := stFF.Veto.Duration,
+    Q => stFF.Veto.Active,
+    ET => stFF.Veto.ElapsedTime);
+
+// Updating internal fault state
+stFF.OK := OK;
+
+// Reset and latching logic
+stFF.rtReset(CLK:=stFF.Reset OR Reset);
+stFF.Reset R= stFF.rtReset.Q;
+stFF.bsFF(SET := rtReset.Q, RESET1:= NOT OK);    
+
+// Fault generation    
+IF NOT OK AND NOT stFF.Veto.Active THEN
+    THIS^.xOK := FALSE; //Very clever, thanks Zach!
+END_IF
+
+// Fast fault accumulation
+stFF.ftCountFault(CLK:=stFF.bsFF.Q1);
+IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
       <Declaration><![CDATA[METHOD Register : BOOL
 VAR_INPUT
-    i_sFFName    :    STRING := ''; //Fast fault FB variable name to register
     stFFInfo : ST_FFInfo := (
         sPath := '',
-        InUse := False,
         Desc := '',
-        State := False,
-        DevName := ''); //Fast fault information
+        TypeCode := 16#00,
+        DevName := ''); // Fast fault information
 END_VAR
 VAR_OUTPUT
     FFOName : T_MaxString;
@@ -123,14 +147,13 @@ Idx := THIS^.nIndex;
 
 IF THIS^.nIndex <= PMPS_GVL.MAX_FAST_FAULTS THEN
     
-    THIS^.asList[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)]:=i_sFFName;
-    THIS^.astFFInfo[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)]:=stFFInfo;
+    THIS^.astFF[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)].Info:=stFFInfo;
     
     THIS^.nIndex := THIS^.nIndex + 1;
     
-    Register := TRUE; //Add successful    
+    Register := TRUE; // Add successful    
 ELSE
-    Register := FALSE; //failed to add name to list
+    Register := FALSE; // Failed to add name to list
 END_IF]]></ST>
       </Implementation>
     </Method>
