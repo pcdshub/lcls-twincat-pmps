@@ -24,11 +24,6 @@ VAR_INPUT
         io: o
      '}
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
-    {attribute 'pytmc' := '
-        pv: EnableVeto
-        io: o
-     '}
-    i_xVeto    :    BOOL; // Veto input
     
     i_DevName : T_MaxString := ''; // Device name for diagnostic
     i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
@@ -55,19 +50,7 @@ VAR
     xInit    :    BOOL :=TRUE;
     bsFF    :    RS;
     rtReset    :    R_TRIG;
-    
-    {attribute 'pytmc' := '
-        pv: VetoDuration
-        io: o
-     '}
-    VetoDuration : TIME;
-    Veto    :   TOF;
-    {attribute 'pytmc' := '
-        pv: VetoActive
-        io: i
-     '} 
-	VetoActive: BOOL;
-    
+
     ftCountFault : F_TRIG;
 END_VAR
 ]]></Declaration>
@@ -77,22 +60,16 @@ END_VAR
     FFInfo.InUse := True;
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
-    io_fbFFHWO.Register(i_sFFName:=sPath, stFFInfo:=FFInfo, Idx=>RegistrationIdx);
+    io_fbFFHWO.Register(
+        stFFInfo:=FFInfo, 
+        Idx=>RegistrationIdx);
     //<TODO> if registration doesn't succeed, send warning to diagnostic
     xInit := FALSE;
 END_IF
 
-Veto(IN:=i_xVeto, PT:=VetoDuration, Q=>VetoActive); //might want to reset duration when veto expires
+io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := i_xOK, Reset:= i_xReset);
 
-rtReset(CLK:=i_xReset);
-bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK AND NOT VetoActive);
-o_xFFLine := bsFF.Q1;
-io_fbFFHWO.CheckIn(bsFF.Q1);
-
-io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := bsFF.Q1);
-
-ftCountFault(CLK:=bsFF.Q1);
-IF ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
