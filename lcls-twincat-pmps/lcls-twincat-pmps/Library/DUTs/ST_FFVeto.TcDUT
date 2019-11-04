@@ -10,14 +10,14 @@ STRUCT
     Duration : TIME;
     
     {attribute 'pytmc' := '
-        pv: Duration
+        pv: Activate
         io: o
      '}
     Activate : BOOL;
     
     {attribute 'pytmc' := '
         pv: ElapsedTime
-        io: o
+        io: i
      '}
     ElapsedTime : TIME;
     
