@@ -26,7 +26,7 @@ STRUCT
     BeamPermitted   :   BOOL; // Result of reset, veto, and fault logic, true beam off boolean
     
     {attribute 'pytmc' := '
-        pv: OK
+        pv: Reset
         io: o
      '}
     Reset   :   BOOL;
