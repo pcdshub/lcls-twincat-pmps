@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_BeamClassOutputs" Id="{4a29fded-500d-49a8-af9c-1a0c32a74d5a}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 Sets the beam class assertion lines for a given beam class.
@@ -12,9 +12,30 @@ VAR_OUTPUT
 END_VAR
 VAR
     wBeamClass    :    BYTE;
-    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
+
     InitCounter: INT;
     counter    :    INT;
+    
+            {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_BC]^Channel 1^Output;
+                              [2] := TIIB[PMPS_BC]^Channel 2^Output;
+                              [3] := TIIB[PMPS_BC]^Channel 3^Output;
+                              [4] := TIIB[PMPS_BC]^Channel 4^Output;
+                              
+                              [5] := TIIB[PMPS_BC]^Channel 5^Output;
+                              [6] := TIIB[PMPS_BC]^Channel 6^Output;
+                              [7] := TIIB[PMPS_BC]^Channel 7^Output;
+                              [8] := TIIB[PMPS_BC]^Channel 8^Output;
+                              
+                              [9] := TIIB[PMPS_BC]^Channel 9^Output;
+                              [10] := TIIB[PMPS_BC]^Channel 10^Output;
+                              [11] := TIIB[PMPS_BC]^Channel 11^Output;
+                              [12] := TIIB[PMPS_BC]^Channel 12^Output;
+                              
+                              [13] := TIIB[PMPS_BC]^Channel 13^Output;
+                              [14] := TIIB[PMPS_BC]^Channel 14^Output;
+                              [15] := TIIB[PMPS_BC]^Channel 15^Output;
+                              [16] := TIIB[PMPS_BC]^Channel 16^Output'}
+    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
