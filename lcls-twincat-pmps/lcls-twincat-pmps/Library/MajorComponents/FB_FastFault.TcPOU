@@ -24,9 +24,15 @@ VAR_INPUT
         io: o
      '}
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
+    {attribute 'pytmc' := '
+        pv: AutoReset
+        io: i
+     '}
+    i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
     
     i_DevName : T_MaxString := ''; // Device name for diagnostic
     i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
+    i_TypeCode : UINT; // Error code for classifying fast faults
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -48,18 +54,17 @@ VAR
     RegistrationIdx : UINT; // The index this FF was registered in the FFO
     
     xInit    :    BOOL :=TRUE;
-    bsFF    :    RS;
-    rtReset    :    R_TRIG;
 
-    ftCountFault : F_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF xInit    THEN
     FFInfo.sPath := sPath;
     FFInfo.InUse := True;
+    FFInfo.TypeCode := i_TypeCode;
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
+    FFInfo.AutoReset := i_xAutoReset;
     io_fbFFHWO.Register(
         stFFInfo:=FFInfo, 
         Idx=>RegistrationIdx);

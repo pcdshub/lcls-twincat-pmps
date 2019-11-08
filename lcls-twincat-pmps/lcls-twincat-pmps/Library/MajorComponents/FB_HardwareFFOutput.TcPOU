@@ -114,10 +114,10 @@ stFF.OK := OK;
 // Reset and latching logic
 stFF.rtReset(CLK:=stFF.Reset OR Reset);
 stFF.Reset R= stFF.rtReset.Q;
-stFF.bsFF(SET := rtReset.Q, RESET1:= NOT OK);    
+stFF.bsFF(SET := rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
 
 // Fault generation    
-IF NOT OK AND NOT stFF.Veto.Active THEN
+IF NOT stFF.bsFF.Q1 OR NOT OK AND NOT stFF.Veto.Active THEN
     THIS^.xOK := FALSE; //Very clever, thanks Zach!
 END_IF
 
@@ -134,6 +134,7 @@ VAR_INPUT
         Desc := '',
         TypeCode := 16#00,
         DevName := ''); // Fast fault information
+        
 END_VAR
 VAR_OUTPUT
     FFOName : T_MaxString;
