@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_PhotonEnergyWatcher" Id="{36789dc0-18e8-4123-89a2-b9f452534e7c}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 A. Wallace 2019-4-22
@@ -33,7 +33,11 @@ VAR_IN_OUT
 END_VAR
 VAR
     xPhotonEnergyWithinBounds    :    BOOL;
-    fbFF    :    FB_FastFault;
+    fbFF    :    FB_FastFault :=(
+        i_DevName := 'ARBITER:K:PhotonEnergyWatcher',
+        i_Desc := 'Fault occurs when the calculated machine photon energy (K value calculated by undulator
+                    gap, and electron energy) falls outside the permitted range.',
+        i_TypeCode := 16#9010);
 END_VAR
 ]]></Declaration>
     <Implementation>

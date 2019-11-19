@@ -24,6 +24,7 @@
 			</SubItem>
 			<Hides>
 				<Hide GUID="{A6175640-219D-4EFE-96DC-913F7DAE0CBA}"/>
+				<Hide GUID="{E56E3FA8-55E9-40D5-A85F-9A19737EB6BA}"/>
 			</Hides>
 		</DataType>
 		<DataType>
@@ -125,10 +126,11 @@
 			</SubItem>
 			<Hides>
 				<Hide GUID="{100E5D1B-E254-4ADE-9CA3-ED8293E49A42}"/>
+				<Hide GUID="{FB943590-84A3-4697-A3A5-DFB039A31E61}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" Target64Bit="true" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x106">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
