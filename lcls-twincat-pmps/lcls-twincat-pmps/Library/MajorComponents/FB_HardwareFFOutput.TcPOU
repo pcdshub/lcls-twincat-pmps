@@ -53,19 +53,6 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// <TODO> latch off beam if DI card status goes bad]]></ST>
     </Implementation>
-    <Method Name="CheckIn" Id="{a62d20dc-2f83-47a3-8377-2fd77eff32f0}">
-      <Declaration><![CDATA[METHOD CheckIn : BOOL
-VAR_INPUT
-    i_xOK    :    BOOL; //Keep true to keep beam
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT i_xOK THEN
-    THIS^.xOK := FALSE; //Very clever, thanks Zach!
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
         <ST><![CDATA[
@@ -102,11 +89,18 @@ END_VAR]]></Declaration>
         <ST><![CDATA[stFF := THIS^.astFF[LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS)];
 
 // Veto timer
+IF stFF.Veto.Deactivate THEN 
+    stFF.Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
+ELSE
+    stFF.Veto.Timer.PT := UDINT_TO_TIME(stFF.Veto.Duration);
+END_IF
+
+// UDINT conversions for ESS module compatibility.
 stFF.Veto.Timer(
-    IN := stFF.Veto.Activate,
-    PT := stFF.Veto.Duration,
-    Q => stFF.Veto.Active,
-    ET => stFF.Veto.ElapsedTime);
+    IN := stFF.Veto.Activate, // Rising edge activated
+    Q => stFF.Veto.Active);
+    
+stFF.Veto.ElapsedTime := TIME_TO_UDINT(stFF.Veto.Timer.ET);
 
 // Updating internal fault state
 stFF.OK := OK;
@@ -116,14 +110,21 @@ stFF.rtReset(CLK:=stFF.Reset OR Reset);
 stFF.Reset R= stFF.rtReset.Q;
 stFF.bsFF(SET := rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
 
+stFF.BeamPermitted := stFF.bsFF.Q1 OR stFF.Veto.Active;
+
 // Fault generation    
-IF NOT stFF.bsFF.Q1 OR NOT OK AND NOT stFF.Veto.Active THEN
+IF NOT stFF.BeamPermitted THEN
     THIS^.xOK := FALSE; //Very clever, thanks Zach!
 END_IF
 
 // Fast fault accumulation
 stFF.ftCountFault(CLK:=stFF.bsFF.Q1);
-IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF]]></ST>
+IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF
+
+stFF.Veto.Activate := FALSE;
+stFF.Veto.Deactivate := FALSE;
+
+THIS^.astFF[LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS)] := stFF;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
