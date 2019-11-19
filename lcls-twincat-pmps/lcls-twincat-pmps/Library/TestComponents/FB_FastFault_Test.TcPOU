@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_FastFault_Test" Id="{2ec3826d-e723-4fb3-ae0d-bdcd8662dc40}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_FastFault_Test EXTENDS TcUnit.FB_TestSuite
@@ -19,7 +19,7 @@ FFRegistration();]]></ST>
       <Declaration><![CDATA[METHOD FFCombinedFunctionality
 VAR_INPUT
 END_VAR
-VAR
+VAR_INST
     fbFF    :    FB_FastFault;
     fbFFO    :    FB_HardwareFFOutput;
     
@@ -88,7 +88,7 @@ TEST_FINISHED();]]></ST>
       <Declaration><![CDATA[METHOD FFRegistration
 VAR_INPUT
 END_VAR
-VAR
+VAR_INST
     fbFF    :    FB_FastFault;
     fbFFO    :    FB_HardwareFFOutput;
 END_VAR]]></Declaration>
@@ -97,7 +97,7 @@ END_VAR]]></Declaration>
 
 fbFF(io_fbFFHWO := fbFFO);
 
-AssertEquals_STRING(fbFF.sPath, fbFFO.asList[fbFFO.nIndex-1],
+AssertEquals_STRING(fbFF.sPath, fbFFO.astFF[fbFF.RegistrationIdx].Info.sPath,
     'FF registration with FFO did not succeed');
 
 TEST_FINISHED();]]></ST>
