@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_LinearGovernor" Id="{07e517ca-7850-4f18-a618-982393f377e9}" SpecialFunc="None">
     <Declaration><![CDATA[
 (* The governor is meant to check your work and keep you from making mistakes.
@@ -218,7 +218,7 @@ q_xFault := NOT ffBeamParamsOK.o_xFFLine OR
     xInitFault;
 
 //Any faults trip the fast fault line for this FB    
-FastFaultOutput.CheckIn(NOT q_xFault);
+//FastFaultOutput.CheckIn(NOT q_xFault);
 
 ]]></ST>
     </Implementation>
