@@ -17,7 +17,7 @@ VAR_GLOBAL CONSTANT
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
-    MAX_FAST_FAULTS : UINT := 100; // Maximum number of fast faults that can be associated with a FFO
+    MAX_FAST_FAULTS : UINT := 500; // Maximum number of fast faults that can be associated with a FFO
     
     cstFullBeam    :    ST_BeamParams := (
         fAtt := 0,

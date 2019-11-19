@@ -7,7 +7,7 @@ STRUCT
         pv: Duration
         io: o
      '}
-    Duration : TIME;
+    Duration : UDINT; // UDINT to be compatible with ESS module.
     
     {attribute 'pytmc' := '
         pv: Activate
@@ -16,10 +16,16 @@ STRUCT
     Activate : BOOL;
     
     {attribute 'pytmc' := '
+        pv: Deactivate
+        io: o
+     '}
+    Deactivate : BOOL;
+    
+    {attribute 'pytmc' := '
         pv: ElapsedTime
         io: i
      '}
-    ElapsedTime : TIME;
+    ElapsedTime : UDINT; // UDINT to be compatible with ESS module.
     
     {attribute 'pytmc' := '
         pv: Active
