@@ -51,7 +51,7 @@ VAR
     
     FFInfo : ST_FFInfo;
     
-    RegistrationIdx : UINT; // The index this FF was registered in the FFO
+    RegistrationIdx : UINT := 1; // The index this FF was registered in the FFO
     
     xInit    :    BOOL :=TRUE;
 

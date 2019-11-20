@@ -28,7 +28,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[TEST('FFCombinedFunctionality');
 
 //Clear initial faults
-fbFFO(i_xReset:=TRUE); //Reset requested at start of cycle
+fbFFO.i_xReset:=TRUE; //Reset requested at start of cycle
 
 fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
     i_xOK := TRUE,
