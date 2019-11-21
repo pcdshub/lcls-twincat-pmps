@@ -25,13 +25,14 @@ VAR_INPUT
      '}
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
     {attribute 'pytmc' := '
-        pv: EnableVeto
-        io: o
+        pv: AutoReset
+        io: i
      '}
-    i_xVeto    :    BOOL; // Veto input
+    i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
     
     i_DevName : T_MaxString := ''; // Device name for diagnostic
     i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
+    i_TypeCode : UINT; // Error code for classifying fast faults
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -50,49 +51,30 @@ VAR
     
     FFInfo : ST_FFInfo;
     
-    RegistrationIdx : UINT; // The index this FF was registered in the FFO
+    RegistrationIdx : UINT := 1; // The index this FF was registered in the FFO
     
     xInit    :    BOOL :=TRUE;
-    bsFF    :    RS;
-    rtReset    :    R_TRIG;
-    
-    {attribute 'pytmc' := '
-        pv: VetoDuration
-        io: o
-     '}
-    VetoDuration : TIME;
-    Veto    :   TOF;
-    {attribute 'pytmc' := '
-        pv: VetoActive
-        io: i
-     '} 
-	VetoActive: BOOL;
-    
-    ftCountFault : F_TRIG;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF xInit    THEN
     FFInfo.sPath := sPath;
     FFInfo.InUse := True;
+    FFInfo.TypeCode := i_TypeCode;
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
-    io_fbFFHWO.Register(i_sFFName:=sPath, stFFInfo:=FFInfo, Idx=>RegistrationIdx);
+    FFInfo.AutoReset := i_xAutoReset;
+    io_fbFFHWO.Register(
+        stFFInfo:=FFInfo, 
+        Idx=>RegistrationIdx);
     //<TODO> if registration doesn't succeed, send warning to diagnostic
     xInit := FALSE;
 END_IF
 
-Veto(IN:=i_xVeto, PT:=VetoDuration, Q=>VetoActive); //might want to reset duration when veto expires
+io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := i_xOK, Reset:= i_xReset);
 
-rtReset(CLK:=i_xReset);
-bsFF(SET := rtReset.Q, RESET1:= NOT i_xOK AND NOT VetoActive);
-o_xFFLine := bsFF.Q1;
-io_fbFFHWO.CheckIn(bsFF.Q1);
-
-io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := bsFF.Q1);
-
-ftCountFault(CLK:=bsFF.Q1);
-IF ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
