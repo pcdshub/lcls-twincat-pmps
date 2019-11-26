@@ -57,7 +57,7 @@ AssertFalse(fbFFO.q_xFastFaultOut,
 //are actually cleared
 
 //Attempt to clear FFO fails because FF still faulted
-fbFFO(i_xReset := TRUE); //Reset requested
+fbFFO.i_xReset := TRUE; //Reset requested
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
     i_xOK := FALSE,
@@ -69,8 +69,9 @@ AssertFalse(fbFFO.q_xFastFaultOut,
     'Fast fault output cleared while fault remains, very bad');
     
 //Attempt to clear FF while fault remains fails
-fbFFO(i_xReset := FALSE);
-fbFFO(i_xReset := TRUE); //Reset requested
+fbFFO.EvaluateOutput(i_xReset := FALSE);
+
+fbFFO.i_xReset := TRUE; //Reset requested
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
     i_xOK := FALSE,
