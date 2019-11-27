@@ -6,47 +6,53 @@
 
 TYPE ST_FFInfo :
 STRUCT
-    {attribute 'pytmc' := '
-    pv: FFPath
-    io: i
-     '}
+//    {attribute 'pytmc' := '
+//    pv: FFPath
+//    io: i
+//     '}
     sPath   :    T_MaxString; // Full PLC path to FF object
     
-    {attribute 'pytmc' := '
-        pv: Description
-        io: i
-     '}
+//    {attribute 'pytmc' := '
+//        pv: Description
+//        io: i
+//     '}
     Desc    :   T_MaxString; // Set at instantiation to a helpful description of the fast fault purpose
     
-        {attribute 'pytmc' := '
-        pv: DevName
-        io: i
-     '}
+//        {attribute 'pytmc' := '
+//        pv: DevName
+//        io: i
+//     '}
     DevName :   T_MaxString; // Component name, used in diagnostic to help narrow down where beam faults are coming from
     
-    {attribute 'pytmc' := '
-        pv: TypeCode
-        io: i
-     '}
+//    {attribute 'pytmc' := '
+//        pv: TypeCode
+//        io: i
+//     '}
     TypeCode    :   UINT; // Set at instantiation to fault class code
 
 ///////////////////////////////////////////
 // Warning, this variable is effectively a VETO of the fast fault if set FALSE
 // Do not alter the state of this variable unless you really know what you're doing.
 ///////////////////////////////////////////    
-    {attribute 'pytmc' := '
-        pv: InUse
-        io: i
-     '}
+//    {attribute 'pytmc' := '
+//        pv: InUse
+//        io: i
+//     '}
     InUse   :   BOOL := FALSE; // If this FF is currently in-use
 ///////////////////////////////////////////
 
     
+//    {attribute 'pytmc' := '
+//        pv: AutoReset
+//        io: i
+//     '}
+    AutoReset   :   BOOL; // Automatically clear fast fault (latching vs non-latching)
+    
     {attribute 'pytmc' := '
-        pv: AutoReset
+        pv: InfoString
         io: i
      '}
-    AutoReset   :   BOOL; // Automatically clear fast fault (latching vs non-latching)
+    InfoString : STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
