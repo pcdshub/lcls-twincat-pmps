@@ -115,14 +115,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_BPFanout.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\FB_BPRequestor.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="MajorComponents\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -143,6 +135,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -154,14 +149,6 @@
     </Compile>
     <Compile Include="TestComponents\FB_AttenuatorSimulator.TcPOU">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestComponents\FB_BeamParamFanout_Test.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
-    </Compile>
-    <Compile Include="TestComponents\FB_BPRequestor_Test.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
       <SubType>Code</SubType>
@@ -195,6 +182,7 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="MajorComponents" />
     <Folder Include="MajorComponents\Arbiter" />
+    <Folder Include="MajorComponents\InterPlcComm" />
     <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
   </ItemGroup>
@@ -233,8 +221,6 @@
   <ItemGroup>
     <SubObject Include="FB_Arbiter_Test.Arbitration" />
     <SubObject Include="FB_Arbiter_Test.RequestCheckRemoveBP" />
-    <SubObject Include="FB_BeamParamFanout_Test.BPFanoutSafeguard" />
-    <SubObject Include="FB_BPRequestor_Test.BPRequestorSafeGuardFunctionality" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
