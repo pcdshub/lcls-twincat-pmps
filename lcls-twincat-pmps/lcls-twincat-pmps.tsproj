@@ -28,7 +28,37 @@
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{D3E9F7EC-BE3A-47D6-8804-AFFA5F03D770}" PersistentType="true">ST_BeamParams</Name>
+			<Name GUID="{B0C99D2E-B18D-4753-A368-EB6827B6F002}" PersistentType="true">ST_PMPS_Stopper</Name>
+			<BitSize>656</BitSize>
+			<SubItem>
+				<Name>DeviceID</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>0</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: DeviceID
+            io: i</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+			<SubItem>
+				<Name>In</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>648</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: In
+            io: i</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{B1DD5164-AE05-4422-BC6E-97C093227129}" PersistentType="true">ST_BeamParams</Name>
 			<BitSize>1760</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
@@ -41,6 +71,12 @@
 				<Default>
 					<Value>100</Value>
 				</Default>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Attenuationsssss; io: i;</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<SubItem>
 				<Name>nBeamClass</Name>
@@ -125,8 +161,7 @@
 				<BitOffs>1728</BitOffs>
 			</SubItem>
 			<Hides>
-				<Hide GUID="{100E5D1B-E254-4ADE-9CA3-ED8293E49A42}"/>
-				<Hide GUID="{FB943590-84A3-4697-A3A5-DFB039A31E61}"/>
+				<Hide GUID="{3232C2FC-0648-4AAD-A7AF-541E2EBECBDC}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>

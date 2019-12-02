@@ -4,6 +4,12 @@
     <Declaration><![CDATA[TYPE ST_BeamParams_WC : 
     STRUCT
         (* Requested attenuation % *)
+    {attribute 'pytmc' := '
+    
+    
+        pv: Attenuation
+        io: i
+     '}
         fAtt : REAL := 100;
         (* Machine parameters *)
         nBeamClass : BYTE := 15;

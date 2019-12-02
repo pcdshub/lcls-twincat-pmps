@@ -99,19 +99,19 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\Arbiter\FB_Arbiter.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="MajorComponents\Arbiter\FB_BeamParamAssertionPool.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_Arbiter.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="MajorComponents\FB_BeamClassOutputs.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\FB_BeamParamAssertionPool.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -194,6 +194,7 @@
     <Folder Include="GVLs" />
     <Folder Include="HelperFunctions" />
     <Folder Include="MajorComponents" />
+    <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
   </ItemGroup>
@@ -230,21 +231,8 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <SubObject Include="FB_Arbiter.AddRequest" />
-    <SubObject Include="FB_Arbiter.ArbitrateBP" />
-    <SubObject Include="FB_Arbiter.A_Init" />
-    <SubObject Include="FB_Arbiter.CheckRequest" />
-    <SubObject Include="FB_Arbiter.GetArbitratedBP" />
-    <SubObject Include="FB_Arbiter.RemoveRequest" />
     <SubObject Include="FB_Arbiter_Test.Arbitration" />
     <SubObject Include="FB_Arbiter_Test.RequestCheckRemoveBP" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_Add" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_Count" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_GetFirst" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_GetNext" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_Lookup" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_Remove" />
-    <SubObject Include="FB_BeamParamAssertionPool.A_Reset" />
     <SubObject Include="FB_BeamParamFanout_Test.BPFanoutSafeguard" />
     <SubObject Include="FB_BPRequestor_Test.BPRequestorSafeGuardFunctionality" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />

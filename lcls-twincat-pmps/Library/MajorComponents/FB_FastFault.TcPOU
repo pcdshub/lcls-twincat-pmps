@@ -54,6 +54,11 @@ VAR
     RegistrationIdx : UINT := 1; // The index this FF was registered in the FFO
     
     xInit    :    BOOL :=TRUE;
+    
+    InfoStringFmtr : FB_FormatString;
+    
+    InUse : STRING;
+    AutoReset : STRING;
 
 END_VAR
 ]]></Declaration>
@@ -65,6 +70,17 @@ END_VAR
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
     FFInfo.AutoReset := i_xAutoReset;
+    
+    InUse := BOOL_TO_STRING(FFInfo.InUse);
+    AutoReset := BOOL_TO_STRING(FFInfo.AutoReset);
+    InfoStringFmtr(sFormat:='%s;%s;%X;%s;%s;%s;',
+        arg1 := F_STRING(FFinfo.sPath),
+        arg2 := F_STRING(InUse),
+        arg3 := F_WORD(FFInfo.TypeCode),
+        arg4 := F_STRING(FFInfo.DevName),
+        arg5 := F_STRING(FFInfo.Desc),
+        arg6 := F_STRING(AutoReset),
+        sOut=>FFInfo.InfoString);
     io_fbFFHWO.Register(
         stFFInfo:=FFInfo, 
         Idx=>RegistrationIdx);
