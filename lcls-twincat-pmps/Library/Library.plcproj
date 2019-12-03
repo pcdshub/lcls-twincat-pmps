@@ -111,10 +111,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_BeamClassOutputs.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="MajorComponents\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -131,12 +127,22 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_PhotonEnergyWatcher.TcPOU">
+    <Compile Include="MajorComponents\InterPlcComm\FB_ArbiterToSubSys_IO.TcPOU">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassOutputs.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_CTLS_Outputs.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_PhotonEnergyWatcher.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
@@ -183,6 +189,7 @@
     <Folder Include="MajorComponents" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
+    <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
   </ItemGroup>
