@@ -111,11 +111,11 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_FastFault.TcPOU">
+    <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_HardwareFFOutput.TcPOU">
+    <Compile Include="MajorComponents\FastFaults\FB_HardwareFFOutput.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -189,6 +189,7 @@
     <Folder Include="MajorComponents" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
+    <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
