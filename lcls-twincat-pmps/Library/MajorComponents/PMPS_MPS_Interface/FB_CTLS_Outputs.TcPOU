@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_CTLS_Outputs" Id="{416fb51f-2328-4265-b79c-95ac443ac6d4}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Controls auxiliary beam class outputs.
+
+1-3 are mapped to control the Cu beamline rate via the LCLS II MPS.
+
+Maps beam rate requests to 1, 10, or full rate beam for Cu linac.
+
+*)
+FUNCTION_BLOCK FB_CTLS_Outputs
+VAR_INPUT
+    i_ArbiterBP    :    ST_BeamParams;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    
+            {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_CLTS]^Channel 1^Output;
+                                      [2] := TIIB[PMPS_CLTS]^Channel 2^Output;
+                                      [3] := TIIB[PMPS_CLTS]^Channel 3^Output;
+                                      [4] := TIIB[PMPS_CLTS]^Channel 4^Output;
+                                      
+                                      [5] := TIIB[PMPS_CLTS]^Channel 5^Output;
+                                      [6] := TIIB[PMPS_CLTS]^Channel 6^Output;
+                                      [7] := TIIB[PMPS_CLTS]^Channel 7^Output;
+                                      [8] := TIIB[PMPS_CLTS]^Channel 8^Output;
+                                      
+                                      [9] := TIIB[PMPS_CLTS]^Channel 9^Output;
+                                      [10] := TIIB[PMPS_CLTS]^Channel 10^Output;
+                                      [11] := TIIB[PMPS_CLTS]^Channel 11^Output;
+                                      [12] := TIIB[PMPS_CLTS]^Channel 12^Output;
+                                      
+                                      [13] := TIIB[PMPS_CLTS]^Channel 13^Output;
+                                      [14] := TIIB[PMPS_CLTS]^Channel 14^Output;
+                                      [15] := TIIB[PMPS_CLTS]^Channel 15^Output;
+                                      [16] := TIIB[PMPS_CLTS]^Channel 16^Output'}
+    q_CLTS_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
+    
+    
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// CLTS 1Hz
+q_CLTS_ASSERTION_LINES[1] := i_ArbiterBP.nRate >= 1;
+// CLTS 10Hz
+q_CLTS_ASSERTION_LINES[2] := i_ArbiterBP.nRate >= 10;
+// CLTS Full rate
+q_CLTS_ASSERTION_LINES[3] := i_ArbiterBP.nRate >= 120;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

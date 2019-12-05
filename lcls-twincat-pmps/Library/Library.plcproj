@@ -109,25 +109,12 @@
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_BeamClassOutputs.TcPOU">
+    <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_BPFanout.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\FB_BPRequestor.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\FB_FastFault.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\FB_HardwareFFOutput.TcPOU">
+    <Compile Include="MajorComponents\FastFaults\FB_HardwareFFOutput.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -139,7 +126,20 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="MajorComponents\FB_PhotonEnergyWatcher.TcPOU">
+    <Compile Include="MajorComponents\InterPlcComm\FB_ArbiterToSubSys_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassOutputs.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_CTLS_Outputs.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_PhotonEnergyWatcher.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -154,14 +154,6 @@
     </Compile>
     <Compile Include="TestComponents\FB_AttenuatorSimulator.TcPOU">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestComponents\FB_BeamParamFanout_Test.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
-    </Compile>
-    <Compile Include="TestComponents\FB_BPRequestor_Test.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
       <SubType>Code</SubType>
@@ -195,6 +187,9 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="MajorComponents" />
     <Folder Include="MajorComponents\Arbiter" />
+    <Folder Include="MajorComponents\InterPlcComm" />
+    <Folder Include="MajorComponents\FastFaults" />
+    <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="TestComponents" />
     <Folder Include="VISUs" />
   </ItemGroup>
@@ -233,8 +228,6 @@
   <ItemGroup>
     <SubObject Include="FB_Arbiter_Test.Arbitration" />
     <SubObject Include="FB_Arbiter_Test.RequestCheckRemoveBP" />
-    <SubObject Include="FB_BeamParamFanout_Test.BPFanoutSafeguard" />
-    <SubObject Include="FB_BPRequestor_Test.BPRequestorSafeGuardFunctionality" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />

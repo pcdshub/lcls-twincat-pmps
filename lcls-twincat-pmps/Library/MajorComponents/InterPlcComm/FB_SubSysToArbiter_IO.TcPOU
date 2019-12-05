@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SubSysToArbiter_IO
+VAR_INPUT
+    Reset : BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	Arbiter	: FB_Arbiter;
+    fbFFHWO : FB_HardwareFFOutput;
+END_VAR
+VAR
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Inputs^CurrentBP'}
+    i_stCurrentBP    AT %I* :    ST_BeamParams;
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
+    q_stRequestedBP AT %Q* :    ST_BeamParams;
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
+    xTxPDO_toggle    AT     %I* :    BIT;
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
+    xTxPDO_state    AT    %I*    :    BIT;
+    
+    // Fast faults
+    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[q_stRequestedBP := Arbiter.GetArbitratedBP();
+
+
+PMPS_GVL.stCurrentBeamParameters := i_stCurrentBP;
+PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must follow the one above. Sequence is important.
+
+ffPMPSIO_Disconnect(io_fbFFHWO := fbFFHWO,
+    i_xReset := Reset);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
