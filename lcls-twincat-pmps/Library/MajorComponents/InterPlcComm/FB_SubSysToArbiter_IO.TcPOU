@@ -12,13 +12,13 @@ VAR_IN_OUT
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
-    {attribute 'TcLinkTo' := 'TIIB[PMPS_IF]^IO Inputs^CurrentBP'}
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Inputs^CurrentBP'}
     i_stCurrentBP    AT %I* :    ST_BeamParams;
-    {attribute 'TcLinkTo' := 'TIIB[PMPS_IF]^IO Outputs^RequestedBP'}
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
     q_stRequestedBP AT %Q* :    ST_BeamParams;
-    {attribute 'TcLinkTo' := 'TIIB[PMPS_IF]^SYNC Inputs^TxPDO toggle'}
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
     xTxPDO_toggle    AT     %I* :    BIT;
-    {attribute 'TcLinkTo' := 'TIIB[PMPS_IF]^SYNC Inputs^TxPDO state'}
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
     xTxPDO_state    AT    %I*    :    BIT;
     
     // Fast faults
