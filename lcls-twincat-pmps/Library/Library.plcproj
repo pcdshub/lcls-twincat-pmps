@@ -109,7 +109,6 @@
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
