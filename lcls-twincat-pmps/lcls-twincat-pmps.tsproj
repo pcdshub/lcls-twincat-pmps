@@ -58,8 +58,8 @@
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{B1DD5164-AE05-4422-BC6E-97C093227129}" PersistentType="true">ST_BeamParams</Name>
-			<BitSize>1760</BitSize>
+			<Name GUID="{CE06BA2D-CD18-4B37-AE73-CAA6752F2295}" PersistentType="true">ST_BeamParams</Name>
+			<BitSize>1856</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
@@ -74,7 +74,8 @@
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Attenuationsssss; io: i;</Value>
+						<Value>pv: Attenuation
+        io: i</Value>
 					</Property>
 				</Properties>
 			</SubItem>
@@ -160,12 +161,30 @@
 				<BitSize>8</BitSize>
 				<BitOffs>1728</BitOffs>
 			</SubItem>
+			<SubItem>
+				<Name>xValid</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment>
+					<![CDATA[ Beam parameter set is valid (if readback), or acknowledged (if request)]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>1736</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nCohortInt</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000B}">ULINT</Type>
+				<Comment>
+					<![CDATA[ Cohort index. Identifies which cohort this BP set was included in arbitration]]>
+				</Comment>
+				<BitSize>64</BitSize>
+				<BitOffs>1792</BitOffs>
+			</SubItem>
 			<Hides>
-				<Hide GUID="{3232C2FC-0648-4AAD-A7AF-541E2EBECBDC}"/>
+				<Hide GUID="{B1DD5164-AE05-4422-BC6E-97C093227129}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="172.21.149.37.1.1" ShowHideConfigurations="#x106">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">

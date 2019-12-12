@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <Itf Name="ITF_HigherAuthority" Id="{c89248f4-a9e2-47b3-95b2-b5284f356db8}">
+    <Declaration><![CDATA[INTERFACE ITF_HigherAuthority
+]]></Declaration>
+    <Method Name="CheckRequest" Id="{2b6572a7-0464-4365-87a4-ea55112db4f2}">
+      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+VAR_INPUT
+    nReqID    :    DWORD;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RequestBP" Id="{3e1739a1-1ad7-458f-aff2-92eb7b0d02d9}">
+      <Declaration><![CDATA[METHOD RequestBP : BOOL
+VAR_INPUT
+    nReqID    :    DWORD; //StateID of state requesting beam parameter set
+    stReqBP        :    ST_BeamParams; //Requested beam params
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

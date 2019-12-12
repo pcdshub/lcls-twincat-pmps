@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_BPTM_Test" Id="{fb9a456e-191d-4018-903c-95799c9aa22a}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_BPTM_Test EXTENDS TcUnit.FB_TestSuite
@@ -30,7 +30,7 @@ VAR
 END_VAR
 VAR_INST
     fbBPTM_TestBasicFunction    :    BeamParameterTransitionManager;
-    fbArbiter    :    FB_Arbiter;
+    fbArbiter    :    FB_Arbiter(1);
     xFirstPass    :    BOOL := TRUE;
     eTestStep: eBPTMTestStates := eBPTMTestStates.Init;
 END_VAR]]></Declaration>
@@ -38,7 +38,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[CASE eTestStep OF
 
 eBPTMTestStates.Init:
-    fbArbiter.A_Init();
+    
     
     eTestStep := eBPTMTestStates.WaitingForTransitionAssertion;
 

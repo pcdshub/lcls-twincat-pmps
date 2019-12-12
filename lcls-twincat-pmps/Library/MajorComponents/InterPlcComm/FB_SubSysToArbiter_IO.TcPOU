@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_SubSysToArbiter_IO
+    <Declaration><![CDATA[// Use on a subsystem PLC to request from the arbiter
+// Run at the top of your cycle to receive the latest BP
+FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS ITF_HigherAuthority
 VAR_INPUT
     Reset : BOOL;
 END_VAR
@@ -23,17 +25,65 @@ VAR
     
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
+    
+    nRequestCohort : ULINT := 1;
+    xActiveInArbitration : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[q_stRequestedBP := Arbiter.GetArbitratedBP();
-
-
+      <ST><![CDATA[//Receiving current BP state
 PMPS_GVL.stCurrentBeamParameters := i_stCurrentBP;
 PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must follow the one above. Sequence is important.
+
+// Forwarding BP request for the subsystem
+Arbiter.ElevateRequest(THIS^);
 
 ffPMPSIO_Disconnect(io_fbFFHWO := fbFFHWO,
     i_xReset := Reset);]]></ST>
     </Implementation>
+    <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
+      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+VAR_INST
+    xFirstTime : BOOL;
+    nId : DWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Check this id matches what we've seen before
+IF xFirstTime THEN
+    nId := nReqId;
+ELSIF nId <> nReqId THEN
+    RETURN;
+END_IF
+
+// i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
+
+CheckRequest := xActiveInArbitration AND nRequestCohort < i_stCurrentBP.nCohortInt;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">
+      <Declaration><![CDATA[METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Check the request is coming from the same source we're used to
+
+// Update internal BP request struct
+THIS^.q_stRequestedBP := stReqBP;
+
+// Mark the current cohort id
+nRequestCohort := i_stCurrentBP.nCohortInt;
+
+// Reset the active in arbitration bit
+xActiveInArbitration := FALSE;]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
