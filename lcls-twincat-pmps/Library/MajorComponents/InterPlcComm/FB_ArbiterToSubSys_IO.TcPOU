@@ -20,6 +20,8 @@ VAR_IN_OUT
 END_VAR
 VAR
 	i_RequestedBP AT %I*	:	ST_BeamParams;
+    ftRequestedBPAck : F_TRIG;
+    PrevAckInt : ULINT;
 	o_CurrentBP AT %Q* : ST_BeamParams;
     
     // EL6692 Diagnostics
@@ -29,15 +31,30 @@ VAR
     
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection');
+    nCohort : ULINT := 1; // Cohort counter
+    rtCheckRequest : R_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Update arbiter with our request
-Arbiter.RemoveRequest(RequestingSystemID);
-Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
+
+
+ Arbiter.RemoveRequest(RequestingSystemID);
+ Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
+
+
+
+
+// Check if latest request is acknowledged by this arbiter
+// This happens after an arbitration
+rtCheckRequest(CLK:= Arbiter.CheckRequest(RequestingSystemID) );
+IF rtCheckRequest.Q THEN
+    nCohort := nCohort + 1;
+END_IF
 
 // Current beam params fanout
 o_CurrentBP := PMPS_GVL.stCurrentBeamParameters;
+o_CurrentBP.nCohortInt := nCohort;
 
 // Both of these values should be 0 for a fully valid exchange
 ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
