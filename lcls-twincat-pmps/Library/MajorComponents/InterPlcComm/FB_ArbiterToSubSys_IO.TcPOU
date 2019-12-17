@@ -20,36 +20,39 @@ VAR_IN_OUT
 END_VAR
 VAR
 	i_RequestedBP AT %I*	:	ST_BeamParams;
-    ftRequestedBPAck : F_TRIG;
-    PrevAckInt : ULINT;
+
 	o_CurrentBP AT %Q* : ST_BeamParams;
     
     // EL6692 Diagnostics
     i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
     i_WcState AT %I* : BOOL; // WcState^WcState
     i_TxPDOState AT %I* : BOOL; // SYNC Inputs^TxPDO state
+    i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
     
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection');
     nCohort : ULINT := 1; // Cohort counter
-    rtCheckRequest : R_TRIG;
+    rtToggle : R_TRIG;
+    ctuNew : CTU := (PV := 10000);
+    nRequestedCohort : ULINT := 1;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Update arbiter with our request
-
-
- Arbiter.RemoveRequest(RequestingSystemID);
- Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
-
+rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
+// xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
+IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN
+    Arbiter.RemoveRequest(RequestingSystemID);
+    Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
+    nRequestedCohort := i_RequestedBP.nCohortInt;
+END_IF
 
 
 
 // Check if latest request is acknowledged by this arbiter
 // This happens after an arbitration
-rtCheckRequest(CLK:= Arbiter.CheckRequest(RequestingSystemID) );
-IF rtCheckRequest.Q THEN
-    nCohort := nCohort + 1;
+IF Arbiter.CheckRequest(RequestingSystemID) THEN
+    nCohort := i_RequestedBP.nCohortInt;
 END_IF
 
 // Current beam params fanout

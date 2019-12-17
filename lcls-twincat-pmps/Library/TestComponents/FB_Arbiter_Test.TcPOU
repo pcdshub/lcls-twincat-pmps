@@ -91,45 +91,89 @@ VAR_INST
     
     fbSubSysToArb : FB_SubSysToArbiter_IO;
     pBPR : POINTER TO ST_BeamParams;
-    fbArbToSubSys : FB_ArbiterToSubSys_IO;
+    fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=34);
     pBPC : POINTER TO ST_BeamParams;
     
     fbBPR : FB_BPRequestor;
     
     FFO : FB_HardwareFFOutput;
+    
+    State : INT := 10;
+    testidx : INT := 10;
+    Cycle : INT := 0;
+    
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbArbiter.AddRequest(nId, stReq);
+        <ST><![CDATA[TEST('FullStack');
+
+fbArbiter.AddRequest(nId, stReq); // some device asking it's arbiter for some beam parameters
 
 TEST('CheckBPNotValidYet');
 AssertFalse(fbArbiter.CheckRequest(nId),
     'Check should fail. Request not arbitrated yet.');
 TEST_FINISHED();
 
-fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+CASE state OF
 
-
-
-
-pBPR := ADR(fbArbToSubSys.i_RequestedBP);
-pBPR^ := fbSubSysToArb.q_stRequestedBP;
-
-fbArbToSubSys(Arbiter := fbHigherArb, fbFFHWO := FFO);
-
-fbBPR(Arbiter := fbHigherArb);
-
-fbArbToSubSys(Arbiter := fbHigherArb, fbFFHWO := FFO);
-
-pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
-pBPC^ := fbArbToSubSys.o_CurrentBP;
-
-fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
-
-TEST('CheckBPValidNow');
-AssertTrue(fbArbiter.CheckRequest(nId),
+10:
+    
+    
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+    
+    //Ethercat transfer simulation
+    pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+    pBPR^ := fbSubSysToArb.q_stRequestedBP;
+    WRITE_PROTECTED_BOOL(ADR(fbArbToSubSys.i_TxPDOToggle), TRUE);
+    
+    pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
+    pBPC^ := fbArbToSubSys.o_CurrentBP;
+    
+    //////////////////////////////////////
+    //Start of arbiter plc cycle
+    //Arb io collects sub system status
+    fbArbToSubSys(Arbiter := fbHigherArb, fbFFHWO := FFO);
+    //BPR collects arbiter summation
+    fbBPR(Arbiter := fbHigherArb);
+    
+    Cycle := Cycle + 1;
+    
+    CASE Cycle OF
+        2:
+            state := 11;
+        3:
+            state := 12;
+        10:
+            state := 8000;
+    ELSE
+        ;
+	END_CASE
+    
+11:
+    TEST('CheckBPValidNow');
+    AssertTrue(fbArbiter.CheckRequest(nId),
     'Check should pass.');
-TEST_FINISHED();]]></ST>
+    TEST_FINISHED_NAMED('CheckBPValidNow');
+    
+    state := 10;
+    
+12:
+    state := 8000;
+    
+8000:
+    TEST_FINISHED_NAMED('FullStack');
+    
+
+END_CASE 
+
+
+
+
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestCheckRemoveBP" Id="{62a4c245-663e-41d8-901a-0a0faba360f7}">
