@@ -18,16 +18,21 @@ VAR
     i_stCurrentBP    AT %I* :    ST_BeamParams;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
     q_stRequestedBP AT %Q* :    ST_BeamParams;
+    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^xNewRequest'}
+    xNewRequest AT %Q* :    BOOL;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
     xTxPDO_toggle    AT     %I* :    BIT;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
     xTxPDO_state    AT    %I*    :    BIT;
     
+    
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
     
     nRequestCohort : ULINT := 1;
+    nCurrentCohort : ULINT := 1;
     xActiveInArbitration : BOOL;
+    xRequestMade : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,6 +43,8 @@ PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must
 // Forwarding BP request for the subsystem
 Arbiter.ElevateRequest(THIS^);
 
+q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
+
 ffPMPSIO_Disconnect(io_fbFFHWO := fbFFHWO,
     i_xReset := Reset);]]></ST>
     </Implementation>
@@ -47,7 +54,7 @@ VAR_INPUT
 	nReqID	: DWORD;
 END_VAR
 VAR_INST
-    xFirstTime : BOOL;
+    xFirstTime : BOOL := TRUE;
     nId : DWORD;
 END_VAR]]></Declaration>
       <Implementation>
@@ -55,12 +62,13 @@ END_VAR]]></Declaration>
 IF xFirstTime THEN
     nId := nReqId;
 ELSIF nId <> nReqId THEN
+    PMPS_GVL.fbLog(i_sMsg := 'SubSysToArbiter Check mismatched with a different ID', i_eSevr := E_MesgSevr.Error);
     RETURN;
 END_IF
 
 // i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
 
-CheckRequest := xActiveInArbitration AND nRequestCohort < i_stCurrentBP.nCohortInt;]]></ST>
+CheckRequest := nRequestCohort <= i_stCurrentBP.nCohortInt;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">
@@ -78,11 +86,17 @@ END_VAR
 // Update internal BP request struct
 THIS^.q_stRequestedBP := stReqBP;
 
+nRequestCohort := nRequestCohort + 1;
+
 // Mark the current cohort id
-nRequestCohort := i_stCurrentBP.nCohortInt;
+THIS^.q_stRequestedBP.nCohortInt := nRequestCohort;
 
 // Reset the active in arbitration bit
-xActiveInArbitration := FALSE;]]></ST>
+xActiveInArbitration := FALSE;
+
+xRequestMade := FALSE;
+
+xNewRequest := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

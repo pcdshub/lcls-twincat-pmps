@@ -189,8 +189,6 @@ END_IF
 IF HigherAuthority.CheckRequest(nReqID := nArbiterID) AND NOT xActiveInArbitration THEN // Check request must verify the ID is present and accounted for in arbitration
     nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
     xActiveInArbitration := TRUE;
-ELSE
-    xActiveInArbitration := FALSE;
 END_IF
 ]]></ST>
       </Implementation>

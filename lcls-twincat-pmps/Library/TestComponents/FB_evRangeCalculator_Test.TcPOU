@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_evRangeCalculator_Test" Id="{e6bcc6ca-553c-488f-ba3b-eabce151236e}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_evRangeCalculator_Test EXTENDS FB_TestSuite
@@ -67,9 +67,7 @@ AssertTrue(
     F_eVRangeCalculator(149, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0001,
     'Moving down does not drop.');
 
-TEST_FINISHED();
-
-TEST_FINISHED_NAMED('FOO');]]></ST>
+TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
   </POU>
