@@ -43,7 +43,7 @@ VAR
     getBPStruct    :    ST_BeamParams;
     stOutputBP    :    ST_BeamParams; //Safest beam parameters from all in the assertion pool
 
-    xRequestMade : BOOL; // Arbiter has confirmed it's request has made it into the beam parameter request    
+    xRequestMade : BOOL; // Arbiter has confirmed its request has made it into the beam parameter request    
     
     nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
     
