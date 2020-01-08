@@ -5,7 +5,7 @@
 // Run at the top of your cycle to receive the latest BP
 FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS ITF_HigherAuthority
 VAR_INPUT
-    Reset : BOOL;
+    Reset : BOOL; // Fast fault reset
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -18,8 +18,6 @@ VAR
     i_stCurrentBP    AT %I* :    ST_BeamParams;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
     q_stRequestedBP AT %Q* :    ST_BeamParams;
-    {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^xNewRequest'}
-    xNewRequest AT %Q* :    BOOL;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
     xTxPDO_toggle    AT     %I* :    BIT;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
@@ -29,10 +27,12 @@ VAR
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
     
-    nRequestCohort : ULINT := 1;
-    nCurrentCohort : ULINT := 1;
-    xActiveInArbitration : BOOL;
-    xRequestMade : BOOL;
+    // A request is not considered included until the active cohort number is >= the request cohort number.
+    nRequestCohort : ULINT := 1; // Request cohort
+    nCurrentCohort : ULINT := 0; // Active cohort
+    
+    
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -66,9 +66,10 @@ ELSIF nId <> nReqId THEN
     RETURN;
 END_IF
 
-// i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
+nCurrentCohort := i_stCurrentBP.nCohortInt;
 
-CheckRequest := nRequestCohort <= i_stCurrentBP.nCohortInt;]]></ST>
+// i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
+CheckRequest := nRequestCohort <= nCurrentCohort;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">
@@ -84,19 +85,12 @@ END_VAR
         <ST><![CDATA[// Check the request is coming from the same source we're used to
 
 // Update internal BP request struct
-THIS^.q_stRequestedBP := stReqBP;
+q_stRequestedBP := stReqBP;
 
 nRequestCohort := nRequestCohort + 1;
 
 // Mark the current cohort id
-THIS^.q_stRequestedBP.nCohortInt := nRequestCohort;
-
-// Reset the active in arbitration bit
-xActiveInArbitration := FALSE;
-
-xRequestMade := FALSE;
-
-xNewRequest := TRUE;]]></ST>
+q_stRequestedBP.nCohortInt := nRequestCohort;]]></ST>
       </Implementation>
     </Method>
   </POU>

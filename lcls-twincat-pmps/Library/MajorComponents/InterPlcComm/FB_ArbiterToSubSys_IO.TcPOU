@@ -19,9 +19,9 @@ VAR_IN_OUT
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
-	i_RequestedBP AT %I*	:	ST_BeamParams;
+	i_RequestedBP AT %I*	:	ST_BeamParams; // Requested BP from subsystem
 
-	o_CurrentBP AT %Q* : ST_BeamParams;
+	o_CurrentBP AT %Q* : ST_BeamParams; // Current BP set
     
     // EL6692 Diagnostics
     i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
@@ -30,34 +30,33 @@ VAR
     i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
     
     // Fast faults
-    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection');
-    nCohort : ULINT := 1; // Cohort counter
-    rtToggle : R_TRIG;
-    ctuNew : CTU := (PV := 10000);
+    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection'); // Fast fault for ethercat issues
+    nActiveCohort : ULINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
     nRequestedCohort : ULINT := 1;
+    rtToggle : R_TRIG;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Update arbiter with our request
 rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
 // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
-IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN
+IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN // If subsystem cohort has incremented, update beam parameter request with our arbiter
     Arbiter.RemoveRequest(RequestingSystemID);
     Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
     nRequestedCohort := i_RequestedBP.nCohortInt;
 END_IF
 
 
-
 // Check if latest request is acknowledged by this arbiter
 // This happens after an arbitration
 IF Arbiter.CheckRequest(RequestingSystemID) THEN
-    nCohort := i_RequestedBP.nCohortInt;
+    nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
 END_IF
 
 // Current beam params fanout
 o_CurrentBP := PMPS_GVL.stCurrentBeamParameters;
-o_CurrentBP.nCohortInt := nCohort;
+o_CurrentBP.nCohortInt := nActiveCohort;
 
 // Both of these values should be 0 for a fully valid exchange
 ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
