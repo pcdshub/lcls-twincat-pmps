@@ -172,7 +172,7 @@ CheckRequestInPool := THIS^.fbBPAssertionPool.bOk;]]></ST>
 // or an FB that locks in a specific portion of the BP set.
 METHOD ElevateRequest : BOOL
 VAR_INPUT
-    HigherAuthority : ITF_HigherAuthority;
+    HigherAuthority : I_HigherAuthority;
 END_VAR
 ]]></Declaration>
       <Implementation>

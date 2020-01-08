@@ -135,7 +135,7 @@
     <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\ITF_HigherAuthority.TcIO">
+    <Compile Include="MajorComponents\I_HigherAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassOutputs.TcPOU">

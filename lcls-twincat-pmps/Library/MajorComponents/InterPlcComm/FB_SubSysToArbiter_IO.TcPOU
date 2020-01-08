@@ -3,7 +3,7 @@
   <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
     <Declaration><![CDATA[// Use on a subsystem PLC to request from the arbiter
 // Run at the top of your cycle to receive the latest BP
-FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS ITF_HigherAuthority
+FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS I_HigherAuthority
 VAR_INPUT
     Reset : BOOL; // Fast fault reset
 END_VAR
