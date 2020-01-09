@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_BPRequestor" Id="{2d3c8555-be23-46c8-b62f-1827b5ade9b3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BPRequestor IMPLEMENTS I_HigherAuthority
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+    Arbiter : FB_Arbiter;
+    //FFO : FB_HardwareFFOutput;
+END_VAR
+VAR
+    ReqBP : ST_BeamParams;
+    nCohort : ULINT;
+    nRequestCohort : ULINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Arbiter.ElevateRequest(THIS^);
+
+nCohort := nCohort + 1;]]></ST>
+    </Implementation>
+    <Method Name="CheckRequest" Id="{ce308cf6-ce66-435f-8697-869ef44d9fd9}">
+      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+VAR_INST
+    xFirstTime : BOOL;
+    nId : DWORD;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CheckRequest := nRequestCohort < nCohort;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{78798840-b1ee-4202-8b86-21a56b010c7b}">
+      <Declaration><![CDATA[METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Check the request is coming from the same source we're used to
+
+// Update internal BP request struct
+ReqBP := stReqBP;
+
+// Record current cohort
+nRequestCohort := nCohort;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

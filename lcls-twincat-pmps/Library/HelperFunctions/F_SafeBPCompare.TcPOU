@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="F_SafeBPCompare" Id="{688ded70-423f-032d-1c2c-e52a6cd87b7c}" SpecialFunc="None">
     <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
 the result will be true. *)
@@ -19,8 +19,6 @@ VAR
     xRateOK: BOOL;
     // Beam-rate is zero, masks all others considerations.
     xZeroRate: BOOL;
-    
-    foo : __SYSTEM.VAR_INFO;
 END_VAR
 ]]></Declaration>
     <Implementation>

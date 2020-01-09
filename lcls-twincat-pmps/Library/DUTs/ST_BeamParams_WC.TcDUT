@@ -24,6 +24,10 @@
         reV : REAL := 0;
         astAttenuators : ARRAY [0..31] OF ST_PMPS_Attenuator;
         xValidToggle : BOOL;
+        // Beam parameter set is valid (if readback), or acknowledged (if request)
+        xValid : BOOL;
+        // Cohort index. Identifies which cohort this BP set was included in arbitration
+        nCohortInt : ULINT;
     END_STRUCT
 END_TYPE
 ]]></Declaration>

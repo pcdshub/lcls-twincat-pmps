@@ -118,6 +118,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="MajorComponents\FB_BPRequestor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\FB_LinearDeviceStateTable.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -130,6 +133,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\I_HigherAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassOutputs.TcPOU">
@@ -214,10 +220,6 @@
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
-    <PlaceholderReference Include="TcUnit">
-      <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
-      <Namespace>TcUnit</Namespace>
-    </PlaceholderReference>
     <PlaceholderReference Include="UML State Chart Types">
       <DefaultResolution>UML Statechart Types, 4.0.5.0 (3S - Smart Software Solutions GmbH)</DefaultResolution>
       <Namespace>UML_SC</Namespace>
@@ -226,8 +228,6 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <SubObject Include="FB_Arbiter_Test.Arbitration" />
-    <SubObject Include="FB_Arbiter_Test.RequestCheckRemoveBP" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
@@ -253,6 +253,14 @@
     <PinnedGlobalDataType Include="ST_BeamParams" />
     <PinnedGlobalDataType Include="ST_PMPS_Attenuator" />
   </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="LCLS General,0.0.0,SLAC">
+      <Namespace>LCLS_General</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="TcUnit,newest,www.tcunit.org">
+      <Namespace>TcUnit</Namespace>
+    </LibraryReference>
+  </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
@@ -266,8 +274,20 @@
           <d n="SubKeys" t="Hashtable" />
           <d n="Values" t="Hashtable" ckt="String" cvt="String">
             <v>CurrentUmlCompilerVersion</v>
-            <v>4.0.5.1</v>
+            <v>4.0.5.0</v>
           </d>
+        </o>
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
         </o>
         <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
         <o>
