@@ -6,7 +6,7 @@ Sets the beam class assertion lines for a given beam class.
 *)
 FUNCTION_BLOCK FB_BeamClassOutputs
 VAR_INPUT
-    i_ArbiterBP    :    ST_BeamParams;
+    nBeamClass   :    BYTE;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -55,7 +55,7 @@ END_FOR
 //A BC of 0x0 would pass over this loop, setting none of the lines high
 // , as FOR loops check the initialized variable at the top to see if it's >
 // than the "TO" variable.
-FOR wBeamClass:=1 TO i_ArbiterBP.nBeamClass DO
+FOR wBeamClass:=1 TO nBeamClass DO
     q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
 END_FOR
 ]]></ST>

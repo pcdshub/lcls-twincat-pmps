@@ -58,13 +58,13 @@
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{CE06BA2D-CD18-4B37-AE73-CAA6752F2295}" PersistentType="true">ST_BeamParams</Name>
-			<BitSize>1856</BitSize>
+			<Name GUID="{41F989BD-E6AB-4C12-83CE-EE801B1CE196}" PersistentType="true">ST_BeamParams</Name>
+			<BitSize>1728</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
 				<Comment>
-					<![CDATA[ Requested attenuation % ]]>
+					<![CDATA[  Requested pre-optic attenuation %  ]]>
 				</Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>0</BitOffs>
@@ -80,28 +80,23 @@
 				</Properties>
 			</SubItem>
 			<SubItem>
-				<Name>nBeamClass</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
-				<Comment>
-					<![CDATA[ Machine parameters ]]>
-				</Comment>
-				<BitSize>8</BitSize>
-				<BitOffs>32</BitOffs>
-				<Default>
-					<Value>15</Value>
-				</Default>
-			</SubItem>
-			<SubItem>
 				<Name>nRate</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
 				<Comment>
 					<![CDATA[ Pulse-rate ]]>
 				</Comment>
 				<BitSize>32</BitSize>
-				<BitOffs>64</BitOffs>
+				<BitOffs>32</BitOffs>
 				<Default>
 					<Value>10</Value>
 				</Default>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Rate
+        io: i</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<SubItem>
 				<Name>fPP_mJ</Name>
@@ -110,40 +105,40 @@
 					<![CDATA[ Per pulse max energy (mJ) ]]>
 				</Comment>
 				<BitSize>32</BitSize>
-				<BitOffs>96</BitOffs>
+				<BitOffs>64</BitOffs>
 				<Default>
 					<Value>20</Value>
 				</Default>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: PulseEnergy
+        io: i</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<SubItem>
 				<Name>neVRange</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
 				<Comment>
-					<![CDATA[ Valid photon energy ranges ]]>
+					<![CDATA[ Photon energy ranges ]]>
 				</Comment>
 				<BitSize>16</BitSize>
-				<BitOffs>128</BitOffs>
+				<BitOffs>96</BitOffs>
 				<Default>
 					<Value>65535</Value>
 				</Default>
 				<Properties>
 					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: PhotonEnergy
+        io: i</Value>
+					</Property>
+					<Property>
 						<Name>plcAttribute_displaymode</Name>
 						<Value>binary</Value>
 					</Property>
 				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>reV</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
-				<Comment>
-					<![CDATA[ Photon energy (calculated by undulator gap) ]]>
-				</Comment>
-				<BitSize>32</BitSize>
-				<BitOffs>160</BitOffs>
-				<Default>
-					<Value>0</Value>
-				</Default>
 			</SubItem>
 			<SubItem>
 				<Name>astAttenuators</Name>
@@ -152,14 +147,27 @@
 					<LBound>0</LBound>
 					<Elements>32</Elements>
 				</ArrayInfo>
+				<Comment>
+					<![CDATA[ Beamline attenuators ]]>
+				</Comment>
 				<BitSize>1536</BitSize>
-				<BitOffs>192</BitOffs>
+				<BitOffs>112</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: AuxAttenuator
+        io: i</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<SubItem>
 				<Name>xValidToggle</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment>
+					<![CDATA[ Toggle for watchdog]]>
+				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1728</BitOffs>
+				<BitOffs>1648</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>xValid</Name>
@@ -168,7 +176,14 @@
 					<![CDATA[ Beam parameter set is valid (if readback), or acknowledged (if request)]]>
 				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1736</BitOffs>
+				<BitOffs>1656</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Valid
+        io: i</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<SubItem>
 				<Name>nCohortInt</Name>
@@ -177,10 +192,17 @@
 					<![CDATA[ Cohort index. Identifies which cohort this BP set was included in arbitration]]>
 				</Comment>
 				<BitSize>64</BitSize>
-				<BitOffs>1792</BitOffs>
+				<BitOffs>1664</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Attenuation
+        io: i</Value>
+					</Property>
+				</Properties>
 			</SubItem>
 			<Hides>
-				<Hide GUID="{B1DD5164-AE05-4422-BC6E-97C093227129}"/>
+				<Hide GUID="{3DC76A45-C81C-4DCC-84E6-5C2AE322C5A8}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>

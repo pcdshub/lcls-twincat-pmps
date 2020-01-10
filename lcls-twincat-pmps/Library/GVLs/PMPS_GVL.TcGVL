@@ -36,6 +36,9 @@ VAR_GLOBAL CONSTANT
 );
     cnMaxStateArrayLen : INT := 20;
     
+    AUX_ATTENUATORS : INT := 32;
+    DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
+    
     MAX_ASSERTIONS    :    UDINT := 100; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
@@ -57,6 +60,8 @@ VAR_GLOBAL CONSTANT
     1.6,
     1.7
 ];
+
+
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
