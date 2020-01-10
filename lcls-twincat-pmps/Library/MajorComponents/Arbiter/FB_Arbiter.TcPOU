@@ -100,12 +100,19 @@ VAR_INPUT
     stBP1    :    ST_BeamParams;
     stBP2    :    ST_BeamParams;
 END_VAR
-]]></Declaration>
+VAR
+    idx : INT := 1;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
 
 //Attenuation
 ArbitrateBP.fAtt := MAX(stBP1.fAtt, stBP2.fAtt);
+
+FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+    ArbitrateBP.astAttenuators[idx].nReqAtt := MAX(stBP1.astAttenuators[idx].nReqAtt, stBP2.astAttenuators[idx].nReqAtt);
+END_FOR
+
 
 //Pulse energy
 ArbitrateBP.fPP_mJ := MIN(stBP1.fPP_mJ, stBP2.fPP_mJ);
@@ -241,6 +248,7 @@ IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are lef
     //The first entry in the hash table is taken as the setting to arbitrate against
     stOutputBP := F_SetBeamParams(
         fAtt := getBPStruct.fAtt,
+        astAuxAtt := getBPStruct.astAttenuators,
         fPP_mJ := getBPStruct.fPP_mJ,
         neVRange    := getBPStruct.neVRange,
         nRate := getBPStruct.nRate
@@ -276,11 +284,10 @@ END_IF
 *)
 
 
-THIS^.q_stBeamParams := stOutputBP;
+q_stBeamParams := stOutputBP;
 
 GetArbitratedBP.fAtt := stOutputBP.fAtt;
 GetArbitratedBP.fPP_mJ := stOutputBP.fPP_mJ;
-GetArbitratedBP.nBeamClass := stOutputBP.nBeamClass;
 GetArbitratedBP.neVRange := stOutputBP.neVRange;
 GetArbitratedBP.nRate := stOutputBP.nRate;
 

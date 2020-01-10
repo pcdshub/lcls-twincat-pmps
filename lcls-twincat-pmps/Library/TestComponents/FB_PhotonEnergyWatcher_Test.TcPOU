@@ -36,7 +36,7 @@ fbFFO(i_xReset:=TRUE);
 //All eV OK
 stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
     
-stMachineTargetBeamParams.reV := 2#0000_0000_1000_0000;
+stMachineTargetBeamParams.neVRange := 2#0000_0000_1000_0000;
 
 stReqBeamParams.neVRange := 2#1111_1111_1111_1111;    
 
@@ -56,9 +56,9 @@ AssertTrue(q_Output,
     
     
 //Req eV moved out of range
-stCurBeamParams.reV := 800;
+stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
     
-stMachineTargetBeamParams.reV := 800;
+stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0);
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
 
@@ -74,9 +74,9 @@ AssertFalse(q_Output,
     'Limits moved beyond current and target beam, should produce a fault.');
 
 //Beam and target eV moved back within permitted ranges, reset clears fault
-stCurBeamParams.reV := 300;
+stCurBeamParams.neVRange := F_eVRangeCalculator( 300, 0);
     
-stMachineTargetBeamParams.reV := 300;
+stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0);
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
 
@@ -97,9 +97,9 @@ AssertTrue(q_Output,
 //At this point, the fast fault would be cleared
 
 //Current beam eV moved out of range
-stCurBeamParams.reV := 800; //Moved out of range
+stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
     
-stMachineTargetBeamParams.reV := 300; //Still within range
+stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Still within range
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
 
@@ -117,9 +117,9 @@ AssertFalse(q_Output,
 fbFFO(i_xReset:=FALSE); //Reset released
 fbFFO(i_xReset:=TRUE); //New reset request comes in at the top of a cycle, but will be overridden
 
-stCurBeamParams.reV := 300; //Now within range
+stCurBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Now within range
     
-stMachineTargetBeamParams.reV := 800; //Moved out of range
+stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
 
