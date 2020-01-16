@@ -83,9 +83,9 @@ IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
 END_IF
     
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
-    fbLog(i_sMsg:='Addition to arbiter assertion pool failed',
-            i_eSevr:=E_MesgSevr.Warning,
-            i_eSubsystem:=E_Subsystem.MPS);
+    fbLog(sMsg:='Addition to arbiter assertion pool failed',
+            eSevr:=TcEventSeverity.Warning,
+            eSubsystem:=E_Subsystem.MPS);
 END_IF
 
 // With any new request reset the internal arbiter "done" flag

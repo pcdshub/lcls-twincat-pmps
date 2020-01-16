@@ -62,7 +62,7 @@ END_VAR]]></Declaration>
 IF xFirstTime THEN
     nId := nReqId;
 ELSIF nId <> nReqId THEN
-    PMPS_GVL.fbLog(i_sMsg := 'SubSysToArbiter Check mismatched with a different ID', i_eSevr := E_MesgSevr.Error);
+    PMPS_GVL.fbLog(sMsg := 'SubSysToArbiter Check mismatched with a different ID', eSevr := TcEventSeverity.Error);
     RETURN;
 END_IF
 

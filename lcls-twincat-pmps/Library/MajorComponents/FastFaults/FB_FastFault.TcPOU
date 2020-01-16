@@ -57,8 +57,8 @@ VAR
     
     InfoStringFmtr : FB_FormatString;
     
-    InUse : STRING;
-    AutoReset : STRING;
+    InUse : T_MaxString;
+    AutoReset : T_MaxString;
 
 END_VAR
 ]]></Declaration>
