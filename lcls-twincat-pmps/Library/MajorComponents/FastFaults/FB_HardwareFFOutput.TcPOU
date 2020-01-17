@@ -48,6 +48,12 @@ VAR
     astFF : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FF;
 	EvalIdx: UINT := 1;
 	IdxOK: BOOL;
+    
+    logIdx : UINT := 1;
+    Msg : FB_FormatString;
+    fbLogger : FB_LogMessage := (
+        eSevr := TcEventSeverity.Critical,
+        eSubsystem := E_Subsystem.MPS);
 
 END_VAR]]></Declaration>
     <Implementation>
@@ -74,6 +80,23 @@ q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;
 
 //Reset OK for next cycle
 xOK := True;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="ExecuteLogging" Id="{5e96b8c8-5711-4e05-885f-92a874abdd48}">
+      <Implementation>
+        <ST><![CDATA[Msg.sFormat := '%s FF %s: TypeCode %x';
+FOR logIdx := 1 to PMPS_GVL.MAX_FAST_FAULTS do
+    IF astFF[logIdx].FaultAck THEN
+        Msg.arg1 := F_STRING(astFF[logIdx].Info.DevName);
+        Msg.arg2 := F_STRING(astFF[logIdx].Info.sPath);
+        Msg.arg3 := F_UINT(astFF[logIdx].Info.TypeCode);
+        Msg();
+        fbLogger(sMsg := Msg.sOut);
+        
+        astFF[logIdx].FaultAck := FALSE;
+	END_IF
+END_FOR
+]]></ST>
       </Implementation>
     </Action>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
@@ -103,6 +126,9 @@ stFF.Veto.Timer(
     Q => stFF.Veto.Active);
     
 stFF.Veto.ElapsedTime := TIME_TO_UDINT(stFF.Veto.Timer.ET);
+
+// Setting the log flag only on a state change.
+stFF.FaultAck S= stFF.OK AND NOT OK;
 
 // Updating internal fault state
 stFF.OK := OK;

@@ -19,6 +19,8 @@ STRUCT
      '}
     OK   :   BOOL; // Fault logic state
     
+    FaultAck : BOOL; // Set when faulted, reset by logger.
+    
     {attribute 'pytmc' := '
         pv: BeamPermitted
         io: i

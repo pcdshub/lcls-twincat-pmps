@@ -7,7 +7,7 @@ VAR_GLOBAL
     stReqMethBeamParamSum    :    ST_BeamParams;
     stCurrentBeamParameters    :    ST_BeamParams;
     
-    fbLog : FB_LogMessage:=(i_eSubsystem:=E_Subsystem.MPS);
+    fbLog : FB_LogMessage:=(eSubsystem:=E_Subsystem.MPS);
 END_VAR
 VAR_GLOBAL RETAIN    
     // Statistics
