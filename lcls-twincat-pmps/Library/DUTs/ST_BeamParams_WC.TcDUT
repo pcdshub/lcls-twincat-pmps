@@ -24,6 +24,12 @@
         {attribute 'pytmc' := 'pv: AuxAttenuator
         io: i'}
         astAttenuators : ARRAY [1..32] OF ST_PMPS_Attenuator;
+        
+        (* Stopper statuses *)
+        {attribute 'pytmc' := 'pv: AuxAttenuator
+        io: i'}
+        aStoppers : ARRAY [1..16] OF BOOL;
+        
         // Toggle for watchdog
         xValidToggle : BOOL;
         // Beam parameter set is valid (if readback), or acknowledged (if request)
