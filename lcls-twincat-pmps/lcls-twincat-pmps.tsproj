@@ -58,8 +58,8 @@
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{41F989BD-E6AB-4C12-83CE-EE801B1CE196}" PersistentType="true">ST_BeamParams</Name>
-			<BitSize>1728</BitSize>
+			<Name GUID="{C3F16A32-5ACF-4E18-942D-BE26D1DC8A5F}" PersistentType="true">ST_BeamParams</Name>
+			<BitSize>1856</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
@@ -144,7 +144,7 @@
 				<Name>astAttenuators</Name>
 				<Type GUID="{CD9A5CB4-772A-4C5D-92CC-8611A9FB1859}">ST_PMPS_Attenuator</Type>
 				<ArrayInfo>
-					<LBound>0</LBound>
+					<LBound>1</LBound>
 					<Elements>32</Elements>
 				</ArrayInfo>
 				<Comment>
@@ -161,13 +161,33 @@
 				</Properties>
 			</SubItem>
 			<SubItem>
+				<Name>aStoppers</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<ArrayInfo>
+					<LBound>1</LBound>
+					<Elements>16</Elements>
+				</ArrayInfo>
+				<Comment>
+					<![CDATA[ Stopper statuses ]]>
+				</Comment>
+				<BitSize>128</BitSize>
+				<BitOffs>1648</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: AuxAttenuator
+        io: i</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+			<SubItem>
 				<Name>xValidToggle</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
 				<Comment>
 					<![CDATA[ Toggle for watchdog]]>
 				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1648</BitOffs>
+				<BitOffs>1776</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>xValid</Name>
@@ -176,7 +196,7 @@
 					<![CDATA[ Beam parameter set is valid (if readback), or acknowledged (if request)]]>
 				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1656</BitOffs>
+				<BitOffs>1784</BitOffs>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
@@ -192,7 +212,7 @@
 					<![CDATA[ Cohort index. Identifies which cohort this BP set was included in arbitration]]>
 				</Comment>
 				<BitSize>64</BitSize>
-				<BitOffs>1664</BitOffs>
+				<BitOffs>1792</BitOffs>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
@@ -202,7 +222,7 @@
 				</Properties>
 			</SubItem>
 			<Hides>
-				<Hide GUID="{3DC76A45-C81C-4DCC-84E6-5C2AE322C5A8}"/>
+				<Hide GUID="{41F989BD-E6AB-4C12-83CE-EE801B1CE196}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>

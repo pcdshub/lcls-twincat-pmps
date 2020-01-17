@@ -25,6 +25,9 @@
     <DocFormat>reStructuredText</DocFormat>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\L_Stopper.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\ST_BeamParams_WC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
