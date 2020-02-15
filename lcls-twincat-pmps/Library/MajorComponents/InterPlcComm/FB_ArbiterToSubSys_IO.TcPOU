@@ -19,9 +19,10 @@ VAR_IN_OUT
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
-	i_RequestedBP AT %I*	:	ST_BeamParams; // Requested BP from subsystem
-
-	o_CurrentBP AT %Q* : ST_BeamParams; // Current BP set
+	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
+    RequestedBP: ST_BeamParams;
+    
+	o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
     
     // EL6692 Diagnostics
     i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
@@ -35,15 +36,19 @@ VAR
     nRequestedCohort : ULINT := 1;
     rtToggle : R_TRIG;
 
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Update arbiter with our request
+      <ST><![CDATA[
+RequestedBP := IO_TO_BP(i_RequestedBP);
+
+// Update arbiter with our request
 rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
 // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
 IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN // If subsystem cohort has incremented, update beam parameter request with our arbiter
     Arbiter.RemoveRequest(RequestingSystemID);
-    Arbiter.AddRequest(RequestingSystemID, i_RequestedBP);
+    Arbiter.AddRequest(RequestingSystemID, RequestedBP);
     nRequestedCohort := i_RequestedBP.nCohortInt;
 END_IF
 
@@ -55,7 +60,7 @@ IF Arbiter.CheckRequest(RequestingSystemID) THEN
 END_IF
 
 // Current beam params fanout
-o_CurrentBP := PMPS_GVL.stCurrentBeamParameters;
+o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
 o_CurrentBP.nCohortInt := nActiveCohort;
 
 // Both of these values should be 0 for a fully valid exchange

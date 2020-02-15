@@ -2,32 +2,6 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
 	<DataTypes>
 		<DataType>
-			<Name GUID="{CD9A5CB4-772A-4C5D-92CC-8611A9FB1859}" PersistentType="true">ST_PMPS_Attenuator</Name>
-			<BitSize>48</BitSize>
-			<SubItem>
-				<Name>nReqAtt</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>0</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>nAttCur</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>16</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>xAttOK</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>32</BitOffs>
-			</SubItem>
-			<Hides>
-				<Hide GUID="{A6175640-219D-4EFE-96DC-913F7DAE0CBA}"/>
-				<Hide GUID="{E56E3FA8-55E9-40D5-A85F-9A19737EB6BA}"/>
-			</Hides>
-		</DataType>
-		<DataType>
 			<Name GUID="{B0C99D2E-B18D-4753-A368-EB6827B6F002}" PersistentType="true">ST_PMPS_Stopper</Name>
 			<BitSize>656</BitSize>
 			<SubItem>
@@ -58,7 +32,33 @@
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{C3F16A32-5ACF-4E18-942D-BE26D1DC8A5F}" PersistentType="true">ST_BeamParams</Name>
+			<Name GUID="{CD9A5CB4-772A-4C5D-92CC-8611A9FB1859}" AutoDeleteType="true">ST_PMPS_Attenuator</Name>
+			<BitSize>48</BitSize>
+			<SubItem>
+				<Name>nReqAtt</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nAttCur</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>xAttOK</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<Hides>
+				<Hide GUID="{A6175640-219D-4EFE-96DC-913F7DAE0CBA}"/>
+				<Hide GUID="{E56E3FA8-55E9-40D5-A85F-9A19737EB6BA}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{95EE78E5-EC39-42F1-A1EE-C5B10F8BDB57}" PersistentType="true">ST_BeamParams_IO</Name>
 			<BitSize>1856</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
@@ -221,9 +221,28 @@
 					</Property>
 				</Properties>
 			</SubItem>
-			<Hides>
-				<Hide GUID="{41F989BD-E6AB-4C12-83CE-EE801B1CE196}"/>
-			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{76269EAC-36F0-4513-B811-3725FD02409A}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
+			<BitSize>48</BitSize>
+			<SubItem>
+				<Name>nReqAtt</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nAttCur</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>xAttOK</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
 		</DataType>
 	</DataTypes>
 	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="172.21.149.37.1.1" ShowHideConfigurations="#x106">
@@ -233,6 +252,9 @@
 					<Name>PlcTask</Name>
 				</Task>
 			</Tasks>
+			<TypeSystem>
+				<AdditionalTmcFile Name="stBPIO" File="stBPIO.tmc"/>
+			</TypeSystem>
 		</System>
 		<Plc>
 			<Project File="Library.xti"/>

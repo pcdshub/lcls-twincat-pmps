@@ -90,10 +90,10 @@ VAR_INST
     fbHigherArb : FB_Arbiter(2);
     
     fbSubSysToArb : FB_SubSysToArbiter_IO; // Used in the simulation sub-system
-    pBPR : POINTER TO ST_BeamParams;
+    pBPR : POINTER TO ST_BeamParams_IO;
     
     fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42);
-    pBPC : POINTER TO ST_BeamParams;
+    pBPC : POINTER TO ST_BeamParams_IO;
     
     fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
     
