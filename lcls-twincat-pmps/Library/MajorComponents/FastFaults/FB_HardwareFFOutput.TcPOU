@@ -59,11 +59,6 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[// <TODO> latch off beam if DI card status goes bad]]></ST>
     </Implementation>
-    <Action Name="A_EvaluateVetos" Id="{7be01ed2-4dc3-48de-b07c-613e9f301029}">
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Action>
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
         <ST><![CDATA[
@@ -87,18 +82,68 @@ q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;
 xOK := True;]]></ST>
       </Implementation>
     </Action>
+    <Action Name="EvaluateVetos" Id="{7be01ed2-4dc3-48de-b07c-613e9f301029}">
+      <Implementation>
+        <ST><![CDATA[
+FOR EvalIdx := 1 TO PMPS_GVL.MAX_FAST_FAULTS DO
+    IF NOT astFF[EvalIdx].Info.InUse THEN 
+        CONTINUE;
+    ELSE
+        // Veto timer
+        IF astFF[EvalIdx].Veto.Deactivate THEN 
+            astFF[EvalIdx].Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
+        ELSE
+            astFF[EvalIdx].Veto.Timer.PT := UDINT_TO_TIME(astFF[EvalIdx].Veto.Duration);
+        END_IF
+        
+        // UDINT conversions for ESS module compatibility.
+        astFF[EvalIdx].Veto.Timer(
+            IN := astFF[EvalIdx].Veto.Activate, // Rising edge activated
+            Q => astFF[EvalIdx].Veto.Active);
+            
+        astFF[EvalIdx].Veto.tVetoActivate(CLK:=astFF[EvalIdx].Veto.Active);
+        astFF[EvalIdx].Veto.VetoActLogAck S= astFF[EvalIdx].Veto.tVetoActivate.Q;
+        
+        astFF[EvalIdx].Veto.tVetoExpiring(CLK:=astFF[EvalIdx].Veto.Active);
+        astFF[EvalIdx].Veto.VetoExpLogAck S= astFF[EvalIdx].Veto.tVetoExpiring.Q;
+            
+        astFF[EvalIdx].Veto.ElapsedTime := TIME_TO_UDINT(astFF[EvalIdx].Veto.Timer.ET);
+        
+        // Clear pushbuttons
+        astFF[EvalIdx].Veto.Activate := FALSE;
+        astFF[EvalIdx].Veto.Deactivate := FALSE;
+        
+    END_IF    
+END_FOR
+
+
+]]></ST>
+      </Implementation>
+    </Action>
     <Action Name="ExecuteLogging" Id="{5e96b8c8-5711-4e05-885f-92a874abdd48}">
       <Implementation>
-        <ST><![CDATA[Msg.sFormat := '%s FF %s: TypeCode %x';
+        <ST><![CDATA[
 FOR logIdx := 1 to PMPS_GVL.MAX_FAST_FAULTS do
     IF astFF[logIdx].FaultAck THEN
+        Msg.sFormat := '%s FF %s';
         Msg.arg1 := F_STRING(astFF[logIdx].Info.DevName);
         Msg.arg2 := F_STRING(astFF[logIdx].Info.sPath);
-        Msg.arg3 := F_UINT(astFF[logIdx].Info.TypeCode);
         Msg();
-        fbLogger(sMsg := Msg.sOut);
+        fbLogger(sMsg := Msg.sOut, eSevr:=TcEventSeverity.Critical, sJson:='{"pmps_typecode":1}');
         
         astFF[logIdx].FaultAck := FALSE;
+	END_IF
+    
+    IF astFF[logIdx].Veto.VetoActLogAck THEN
+        fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning, sJson:='{"pmps_typecode":2}');
+        
+        astFF[logIdx].Veto.VetoActLogAck := FALSE;
+	END_IF
+    
+    IF astFF[logIdx].Veto.VetoExpLogAck THEN
+        fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning, sJson:='{"pmps_typecode":3}');
+        
+        astFF[logIdx].Veto.VetoExpLogAck := FALSE;
 	END_IF
 END_FOR
 ]]></ST>
@@ -117,20 +162,6 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Idx := LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS);
 stFF := THIS^.astFF[Idx];
-
-// Veto timer
-IF stFF.Veto.Deactivate THEN 
-    stFF.Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
-ELSE
-    stFF.Veto.Timer.PT := UDINT_TO_TIME(stFF.Veto.Duration);
-END_IF
-
-// UDINT conversions for ESS module compatibility.
-stFF.Veto.Timer(
-    IN := stFF.Veto.Activate, // Rising edge activated
-    Q => stFF.Veto.Active);
-    
-stFF.Veto.ElapsedTime := TIME_TO_UDINT(stFF.Veto.Timer.ET);
 
 // Setting the log flag only on a state change.
 stFF.FaultAck S= stFF.OK AND NOT OK;
@@ -154,9 +185,7 @@ END_IF
 stFF.ftCountFault(CLK:=stFF.bsFF.Q1);
 IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF
 
-// Clear pushbuttons
-stFF.Veto.Activate := FALSE;
-stFF.Veto.Deactivate := FALSE;
+//Clear pushbuttons
 stFF.Reset := FALSE;
 
 // Copy state back to ff struct
