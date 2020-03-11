@@ -50,7 +50,8 @@ VAR
 	IdxOK: BOOL;
     
     logIdx : UINT := 1;
-    Msg : FB_FormatString;
+    fbJson : FB_JsonSaxWriter;
+    pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
         eSevr := TcEventSeverity.Critical,
         eSubsystem := E_Subsystem.MPS);
@@ -125,28 +126,51 @@ END_FOR
         <ST><![CDATA[
 FOR logIdx := 1 to PMPS_GVL.MAX_FAST_FAULTS do
     IF astFF[logIdx].FaultAck THEN
-        Msg.sFormat := '%s FF %s';
-        Msg.arg1 := F_STRING(astFF[logIdx].Info.DevName);
-        Msg.arg2 := F_STRING(astFF[logIdx].Info.sPath);
-        Msg();
-        fbLogger(sMsg := Msg.sOut, eSevr:=TcEventSeverity.Critical, sJson:='{"pmps_typecode":1}');
+        
+        pmpsTypeCode := 1;
+        FormulateLogJson();
+        
+        //Json is gen. in FormulateLogJson
+        fbLogger(sMsg := 'Fast Fault, beam off', eSevr:=TcEventSeverity.Critical);
         
         astFF[logIdx].FaultAck := FALSE;
 	END_IF
     
     IF astFF[logIdx].Veto.VetoActLogAck THEN
-        fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning, sJson:='{"pmps_typecode":2}');
+        
+        pmpsTypeCode := 2;
+        FormulateLogJson();
+        
+        fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning);
         
         astFF[logIdx].Veto.VetoActLogAck := FALSE;
 	END_IF
     
     IF astFF[logIdx].Veto.VetoExpLogAck THEN
-        fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning, sJson:='{"pmps_typecode":3}');
+        
+        pmpsTypeCode := 3;
+        FormulateLogJson();
+        
+        fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning);
         
         astFF[logIdx].Veto.VetoExpLogAck := FALSE;
 	END_IF
 END_FOR
 ]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="FormulateLogJson" Id="{e45f0264-4193-40c5-bd71-0ca588b0ef2a}">
+      <Implementation>
+        <ST><![CDATA[fbJson.StartObject();
+fbJson.AddKey("pmps_typecode");
+fbJson.AddUdint(pmpsTypeCode);
+fbJson.AddKey("pmps_path");
+fbJson.AddString(astFF[logIdx].Info.sPath);
+fbJson.AddKey("pmps_device_name");
+fbJson.AddString(astFF[logIdx].Info.DevName);
+fbJson.EndObject();
+fbLogger.sJson := fbJson.GetDocument();
+fbJson.ResetDocument();]]></ST>
       </Implementation>
     </Action>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
