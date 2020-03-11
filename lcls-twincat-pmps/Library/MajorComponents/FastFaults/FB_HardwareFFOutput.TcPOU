@@ -162,11 +162,11 @@ END_FOR
     <Action Name="FormulateLogJson" Id="{e45f0264-4193-40c5-bd71-0ca588b0ef2a}">
       <Implementation>
         <ST><![CDATA[fbJson.StartObject();
-fbJson.AddKey("pmps_typecode");
+fbJson.AddKey('pmps_typecode');
 fbJson.AddUdint(pmpsTypeCode);
-fbJson.AddKey("pmps_path");
+fbJson.AddKey('pmps_path');
 fbJson.AddString(astFF[logIdx].Info.sPath);
-fbJson.AddKey("pmps_device_name");
+fbJson.AddKey('pmps_device_name');
 fbJson.AddString(astFF[logIdx].Info.DevName);
 fbJson.EndObject();
 fbLogger.sJson := fbJson.GetDocument();
