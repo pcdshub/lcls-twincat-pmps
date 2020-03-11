@@ -14,11 +14,7 @@ STRUCT
 ///////////////////////////////////////////
 // Warning, this variable is effectively a VETO of the fast fault if set FALSE
 // Do not alter the state of this variable unless you really know what you're doing.
-///////////////////////////////////////////    
-//    {attribute 'pytmc' := '
-//        pv: InUse
-//        io: i
-//     '}
+///////////////////////////////////////////
     InUse   :   BOOL := FALSE; // If this FF is currently in-use
 ///////////////////////////////////////////
 
