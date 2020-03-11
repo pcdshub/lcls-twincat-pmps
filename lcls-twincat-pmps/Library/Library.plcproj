@@ -126,6 +126,7 @@
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
@@ -183,6 +184,7 @@
     </Compile>
     <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="TestComponents\FB_evRangeCalculator_Test.TcPOU">
       <SubType>Code</SubType>
@@ -249,6 +251,7 @@
       <Namespace>UML_SC</Namespace>
       <SystemLibrary>true</SystemLibrary>
       <ResolverGuid>d9a6b70a-92f0-4827-8ca3-8ce8a61652d9</ResolverGuid>
+      <Optional>true</Optional>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
