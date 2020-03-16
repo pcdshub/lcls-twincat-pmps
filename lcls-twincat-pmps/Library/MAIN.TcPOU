@@ -3,7 +3,7 @@
   <POU Name="MAIN" Id="{87d6bba0-cac0-4c5b-b8ef-b01bdb9ad7f6}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-    fbBPTMTest    :    FB_BPTM_Test;
+    //fbBPTMTest    :    FB_BPTM_Test;
     fbSafeBPCompareTest    :    FB_SafeBPCompare_Test;
     fbevWithinSpecTest    :    FB_evWithinSpec_Test;
     fbPEWTest    :    FB_PhotonEnergyWatcher_Test;
