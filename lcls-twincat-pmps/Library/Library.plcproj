@@ -22,7 +22,6 @@
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
     <Title>PMPS</Title>
-    <DocFormat>reStructuredText</DocFormat>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\L_Stopper.TcTLEO">
@@ -127,6 +126,7 @@
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="TestComponents\FB_evRangeCalculator_Test.TcPOU">
       <SubType>Code</SubType>
@@ -237,15 +238,13 @@
       <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_JsonXml">
+      <DefaultResolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_JsonXml</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="UML State Chart Types">
-      <DefaultResolution>UML Statechart Types, 4.0.5.0 (3S - Smart Software Solutions GmbH)</DefaultResolution>
-      <Namespace>UML_SC</Namespace>
-      <SystemLibrary>true</SystemLibrary>
-      <ResolverGuid>d9a6b70a-92f0-4827-8ca3-8ce8a61652d9</ResolverGuid>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +280,11 @@
   <ItemGroup>
     <PinnedGlobalDataType Include="ST_BeamParams_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Attenuator_IO" />
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="Tc3_JsonXml">
+      <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
