@@ -261,7 +261,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[FFOName := THIS^.sPath;
 Idx := THIS^.nIndex;
 
-IF THIS^.nIndex <= PMPS_GVL.MAX_FAST_FAULTS THEN
+IF THIS^.nIndex <= FF_ARRAY_UPPER_BOUND THEN
     
     THIS^.astFF[MIN(THIS^.nIndex,FF_ARRAY_UPPER_BOUND)].Info:=stFFInfo;
     
@@ -269,6 +269,20 @@ IF THIS^.nIndex <= PMPS_GVL.MAX_FAST_FAULTS THEN
     
     Register := TRUE; // Add successful    
 ELSE
+    fbJson.StartObject();
+    fbJson.AddKey('pmps_typecode');
+    fbJson.AddUdint(4);
+    fbJson.AddKey('pmps_path');
+    fbJson.AddString(stFFInfo.sPath);
+    fbJson.AddKey('pmps_device_name');
+    fbJson.AddString(stFFInfo.DevName);
+    fbJson.EndObject();
+    fbLogger.sJson := fbJson.GetDocument();
+    fbJson.ResetDocument();
+    fbLogger(sMsg:='Fast fault registration failed.',
+        eSevr:=TcEventSeverity.Warning,
+        eSubsystem:=E_Subsystem.MPS);
+    
     Register := FALSE; // Failed to add name to list
 END_IF]]></ST>
       </Implementation>
