@@ -63,15 +63,6 @@ END_VAR]]></Declaration>
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
         <ST><![CDATA[
-IdxOK := True;
-FOR EvalIdx := 1 TO PMPS_GVL.MAX_FAST_FAULTS DO
-    IF NOT astFF[EvalIdx].Info.InUse THEN 
-        CONTINUE;
-    ELSE
-        IdxOK := IdxOK AND astFF[EvalIdx].BeamPermitted;
-    END_IF    
-END_FOR
-
 //<TODO> add diagnostic for success or failure of reset
 rtReset(CLK:=i_xReset);
 rtResetandOK(CLK:=rtReset.Q AND xOK); // Need two R_TRIG to avoid autoreset
