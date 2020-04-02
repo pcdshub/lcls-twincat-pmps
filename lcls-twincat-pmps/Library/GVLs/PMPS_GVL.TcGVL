@@ -39,7 +39,7 @@ VAR_GLOBAL CONSTANT
     AUX_ATTENUATORS : INT := 32;
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     
-    MAX_ASSERTIONS    :    UDINT := 100; //Maximum number of assertions permitted in the arbiter
+    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
     g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
