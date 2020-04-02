@@ -22,6 +22,12 @@ VAR_OUTPUT
      '}
     q_xFastFaultOut    AT %Q*    :    BOOL;
 END_VAR
+VAR_IN_OUT
+    {attribute 'pytmc' := '
+        pv: FF
+     '}
+    astFF : ARRAY[*] OF ST_FF;
+END_VAR
 VAR
     
     {attribute 'instance-path'}
@@ -37,19 +43,11 @@ VAR
     rtReset    :    R_TRIG;
     rtResetandOK : R_TRIG;
     
-    //Fault registration list
-    //Fast faults add their name here to indicate they
-    //"check in" to indicate their status with this fast
-    //fault output. ie. They may be a culprit of beam off.
     nIndex    :    UINT := 1;
-        {attribute 'pytmc' := '
-        pv: FF
-     '}
-    astFF : ARRAY[1..PMPS_GVL.MAX_FAST_FAULTS] OF ST_FF;
-	EvalIdx: UINT := 1;
+	
 	IdxOK: BOOL;
     
-    logIdx : UINT := 1;
+    
     fbJson : FB_JsonSaxWriter;
     pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
@@ -63,6 +61,10 @@ END_VAR]]></Declaration>
     <Action Name="EvaluateOutput" Id="{1614665f-52f0-4071-a93e-c3d94919ee5b}">
       <Implementation>
         <ST><![CDATA[
+////////////////////////////////////////////////////////////////
+// Critical code. Do not touch unless you know what you're doing
+////////////////////////////////////////////////////////////////
+
 //<TODO> add diagnostic for success or failure of reset
 rtReset(CLK:=i_xReset);
 rtResetandOK(CLK:=rtReset.Q AND xOK); // Need two R_TRIG to avoid autoreset
@@ -71,99 +73,127 @@ q_xFastFaultOut S= rtResetandOK.Q OR i_xVeto;
 q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;
 
 //Reset OK for next cycle
-xOK := True;]]></ST>
+xOK := True;
+
+////////////////////////////////////////////////////////////////]]></ST>
       </Implementation>
     </Action>
-    <Action Name="EvaluateVetos" Id="{7be01ed2-4dc3-48de-b07c-613e9f301029}">
+    <Method Name="EvaluateVetos" Id="{b05563e8-13ae-495e-807c-befe31dea571}">
+      <Declaration><![CDATA[METHOD EvaluateVetos : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    FF : REFERENCE TO ST_FF;
+    EvalIdx: DINT := 1;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-FOR EvalIdx := 1 TO PMPS_GVL.MAX_FAST_FAULTS DO
-    IF NOT astFF[EvalIdx].Info.InUse THEN 
+FOR EvalIdx := LOWER_BOUND(astFF,1) TO UPPER_BOUND(astFF,1) DO
+    
+    FF REF= astFF[EvalIdx];
+    
+    IF NOT FF.Info.InUse THEN 
         CONTINUE;
     ELSE
         // Veto timer
-        IF astFF[EvalIdx].Veto.Deactivate THEN 
-            astFF[EvalIdx].Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
+        IF FF.Veto.Deactivate THEN 
+            FF.Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
         ELSE
-            astFF[EvalIdx].Veto.Timer.PT := UDINT_TO_TIME(astFF[EvalIdx].Veto.Duration);
+            FF.Veto.Timer.PT := UDINT_TO_TIME(FF.Veto.Duration);
         END_IF
         
         // UDINT conversions for ESS module compatibility.
-        astFF[EvalIdx].Veto.Timer(
-            IN := astFF[EvalIdx].Veto.Activate, // Rising edge activated
-            Q => astFF[EvalIdx].Veto.Active);
+        FF.Veto.Timer(
+            IN := FF.Veto.Activate, // Rising edge activated
+            Q => FF.Veto.Active);
             
-        astFF[EvalIdx].Veto.tVetoActivate(CLK:=astFF[EvalIdx].Veto.Active);
-        astFF[EvalIdx].Veto.VetoActLogAck S= astFF[EvalIdx].Veto.tVetoActivate.Q;
+        FF.Veto.tVetoActivate(CLK:=FF.Veto.Active);
+        FF.Veto.VetoActLogAck S= FF.Veto.tVetoActivate.Q;
         
-        astFF[EvalIdx].Veto.tVetoExpiring(CLK:=astFF[EvalIdx].Veto.Active);
-        astFF[EvalIdx].Veto.VetoExpLogAck S= astFF[EvalIdx].Veto.tVetoExpiring.Q;
+        FF.Veto.tVetoExpiring(CLK:=FF.Veto.Active);
+        FF.Veto.VetoExpLogAck S= FF.Veto.tVetoExpiring.Q;
             
-        astFF[EvalIdx].Veto.ElapsedTime := TIME_TO_UDINT(astFF[EvalIdx].Veto.Timer.ET);
+        FF.Veto.ElapsedTime := TIME_TO_UDINT(FF.Veto.Timer.ET);
         
         // Clear pushbuttons
-        astFF[EvalIdx].Veto.Activate := FALSE;
-        astFF[EvalIdx].Veto.Deactivate := FALSE;
+        FF.Veto.Activate := FALSE;
+        FF.Veto.Deactivate := FALSE;
         
     END_IF    
-END_FOR
-
-
-]]></ST>
+END_FOR]]></ST>
       </Implementation>
-    </Action>
-    <Action Name="ExecuteLogging" Id="{5e96b8c8-5711-4e05-885f-92a874abdd48}">
+    </Method>
+    <Method Name="ExecuteLogging" Id="{0b57308b-9b1c-4482-8d48-fd43e479e123}">
+      <Declaration><![CDATA[METHOD ExecuteLogging : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    FF : REFERENCE TO ST_FF;
+    logIdx : DINT := 1; 
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-FOR logIdx := 1 to PMPS_GVL.MAX_FAST_FAULTS do
-    IF astFF[logIdx].FaultAck THEN
-        
-        pmpsTypeCode := 1;
-        FormulateLogJson();
-        
-        //Json is gen. in FormulateLogJson
-        fbLogger(sMsg := 'Fast Fault, beam off', eSevr:=TcEventSeverity.Critical);
-        
-        astFF[logIdx].FaultAck := FALSE;
-	END_IF
+FOR logIdx := LOWER_BOUND(astFF,1) to UPPER_BOUND(astFF,1) do
     
-    IF astFF[logIdx].Veto.VetoActLogAck THEN
-        
-        pmpsTypeCode := 2;
-        FormulateLogJson();
-        
-        fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning);
-        
-        astFF[logIdx].Veto.VetoActLogAck := FALSE;
-	END_IF
+    FF REF= astFF[logIdx];
     
-    IF astFF[logIdx].Veto.VetoExpLogAck THEN
+    IF NOT FF.Info.InUse THEN 
+        CONTINUE;
+    ELSE
+        IF FF.FaultAck THEN
+            
+            pmpsTypeCode := 1;
+            FormulateLogJson(FF);
+            
+            //Json is gen. in FormulateLogJson
+            fbLogger(sMsg := 'Fast Fault, beam off', eSevr:=TcEventSeverity.Critical);
+            
+            FF.FaultAck := FALSE;
+        END_IF
         
-        pmpsTypeCode := 3;
-        FormulateLogJson();
+        IF FF.Veto.VetoActLogAck THEN
+            
+            pmpsTypeCode := 2;
+            FormulateLogJson(FF);
+            
+            fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning);
+            
+            FF.Veto.VetoActLogAck := FALSE;
+        END_IF
         
-        fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning);
-        
-        astFF[logIdx].Veto.VetoExpLogAck := FALSE;
-	END_IF
-END_FOR
-]]></ST>
+        IF FF.Veto.VetoExpLogAck THEN
+            
+            pmpsTypeCode := 3;
+            FormulateLogJson(FF);
+            
+            fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning);
+            
+            FF.Veto.VetoExpLogAck := FALSE;
+        END_IF
+    END_IF
+END_FOR]]></ST>
       </Implementation>
-    </Action>
-    <Action Name="FormulateLogJson" Id="{e45f0264-4193-40c5-bd71-0ca588b0ef2a}">
+    </Method>
+    <Method Name="FormulateLogJson" Id="{1e592e14-8e12-4b07-bc53-a921f8f882df}">
+      <Declaration><![CDATA[METHOD FormulateLogJson : STRING
+VAR_INPUT
+    FF : ST_FF;
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbJson.StartObject();
 fbJson.AddKey('pmps_typecode');
 fbJson.AddUdint(pmpsTypeCode);
 fbJson.AddKey('pmps_path');
-fbJson.AddString(astFF[logIdx].Info.sPath);
+fbJson.AddString(FF.Info.sPath);
 fbJson.AddKey('pmps_device_name');
-fbJson.AddString(astFF[logIdx].Info.DevName);
+fbJson.AddString(FF.Info.DevName);
 fbJson.EndObject();
 fbLogger.sJson := fbJson.GetDocument();
 fbJson.ResetDocument();]]></ST>
       </Implementation>
-    </Action>
+    </Method>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
       <Declaration><![CDATA[METHOD IdxCheckIn : BOOL
 VAR_INPUT
