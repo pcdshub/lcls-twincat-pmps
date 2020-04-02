@@ -3,6 +3,9 @@
   <POU Name="FB_HardwareFFOutput" Id="{4c5345fc-1911-455c-a3d8-14bade73dcd8}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_HardwareFFOutput
+VAR CONSTANT
+    FF_ARRAY_UPPER_BOUND : DINT := PMPS_GVL.MAX_FAST_FAULTS;
+END_VAR
 VAR_INPUT
     {attribute 'pytmc' := '
         pv: ClearFault
@@ -23,12 +26,13 @@ VAR_OUTPUT
     q_xFastFaultOut    AT %Q*    :    BOOL;
 END_VAR
 VAR_IN_OUT
+
+END_VAR
+VAR
     {attribute 'pytmc' := '
         pv: FF
      '}
-    astFF : ARRAY[*] OF ST_FF;
-END_VAR
-VAR
+    astFF : ARRAY[1..FF_ARRAY_UPPER_BOUND] OF ST_FF;
     
     {attribute 'instance-path'}
     {attribute 'noinit'}
@@ -88,7 +92,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-FOR EvalIdx := LOWER_BOUND(astFF,1) TO UPPER_BOUND(astFF,1) DO
+FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
     
     FF REF= astFF[EvalIdx];
     
@@ -134,7 +138,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-FOR logIdx := LOWER_BOUND(astFF,1) to UPPER_BOUND(astFF,1) do
+FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
     
     FF REF= astFF[logIdx];
     
@@ -197,7 +201,7 @@ fbJson.ResetDocument();]]></ST>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
       <Declaration><![CDATA[METHOD IdxCheckIn : BOOL
 VAR_INPUT
-    Idx : UINT;
+    Idx : DINT;
     OK : BOOL;
     Reset : BOOL;
 END_VAR
@@ -205,7 +209,7 @@ VAR
     stFF : ST_FF;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Idx := LIMIT(1,Idx,PMPS_GVL.MAX_FAST_FAULTS);
+        <ST><![CDATA[Idx := LIMIT(1,Idx,FF_ARRAY_UPPER_BOUND);
 stFF := THIS^.astFF[Idx];
 
 // Setting the log flag only on a state change.
@@ -259,7 +263,7 @@ Idx := THIS^.nIndex;
 
 IF THIS^.nIndex <= PMPS_GVL.MAX_FAST_FAULTS THEN
     
-    THIS^.astFF[MIN(THIS^.nIndex,PMPS_GVL.MAX_FAST_FAULTS)].Info:=stFFInfo;
+    THIS^.astFF[MIN(THIS^.nIndex,FF_ARRAY_UPPER_BOUND)].Info:=stFFInfo;
     
     THIS^.nIndex := THIS^.nIndex + 1;
     
