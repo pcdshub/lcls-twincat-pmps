@@ -24,6 +24,9 @@
     <Title>PMPS</Title>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\E_BPTMState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -126,7 +129,6 @@
     </Compile>
     <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
       <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
