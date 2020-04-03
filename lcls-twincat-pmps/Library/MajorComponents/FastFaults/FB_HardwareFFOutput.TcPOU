@@ -34,6 +34,13 @@ VAR
      '}
     astFF : ARRAY[1..FF_ARRAY_UPPER_BOUND] OF ST_FF;
     
+    {attribute 'pytmc' := '
+        pv: RegistrationFailure
+        io: io
+     '}
+    xFastFaultRegFail  :   BOOL := FALSE; // Set true if a fast fault fails to register. Holds beam off.
+    tFFRegFail : F_TRIG;
+    
     {attribute 'instance-path'}
     {attribute 'noinit'}
     sPath    :    T_MaxString;
@@ -74,7 +81,7 @@ rtReset(CLK:=i_xReset);
 rtResetandOK(CLK:=rtReset.Q AND xOK); // Need two R_TRIG to avoid autoreset
 
 q_xFastFaultOut S= rtResetandOK.Q OR i_xVeto;
-q_xFastFaultOut R= NOT xOK AND NOT i_xVeto;
+q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail) AND NOT i_xVeto;
 
 //Reset OK for next cycle
 xOK := True;
@@ -176,7 +183,22 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             FF.Veto.VetoExpLogAck := FALSE;
         END_IF
     END_IF
-END_FOR]]></ST>
+END_FOR
+
+// Log registration fault cleared
+tFFRegFail(CLK:=xFastFaultRegFail);
+IF tFFRegFail.Q THEN
+    fbJson.StartObject();
+    fbJson.AddKey('pmps_typecode');
+    fbJson.AddUdint(5);
+    fbJson.AddKey('pmps_path');
+    fbJson.AddString(sPath);
+    fbJson.EndObject();
+    fbJson.CopyDocument(pDoc:=fbLogger.sJson, SIZEOF(fbLogger.sJson));
+    fbLogger(sMsg := 'Fast fault registration failure cleared. This may be bad as a fast fault could go unoticed.', 
+        eSevr:=TcEventSeverity.Warning);  
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FormulateLogJson" Id="{1e592e14-8e12-4b07-bc53-a921f8f882df}">
@@ -282,7 +304,7 @@ ELSE
     fbLogger(sMsg:='Fast fault registration failed.',
         eSevr:=TcEventSeverity.Warning,
         eSubsystem:=E_Subsystem.MPS);
-    
+    xFastFaultRegFail := TRUE;
     Register := FALSE; // Failed to add name to list
 END_IF]]></ST>
       </Implementation>
