@@ -55,8 +55,7 @@ eBPTMTestStates.WaitingForTransitionAssertion:
         i_stRequestedAssertion := stReqAssertion
     );
     
-    IF fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.States
-    [fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.Names.WaitingForTransitionAssertion].Active THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForTransitionAssertion THEN
     
         AssertTrue(fbArbiter.CheckRequest(nTransitionID), 'Arbiter did not accept BPTM transition assertion');
         
@@ -76,8 +75,7 @@ eBPTMTestStates.WaitingForFinalAssertion:
     fbBPTM_TestBasicFunction(fbArbiter := fbArbiter,
         stCurrentBeamParameters := stTransitionAssertion);
     
-    IF fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.States
-    [fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.Names.WaitingForFinalAssertion].Active THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForFinalAssertion THEN
     
         AssertTrue(fbArbiter.CheckRequest(nReqID),
             'Transition assertion should be in arbiter');
@@ -98,8 +96,7 @@ eBPTMTestStates.Transitioning:
     fbBPTM_TestBasicFunction(fbArbiter := fbArbiter,
         stCurrentBeamParameters := stTransitionAssertion);
         
-    IF fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.States
-    [fbBPTM_TestBasicFunction.UML_SC_BeamParameterTransitionManager.Names.Transitioning].Active THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning THEN
     
         AssertTrue(fbArbiter.CheckRequest(nReqID),
             'Transition assertion should be in arbiter');
