@@ -92,6 +92,7 @@ END_VAR
 VAR_INST
     fbFF    :    FB_FastFault;
     fbFFO    :    FB_HardwareFFOutput;
+    astFF : ARRAY[0..10] OF ST_FF;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFRegistration');

@@ -19,7 +19,7 @@ VAR_GLOBAL CONSTANT
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
-    MAX_FAST_FAULTS : UINT := 100; // Maximum number of fast faults that can be associated with a FFO
+    MAX_FAST_FAULTS : UINT := 50; // Maximum number of fast faults that can be associated with a FFO
     
     cstFullBeam    :    ST_BeamParams := (
         fAtt := 0,
@@ -39,7 +39,7 @@ VAR_GLOBAL CONSTANT
     AUX_ATTENUATORS : INT := 32;
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     
-    MAX_ASSERTIONS    :    UDINT := 100; //Maximum number of assertions permitted in the arbiter
+    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
     g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
