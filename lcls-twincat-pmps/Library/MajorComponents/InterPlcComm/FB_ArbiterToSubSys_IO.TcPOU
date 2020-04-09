@@ -19,14 +19,13 @@ VAR_IN_OUT
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
+    
+	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
     {attribute 'pytmc' := '
         pv: RequestedBP:FromSubSys
     '}
-	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
     RequestedBP: ST_BeamParams;
-    {attribute 'pytmc' := '
-        pv: CurrentBP:Broadcast
-    '}
+    
 	o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
     
     // EL6692 Diagnostics

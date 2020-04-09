@@ -48,7 +48,7 @@
         io: i
             field: DESC Cohort increments on each arbitration cycle
         '}
-        nCohortInt : ULINT;
+        nCohortInt : UDINT;
     END_STRUCT
 END_TYPE
 ]]></Declaration>

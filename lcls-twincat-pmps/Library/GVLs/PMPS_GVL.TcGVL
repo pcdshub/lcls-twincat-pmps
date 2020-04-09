@@ -22,12 +22,12 @@ VAR_GLOBAL RETAIN
         pv: @(PREFIX)SuccessfulPreemptions
         io: i
     '}
-    SuccessfulPreemption : ULINT; // Any time BPTM applies a new BP request which is confirmed
+    SuccessfulPreemption : UDINT; // Any time BPTM applies a new BP request which is confirmed
     {attribute 'pytmc' := '
         pv: @(PREFIX)AccumulatedFastFaults
         io: i
     '}
-    AccumulatedFF : ULINT; // Any time a FF occurs
+    AccumulatedFF : UDINT; // Any time a FF occurs
 END_VAR
 VAR_GLOBAL CONSTANT
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool

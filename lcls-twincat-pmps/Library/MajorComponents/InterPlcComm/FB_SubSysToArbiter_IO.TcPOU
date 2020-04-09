@@ -34,10 +34,10 @@ VAR
     // A request is not considered included until the active cohort number is >= the request cohort number.
     {attribute 'pytmc' := 'pv: RequestCohort
         io: i'}
-    nRequestCohort : ULINT := 1; // Request cohort
+    nRequestCohort : UDINT := 1; // Request cohort
     {attribute 'pytmc' := 'pv: ActiveCohort
         io: i'}
-    nActiveCohort : ULINT := 0; // Active cohort
+    nActiveCohort : UDINT := 0; // Active cohort
 
 END_VAR
 ]]></Declaration>
@@ -50,7 +50,7 @@ PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must
 Arbiter.ElevateRequest(THIS^);
 
 //Broadcasting current request
-PMPS_GVL.stRequestedBeamParameters := q_stRequestedBP;
+PMPS_GVL.stRequestedBeamParameters := IO_TO_BP(q_stRequestedBP);
 
 q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
@@ -75,7 +75,7 @@ ELSIF nId <> nReqId THEN
     RETURN;
 END_IF
 
-nActiveCohort := i_stCurrentBP.nCohortInt;
+nActiveCohort := ULINT_TO_UDINT(i_stCurrentBP.nCohortInt);
 
 // i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
 CheckRequest := nRequestCohort <= nActiveCohort;]]></ST>
