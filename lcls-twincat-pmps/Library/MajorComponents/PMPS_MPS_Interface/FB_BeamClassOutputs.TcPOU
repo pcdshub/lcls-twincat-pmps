@@ -13,29 +13,31 @@ END_VAR
 VAR
     wBeamClass    :    BYTE;
 
-    InitCounter: INT;
+    InitCounter: BYTE;
     counter    :    INT;
     
-            {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_BC]^Channel 1^Output;
-                              [2] := TIIB[PMPS_BC]^Channel 2^Output;
-                              [3] := TIIB[PMPS_BC]^Channel 3^Output;
-                              [4] := TIIB[PMPS_BC]^Channel 4^Output;
+    // Beam class lines are restricted to 8 channels in the current design, since
+    // there are no plans to use all 16. Channels 1-7 may be allocated to any other
+    // beam classes so long as they are ordered least to greatest.
+    // Channel 8 is reserved for full beam.
+    {attribute 'pytmc' := 'pv: BeamClassChannel
+        io: i
+        field: DESC Hardwire channel state
+        field: ZNAM Off
+        field: ONAM On'}
+    {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
+                              [2] := TIIB[PMPS_Premp]^Channel 2^Output;
+                              [3] := TIIB[PMPS_Premp]^Channel 3^Output;
+                              [4] := TIIB[PMPS_Premp]^Channel 4^Output;
                               
-                              [5] := TIIB[PMPS_BC]^Channel 5^Output;
-                              [6] := TIIB[PMPS_BC]^Channel 6^Output;
-                              [7] := TIIB[PMPS_BC]^Channel 7^Output;
-                              [8] := TIIB[PMPS_BC]^Channel 8^Output;
-                              
-                              [9] := TIIB[PMPS_BC]^Channel 9^Output;
-                              [10] := TIIB[PMPS_BC]^Channel 10^Output;
-                              [11] := TIIB[PMPS_BC]^Channel 11^Output;
-                              [12] := TIIB[PMPS_BC]^Channel 12^Output;
-                              
-                              [13] := TIIB[PMPS_BC]^Channel 13^Output;
-                              [14] := TIIB[PMPS_BC]^Channel 14^Output;
-                              [15] := TIIB[PMPS_BC]^Channel 15^Output;
-                              [16] := TIIB[PMPS_BC]^Channel 16^Output'}
-    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
+                              [5] := TIIB[PMPS_Premp]^Channel 5^Output;
+                              [6] := TIIB[PMPS_Premp]^Channel 6^Output;
+                              [7] := TIIB[PMPS_Premp]^Channel 7^Output;
+                              [8] := TIIB[PMPS_Premp]^Channel 8^Output;'} // 8 - Full beam
+    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
+END_VAR
+VAR CONSTANT
+    MAX_BEAM_CLASS_LINES : BYTE := 8;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -47,7 +49,7 @@ END_VAR
 //0xF = 1111 1111 1111 1111
 
 //Initialize BC lines to zero on every pass
-FOR InitCounter := 1 TO 16 DO
+FOR InitCounter := 1 TO MAX_BEAM_CLASS_LINES DO
     q_BC_ASSERTION_LINES[InitCounter] := FALSE;
 END_FOR
 
@@ -55,10 +57,11 @@ END_FOR
 //A BC of 0x0 would pass over this loop, setting none of the lines high
 // , as FOR loops check the initialized variable at the top to see if it's >
 // than the "TO" variable.
-FOR wBeamClass:=1 TO nBeamClass DO
+FOR wBeamClass:=1 TO MIN(MAX_BEAM_CLASS_LINES-1, nBeamClass) DO
     q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
 END_FOR
-]]></ST>
+
+q_BC_ASSERTION_LINES[8] := nBeamClass = 16; //Set channel 8 true if BC is 16]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
