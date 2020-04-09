@@ -5,10 +5,12 @@
 VAR_GLOBAL
     {attribute 'pytmc' := '
         pv: @(PREFIX)RequestedBP
+        archive: 1Hz monitor
     '}
     stRequestedBeamParameters    :    ST_BeamParams;
     {attribute 'pytmc' := '
         pv: @(PREFIX)CurrentBP
+        archive: 1Hz monitor
     '}
     stCurrentBeamParameters    :    ST_BeamParams;
     
@@ -33,20 +35,28 @@ VAR_GLOBAL CONSTANT
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
     MAX_FAST_FAULTS : UINT := 50; // Maximum number of fast faults that can be associated with a FFO
-    
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)FullBeamCnst
+        archive: 1Hz monitor
+        field: DESC Full beam constant
+    '}    
     cstFullBeam    :    ST_BeamParams := (
         fAtt := 0,
         fPP_mJ := 1E4,
         neVRange := 2#1111_1111_1111_1111,
         nRate    := UDINT#1000000
-        
-);
+    );
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)SafeBeamCnst
+        archive: 1Hz monitor
+        field: DESC Safe beam constant
+    '} 
     cstSafeBeam    :    ST_BeamParams := (
         fAtt := 100,
         fPP_mJ := 0,
         neVRange := 0,
         nRate    := 0
-);
+    );
     cnMaxStateArrayLen : INT := 20;
     
     AUX_ATTENUATORS : INT := 32;
@@ -55,7 +65,13 @@ VAR_GLOBAL CONSTANT
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
-    g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)eVRangeCnst
+        archive: 1Hz monitor
+        field: DESC eV Range constants
+        field: EGU keV
+    '}
+    g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [ 
     0.2,
     0.3,
     0.4,
