@@ -18,8 +18,12 @@ VAR
     i_stCurrentBP    AT %I* :    ST_BeamParams_IO;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
     q_stRequestedBP AT %Q* :    ST_BeamParams_IO;
+    {attribute 'pytmc' := 'pv: TxPDO_toggle
+        io: i'}
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
     xTxPDO_toggle    AT     %I* :    BIT;
+    {attribute 'pytmc' := 'pv: TxPDO_state
+        io: i'}
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
     xTxPDO_state    AT    %I*    :    BIT;
     
@@ -28,10 +32,12 @@ VAR
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
     
     // A request is not considered included until the active cohort number is >= the request cohort number.
+    {attribute 'pytmc' := 'pv: RequestCohort
+        io: i'}
     nRequestCohort : ULINT := 1; // Request cohort
-    nCurrentCohort : ULINT := 0; // Active cohort
-    
-    
+    {attribute 'pytmc' := 'pv: ActiveCohort
+        io: i'}
+    nActiveCohort : ULINT := 0; // Active cohort
 
 END_VAR
 ]]></Declaration>
@@ -42,6 +48,9 @@ PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must
 
 // Forwarding BP request for the subsystem
 Arbiter.ElevateRequest(THIS^);
+
+//Broadcasting current request
+PMPS_GVL.stRequestedBeamParameters := q_stRequestedBP;
 
 q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
@@ -66,10 +75,10 @@ ELSIF nId <> nReqId THEN
     RETURN;
 END_IF
 
-nCurrentCohort := i_stCurrentBP.nCohortInt;
+nActiveCohort := i_stCurrentBP.nCohortInt;
 
 // i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
-CheckRequest := nRequestCohort <= nCurrentCohort;]]></ST>
+CheckRequest := nRequestCohort <= nActiveCohort;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">

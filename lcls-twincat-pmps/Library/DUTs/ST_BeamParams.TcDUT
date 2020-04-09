@@ -5,19 +5,26 @@
     STRUCT
         (*  Requested pre-optic attenuation %  *)
 		{attribute 'pytmc' := 'pv: Attenuation
-        io: i'}
+            io: i
+            field: EGU %
+        '}
 		fAtt : REAL := 100;
         (* Pulse-rate *)
         {attribute 'pytmc' := 'pv: Rate
-        io: i'}
+            io: i
+            field: EGU Hz
+        '}
         nRate : UDINT := 10;
         (* Per pulse max energy (mJ) *)
         {attribute 'pytmc' := 'pv: PulseEnergy
-        io: i'}
+            io: i
+            field: EGU mJ
+        '}
         fPP_mJ : REAL := 20;
         (* Photon energy ranges *)
-        {attribute 'pytmc' := 'pv: PhotonEnergy
-        io: i'}
+        {attribute 'pytmc' := 'pv: PhotonEnergyRanges
+            io: i
+            field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
         neVRange : WORD := 65535;
         (* Beamline attenuators *)
@@ -38,7 +45,9 @@
         xValid : BOOL;
         // Cohort index. Identifies which cohort this BP set was included in arbitration
         {attribute 'pytmc' := 'pv: Cohort
-        io: i'}
+        io: i
+            field: DESC Cohort increments on each arbitration cycle
+        '}
         nCohortInt : ULINT;
     END_STRUCT
 END_TYPE

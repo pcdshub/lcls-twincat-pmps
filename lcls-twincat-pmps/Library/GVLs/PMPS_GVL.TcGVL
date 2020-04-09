@@ -3,15 +3,28 @@
   <GVL Name="PMPS_GVL" Id="{b2e0edd3-11b0-047f-0282-aaa0e3c1afb7}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
-    stReqFBDBeamParamsSum    :    ST_BeamParams;
-    stReqMethBeamParamSum    :    ST_BeamParams;
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)RequestedBP
+    '}
+    stRequestedBeamParameters    :    ST_BeamParams;
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)CurrentBP
+    '}
     stCurrentBeamParameters    :    ST_BeamParams;
     
     fbLog : FB_LogMessage:=(eSubsystem:=E_Subsystem.MPS);
 END_VAR
 VAR_GLOBAL RETAIN    
     // Statistics
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)SuccessfulPreemptions
+        io: i
+    '}
     SuccessfulPreemption : ULINT; // Any time BPTM applies a new BP request which is confirmed
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)AccumulatedFastFaults
+        io: i
+    '}
     AccumulatedFF : ULINT; // Any time a FF occurs
 END_VAR
 VAR_GLOBAL CONSTANT
