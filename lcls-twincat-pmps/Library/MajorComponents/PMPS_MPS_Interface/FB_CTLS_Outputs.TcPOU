@@ -16,33 +16,20 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    
-            {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_CLTS]^Channel 1^Output;
-                                      [2] := TIIB[PMPS_CLTS]^Channel 2^Output;
-                                      [3] := TIIB[PMPS_CLTS]^Channel 3^Output;
-                                      [4] := TIIB[PMPS_CLTS]^Channel 4^Output;
-                                      
-                                      [5] := TIIB[PMPS_CLTS]^Channel 5^Output;
-                                      [6] := TIIB[PMPS_CLTS]^Channel 6^Output;
-                                      [7] := TIIB[PMPS_CLTS]^Channel 7^Output;
-                                      [8] := TIIB[PMPS_CLTS]^Channel 8^Output;
-                                      
-                                      [9] := TIIB[PMPS_CLTS]^Channel 9^Output;
-                                      [10] := TIIB[PMPS_CLTS]^Channel 10^Output;
-                                      [11] := TIIB[PMPS_CLTS]^Channel 11^Output;
-                                      [12] := TIIB[PMPS_CLTS]^Channel 12^Output;
-                                      
-                                      [13] := TIIB[PMPS_CLTS]^Channel 13^Output;
-                                      [14] := TIIB[PMPS_CLTS]^Channel 14^Output;
-                                      [15] := TIIB[PMPS_CLTS]^Channel 15^Output;
-                                      [16] := TIIB[PMPS_CLTS]^Channel 16^Output'}
-    q_CLTS_ASSERTION_LINES    AT    %Q*    : ARRAY [1..16] OF    BOOL;
-    
-    
+    {attribute 'pytmc' := 'pv: CTLSChannel
+        io: i
+        field: DESC CTLS Rate Control hardwire channel state
+        field: ZNAM Off
+        field: ONAM On'}
+    {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 9^Output;
+                              [2] := TIIB[PMPS_Premp]^Channel 10^Output;
+                              [3] := TIIB[PMPS_Premp]^Channel 11^Output;'}
+    q_CLTS_ASSERTION_LINES    AT    %Q*    : ARRAY [1..3] OF    BOOL;  
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// CLTS 1Hz
+      <ST><![CDATA[
+// CLTS 1Hz
 q_CLTS_ASSERTION_LINES[1] := i_ArbiterBP.nRate >= 1;
 // CLTS 10Hz
 q_CLTS_ASSERTION_LINES[2] := i_ArbiterBP.nRate >= 10;
