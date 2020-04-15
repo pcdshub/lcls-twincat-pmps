@@ -11,7 +11,7 @@ Maps beam rate requests to 1, 10, or full rate beam for Cu linac.
 *)
 FUNCTION_BLOCK FB_CTLS_Outputs
 VAR_INPUT
-    i_ArbiterBP    :    ST_BeamParams;
+    BP    :    ST_BeamParams;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -30,11 +30,11 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 // CLTS 1Hz
-q_CLTS_ASSERTION_LINES[1] := i_ArbiterBP.nRate >= 1;
+q_CLTS_ASSERTION_LINES[1] := BP.nRate >= 1;
 // CLTS 10Hz
-q_CLTS_ASSERTION_LINES[2] := i_ArbiterBP.nRate >= 10;
+q_CLTS_ASSERTION_LINES[2] := BP.nRate >= 10;
 // CLTS Full rate
-q_CLTS_ASSERTION_LINES[3] := i_ArbiterBP.nRate >= 120;]]></ST>
+q_CLTS_ASSERTION_LINES[3] := BP.nRate >= 120;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

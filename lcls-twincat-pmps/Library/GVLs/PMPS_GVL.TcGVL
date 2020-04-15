@@ -7,12 +7,12 @@ VAR_GLOBAL
         pv: @(PREFIX)RequestedBP
         archive: 1Hz monitor
     '}
-    stRequestedBeamParameters    :    ST_BeamParams;
+    stRequestedBeamParameters    :    ST_BeamParams; //Summarized request for the line, as recognized by the line arbiter PLC
     {attribute 'pytmc' := '
         pv: @(PREFIX)CurrentBP
         archive: 1Hz monitor
     '}
-    stCurrentBeamParameters    :    ST_BeamParams;
+    stCurrentBeamParameters    :    ST_BeamParams; //Currently active BP set, broadcast by the line arbiter PLC
     
     fbLog : FB_LogMessage:=(eSubsystem:=E_Subsystem.MPS);
 END_VAR
