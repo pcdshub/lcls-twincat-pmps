@@ -47,7 +47,7 @@ VAR
     
     nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
     
-    nArbiterCohort : ULINT := 1; // The cohort index keeps track of which beam parameter requests have been included in higher-level arbitrations
+    nArbiterCohort : UDINT := 1; // The cohort index keeps track of which beam parameter requests have been included in higher-level arbitrations
     // Init to 1, provides a guard against default cohort value in BP requests.
     
     xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations

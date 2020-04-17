@@ -148,7 +148,7 @@ END_IF
 
 TEST('SubsysToArbPropagation');
 IF fbArbiter.CheckRequest(nId) THEN
-    AssertTrue(fbSubSysToArb.nCurrentCohort >= fbSubSysToArb.nRequestCohort,
+    AssertTrue(fbSubSysToArb.nActiveCohort >= fbSubSysToArb.nRequestCohort,
         'Request validated before higher level confirmation');
     TEST_FINISHED_NAMED('SubsysToArbPropagation');
 END_IF
