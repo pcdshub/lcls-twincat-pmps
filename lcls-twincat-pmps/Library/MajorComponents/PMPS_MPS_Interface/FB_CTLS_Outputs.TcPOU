@@ -16,7 +16,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    {attribute 'pytmc' := 'pv: CTLSChannel
+    {attribute 'pytmc' := 'pv: CTLSOutputs
         io: i
         field: DESC CTLS Rate Control hardwire channel state
         field: ZNAM Off
