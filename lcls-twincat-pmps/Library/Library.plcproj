@@ -61,7 +61,7 @@
     <Compile Include="DUTs\ST_FF.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_FFVeto.TcDUT">
+    <Compile Include="DUTs\ST_FFOverride.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
