@@ -89,8 +89,8 @@ xOK := True;
 ////////////////////////////////////////////////////////////////]]></ST>
       </Implementation>
     </Action>
-    <Method Name="EvaluateVetos" Id="{b05563e8-13ae-495e-807c-befe31dea571}">
-      <Declaration><![CDATA[METHOD EvaluateVetos : BOOL
+    <Method Name="EvaluateOverrides" Id="{b05563e8-13ae-495e-807c-befe31dea571}">
+      <Declaration><![CDATA[METHOD EvaluateOverrides : BOOL
 VAR_INPUT
 END_VAR
 VAR
@@ -107,31 +107,41 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         CONTINUE;
     ELSE
         // Veto timer
-        IF FF.Veto.Deactivate THEN 
-            FF.Veto.Timer.PT := T#0s; // Only needs to be set zero for one cycle
+        IF FF.Ovrd.Deactivate THEN 
+            FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
         ELSE
-            FF.Veto.Timer.PT := UDINT_TO_TIME(FF.Veto.Duration);
+            FF.Ovrd.Timer.PT := UDINT_TO_TIME(FF.Ovrd.Duration);
         END_IF
         
         // UDINT conversions for ESS module compatibility.
-        FF.Veto.Timer(
-            IN := FF.Veto.Activate, // Rising edge activated
-            Q => FF.Veto.Active);
+        FF.Ovrd.Timer(
+            IN := FF.Ovrd.Activate, // Rising edge activated
+            Q => FF.Ovrd.Active);
             
-        FF.Veto.tVetoActivate(CLK:=FF.Veto.Active);
-        FF.Veto.VetoActLogAck S= FF.Veto.tVetoActivate.Q;
+        FF.Ovrd.tOvrdActivate(CLK:=FF.Ovrd.Active);
+        FF.Ovrd.OvrdActLogAck S= FF.Ovrd.tOvrdActivate.Q;
         
-        FF.Veto.tVetoExpiring(CLK:=FF.Veto.Active);
-        FF.Veto.VetoExpLogAck S= FF.Veto.tVetoExpiring.Q;
+        FF.Ovrd.tOvrdExpiring(CLK:=FF.Ovrd.Active);
+        FF.Ovrd.OvrdExpLogAck S= FF.Ovrd.tOvrdExpiring.Q;
             
-        FF.Veto.ElapsedTime := TIME_TO_UDINT(FF.Veto.Timer.ET);
+        FF.Ovrd.ElapsedTime := TIME_TO_UDINT(FF.Ovrd.Timer.ET);
         
         // Clear pushbuttons
-        FF.Veto.Activate := FALSE;
-        FF.Veto.Deactivate := FALSE;
+        FF.Ovrd.Activate := FALSE;
+        FF.Ovrd.Deactivate := FALSE;
         
     END_IF    
 END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EvaluateVetos" Id="{a668f2a3-9954-4aeb-ad93-2aac65e64302}">
+      <Declaration><![CDATA[{attribute 'obsolete' := 'Use EvaluateOverrides instead.'} 
+METHOD EvaluateVetos : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <Method Name="ExecuteLogging" Id="{0b57308b-9b1c-4482-8d48-fd43e479e123}">
@@ -163,24 +173,24 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             FF.FaultAck := FALSE;
         END_IF
         
-        IF FF.Veto.VetoActLogAck THEN
+        IF FF.Ovrd.OvrdActLogAck THEN
             
             pmpsTypeCode := 2;
             FormulateLogJson(FF);
             
             fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning);
             
-            FF.Veto.VetoActLogAck := FALSE;
+            FF.Ovrd.OvrdActLogAck := FALSE;
         END_IF
         
-        IF FF.Veto.VetoExpLogAck THEN
+        IF FF.Ovrd.OvrdExpLogAck THEN
             
             pmpsTypeCode := 3;
             FormulateLogJson(FF);
             
             fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning);
             
-            FF.Veto.VetoExpLogAck := FALSE;
+            FF.Ovrd.OvrdExpLogAck := FALSE;
         END_IF
     END_IF
 END_FOR
@@ -245,7 +255,7 @@ stFF.rtReset(CLK:=stFF.Reset OR Reset);
 stFF.Reset R= stFF.rtReset.Q;
 stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
 
-stFF.BeamPermitted := stFF.bsFF.Q1 OR stFF.Veto.Active;
+stFF.BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active;
 
 // Fault generation    
 IF NOT stFF.BeamPermitted THEN

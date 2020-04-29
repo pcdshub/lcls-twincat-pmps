@@ -28,6 +28,11 @@ FUNCTION_BLOCK FB_Arbiter
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: ArbitratedBP
+        io: i
+        field: DESC Arbitrated BP
+     '}
     q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
     
     q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
@@ -38,18 +43,27 @@ VAR
         io: i
      '}
     fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
-    
-    getPosPtr    : POINTER TO T_HashTableEntry := 0; 
-    getBPStruct    :    ST_BeamParams;
-    stOutputBP    :    ST_BeamParams; //Safest beam parameters from all in the assertion pool
 
     xRequestMade : BOOL; // Arbiter has confirmed its request has made it into the beam parameter request    
     
+    {attribute 'pytmc' := '
+        pv: ArbiterID
+        io: i
+        field: DESC Arbiter ID for elev. req.
+     '}
     nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
-    
+    {attribute 'pytmc' := '
+        pv: CohortCounter
+        io: i
+        field: DESC Intrnl cohort counter
+     '}
     nArbiterCohort : UDINT := 1; // The cohort index keeps track of which beam parameter requests have been included in higher-level arbitrations
     // Init to 1, provides a guard against default cohort value in BP requests.
-    
+    {attribute 'pytmc' := '
+        pv: ActiveInArbitration
+        io: i
+        field: DESC True if this arbiter's req is included
+     '}
     xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations
 END_VAR
 ]]></Declaration>
@@ -188,8 +202,7 @@ This method should only be used with one higher level component.
 *)
 
 IF NOT xRequestMade THEN
-    HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
-    xRequestMade := TRUE;
+    xRequestMade := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
     xActiveInArbitration := FALSE;
 END_IF
 

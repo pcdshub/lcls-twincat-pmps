@@ -9,9 +9,9 @@ STRUCT
     Info : ST_FFInfo;
     
     {attribute 'pytmc' := '
-        pv: Veto
+        pv: Ovrd
      '}
-    Veto : ST_FFVeto;
+    Ovrd : ST_FFOverride;
     
     {attribute 'pytmc' := '
         pv: OK

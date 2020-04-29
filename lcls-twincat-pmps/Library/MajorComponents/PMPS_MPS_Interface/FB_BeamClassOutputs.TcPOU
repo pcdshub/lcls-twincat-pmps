@@ -6,11 +6,12 @@ Sets the beam class assertion lines for a given beam class.
 *)
 FUNCTION_BLOCK FB_BeamClassOutputs
 VAR_INPUT
-    nBeamClass   :    BYTE;
+    BP : ST_BeamParams;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+    nBeamClass   :    BYTE;
     wBeamClass    :    BYTE;
 
     InitCounter: BYTE;
@@ -20,7 +21,7 @@ VAR
     // there are no plans to use all 16. Channels 1-7 may be allocated to any other
     // beam classes so long as they are ordered least to greatest.
     // Channel 8 is reserved for full beam.
-    {attribute 'pytmc' := 'pv: BeamClassChannel
+    {attribute 'pytmc' := 'pv: BeamClassOutputs
         io: i
         field: DESC Hardwire channel state
         field: ZNAM Off
@@ -38,11 +39,24 @@ VAR
 END_VAR
 VAR CONSTANT
     MAX_BEAM_CLASS_LINES : BYTE := 8;
+    BC_1HZ : BYTE := 1;
+    BC_10HZ : BYTE := 2;
+    BC_FULL : BYTE := 16;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-//Beam Class
+// Determine BC
+IF BP.nRate >= 1 THEN
+    nBeamClass := BC_1HZ;
+ELSIF BP.nRate >= 10 THEN
+    nBeamClass := BC_10HZ;
+ELSIF BP.nRate >= 120 THEN
+    nBeamClass := BC_FULL;
+END_IF
+
+
+//Assert Beam Class
 ////////////////////////////////////
 //0x0 = 0000 0000 0000 0000
 //0x1 = 0000 0000 0000 0001
