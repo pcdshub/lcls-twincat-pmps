@@ -3,9 +3,15 @@
   <DUT Name="ST_PMPS_Attenuator" Id="{91a12f52-7679-4a97-9c50-d3975974c134}">
     <Declaration><![CDATA[TYPE ST_PMPS_Attenuator :
 STRUCT
-		nReqAtt : UINT;
-		nAttCur : UINT;
-		xAttOK : UINT;
+        {attribute 'pytmc' := 'pv: Att
+            io: i
+            field: EGU %
+        '}
+		nAtt : UINT;
+        {attribute 'pytmc' := 'pv: OK
+            io: i
+        '}
+		xAttOK : UINT; // true = no errors and attenuator is stable
 END_STRUCT
 END_TYPE
 ]]></Declaration>
