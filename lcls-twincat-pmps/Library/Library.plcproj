@@ -27,6 +27,12 @@
     <Compile Include="DUTs\E_BPTMState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\K_Apertures.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\L_Apertures.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -62,6 +68,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_FFOverride.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_PMPS_Aperture.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
