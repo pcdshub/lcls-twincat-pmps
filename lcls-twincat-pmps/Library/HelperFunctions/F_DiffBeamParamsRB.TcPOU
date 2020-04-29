@@ -9,37 +9,43 @@ VAR_INPUT
     BeamParam2    :    ST_BeamParams;
 END_VAR
 VAR
-    // Internal Attenuation OK boolean
-    xAttOK: BOOL := FALSE;
-    // Internal Per-pulse energy OK boolean
-    xPPmjOK: BOOL := FALSE;
-    // Internal photon energy OK boolean
-    xEvOK: BOOL := FALSE;
-    xRateOK: BOOL;
+    // Internal Attenuation Diff boolean
+    xAttDiff: BOOL := FALSE;
+    // Internal Per-pulse energy Diff boolean
+    xPPmjDiff: BOOL := FALSE;
+    // Internal photon energy Diff boolean
+    xEvDiff: BOOL := FALSE;
+    xRateDiff: BOOL := FALSE;
     // Internal attenuator array boolean
-    xAuxAttOK : BOOL;
-    // Internal cohort OK bool
-    xCohortOK : BOOL;
-    idx : int :=1;
+    xAuxAttDiff : BOOL := FALSE;
+    // Internal cohort Diff bool
+    xCohortDiff : BOOL := FALSE;
+    idx : uint :=1;
+    
+    xAuxAprtDiff : BOOL := FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[xAttOK := BeamParam1.fAtt <> BeamParam2.fAtt;
-xAuxAttOK := TRUE;
+      <ST><![CDATA[xAttDiff := BeamParam1.fAtt <> BeamParam2.fAtt;
+
 FOR idx := 1 to PMPS_GVL.AUX_ATTENUATORS DO
-    xAuxAttOK R= BeamParam1.astAttenuators[idx].nAttCur = BeamParam2.astAttenuators[idx].nAttCur;
-    xAuxAttOK R= BeamParam1.astAttenuators[idx].nReqAtt = BeamParam2.astAttenuators[idx].nReqAtt;
-    xAuxAttOK R= BeamParam1.astAttenuators[idx].xAttOK = BeamParam2.astAttenuators[idx].xAttOK;
+    xAuxAttDiff S= BeamParam1.astAttenuators[idx].nAtt <> BeamParam2.astAttenuators[idx].nAtt;
+    xAuxAttDiff S= BeamParam1.astAttenuators[idx].xAttOK <> BeamParam2.astAttenuators[idx].xAttOK;
 END_FOR
 
-xPPmjOK := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
-xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
-xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
+FOR idx := 1 to PMPS_GVL.MAX_APERTURES DO
+    xAuxAprtDiff S= BeamParam1.astApertures[idx].Height <> BeamParam2.astApertures[idx].Height;
+    xAuxAprtDiff S= BeamParam1.astApertures[idx].Width <> BeamParam2.astApertures[idx].Width;
+    xAuxAprtDiff S= BeamParam1.astApertures[idx].xOK <> BeamParam2.astApertures[idx].xOK;
+END_FOR
 
-xCohortOK := BeamParam1.nCohortInt <> BeamParam2.nCohortInt;
+xPPmjDiff := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
+xEvDiff := BeamParam1.neVRange <> BeamParam2.neVRange;
+xRateDiff     := BeamParam1.nRate <> BeamParam2.nRate;
 
+xCohortDiff := BeamParam1.nCohortInt <> BeamParam2.nCohortInt;
 
-F_DiffBeamParamsRB := xAttOK OR xPPmjOK OR xEvOK OR xRateOK;]]></ST>
+F_DiffBeamParamsRB := xAttDiff OR xPPmjDiff OR xEvDiff OR xRateDiff OR xAuxAprtDiff OR xAuxAttDiff;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
