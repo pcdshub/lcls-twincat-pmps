@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_PMPS_Aperture" Id="{2210e112-7522-48f0-a3ee-46a791c14b5e}">
+    <Declaration><![CDATA[TYPE ST_PMPS_Aperture :
+STRUCT
+    {attribute 'pytmc' := 'pv: Width
+            io: i
+            field: EGU mm'}
+    Width : REAL; // distance between horizontal slits (x)
+    {attribute 'pytmc' := 'pv: Height
+            io: i
+            field: EGU mm'}
+    Height : REAL; // distance between vertical slits (y)
+    
+    {attribute 'pytmc' := 'pv: OK
+        io: i'}
+    xOK : BOOL; // status of aperture, false if error or in motion
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
