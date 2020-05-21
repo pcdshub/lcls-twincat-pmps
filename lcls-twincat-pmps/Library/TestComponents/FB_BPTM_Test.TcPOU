@@ -39,7 +39,7 @@ END_VAR]]></Declaration>
 
 eBPTMTestStates.Init:
     
-    
+    TEST('BPTMTest');
     eTestStep := eBPTMTestStates.WaitingForTransitionAssertion;
 
 eBPTMTestStates.WaitingForTransitionAssertion:
@@ -111,9 +111,12 @@ eBPTMTestStates.Transitioning:
             'nCurrentAssertionID not set.');
     
         TEST_FINISHED_NAMED('BPTM Authorizes Transition');
+        
+        eTestStep := eBPTMTestStates.CleaningUp;
     END_IF
 
-eBPTMTestStates.CleaningUp:    
+eBPTMTestStates.CleaningUp:
+    TEST_FINISHED_NAMED('BPTMTest');    
     
 END_CASE
 ]]></ST>
