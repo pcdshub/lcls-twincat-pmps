@@ -6,18 +6,23 @@ VAR_INPUT
     BP : ST_BeamParams;
 END_VAR
 VAR
+    idx : UINT := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[BP.astAttenuators := BP_TO_IO.astAttenuators;
-BP.aStoppers := BP_TO_IO.aStoppers;
-BP.fAtt := BP_TO_IO.fAtt;
-BP.fPP_mJ := BP_TO_IO.fPP_mJ;
-BP.nCohortInt := ULINT_TO_UDINT(BP_TO_IO.nCohortInt);
-BP.neVRange := BP_TO_IO.neVRange;
-BP.nRate := BP_TO_IO.nRate;
-BP.xValid := BP_TO_IO.xValid;
-BP.xValidToggle := BP_TO_IO.xValidToggle;]]></ST>
+      <ST><![CDATA[
+FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+    BP_TO_IO.astAttenuators[idx] := ATT_TO_IO(BP.astAttenuators[idx]);
+END_FOR
+
+BP_TO_IO.aStoppers := BP.aStoppers;
+BP_TO_IO.fAtt := BP.fAtt;
+BP_TO_IO.fPP_mJ := BP.fPP_mJ;
+BP_TO_IO.nCohortInt := ULINT_TO_UDINT(BP.nCohortInt);
+BP_TO_IO.neVRange := BP.neVRange;
+BP_TO_IO.nRate := BP.nRate;
+BP_TO_IO.xValid := BP.xValid;
+BP_TO_IO.xValidToggle := BP.xValidToggle;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
