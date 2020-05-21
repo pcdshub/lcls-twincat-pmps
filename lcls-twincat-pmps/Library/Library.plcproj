@@ -22,6 +22,7 @@
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
     <Title>PMPS</Title>
+    <DefaultNamespace>PMPS</DefaultNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\E_BPTMState.TcDUT">
@@ -83,6 +84,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\APT_TO_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\ATT_TO_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -121,6 +125,12 @@
     <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\IO_TO_APT.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\IO_TO_ATT.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\IO_TO_BP.TcPOU">
       <SubType>Code</SubType>
@@ -292,6 +302,7 @@
   </ItemGroup>
   <ItemGroup>
     <PinnedGlobalDataType Include="ST_BeamParams_IO" />
+    <PinnedGlobalDataType Include="ST_PMPS_Aperture_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Attenuator_IO" />
   </ItemGroup>
   <ItemGroup>

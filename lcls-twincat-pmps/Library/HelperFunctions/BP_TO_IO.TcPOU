@@ -15,6 +15,10 @@ FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
     BP_TO_IO.astAttenuators[idx] := ATT_TO_IO(BP.astAttenuators[idx]);
 END_FOR
 
+FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+    BP_TO_IO.astApertures[idx] := APT_TO_IO(BP.astApertures[idx]);
+END_FOR
+
 BP_TO_IO.aStoppers := BP.aStoppers;
 BP_TO_IO.fAtt := BP.fAtt;
 BP_TO_IO.fPP_mJ := BP.fPP_mJ;
