@@ -51,8 +51,8 @@ VAR
     
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection'); // Fast fault for ethercat issues
-    nActiveCohort : ULINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
-    nRequestedCohort : ULINT := 1;
+    nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
+    nRequestedCohort : UDINT := 1;
     rtToggle : R_TRIG;
 
 	

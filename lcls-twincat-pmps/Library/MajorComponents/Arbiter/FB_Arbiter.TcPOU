@@ -115,7 +115,7 @@ VAR_INPUT
     stBP2    :    ST_BeamParams;
 END_VAR
 VAR
-    idx : INT := 1;
+    idx : UINT := 1;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
@@ -124,9 +124,14 @@ END_VAR]]></Declaration>
 ArbitrateBP.fAtt := MAX(stBP1.fAtt, stBP2.fAtt);
 
 FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    ArbitrateBP.astAttenuators[idx].nReqAtt := MAX(stBP1.astAttenuators[idx].nReqAtt, stBP2.astAttenuators[idx].nReqAtt);
+    ArbitrateBP.astAttenuators[idx].nAtt := MAX(stBP1.astAttenuators[idx].nAtt, stBP2.astAttenuators[idx].nAtt);
 END_FOR
 
+//Apertures
+FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+    ArbitrateBP.astApertures[idx].Height := MIN(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
+    ArbitrateBP.astApertures[idx].Width := MIN(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+END_FOR
 
 //Pulse energy
 ArbitrateBP.fPP_mJ := MIN(stBP1.fPP_mJ, stBP2.fPP_mJ);
