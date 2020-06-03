@@ -70,7 +70,7 @@ stExpectedBP.nRate := stRateReqBP.nRate;
 
 stArbitratedBP := fbArbiter.GetArbitratedBP();
 
-AssertFalse(F_DiffReqBeamParams(stExpectedBP, stArbitratedBP),
+AssertFalse(F_DifferentBeamParams(stExpectedBP, stArbitratedBP),
                 'Arbitrated BP does not match expected.');
 
 TEST_FINISHED();]]></ST>
@@ -89,10 +89,10 @@ VAR_INST
     
     fbHigherArb : FB_Arbiter(2);
     
-    fbSubSysToArb : FB_SubSysToArbiter_IO; // Used in the simulation sub-system
+    fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
     pBPR : POINTER TO ST_BeamParams_IO;
     
-    fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42);
+    fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
     pBPC : POINTER TO ST_BeamParams_IO;
     
     fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
