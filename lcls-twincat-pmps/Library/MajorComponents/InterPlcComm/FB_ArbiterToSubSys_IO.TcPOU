@@ -52,7 +52,7 @@ VAR
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection'); // Fast fault for ethercat issues
     nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
-    nRequestedCohort : UDINT := 1;
+    nRequestedCohort : UDINT := 0;
     rtToggle : R_TRIG;
 
 	
@@ -78,10 +78,14 @@ IF Arbiter.CheckRequest(RequestingSystemID) THEN
     nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
 END_IF
 
-// Current beam params fanout
+// Sending current beam parameter set to subsystems 
 o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
 o_CurrentBP.nCohortInt := nActiveCohort;
 
+
+//////////////////////////////////////
+// Verifying the ethercat interface health
+/////////////////////////////////////
 // Both of these values should be 0 for a fully valid exchange
 ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
 

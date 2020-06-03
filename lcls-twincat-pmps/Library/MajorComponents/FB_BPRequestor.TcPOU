@@ -23,7 +23,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[Arbiter.ElevateRequest(THIS^); // Executes arbitration and retrieves ReqBP
 
-IF nRequestCohort = nCohort THEN
+IF nRequestCohort >= nCohort THEN
     // Update requested BP set
     q_ReqBP := ReqBP;
     // Note: we may do more here someday... perhaps all of the output control
@@ -77,7 +77,12 @@ RequestBP := ReqId = nReqId;
 ReqBP := stReqBP;
 
 // Record current cohort
-nRequestCohort := nCohort;
+IF nRequestCohort = 0 THEN
+    nRequestCohort := 1;
+ELSE
+    nRequestCohort := nCohort;
+END_IF
+
 ]]></ST>
       </Implementation>
     </Method>

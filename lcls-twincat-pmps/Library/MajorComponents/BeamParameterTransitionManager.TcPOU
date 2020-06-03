@@ -38,8 +38,8 @@ VAR
     xTranBP    :    BOOL;
     xFinalBP    :    BOOL;
     
-    eBPTMState : E_BPTMState;
-    ePrevState : E_BPTMState;
+    eBPTMState : E_BPTMState := Init;
+    ePrevState : E_BPTMState := Init;
     
     xEntry : BOOL;
     rTransition : R_TRIG;
@@ -63,10 +63,11 @@ IF nTargetAssertionID <> i_nRequestedAssertionID THEN
 	END_CASE
     
     eBPTMState := E_BPTMState.NewTarget;
+    xEntry := eBPTMState <> ePrevState;
     
 END_IF
 
-xEntry S= ePrevState <> eBPTMState;
+
 
 // States
 CASE eBPTMState OF
@@ -113,7 +114,10 @@ CASE eBPTMState OF
 		END_IF
 END_CASE
 
+xEntry := ePrevState <> eBPTMState;
 ePrevState := eBPTMState;
+
+
 ]]></ST>
     </Implementation>
     <Action Name="AssertFinalBP" Id="{4d723d61-220d-405f-a182-a1465a63ec6c}">

@@ -201,6 +201,12 @@
     <Compile Include="TestComponents\FB_BPTM_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestComponents\FB_ArbToSubsys_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_SubsysToArb_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestComponents\FB_evRangeCalculator_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
