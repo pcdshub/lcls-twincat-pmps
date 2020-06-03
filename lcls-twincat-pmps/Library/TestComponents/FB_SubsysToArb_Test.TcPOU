@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_SubsysToArb_Test" Id="{c6de136c-0b13-4018-91bd-56ce73f96cbc}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_SubsysToArb_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[BasicFunction();]]></ST>
+    </Implementation>
+    <Method Name="BasicFunction" Id="{69a03e5d-8fdd-408d-93e6-d01b60c62c48}">
+      <Declaration><![CDATA[METHOD BasicFunction
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (fAtt:=12);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    fbHigherArb : FB_Arbiter(2);
+    
+    fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+    pBPR : POINTER TO ST_BeamParams_IO;
+    
+    fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
+    pBPC : POINTER TO ST_BeamParams_IO;
+    
+    fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
+    
+    FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+
+    Cycle : INT := 0;
+    
+    CycleLimit : INT := 20;
+    
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+// trusted with a grain of salt.
+
+TEST('FullStack');
+
+
+
+CASE Cycle OF
+
+0: 
+    IF NOT fbArbiter.CheckRequestInPool(nID) THEN
+        AssertTrue(fbArbiter.AddRequest(nId, stReq), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+    END_IF  
+    
+    TEST('JustEnteredRequest');
+    AssertFalse(fbArbiter.CheckRequest(nId),
+        'Check should fail. Request not arbitrated yet.');
+    TEST_FINISHED();
+   
+8000:
+    TEST_FINISHED_NAMED('FullStack');   
+    
+END_CASE 
+
+
+
+TEST('VerifyIncludedAtAllLevels');
+IF fbArbiter.CheckRequest(nId) THEN
+    AssertTrue(fbHigherArb.xActiveInArbitration, 'HigherArb is not yet included in arbitration');
+    AssertTrue(fbArbiter.xActiveInArbitration, 'Local Arb is not yet included in arbitration');
+    TEST_FINISHED_NAMED('VerifyIncludedAtAllLevels');
+END_IF
+      
+    
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+//END of sub system cycle
+///////////////////////////////////////
+
+//Ethercat transfer simulation
+// Transfer of requested BP to arbiter PLC
+pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+pBPR^ := fbSubSysToArb.q_stRequestedBP;
+
+// Transfer of current BP to sub system PLC
+pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
+pBPC^ := fbArbToSubSys.o_CurrentBP;
+
+//////////////////////////////////////
+//Start of arbiter plc cycle
+//Arb io collects sub system status
+fbArbToSubSys(Arbiter := fbHigherArb, fbFFHWO := FFO); // This is making a request in the higher arb
+//BPR collects arbiter summation
+fbBPR(Arbiter := fbHigherArb); // This is getting the arbitrated BP
+
+
+
+
+IF CycleLimit > Cycle THEN
+    Cycle := Cycle + 1;
+ELSE 
+    Cycle := 8000;
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -82,6 +82,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// If the request is already in the pool, then skip the rest.
+// This is flawed, needs to update the request if it's already in the pool, despite having the same ID
 IF THIS^.CheckRequestInPool(nReqID) THEN
     AddRequest := FALSE;
     RETURN;
