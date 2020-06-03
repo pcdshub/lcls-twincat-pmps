@@ -31,6 +31,7 @@ END_VAR
 VAR_INST
     fbBPTM_TestBasicFunction    :    BeamParameterTransitionManager;
     fbArbiter    :    FB_Arbiter(1);
+    fbBPR :  FB_BPRequestor;
     xFirstPass    :    BOOL := TRUE;
     eTestStep: eBPTMTestStates := eBPTMTestStates.Init;
 END_VAR]]></Declaration>
@@ -43,7 +44,7 @@ eBPTMTestStates.Init:
     eTestStep := eBPTMTestStates.WaitingForTransitionAssertion;
 
 eBPTMTestStates.WaitingForTransitionAssertion:
-    TEST('BPTMBasicFunction');
+    TEST('BPTM Requests Transition');
     
     //Call BPTM with requested final state and transition state
     fbBPTM_TestBasicFunction(
@@ -55,16 +56,17 @@ eBPTMTestStates.WaitingForTransitionAssertion:
         i_stRequestedAssertion := stReqAssertion
     );
     
-    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForTransitionAssertion THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForTransitionAssertion AND 
+        NOT fbBPTM_TestBasicFunction.xEntry THEN
     
-        AssertTrue(fbArbiter.CheckRequest(nTransitionID), 'Arbiter did not accept BPTM transition assertion');
+        AssertTrue(fbArbiter.CheckRequestInPool(nTransitionID), 'Arbiter did not accept BPTM transition assertion');
         
-        AssertFalse(fbArbiter.CheckRequest(nReqID), 'Arbiter has requested too early.');
+        AssertFalse(fbArbiter.CheckRequestInPool(nReqID), 'BPTM has requested final too early.');
                 
         AssertFalse(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
             'Transition should not be authorized until the arbiter has final assertion');
             
-        TEST_FINISHED_NAMED('BPTMBasicFunction');
+        TEST_FINISHED_NAMED('BPTM Requests Transition');
         
         eTestStep := eBPTMTestStates.WaitingForFinalAssertion;
     END_IF
@@ -75,19 +77,20 @@ eBPTMTestStates.WaitingForFinalAssertion:
     fbBPTM_TestBasicFunction(fbArbiter := fbArbiter,
         stCurrentBeamParameters := stTransitionAssertion);
     
-    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForFinalAssertion THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitingForFinalAssertion AND
+        NOT fbBPTM_TestBasicFunction.xEntry THEN
     
-        AssertTrue(fbArbiter.CheckRequest(nReqID),
-            'Transition assertion should be in arbiter');
+        AssertTrue(fbArbiter.CheckRequest(nTransitionID), 
+            'Transition assertion should be active in arbitration now.');
         
-        AssertTrue(fbArbiter.CheckRequest(nReqID),
+        AssertTrue(fbArbiter.CheckRequestInPool(nReqID),
             'Final assertion should be in arbiter');
             
         AssertFalse(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
-            'Transition should not be authorized until the arbiter has final assertion');
+            'Transition should not be authorized until the final request is active in arbitration');
             
         TEST_FINISHED_NAMED('BPTM Requests Final');
-    
+   
         eTestStep := eBPTMTestStates.Transitioning;
     END_IF
 
@@ -96,7 +99,8 @@ eBPTMTestStates.Transitioning:
     fbBPTM_TestBasicFunction(fbArbiter := fbArbiter,
         stCurrentBeamParameters := stTransitionAssertion);
         
-    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning THEN
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
+        NOT fbBPTM_TestBasicFunction.xEntry THEN
     
         AssertTrue(fbArbiter.CheckRequest(nReqID),
             'Transition assertion should be in arbiter');
@@ -119,6 +123,10 @@ eBPTMTestStates.CleaningUp:
     TEST_FINISHED_NAMED('BPTMTest');    
     
 END_CASE
+
+// Completes arbiter request elevation process
+// Necessary for CheckRequest to return true, ever
+fbBPR(Arbiter:=fbArbiter);
 ]]></ST>
       </Implementation>
     </Method>
