@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_ArbToSubsys_Test" Id="{4b9c6b71-f9f3-4505-9b7a-b50c0a7ad926}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_ArbToSubsys_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[BasicFunction();]]></ST>
+    </Implementation>
+    <Method Name="BasicFunction" Id="{3c4c05f2-7e24-41a0-b488-1e2c73951edf}">
+      <Declaration><![CDATA[METHOD BasicFunction
+VAR_INPUT
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (fAtt:=12);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    pBPR : POINTER TO ST_BeamParams_IO;
+    
+    stBPRIO : ST_BeamParams_IO := (
+        nCohortInt := 1,
+        fAtt := 35); // Simulates subsystem BP request
+    
+    fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
+    pBPC : POINTER TO ST_BeamParams_IO;
+    
+    fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
+    
+    FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+
+    Cycle : INT := 0;
+    
+    CycleLimit : INT := 20;
+    
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Simulate an initial cycle with no new requests coming in
+fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+
+TEST('Init');
+TEST_FINISHED();
+
+//Ethercat transfer simulation
+// Transfer of requested BP to arbiter PLC
+pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+pBPR^ := stBPRIO;
+
+///////////////////////////////////////
+//Sub system cycle
+fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+//END of sub system cycle
+///////////////////////////////////////
+
+
+TEST('New request');
+    AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.i_RequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match, and they should');
+    AssertTrue(fbArbiter.CheckRequestInPool(SysID), 'ArbToSubSys request should be in arbiter pool now');
+    AssertFalse(fbArbToSubSys.nActiveCohort = 0, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+    AssertFalse(fbArbToSubSys.o_CurrentBP.nCohortInt = fbArbToSubSys.nActiveCohort, 'Cohort being sent to sub system remains unincremented');
+TEST_FINISHED_NAMED('New request');
+    
+
+///////////////////////////////////////
+//Sub system cycle
+fbBPR(Arbiter:=fbArbiter);
+fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+//END of sub system cycle
+///////////////////////////////////////
+
+
+TEST('Request has become active');
+    AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.nActiveCohort, 'ReqCohort and qBP Cohort do not match, and they should');
+    AssertTrue(fbArbiter.CheckRequest(SysID), 'ArbToSubSys request should be in arbiter pool now');
+    AssertFalse(fbArbToSubSys.nActiveCohort = stBPRIO.nCohortInt, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+TEST_FINISHED_NAMED('Request has become active');
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

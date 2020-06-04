@@ -119,7 +119,9 @@ TEST('FullStack');
 CASE Cycle OF
 
 0: 
-    fbArbiter.AddRequest(nId, stReq); // some device asking its local arbiter for some beam parameters
+    IF NOT fbArbiter.CheckRequestInPool(nID) THEN
+        AssertTrue(fbArbiter.AddRequest(nId, stReq), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+    END_IF  
     
     TEST('JustEnteredRequest');
     AssertFalse(fbArbiter.CheckRequest(nId),

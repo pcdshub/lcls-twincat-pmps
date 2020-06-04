@@ -34,10 +34,10 @@ VAR
     // A request is not considered included until the active cohort number is >= the request cohort number.
     {attribute 'pytmc' := 'pv: RequestCohort
         io: i'}
-    nRequestCohort : UDINT := 1; // Request cohort
+    nRequestCohort : UDINT := 0; // Request cohort
     {attribute 'pytmc' := 'pv: ActiveCohort
         io: i'}
-    nActiveCohort : UDINT := 0; // Active cohort
+    nActiveCohort : UDINT := 0; // Active cohort, updated by incoming BP from arbiter PLC, in the ElevateRequest arbiter call
 
 END_VAR
 ]]></Declaration>
@@ -51,6 +51,7 @@ Arbiter.ElevateRequest(THIS^);
 
 //Broadcasting current request
 PMPS_GVL.stRequestedBeamParameters := IO_TO_BP(q_stRequestedBP);
+
 
 q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
@@ -99,7 +100,9 @@ q_stRequestedBP := BP_TO_IO(stReqBP);
 nRequestCohort := nRequestCohort + 1;
 
 // Mark the current cohort id
-q_stRequestedBP.nCohortInt := nRequestCohort;]]></ST>
+q_stRequestedBP.nCohortInt := nRequestCohort;
+
+RequestBP := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

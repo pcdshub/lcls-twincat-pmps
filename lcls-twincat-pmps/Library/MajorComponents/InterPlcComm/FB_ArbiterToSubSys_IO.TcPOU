@@ -6,6 +6,13 @@ network.
 
 2019-12-2, A. Wallace
 
+Use in conjunction with FB_SubSysToArbiter_IO.
+
+This FB runs in the beamline arbiter PLC (BAP). There should be one of these for every
+subsystem interfaced to the BAP. Each subsystem PLC should run a sibling FB_SubSysToArbiter_IO FB.
+
+This FB and its sibling communicate through the ethercat connection between the subsystem PLC and the BAP.
+
 *)
 FUNCTION_BLOCK FB_ArbiterToSubSys_IO
 VAR_INPUT
@@ -60,12 +67,14 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+// Incoming request from subsystem PLC
 RequestedBP := IO_TO_BP(i_RequestedBP);
 
-// Update arbiter with our request
+// Update Arbiter with our request
 rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
 // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
-IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN // If subsystem cohort has incremented, update beam parameter request with our arbiter
+// If subsystem cohort has incremented, update beam parameter request with our arbiter
+IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
     Arbiter.RemoveRequest(RequestingSystemID);
     Arbiter.AddRequest(RequestingSystemID, RequestedBP);
     nRequestedCohort := i_RequestedBP.nCohortInt;
@@ -73,7 +82,8 @@ END_IF
 
 
 // Check if latest request is acknowledged by this arbiter
-// This happens after an arbitration
+// Acknowledgement happens after an arbitration cycle, which means if RequestedCohort just incremented
+// due to a new request, CheckRequest will be false.
 IF Arbiter.CheckRequest(RequestingSystemID) THEN
     nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
 END_IF
