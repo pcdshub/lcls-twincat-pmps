@@ -49,7 +49,7 @@
         // Cohort index. Identifies which cohort this BP set was included in arbitration
         {attribute 'pytmc' := 'pv: Cohort
         io: i
-            field: DESC Cohort increments on each arbitration cycle
+            field: DESC Cohort inc on each arb cycle
         '}
         nCohortInt : UDINT;
     END_STRUCT
