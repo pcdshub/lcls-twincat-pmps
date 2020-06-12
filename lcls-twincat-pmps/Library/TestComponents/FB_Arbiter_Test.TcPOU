@@ -136,13 +136,14 @@ END_CASE
 
 TEST('VerifyBPRHasBP');
 IF fbHigherArb.CheckRequest(SysID) THEN
-    AssertFalse(F_DifferentBeamParams(stReq, fbBPR.ReqBP),
+    AssertFalse(F_DifferentBeamParams(stReq, fbBPR.q_ReqBP),
         'Beam parameters not fully propagated to BPR at highest level');
         TEST_FINISHED_NAMED('VerifyBPRHasBP');
 END_IF
 
 TEST('ArbToSubsysPropagation');
-IF fbArbToSubSys.nActiveCohort = fbArbToSubSys.nRequestedCohort THEN
+IF fbArbToSubSys.nActiveCohort = fbArbToSubSys.nRequestedCohort 
+    AND fbArbToSubSys.nActiveCohort <> 0 THEN
     AssertTrue(fbHigherArb.CheckRequest(SysID),
         'Active cohort = Requested cohort before higher arbiter confirmed request was active');
     TEST_FINISHED_NAMED('ArbToSubsysPropagation');
@@ -230,6 +231,7 @@ TEST_FINISHED();
 
 TEST('CheckBPArbitrated');
 WRITE_PROTECTED_ULINT(ADR(fbArbiter.nArbiterCohort), fbArbiter.nArbiterCohort + 1);
+WRITE_PROTECTED_BOOL(ADR(fbArbiter.xActiveInArbitration), TRUE);
 AssertTrue(fbArbiter.CheckRequest(nId),
     'Check should pass.');
 

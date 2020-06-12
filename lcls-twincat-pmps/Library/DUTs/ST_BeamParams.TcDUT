@@ -28,12 +28,12 @@
         {attribute 'displaymode' := 'binary'}
         neVRange : WORD := 65535;
         (* Beamline attenuators *)
-        {attribute 'pytmc' := 'pv: AuxAttenuator
+        {attribute 'pytmc' := 'pv: AuxAtt
         io: i'}
         astAttenuators : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
         
         (* Stoppers *)
-        {attribute 'pytmc' := 'pv: Stopper
+        {attribute 'pytmc' := 'pv: ST
         io: i'}
         aStoppers : ARRAY [1..PMPS_GVL.MAX_STOPPERS] OF BOOL;
         

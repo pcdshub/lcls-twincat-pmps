@@ -77,11 +77,9 @@ RequestBP := ReqId = nReqId;
 ReqBP := stReqBP;
 
 // Record current cohort
-IF nRequestCohort = 0 THEN
-    nRequestCohort := 1;
-ELSE
+
     nRequestCohort := nCohort;
-END_IF
+
 
 ]]></ST>
       </Implementation>

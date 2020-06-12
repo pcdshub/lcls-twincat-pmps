@@ -204,6 +204,9 @@
     <Compile Include="TestComponents\FB_ArbToSubsys_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestComponents\FB_DiffBP_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestComponents\FB_SubsysToArb_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -293,6 +296,7 @@
   <ItemGroup>
     <LibraryReference Include="LCLS General,newest,SLAC">
       <Namespace>LCLS_General</Namespace>
+      <HideWhenReferencedAsDependency>true</HideWhenReferencedAsDependency>
     </LibraryReference>
     <LibraryReference Include="TcUnit,newest,www.tcunit.org">
       <Namespace>TcUnit</Namespace>

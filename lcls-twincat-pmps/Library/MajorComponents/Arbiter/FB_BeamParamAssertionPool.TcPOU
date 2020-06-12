@@ -16,12 +16,12 @@ VAR_OUTPUT
 END_VAR
 VAR
     {attribute 'pytmc' := '
-        pv: EntryValue
+        pv: Entry
         io: i
      '}
     dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF ST_BeamParams;(* Structured data element pool *)
     {attribute 'pytmc' := '
-        pv: EntryKey
+        pv: Key
         io: i
      '}
     entries        : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)

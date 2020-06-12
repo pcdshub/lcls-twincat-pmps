@@ -39,8 +39,9 @@ VAR_OUTPUT
 END_VAR
 VAR
     {attribute 'pytmc' := '
-        pv: AssertionPool
+        pv: AP
         io: i
+        field: DESC Assertion Pool
      '}
     fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
 

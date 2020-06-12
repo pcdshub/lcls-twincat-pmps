@@ -18,9 +18,7 @@ END_VAR
 VAR
     {attribute 'pytmc' := 'pv: CTLSOutputs
         io: i
-        field: DESC CTLS Rate Control hardwire channel state
-        field: ZNAM Off
-        field: ONAM On'}
+        field: DESC CTLS Rate Control hardwire channel state'}
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 9^Output;
                               [2] := TIIB[PMPS_Premp]^Channel 10^Output;
                               [3] := TIIB[PMPS_Premp]^Channel 11^Output;'}

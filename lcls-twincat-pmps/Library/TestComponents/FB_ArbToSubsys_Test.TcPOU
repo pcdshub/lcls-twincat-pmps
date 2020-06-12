@@ -70,10 +70,17 @@ fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
 TEST('New request');
     AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.i_RequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match, and they should');
     AssertTrue(fbArbiter.CheckRequestInPool(SysID), 'ArbToSubSys request should be in arbiter pool now');
-    AssertFalse(fbArbToSubSys.nActiveCohort = 0, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
-    AssertFalse(fbArbToSubSys.o_CurrentBP.nCohortInt = fbArbToSubSys.nActiveCohort, 'Cohort being sent to sub system remains unincremented');
+    AssertTrue(fbArbToSubSys.nActiveCohort = 0, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+    AssertTrue(fbArbToSubSys.o_CurrentBP.nCohortInt = fbArbToSubSys.nActiveCohort, 'Cohort being sent to sub system remains unincremented');
 TEST_FINISHED_NAMED('New request');
     
+
+///////////////////////////////////////
+//Sub system cycle
+fbBPR(Arbiter:=fbArbiter);
+fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+//END of sub system cycle
+///////////////////////////////////////
 
 ///////////////////////////////////////
 //Sub system cycle
@@ -86,7 +93,8 @@ fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
 TEST('Request has become active');
     AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.nActiveCohort, 'ReqCohort and qBP Cohort do not match, and they should');
     AssertTrue(fbArbiter.CheckRequest(SysID), 'ArbToSubSys request should be in arbiter pool now');
-    AssertFalse(fbArbToSubSys.nActiveCohort = stBPRIO.nCohortInt, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+    AssertTrue(fbArbToSubSys.nActiveCohort = stBPRIO.nCohortInt, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+    AssertTrue(fbBPR.q_ReqBP.fAtt = stBPRIO.fAtt, 'BPR and requested BP should match');
 TEST_FINISHED_NAMED('Request has become active');
 
 ]]></ST>

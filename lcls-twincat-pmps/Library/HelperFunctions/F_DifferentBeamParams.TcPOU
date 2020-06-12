@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="F_DifferentBeamParams" Id="{a38d8879-5f7d-4866-9636-9bf4011c964f}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'obsolete' := 'Use Req and Readback BP structs instead.'} 
-(*DEPRECATED Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
+    <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
 the result will be true. *)
 FUNCTION F_DifferentBeamParams : BOOL
 VAR_INPUT
@@ -10,13 +9,17 @@ VAR_INPUT
     BeamParam2    :    ST_BeamParams;
 END_VAR
 VAR
-    // Internal Attenuation OK boolean
     xAttOK: BOOL := FALSE;
-    // Internal Per-pulse energy OK boolean
     xPPmjOK: BOOL := FALSE;
-    // Internal photon energy OK boolean
     xEvOK: BOOL := FALSE;
-    xRateOK: BOOL;
+    xRateOK: BOOL := FALSE;
+    xaStopper : BOOL := FALSE;
+    xaAtt : BOOL := FALSE;
+    xaApt : BOOL := FALSE;
+    
+    idx : UINT;
+    
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -25,8 +28,24 @@ xPPmjOK := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
 xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
 xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
 
+//ast Attenuators
+FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
+    xaAtt S= (BeamParam1.astAttenuators[idx].nAtt <> BeamParam2.astAttenuators[idx].nAtt);   
+END_FOR
 
-F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK;]]></ST>
+// Stoppers
+FOR idx:=1 TO PMPS_GVL.MAX_STOPPERS DO
+    xaStopper S= (BeamParam1.aStoppers[idx] <> BeamParam2.aStoppers[idx]);
+END_FOR
+
+// ast Apertures
+FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
+    xaApt S= (BeamParam1.astApertures[idx].Height <> BeamParam2.astApertures[idx].Height) OR
+            (BeamParam1.astApertures[idx].Width <> BeamParam2.astApertures[idx].Width);
+END_FOR
+
+
+F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
