@@ -21,8 +21,8 @@ VAR
     xZeroRate: BOOL;
     
     idx : UINT;
-    xAuxAttOK : BOOL;
-    xAuxAprtOK : BOOL; 
+    xAuxAttOK : BOOL := TRUE;
+    xAuxAprtOK : BOOL := TRUE; 
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,12 +34,12 @@ xZeroRate    := BeamParam1.nRate = 0;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
-    xAuxAttOK := BeamParam1.astAttenuators[idx].nAtt >= BeamParam2.astAttenuators[idx].nAtt;    
+    xAuxAttOK R= BeamParam1.astAttenuators[idx].nAtt < BeamParam2.astAttenuators[idx].nAtt;    
 END_FOR
 
 FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
-    xAuxAprtOK := BeamParam1.astApertures[idx].Height <= BeamParam2.astApertures[idx].Height and
-    BeamParam1.astApertures[idx].Width <= BeamParam2.astApertures[idx].Width;
+    xAuxAprtOK R= BeamParam1.astApertures[idx].Height > BeamParam2.astApertures[idx].Height OR
+    BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
 END_FOR
 
 F_SafeBPCompare := xZeroRate OR (xAttOK AND xPPmjOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK);

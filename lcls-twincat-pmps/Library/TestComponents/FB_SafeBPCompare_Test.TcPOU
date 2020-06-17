@@ -55,11 +55,12 @@ END_VAR
 VAR
     stSafer    :    ST_BeamParams;
     stNotSoSafe    :    ST_BeamParams;
+    idx : UINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TEST('BPComparisonCheck');
+        <ST><![CDATA[
 
-
+TEST('BPComparisonAtt');
 //Attenuation
 stSafer := F_SetBeamParams(
     1, //
@@ -83,10 +84,90 @@ AssertFalse(
     F_SafeBPCompare(stNotSoSafe, stSafer),
     'Attenuation eval is broken (False)');
 
-//Attenuator array
-AssertTrue(False, 'Implement attenuator array tests');
+TEST_FINISHED();
+    
+//Attenuator array    
+TEST('BPComparisonAttArray');
+
+stNotSoSafe := F_SetBeamParams(
+    1, //
+    10,
+    16#FFFF,
+    1,
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
+
+FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
+    stSafer.astAttenuators[idx].nAtt := 50;
+    stNotSoSafe.astAttenuators[idx].nAtt := 30;
+    
+    AssertTrue(
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Attenuation array eval is broken (True)'); 
+
+    AssertFalse(
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Attenuation array eval is broken (False)');
+    
+    IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+        EXIT; // Exit this loop on the first failure.
+	END_IF
+    
+    stSafer.astAttenuators[idx].nAtt := 0;
+    stNotSoSafe.astAttenuators[idx].nAtt := 0;
+    
+END_FOR
+
+TEST_FINISHED();
+
+//Aperture array
+TEST('BPComparisonApertureArray');
+
+FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
+    // Height
+    stSafer.astApertures[idx].Height := 30; // narrower is safer
+    stNotSoSafe.astApertures[idx].Height := 50;
+    
+    AssertTrue(
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Aperture array eval is broken on height (True)'); 
+
+    AssertFalse(
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Aperture array eval is broken on height (False)');
+    
+    IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+        EXIT; // Exit this loop on the first failure.
+	END_IF
+    
+    stSafer.astApertures[idx].Height := 0;
+    stNotSoSafe.astApertures[idx].Height := 0;
+    
+    // Width
+    stSafer.astApertures[idx].Width := 30; // narrower is safer
+    stNotSoSafe.astApertures[idx].Width := 50;
+    
+    AssertTrue(
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Aperture array eval is broken on width (True)'); 
+
+    AssertFalse(
+    F_SafeBPCompare(stNotSoSafe, stSafer),
+    'Aperture array eval is broken on width (False)');
+    
+    IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+        EXIT; // Exit this loop on the first failure.
+	END_IF
+    
+    stSafer.astApertures[idx].Width := 0;
+    stNotSoSafe.astApertures[idx].Width := 0;
+    
+    
+END_FOR
+
+TEST_FINISHED();
     
 //Rate
+TEST('BPComparisonRate');
 stSafer := F_SetBeamParams(
     0,
     10,
@@ -108,8 +189,10 @@ AssertTrue(
 AssertFalse(
     F_SafeBPCompare(stNotSoSafe, stSafer),
     'Rate eval is broken (False)');
+TEST_FINISHED();
     
 //Pulse energy
+TEST('BPComparisonPulseEnergy');
 stSafer := F_SetBeamParams(
     0, 
     1, //
@@ -131,9 +214,11 @@ AssertTrue(
 AssertFalse(
     F_SafeBPCompare(stNotSoSafe, stSafer),
     'Pulse energy eval is broken (False)');    
+TEST_FINISHED();
     
 //Photon energy
 //More extensive tests elsewhere
+TEST('BPComparisonPhotonEnergy');
 stSafer := F_SetBeamParams(
     0, 
     1, 
