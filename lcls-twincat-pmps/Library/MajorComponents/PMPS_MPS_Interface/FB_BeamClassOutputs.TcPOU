@@ -45,12 +45,12 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 // Determine BC
-IF BP.nRate >= 1 THEN
-    nBeamClass := BC_1HZ;
+IF BP.nRate >= 120 THEN
+    nBeamClass := BC_FULL;
 ELSIF BP.nRate >= 10 THEN
     nBeamClass := BC_10HZ;
-ELSIF BP.nRate >= 120 THEN
-    nBeamClass := BC_FULL;
+ELSIF BP.nRate >= 1 THEN
+    nBeamClass := BC_1HZ;
 END_IF
 
 
