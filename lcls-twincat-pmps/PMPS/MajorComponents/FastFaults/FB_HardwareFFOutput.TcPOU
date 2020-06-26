@@ -188,7 +188,7 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             pmpsTypeCode := 2;
             FormulateLogJson(FF);
             
-            fbLogger(sMsg := 'Veto activated', eSevr:=TcEventSeverity.Warning);
+            fbLogger(sMsg := 'Override activated', eSevr:=TcEventSeverity.Warning);
             
             FF.Ovrd.OvrdActLogAck := FALSE;
         END_IF
@@ -198,7 +198,7 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             pmpsTypeCode := 3;
             FormulateLogJson(FF);
             
-            fbLogger(sMsg := 'Veto released', eSevr:=TcEventSeverity.Warning);
+            fbLogger(sMsg := 'Override released', eSevr:=TcEventSeverity.Warning);
             
             FF.Ovrd.OvrdExpLogAck := FALSE;
         END_IF
