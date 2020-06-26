@@ -10,13 +10,15 @@ VAR_INPUT
     {attribute 'pytmc' := '
         pv: ClearFault
         io: o
+        field: DESC Might be overidden by PLC writes
      '}
     i_xReset    :    BOOL;
     {attribute 'pytmc' := '
         pv: EnableVeto
         io: o
      '}
-    i_xVeto    :    BOOL;    
+    i_xVeto    :    BOOL;
+    bAutoReset : BOOL := FALSE; // Set true for the FFO to auto-reset
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -78,7 +80,7 @@ END_VAR]]></Declaration>
 
 //<TODO> add diagnostic for success or failure of reset
 rtReset(CLK:=i_xReset);
-rtResetandOK(CLK:=rtReset.Q AND xOK); // Need two R_TRIG to avoid autoreset
+rtResetandOK(CLK:=(rtReset.Q OR bAutoReset) AND xOK); // Need two R_TRIG to avoid autoreset
 
 q_xFastFaultOut S= rtResetandOK.Q OR i_xVeto;
 q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail) AND NOT i_xVeto;
@@ -144,6 +146,14 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Action Name="Execute" Id="{f8057b03-4d9a-40d4-a5d5-e679c5b7e795}">
+      <Implementation>
+        <ST><![CDATA[EvaluateOutput();
+EvaluateOverrides();
+ExecuteLogging();
+]]></ST>
+      </Implementation>
+    </Action>
     <Method Name="ExecuteLogging" Id="{0b57308b-9b1c-4482-8d48-fd43e479e123}">
       <Declaration><![CDATA[METHOD ExecuteLogging : BOOL
 VAR_INPUT
@@ -251,7 +261,7 @@ stFF.FaultAck S= stFF.OK AND NOT OK;
 stFF.OK := OK;
 
 // Reset and latching logic
-stFF.rtReset(CLK:=stFF.Reset OR Reset);
+stFF.rtReset(CLK:=stFF.Reset (*epics*) OR Reset (*from other PLC logic *) );
 stFF.Reset R= stFF.rtReset.Q;
 stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
 

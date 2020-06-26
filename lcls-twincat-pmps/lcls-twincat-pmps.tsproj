@@ -2,27 +2,82 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
 	<DataTypes>
 		<DataType>
-			<Name GUID="{E96BEA56-6301-4A6A-BF6A-F08340C87594}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
-			<BitSize>48</BitSize>
+			<Name GUID="{FE32F9A9-7E7A-413D-8D77-0C99C34D8CD9}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
+			<BitSize>32</BitSize>
 			<SubItem>
 				<Name>nAtt</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
 				<BitSize>16</BitSize>
-				<BitOffs>16</BitOffs>
+				<BitOffs>0</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>xAttOK</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
 				<BitSize>16</BitSize>
-				<BitOffs>32</BitOffs>
+				<BitOffs>16</BitOffs>
 			</SubItem>
 			<Hides>
 				<Hide GUID="{76269EAC-36F0-4513-B811-3725FD02409A}"/>
+				<Hide GUID="{E96BEA56-6301-4A6A-BF6A-F08340C87594}"/>
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{9C70A196-D8F1-413B-9354-18E716C095BC}" PersistentType="true">ST_BeamParams_IO</Name>
-			<BitSize>1856</BitSize>
+			<Name GUID="{67AC048F-B785-4A4D-B941-B11E2213F502}" PersistentType="true">ST_PMPS_Aperture_IO</Name>
+			<BitSize>96</BitSize>
+			<SubItem>
+				<Name>Width</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<Comment>
+					<![CDATA[ distance between horizontal slits (x)]]>
+				</Comment>
+				<BitSize>32</BitSize>
+				<BitOffs>0</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Width
+            io: i
+            field: EGU mm</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+			<SubItem>
+				<Name>Height</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<Comment>
+					<![CDATA[ distance between vertical slits (y)]]>
+				</Comment>
+				<BitSize>32</BitSize>
+				<BitOffs>32</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: Height
+            io: i
+            field: EGU mm</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+			<SubItem>
+				<Name>xOK</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment>
+					<![CDATA[ status of aperture, false if error or in motion]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>64</BitOffs>
+				<Properties>
+					<Property>
+						<Name>plcAttribute_pytmc</Name>
+						<Value>pv: OK
+        io: i</Value>
+					</Property>
+				</Properties>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{41059C79-1015-4C2C-AFF4-697A824775D7}" PersistentType="true">ST_BeamParams_IO</Name>
+			<BitSize>1216</BitSize>
 			<SubItem>
 				<Name>fAtt</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
@@ -105,7 +160,7 @@
 			</SubItem>
 			<SubItem>
 				<Name>astAttenuators</Name>
-				<Type GUID="{E96BEA56-6301-4A6A-BF6A-F08340C87594}">ST_PMPS_Attenuator_IO</Type>
+				<Type GUID="{FE32F9A9-7E7A-413D-8D77-0C99C34D8CD9}">ST_PMPS_Attenuator_IO</Type>
 				<ArrayInfo>
 					<LBound>1</LBound>
 					<Elements>16</Elements>
@@ -113,7 +168,7 @@
 				<Comment>
 					<![CDATA[ Beamline attenuators ]]>
 				</Comment>
-				<BitSize>768</BitSize>
+				<BitSize>512</BitSize>
 				<BitOffs>112</BitOffs>
 				<Properties>
 					<Property>
@@ -122,6 +177,16 @@
         io: i</Value>
 					</Property>
 				</Properties>
+			</SubItem>
+			<SubItem>
+				<Name>astApertures</Name>
+				<Type GUID="{67AC048F-B785-4A4D-B941-B11E2213F502}">ST_PMPS_Aperture_IO</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>4</Elements>
+				</ArrayInfo>
+				<BitSize>384</BitSize>
+				<BitOffs>640</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>aStoppers</Name>
@@ -134,7 +199,7 @@
 					<![CDATA[ Stopper statuses ]]>
 				</Comment>
 				<BitSize>128</BitSize>
-				<BitOffs>1648</BitOffs>
+				<BitOffs>1024</BitOffs>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
@@ -150,7 +215,7 @@
 					<![CDATA[ Toggle for watchdog]]>
 				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1776</BitOffs>
+				<BitOffs>1152</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>xValid</Name>
@@ -159,7 +224,7 @@
 					<![CDATA[ Beam parameter set is valid (if readback), or acknowledged (if request)]]>
 				</Comment>
 				<BitSize>8</BitSize>
-				<BitOffs>1784</BitOffs>
+				<BitOffs>1160</BitOffs>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
@@ -175,7 +240,7 @@
 					<![CDATA[ Cohort index. Identifies which cohort this BP set was included in arbitration]]>
 				</Comment>
 				<BitSize>32</BitSize>
-				<BitOffs>1792</BitOffs>
+				<BitOffs>1184</BitOffs>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
@@ -185,9 +250,8 @@
 				</Properties>
 			</SubItem>
 			<Hides>
-				<Hide GUID="{95EE78E5-EC39-42F1-A1EE-C5B10F8BDB57}"/>
-				<Hide GUID="{98867326-EF59-4BC5-A4B4-1F4270C729E7}"/>
-				<Hide GUID="{2C998E8A-C0D4-43F7-8B6C-6C04970F6762}"/>
+				<Hide GUID="{ADE62DDD-CAE3-4FE3-BE11-F358D7D0CDD8}"/>
+				<Hide GUID="{729DFDAA-EB68-494E-B247-D86DA3C0AE5E}"/>
 			</Hides>
 		</DataType>
 		<DataType>
@@ -220,62 +284,8 @@
 				</Properties>
 			</SubItem>
 		</DataType>
-		<DataType>
-			<Name GUID="{67AC048F-B785-4A4D-B941-B11E2213F502}" PersistentType="true">ST_PMPS_Aperture_IO</Name>
-			<BitSize>96</BitSize>
-			<SubItem>
-				<Name>Width</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
-				<Comment>
-					<![CDATA[ distance between horizontal slits (x)]]>
-				</Comment>
-				<BitSize>32</BitSize>
-				<BitOffs>0</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Width
-            io: i
-            field: EGU mm</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>Height</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
-				<Comment>
-					<![CDATA[ distance between vertical slits (y)]]>
-				</Comment>
-				<BitSize>32</BitSize>
-				<BitOffs>32</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Height
-            io: i
-            field: EGU mm</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>xOK</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<Comment>
-					<![CDATA[ status of aperture, false if error or in motion]]>
-				</Comment>
-				<BitSize>8</BitSize>
-				<BitOffs>64</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: OK
-        io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" Target64Bit="true" ShowHideConfigurations="#x106">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -287,7 +297,7 @@
 			</TypeSystem>
 		</System>
 		<Plc>
-			<Project File="Library.xti"/>
+			<Project File="PMPS.xti"/>
 		</Plc>
 	</Project>
 </TcSmProject>

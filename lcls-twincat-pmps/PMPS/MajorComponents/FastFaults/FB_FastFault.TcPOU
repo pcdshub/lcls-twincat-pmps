@@ -14,20 +14,9 @@ contributing fast faults, unless the FFO is currently vetoed.
 {attribute 'reflection'}
 FUNCTION_BLOCK FB_FastFault
 VAR_INPUT
-    {attribute 'pytmc' := '
-        pv: FastFaultInput
-        io: i
-     '}
+
     i_xOK        :    BOOL; // Connect to fast-fault condition (false produces fault)
-    {attribute 'pytmc' := '
-        pv: ResetFault
-        io: o
-     '}
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
-    {attribute 'pytmc' := '
-        pv: AutoReset
-        io: i
-     '}
     i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
     
     i_DevName : T_MaxString := ''; // Device name for diagnostic
@@ -35,10 +24,6 @@ VAR_INPUT
     i_TypeCode : UINT; // Error code for classifying fast faults
 END_VAR
 VAR_OUTPUT
-    {attribute 'pytmc' := '
-        pv: FastFaultOK
-        io: i
-     '}
     o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like (Optional)
 END_VAR
 VAR_IN_OUT
