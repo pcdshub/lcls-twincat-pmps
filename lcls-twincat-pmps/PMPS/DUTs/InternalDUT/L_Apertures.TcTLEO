@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
-  <EnumerationTextList Name="L_Stopper" Id="{e3c9e6c4-2110-466d-b87d-181f146f8f2a}">
+  <EnumerationTextList Name="L_Apertures" Id="{894d4fff-bd3f-4ef2-a8fa-499ec344c700}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
-TYPE L_Stopper :
+TYPE L_Apertures :
 (
-	ST1 := 1,
-    ST2 := 2
+	SL1L0 := 1,
+    SL2L0 := 2
 );
 END_TYPE
 ]]></Declaration>
@@ -15,12 +15,12 @@ END_TYPE
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
-              <v n="TextID">"ST1"</v>
+              <v n="TextID">"SL1L0"</v>
               <v n="TextDefault">"1"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"ST2"</v>
+              <v n="TextID">"SL2L0"</v>
               <v n="TextDefault">"2"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
