@@ -21,7 +21,7 @@ VAR
     // there are no plans to use all 16. Channels 1-7 may be allocated to any other
     // beam classes so long as they are ordered least to greatest.
     // Channel 8 is reserved for full beam.
-    {attribute 'pytmc' := 'pv: BeamClassOutputs
+    {attribute 'pytmc' := 'pv: BeamClassChannel
         io: i
         field: DESC Hardwire channel state'}
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
