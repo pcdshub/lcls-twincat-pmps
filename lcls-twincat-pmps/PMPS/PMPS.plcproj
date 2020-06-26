@@ -25,30 +25,38 @@
     <ProjectVersion>0.0.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\E_BPTMState.TcDUT">
+    <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\K_Apertures.TcTLEO">
+    <Compile Include="DUTs\InternalDUT\K_Apertures.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\L_Apertures.TcTLEO">
+    <Compile Include="DUTs\InternalDUT\K_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\L_Stopper.TcTLEO">
+    <Compile Include="DUTs\InternalDUT\L_Apertures.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\K_Stopper.TcTLEO">
+    <Compile Include="DUTs\InternalDUT\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_BeamParams_WC.TcDUT">
+    <Compile Include="DUTs\InternalDUT\ST_FF.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_BeamParams.TcDUT">
+    <Compile Include="DUTs\InternalDUT\ST_FFInfo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_Device.TcDUT">
+    <Compile Include="DUTs\InternalDUT\ST_FFOverride.TcDUT">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="DUTs\InternalDUT\ST_PMPS_Aperture.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\InternalDUT\ST_PMPS_Attenuator.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\InternalDUT\T_HashTableEntry.TcDUT">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_DeviceState.TcDUT">
       <SubType>Code</SubType>
@@ -62,23 +70,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="DUTs\ST_FFInfo.TcDUT">
+    <Compile Include="DUTs\UserDUT\ST_BeamParams.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_FF.TcDUT">
+    <Compile Include="DUTs\UserDUT\ST_Device.TcDUT">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_FFOverride.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_PMPS_Aperture.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_PMPS_Attenuator.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\T_HashTableEntry.TcDUT">
-      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\PMPS_GVL.TcGVL">
       <SubType>Code</SubType>
@@ -235,6 +232,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="DUTs\InternalDUT" />
+    <Folder Include="DUTs\UserDUT" />
     <Folder Include="GVLs" />
     <Folder Include="HelperFunctions" />
     <Folder Include="MajorComponents" />

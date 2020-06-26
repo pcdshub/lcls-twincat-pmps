@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Arbiter" Id="{7464182c-a23a-4d85-9b4a-38e22935bfb9}" SpecialFunc="None">
     <Declaration><![CDATA[(* FB Arbiter
+A. Wallace 2020-6-26
 
 The arbiter primary objectives are:
 - Provide a simple interface for devices to request beam parameter sets
@@ -18,10 +19,6 @@ The hash table can be thought of as an array on steriods, they are worth reading
 the hash table will tell you when you reach the end of all the entries, and enables us to find entries quickly.
 
 These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
-
-An important thing to pay attention to is the A_Arbitrate action. This action implements the evaluation of beam parameter
-sets against each other.
-
 *)
 
 FUNCTION_BLOCK FB_Arbiter
@@ -72,9 +69,11 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="AddRequest" Id="{f6e392d1-3a4a-4d38-b38d-86d9847b5a7a}">
-      <Declaration><![CDATA[METHOD AddRequest : BOOL
+      <Declaration><![CDATA[// Adds a request to the arbiter pool.
+// Returns true if the request was successfully added, false if not enough space or a request with the same ID is already present.
+METHOD AddRequest : BOOL
 VAR_INPUT
-    nReqID    :    DWORD; //StateID of state requesting beam parameter set
+    nReqID    :    DWORD; // Unique ID within aribter for the request. Make sure this is unique for every device + state combination
     stReqBP        :    ST_BeamParams; //Requested beam params
 END_VAR
 VAR_INST
@@ -111,7 +110,9 @@ AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
-      <Declaration><![CDATA[METHOD ArbitrateBP : ST_BeamParams
+      <Declaration><![CDATA[// Kernel of the arbiter
+// Logic for determining which beam parameter is the most conservative across all request sets.
+METHOD INTERNAL ArbitrateBP : ST_BeamParams
 VAR_INPUT
     stBP1    :    ST_BeamParams;
     stBP2    :    ST_BeamParams;
@@ -146,10 +147,9 @@ ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);]]></ST>
       </Implementation>
     </Method>
     <Method Name="CheckRequest" Id="{a64ed6c5-2c93-405e-97a2-fa37d439d3b2}">
-      <Declaration><![CDATA[(* Searches state assertion pool for a state-id, and sets q_xStateIDFound true if found.
-
+      <Declaration><![CDATA[(* Checks request ID is included in arbitration all the way to the accelerator interface
 Use like so:
-IF fbArbiter.CheckRequest(nStateIDAssertionToCheck) THEN:
+IF fbArbiter.CheckRequest(nStateIDAssertionToCheck) AND (other logic) THEN:
     Request is found and active in arbitration,. Do something.
 ELSE:
     Request was not found, or is not yet included in arbitration. Don't do something/ wait.
@@ -180,7 +180,7 @@ CheckRequest := fbBPAssertionPool.bOk AND
       </Implementation>
     </Method>
     <Method Name="CheckRequestInPool" Id="{f0776990-a211-400b-9974-8651dfd1d437}">
-      <Declaration><![CDATA[// Verify request is at least in the pool
+      <Declaration><![CDATA[// Verify request is at least in the local arbiter
 // Does not verify request has been included in arbitration.
 // Use CheckRequest instead.
 METHOD CheckRequestInPool : BOOL
@@ -195,10 +195,11 @@ CheckRequestInPool := THIS^.fbBPAssertionPool.bOk;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ElevateRequest" Id="{7ff662cb-d23f-49f5-854d-1d5b340251d9}">
-      <Declaration><![CDATA[// Elevates the arbitrated BP set to something above.
+      <Declaration><![CDATA[// <Arbiter Internal>
+// Elevates the arbitrated BP set to something above.
 // Could be another arbiter, or a BP requester/ IO, 
 // or an FB that locks in a specific portion of the BP set.
-METHOD ElevateRequest : BOOL
+METHOD INTERNAL ElevateRequest : BOOL 
 VAR_INPUT
     HigherAuthority : I_HigherAuthority;
 END_VAR
@@ -234,7 +235,8 @@ fbBPAssertionPool.A_Reset();]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetArbitratedBP" Id="{aa6541e9-3c4b-40dc-96cf-1afc4ec47cdb}">
-      <Declaration><![CDATA[METHOD GetArbitratedBP : ST_BeamParams
+      <Declaration><![CDATA[// Executes Arbitration between all requested beam parameter sets
+METHOD INTERNAL GetArbitratedBP : ST_BeamParams
 VAR_INPUT
 END_VAR
 VAR
@@ -317,14 +319,7 @@ xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RemoveRequest" Id="{79807308-416c-48f2-9db0-385196c0e213}">
-      <Declaration><![CDATA[(* Searches for a state-id, and removes it from the assertion pool.
-
-Use like so:
-fbArbiter.A_RemoveAssertion(
-i_nStateId := nStateIDAssertionToRemove
-);
-
-*)
+      <Declaration><![CDATA[(* Removes request from abritration. *)
 METHOD RemoveRequest : BOOL
 VAR_INPUT
     nReqId    :    DWORD;
