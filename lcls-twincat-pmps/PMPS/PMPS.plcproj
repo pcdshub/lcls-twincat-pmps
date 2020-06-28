@@ -81,16 +81,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="HelperFunctions\APT_TO_IO.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HelperFunctions\ATT_TO_IO.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HelperFunctions\F_DeviceState_To_DeviceStateExt.TcPOU">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="HelperFunctions\F_DifferentBeamParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -115,16 +105,26 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="HelperFunctions\IO_TO_APT.TcPOU">
+    <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HelperFunctions\IO_TO_ATT.TcPOU">
+    <Compile Include="HelperFunctions\TypeTranslators\ATT_TO_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HelperFunctions\IO_TO_BP.TcPOU">
+    <Compile Include="HelperFunctions\TypeTranslators\BP_TO_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HelperFunctions\BP_TO_IO.TcPOU">
+    <Compile Include="HelperFunctions\TypeTranslators\F_DeviceState_To_DeviceStateExt.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\TypeTranslators\IO_TO_APT.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\TypeTranslators\IO_TO_ATT.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\TypeTranslators\IO_TO_BP.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MAIN.TcPOU">
@@ -236,6 +236,7 @@
     <Folder Include="DUTs\UserDUT" />
     <Folder Include="GVLs" />
     <Folder Include="HelperFunctions" />
+    <Folder Include="HelperFunctions\TypeTranslators" />
     <Folder Include="MajorComponents" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />

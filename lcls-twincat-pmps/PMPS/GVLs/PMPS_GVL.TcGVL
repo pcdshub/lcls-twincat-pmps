@@ -58,10 +58,12 @@ VAR_GLOBAL CONSTANT
         neVRange := 0,
         nRate    := 0
     );
+    
     cnMaxStateArrayLen : INT := 20;
     
     AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
     MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
+    
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="F_DeviceState_To_DeviceStateExt" Id="{647f5b20-e140-4a4a-b23d-0cce310441de}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_DeviceState_To_DeviceStateExt : ST_DeviceStateExt
 VAR_INPUT

@@ -18,7 +18,7 @@ VAR_INPUT
         io: o
      '}
     i_xVeto    :    BOOL;
-    bAutoReset : BOOL := FALSE; // Set true for the FFO to auto-reset
+    bAutoReset : BOOL := FALSE; // Set true for the FFO to automatically permit beam again after all fast faults are cleared
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -80,7 +80,7 @@ END_VAR]]></Declaration>
 
 //<TODO> add diagnostic for success or failure of reset
 rtReset(CLK:=i_xReset);
-rtResetandOK(CLK:=(rtReset.Q OR bAutoReset) AND xOK); // Need two R_TRIG to avoid autoreset
+rtResetandOK(CLK:=(rtReset.Q OR bAutoReset) AND xOK);
 
 q_xFastFaultOut S= rtResetandOK.Q OR i_xVeto;
 q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail) AND NOT i_xVeto;
@@ -222,7 +222,7 @@ END_IF
       </Implementation>
     </Method>
     <Method Name="FormulateLogJson" Id="{1e592e14-8e12-4b07-bc53-a921f8f882df}">
-      <Declaration><![CDATA[METHOD FormulateLogJson : STRING
+      <Declaration><![CDATA[METHOD INTERNAL FormulateLogJson : STRING
 VAR_INPUT
     FF : ST_FF;
 END_VAR
@@ -241,7 +241,7 @@ fbJson.ResetDocument();]]></ST>
       </Implementation>
     </Method>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
-      <Declaration><![CDATA[METHOD IdxCheckIn : BOOL
+      <Declaration><![CDATA[METHOD INTERNAL IdxCheckIn : BOOL
 VAR_INPUT
     Idx : DINT;
     OK : BOOL;
@@ -284,7 +284,7 @@ THIS^.astFF[Idx] := stFF;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
-      <Declaration><![CDATA[METHOD Register : BOOL
+      <Declaration><![CDATA[METHOD INTERNAL Register : BOOL
 VAR_INPUT
     stFFInfo : ST_FFInfo := (
         sPath := '',
