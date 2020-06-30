@@ -6,6 +6,7 @@
 FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS I_HigherAuthority
 VAR_INPUT
     Reset : BOOL; // Fast fault reset
+    sName : STRING := 'SubSysToArbiter';
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -29,7 +30,7 @@ VAR
     
     
     // Fast faults
-    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP');
+    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP',i_DevName := sName);
     
     // A request is not considered included until the active cohort number is >= the request cohort number.
     {attribute 'pytmc' := 'pv: RequestCohort
@@ -55,8 +56,13 @@ PMPS_GVL.stRequestedBeamParameters := IO_TO_BP(q_stRequestedBP);
 
 q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
-ffPMPSIO_Disconnect(io_fbFFHWO := fbFFHWO,
-    i_xReset := Reset);]]></ST>
+ffPMPSIO_Disconnect(
+    i_xOK := xTxPDO_state = 0,
+    io_fbFFHWO := fbFFHWO,
+    i_xReset := Reset,
+    i_DevName := sName,
+    i_TypeCode := 6
+    );]]></ST>
     </Implementation>
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
