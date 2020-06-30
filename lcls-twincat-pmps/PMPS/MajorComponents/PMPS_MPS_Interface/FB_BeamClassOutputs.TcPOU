@@ -24,6 +24,8 @@ VAR
     {attribute 'pytmc' := 'pv: BeamClassChannel
         io: i
         field: DESC Hardwire channel state'}
+        epicsBitmap : WORD;
+        
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
                               [2] := TIIB[PMPS_Premp]^Channel 2^Output;
                               [3] := TIIB[PMPS_Premp]^Channel 3^Output;
@@ -73,7 +75,20 @@ FOR wBeamClass:=1 TO MIN(MAX_BEAM_CLASS_LINES-1, nBeamClass) DO
     q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
 END_FOR
 
-q_BC_ASSERTION_LINES[8] := nBeamClass = 16; //Set channel 8 true if BC is 16]]></ST>
+q_BC_ASSERTION_LINES[8] := nBeamClass = 16; //Set channel 8 true if BC is 16
+
+
+// Readbacks for EPICS
+epicsBitmap.0 := q_BC_ASSERTION_LINES[1];
+epicsBitmap.1 := q_BC_ASSERTION_LINES[2];
+epicsBitmap.2 := q_BC_ASSERTION_LINES[3];
+epicsBitmap.3 := q_BC_ASSERTION_LINES[4];
+
+epicsBitmap.4 := q_BC_ASSERTION_LINES[5];
+epicsBitmap.5 := q_BC_ASSERTION_LINES[6];
+epicsBitmap.6 := q_BC_ASSERTION_LINES[7];
+epicsBitmap.7 := q_BC_ASSERTION_LINES[8];
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

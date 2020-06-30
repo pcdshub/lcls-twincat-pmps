@@ -16,13 +16,18 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-    {attribute 'pytmc' := 'pv: CTLSOutputs
+    {attribute 'pytmc' := 'pv: CTLSChannel
         io: i
         field: DESC CTLS Rate Control hardwire channel state'}
+    epicsBitmap : WORD;
+        
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 9^Output;
                               [2] := TIIB[PMPS_Premp]^Channel 10^Output;
                               [3] := TIIB[PMPS_Premp]^Channel 11^Output;'}
     q_CLTS_ASSERTION_LINES    AT    %Q*    : ARRAY [1..3] OF    BOOL;  
+    
+    
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,7 +37,12 @@ q_CLTS_ASSERTION_LINES[1] := BP.nRate >= 1;
 // CLTS 10Hz
 q_CLTS_ASSERTION_LINES[2] := BP.nRate >= 10;
 // CLTS Full rate
-q_CLTS_ASSERTION_LINES[3] := BP.nRate >= 120;]]></ST>
+q_CLTS_ASSERTION_LINES[3] := BP.nRate >= 120;
+
+
+epicsBitMap.0 := q_CLTS_ASSERTION_LINES[1];
+epicsBitMap.1 := q_CLTS_ASSERTION_LINES[2];
+epicsBitMap.2 := q_CLTS_ASSERTION_LINES[3];]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
