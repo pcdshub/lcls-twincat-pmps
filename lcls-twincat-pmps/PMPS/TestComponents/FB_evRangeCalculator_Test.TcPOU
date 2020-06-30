@@ -19,9 +19,14 @@ VAR_INPUT
 END_VAR
 VAR
     LastWord : WORD := 2#0000_0000_0000_0010;
+    
+    Result : WORD;
+    TestEV : WORD;
+    
+    fbStr : FB_FormatString;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TEST('CheckRanges');
+        <ST><![CDATA[Test('CheckRanges');
 //Lower limit equal
 AssertTrue(
     F_eVRangeCalculator(300, 0) = 2#0000_0000_0000_0100,
@@ -37,7 +42,7 @@ AssertFalse(
 
 TEST_FINISHED();
 
-TEST('Negative eV failsafes');
+Test('Negative eV failsafes');
 //Negative eV
 AssertTrue(
     F_eVRangeCalculator(-300, 0) = 16#FFFF,
@@ -45,19 +50,24 @@ AssertTrue(
 
 TEST_FINISHED();
 
-TEST('Check hyst keeps');
+Test('Check hyst keeps');
 
 AssertTrue(
-    F_eVRangeCalculator(350, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0110,
+    F_eVRangeCalculator(304, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0110,
     'Moving up does not stick.');
     
-AssertTrue(
-    F_eVRangeCalculator(150, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0011,
-    'Moving down does not stick.');
+    Result := F_eVRangeCalculator(50, 2#0000_0000_0000_0010);
+    TestEV := 2#0000_0000_0000_0011;
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.sFormat := 'Moving down does not stick. Result: %b vs. Test: %b';
+    fbStr();
+    
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
 
 TEST_FINISHED();
 
-TEST('Check hyst drops');
+Test('Check hyst drops');
 
 AssertTrue(
     F_eVRangeCalculator(351, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0100,
