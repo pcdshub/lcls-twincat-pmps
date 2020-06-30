@@ -284,8 +284,8 @@ IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are lef
     UNTIL NOT fbBPAssertionPool.bOk
     END_REPEAT
 ELSE
-    //Safest parameters to start
-    stOutputBP := PMPS_GVL.cstSafeBeam;
+    //Full beam if there are no arbitration requests
+    stOutputBP := PMPS_GVL.cstFullBeam;
 END_IF
 (*
 stOutputBP.AckInt := stOutputBP.AckInt + 1; // Arbitration cycle
