@@ -77,6 +77,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\GVL_CUSTOM_CONSTANTS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\PMPS_GVL.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
