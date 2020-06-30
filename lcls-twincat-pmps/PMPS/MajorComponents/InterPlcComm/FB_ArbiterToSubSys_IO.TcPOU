@@ -17,6 +17,7 @@ This FB and its sibling communicate through the ethercat connection between the 
 FUNCTION_BLOCK FB_ArbiterToSubSys_IO
 VAR_INPUT
 	RequestingSystemID	:	DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // System ID for making requests to the supreme arbiter
+    sName : STRING := 'ArbiterToSubSys';
     Reset : BOOL;
 END_VAR
 VAR_OUTPUT
@@ -57,7 +58,7 @@ VAR
     i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
     
     // Fast faults
-    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Fast fault on arbiter disconnection'); // Fast fault for ethercat issues
+    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Issue w/ arbiter interface to subsystem, verify subsystem is OK, or ethercat connection.'); // Fast fault for ethercat issues
     nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
     nRequestedCohort : UDINT := 0;
     rtToggle : R_TRIG;
@@ -101,7 +102,9 @@ ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
 
 ffPMPSIO_Disconnect(
     io_fbFFHWO := fbFFHWO,
-    i_xReset := Reset);]]></ST>
+    i_xReset := Reset,
+    i_DevName := sName,
+    i_TypeCode:=5);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
