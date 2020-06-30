@@ -25,6 +25,7 @@ VAR_INPUT
     i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
     // Reset fault
     i_xReset: BOOL;
+    sName : STRING := 'PhotonEnergyWatcher';
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -34,10 +35,9 @@ END_VAR
 VAR
     xPhotonEnergyWithinBounds    :    BOOL;
     fbFF    :    FB_FastFault :=(
-        i_DevName := 'ARBITER:K:PhotonEnergyWatcher',
-        i_Desc := 'Fault occurs when the calculated machine photon energy (K value calculated by undulator
-                    gap, and electron energy) falls outside the permitted range.',
-        i_TypeCode := 16#9010);
+        i_DevName := sName,
+        i_Desc := 'Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.',
+        i_TypeCode := 7 );
 END_VAR
 ]]></Declaration>
     <Implementation>
