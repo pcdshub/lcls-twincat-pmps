@@ -34,7 +34,7 @@ VAR_GLOBAL CONSTANT
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
-    MAX_FAST_FAULTS : UINT := 50; // Maximum number of fast faults that can be associated with a FFO
+
     MAX_STOPPERS    :   UINT := 16;
     {attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
@@ -63,11 +63,12 @@ VAR_GLOBAL CONSTANT
     
     AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
     MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
-    
+    {warning disable C0228}
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
-    
+    {warning restore C0228}
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
+    reVHyst: REAL := 0.05; // 
     g_cBoundaries    :    INT    := 15;
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeCnst

@@ -4,7 +4,7 @@
     <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_HardwareFFOutput
 VAR CONSTANT
-    FF_ARRAY_UPPER_BOUND : DINT := PMPS_GVL.MAX_FAST_FAULTS;
+    FF_ARRAY_UPPER_BOUND : DINT := MAX_FAST_FAULTS;
 END_VAR
 VAR_INPUT
     {attribute 'pytmc' := '
@@ -24,6 +24,7 @@ VAR_OUTPUT
     {attribute 'pytmc' := '
         pv: FaultHWO
         io: i
+        field: DESC Hardware Output Status
      '}
     q_xFastFaultOut    AT %Q*    :    BOOL;
 END_VAR
