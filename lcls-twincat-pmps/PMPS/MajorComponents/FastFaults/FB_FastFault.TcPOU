@@ -18,6 +18,7 @@ VAR_INPUT
     i_xOK        :    BOOL; // Connect to fast-fault condition (false produces fault)
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
     i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
+    i_xVetoable : BOOL := TRUE; // Mask this fast fault if the FFO veto device is true
     
     i_DevName : T_MaxString := ''; // Device name for diagnostic
     i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
@@ -55,6 +56,7 @@ END_VAR
     FFInfo.DevName := i_DevName;
     FFInfo.Desc := i_Desc;
     FFInfo.AutoReset := i_xAutoReset;
+    FFInfo.Vetoable := i_xVetoable;
     
     InUse := BOOL_TO_STRING(FFInfo.InUse);
     AutoReset := BOOL_TO_STRING(FFInfo.AutoReset);

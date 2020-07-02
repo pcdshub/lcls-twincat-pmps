@@ -83,8 +83,8 @@ END_VAR]]></Declaration>
 rtReset(CLK:=i_xReset);
 rtResetandOK(CLK:=(rtReset.Q OR bAutoReset) AND xOK);
 
-q_xFastFaultOut S= rtResetandOK.Q OR i_xVeto;
-q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail) AND NOT i_xVeto;
+q_xFastFaultOut S= rtResetandOK.Q;
+q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail);
 
 //Reset OK for next cycle
 xOK := True;
@@ -203,6 +203,18 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             
             FF.Ovrd.OvrdExpLogAck := FALSE;
         END_IF
+        
+        IF FF.ClearAck THEN
+            
+            pmpsTypeCode := 8;
+            FormulateLogJson(FF);
+            
+            fbLogger(sMsg := 'Fault cleared', eSevr:=TcEventSeverity.Info);
+            
+            FF.Ovrd.OvrdExpLogAck := FALSE;
+        END_IF
+        
+        
     END_IF
 END_FOR
 
@@ -250,6 +262,7 @@ VAR_INPUT
 END_VAR
 VAR
     stFF : ST_FF;
+    BeamPermitted : BOOL;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Idx := LIMIT(1,Idx,FF_ARRAY_UPPER_BOUND);
@@ -266,10 +279,10 @@ stFF.rtReset(CLK:=stFF.Reset (*epics*) OR Reset (*from other PLC logic *) );
 stFF.Reset R= stFF.rtReset.Q;
 stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
 
-stFF.BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active;
+BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active OR (i_xVeto AND stFF.Info.Vetoable);
 
 // Fault generation    
-IF NOT stFF.BeamPermitted THEN
+IF NOT BeamPermitted THEN
     THIS^.xOK := FALSE; //Very clever, thanks Zach!
 END_IF
 
@@ -279,6 +292,9 @@ IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1
 
 //Clear pushbuttons
 stFF.Reset := FALSE;
+
+// Log when this fault has cleared
+stFF.ClearAck S= BeamPermitted AND NOT stFF.BeamPermitted;
 
 // Copy state back to ff struct
 THIS^.astFF[Idx] := stFF;]]></ST>
@@ -322,7 +338,7 @@ ELSE
     fbJson.EndObject();
     fbLogger.sJson := fbJson.GetDocument();
     fbJson.ResetDocument();
-    fbLogger(sMsg:='Fast fault registration failed.',
+    fbLogger(sMsg:='Fast fault registration failed. Too many fast faults on this FFO.',
         eSevr:=TcEventSeverity.Warning,
         eSubsystem:=E_Subsystem.MPS);
     xFastFaultRegFail := TRUE;

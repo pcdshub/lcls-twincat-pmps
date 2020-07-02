@@ -45,7 +45,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[//Receiving current BP state
 PMPS_GVL.stCurrentBeamParameters := IO_TO_BP(i_stCurrentBP);
-PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_state; // This line must follow the one above. Sequence is important.
+PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_toggle; // This line must follow the one above. Sequence is important.
 
 // Forwarding BP request for the subsystem
 Arbiter.ElevateRequest(THIS^);
@@ -61,7 +61,8 @@ ffPMPSIO_Disconnect(
     io_fbFFHWO := fbFFHWO,
     i_xReset := Reset,
     i_DevName := sName,
-    i_TypeCode := 6
+    i_TypeCode := 6,
+    i_xVetoable := FALSE
     );]]></ST>
     </Implementation>
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">

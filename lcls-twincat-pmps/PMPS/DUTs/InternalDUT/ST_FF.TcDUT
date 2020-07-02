@@ -20,6 +20,7 @@ STRUCT
     OK   :   BOOL; // Fault logic state
     
     FaultAck : BOOL; // Set when faulted, reset by logger.
+    ClearAck : BOOL;
     
     {attribute 'pytmc' := '
         pv: BeamPermitted
