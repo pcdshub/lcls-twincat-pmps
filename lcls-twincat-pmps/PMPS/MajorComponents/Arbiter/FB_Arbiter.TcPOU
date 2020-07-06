@@ -308,10 +308,7 @@ END_IF
 
 q_stBeamParams := stOutputBP;
 
-GetArbitratedBP.fAtt := stOutputBP.fAtt;
-GetArbitratedBP.fPP_mJ := stOutputBP.fPP_mJ;
-GetArbitratedBP.neVRange := stOutputBP.neVRange;
-GetArbitratedBP.nRate := stOutputBP.nRate;
+GetArbitratedBP := stOutputBP;
 
 GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;
 

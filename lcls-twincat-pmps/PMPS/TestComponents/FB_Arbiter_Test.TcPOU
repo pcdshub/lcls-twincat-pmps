@@ -45,7 +45,12 @@ END_VAR]]></Declaration>
 stAttReqBP.fAtt := 50;
 stPPEReqBP.fPP_mJ := 1;
 stEVReqBP.neVRange := 2#1111_1100_1111_1111;
-stRateReqBP.nRate := 120;
+stRateReqBP.nRate := 10;
+
+stExpectedBP.fAtt     :=     stAttReqBP.fAtt;
+stExpectedBP.fPP_mJ    :=  stPPEReqBP.fPP_mJ;
+stExpectedBP.neVRange := stEVReqBP.neVRange;
+stExpectedBP.nRate := stRateReqBP.nRate;
 
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nAttReqID, stAttReqBP),
@@ -61,12 +66,7 @@ AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP),
                     
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP),
-                    'Safest stEVReqBP request failed to load');
-
-stExpectedBP.fAtt     :=     stAttReqBP.fAtt;
-stExpectedBP.fPP_mJ    :=  stPPEReqBP.fPP_mJ;
-stExpectedBP.neVRange := stEVReqBP.neVRange;
-stExpectedBP.nRate := stRateReqBP.nRate;
+                    'Safest stRateReqBP request failed to load');
 
 stArbitratedBP := fbArbiter.GetArbitratedBP();
 
