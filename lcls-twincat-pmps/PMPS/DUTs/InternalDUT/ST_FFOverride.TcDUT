@@ -28,6 +28,12 @@ STRUCT
     ElapsedTime : UDINT; // UDINT to be compatible with ESS module.
     
     {attribute 'pytmc' := '
+        pv: RemainingTime
+        io: i
+     '}
+    RemainingTime : UDINT; // UDINT to be compatible with ESS module.
+    
+    {attribute 'pytmc' := '
         pv: Active
         io: i
      '} 
