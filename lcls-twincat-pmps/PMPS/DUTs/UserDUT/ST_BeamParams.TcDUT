@@ -19,6 +19,7 @@
         {attribute 'pytmc' := 'pv: PulseEnergy
             io: i
             field: EGU mJ
+            field: DESC This beam parameter is non-op for now.
         '}
         fPP_mJ : REAL := 20;
         (* Photon energy ranges *)
