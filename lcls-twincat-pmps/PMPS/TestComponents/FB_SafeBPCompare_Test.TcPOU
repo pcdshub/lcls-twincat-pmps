@@ -119,6 +119,9 @@ END_FOR
 
 TEST_FINISHED();
 
+stSafer.astAttenuators[idx].nTran := 0;
+stNotSoSafe.astAttenuators[idx].nTran := 0;
+
 //Aperture array
 TEST('BPComparisonApertureArray');
 
