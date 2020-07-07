@@ -3,7 +3,7 @@
   <POU Name="F_SetBeamParams" Id="{a4b27d6a-ec21-4812-9b64-4caff94fb4ba}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_SetBeamParams : ST_BeamParams
 VAR_INPUT
-    fAtt    :    REAL := 100;
+    nTran    :    UINT := 0;
     fPP_mJ: REAL := 0;
     neVRange    :    WORD := 0;
     nRate    :    UDINT := 0;
@@ -15,7 +15,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[BeamParams.fatt := LIMIT(0,fAtt,100);
+      <ST><![CDATA[BeamParams.nTran := LIMIT(0,nTran,100);
 BeamParams.astAttenuators := astAuxAtt;
 BeamParams.fPP_mJ := LIMIT(0,fPP_mJ,20);
 BeamParams.neVRange := neVRange;

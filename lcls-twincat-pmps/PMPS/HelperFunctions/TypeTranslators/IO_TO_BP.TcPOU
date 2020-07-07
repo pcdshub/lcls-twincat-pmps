@@ -20,7 +20,7 @@ FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
 END_FOR
 
 IO_TO_BP.aStoppers := IO.aStoppers;
-IO_TO_BP.fAtt := IO.fAtt;
+IO_TO_BP.nTran := IO.nTran;
 IO_TO_BP.fPP_mJ := IO.fPP_mJ;
 IO_TO_BP.nCohortInt := ULINT_TO_UDINT(IO.nCohortInt);
 IO_TO_BP.neVRange := IO.neVRange;

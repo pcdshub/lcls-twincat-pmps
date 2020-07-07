@@ -23,14 +23,14 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[xAttOK := BeamParam1.fAtt <> BeamParam2.fAtt;
+      <ST><![CDATA[xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
 xPPmjOK := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
 xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
 xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
 
 //ast Attenuators
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    xaAtt S= (BeamParam1.astAttenuators[idx].nAtt <> BeamParam2.astAttenuators[idx].nAtt);   
+    xaAtt S= (BeamParam1.astAttenuators[idx].nTran <> BeamParam2.astAttenuators[idx].nTran);   
 END_FOR
 
 // Stoppers

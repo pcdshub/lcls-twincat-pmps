@@ -9,7 +9,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[ATT_TO_IO.nAtt := Att.nAtt;
+      <ST><![CDATA[ATT_TO_IO.nTran := Att.nTran;
 ATT_TO_IO.xAttOK := Att.xAttOK;]]></ST>
     </Implementation>
   </POU>

@@ -19,7 +19,7 @@ VAR_INPUT
 END_VAR
 VAR   
     nId    :    DWORD := 1;
-    stReq    :    ST_BeamParams := (fAtt:=12);
+    stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);

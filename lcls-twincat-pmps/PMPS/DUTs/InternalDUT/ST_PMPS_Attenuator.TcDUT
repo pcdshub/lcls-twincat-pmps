@@ -8,7 +8,7 @@ STRUCT
             io: i
             field: EGU %
         '}
-		nAtt : UINT;
+		nTran : UINT;
         {attribute 'pytmc' := 'pv: OK
             io: i
         '}

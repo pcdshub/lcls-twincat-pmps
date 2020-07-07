@@ -42,7 +42,7 @@ VAR_GLOBAL CONSTANT
         field: DESC Full beam constant
     '}    
     cstFullBeam    :    ST_BeamParams := (
-        fAtt := 0,
+        nTran := 100,
         fPP_mJ := 1E4,
         neVRange := 2#1111_1111_1111_1111,
         nRate    := UDINT#1000000
@@ -53,7 +53,7 @@ VAR_GLOBAL CONSTANT
         field: DESC Safe beam constant
     '} 
     cstSafeBeam    :    ST_BeamParams := (
-        fAtt := 100,
+        nTran := 0,
         fPP_mJ := 0,
         neVRange := 0,
         nRate    := 0

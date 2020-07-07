@@ -21,7 +21,7 @@ VAR_INPUT
 END_VAR
 VAR
     
-     nAttReqID    :    UDINT    := 1;
+     nTranReqID    :    UDINT    := 1;
     stAttReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
     
     nPPEReqID    :    UDINT    := 2;
@@ -42,18 +42,18 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('Arbitration');
 
-stAttReqBP.fAtt := 50;
+stAttReqBP.nTran := 50;
 stPPEReqBP.fPP_mJ := 1;
 stEVReqBP.neVRange := 2#1111_1100_1111_1111;
 stRateReqBP.nRate := 10;
 
-stExpectedBP.fAtt     :=     stAttReqBP.fAtt;
+stExpectedBP.nTran     :=     stAttReqBP.nTran;
 stExpectedBP.fPP_mJ    :=  stPPEReqBP.fPP_mJ;
 stExpectedBP.neVRange := stEVReqBP.neVRange;
 stExpectedBP.nRate := stRateReqBP.nRate;
 
 //Load arbiter with beam parameter sets
-AssertTrue(fbArbiter.AddRequest(nAttReqID, stAttReqBP),
+AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP),
                     'Safest attenuation request failed to load');
                     
 //Load arbiter with beam parameter sets
@@ -82,7 +82,7 @@ VAR_INPUT
 END_VAR
 VAR   
     nId    :    DWORD := 1;
-    stReq    :    ST_BeamParams := (fAtt:=12);
+    stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);

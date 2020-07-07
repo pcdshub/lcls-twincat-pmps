@@ -27,13 +27,13 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('BPDiffCheck');
 
-BP2.fAtt := 10; 
+BP2.nTran := 10; 
     
 AssertTrue(
     F_DifferentBeamParams(BP1, BP2),
     'DifferentBP eval is broken (True)'); 
 
-BP1.fAtt := BP2.fAtt;   
+BP1.nTran := BP2.nTran;   
     
 AssertFalse(
     F_DifferentBeamParams(BP2, BP1),

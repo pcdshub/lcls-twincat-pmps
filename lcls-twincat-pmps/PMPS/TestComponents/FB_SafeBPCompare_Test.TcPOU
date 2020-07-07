@@ -60,17 +60,17 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 
-TEST('BPComparisonAtt');
+TEST('BPComparisonTran');
 //Attenuation
 stSafer := F_SetBeamParams(
-    1, //
+    0, //
     10,
     16#FFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
-    0, //
+    1, //
     10,
     16#FFFF,
     1,
@@ -87,18 +87,18 @@ AssertFalse(
 TEST_FINISHED();
     
 //Attenuator array    
-TEST('BPComparisonAttArray');
+TEST('BPComparisonTranArray');
 
 stNotSoSafe := F_SetBeamParams(
-    1, //
+    0, //
     10,
     16#FFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    stSafer.astAttenuators[idx].nAtt := 50;
-    stNotSoSafe.astAttenuators[idx].nAtt := 30;
+    stSafer.astAttenuators[idx].nTran := 30;
+    stNotSoSafe.astAttenuators[idx].nTran := 50;
     
     AssertTrue(
     F_SafeBPCompare(stSafer, stNotSoSafe),
@@ -112,8 +112,8 @@ FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
         EXIT; // Exit this loop on the first failure.
 	END_IF
     
-    stSafer.astAttenuators[idx].nAtt := 0;
-    stNotSoSafe.astAttenuators[idx].nAtt := 0;
+    stSafer.astAttenuators[idx].nTran := 0;
+    stNotSoSafe.astAttenuators[idx].nTran := 0;
     
 END_FOR
 

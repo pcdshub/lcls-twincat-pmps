@@ -124,10 +124,10 @@ END_VAR]]></Declaration>
         <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
 
 //Attenuation
-ArbitrateBP.fAtt := MAX(stBP1.fAtt, stBP2.fAtt);
+ArbitrateBP.nTran := MIN(stBP1.nTran, stBP2.nTran);
 
 FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    ArbitrateBP.astAttenuators[idx].nAtt := MAX(stBP1.astAttenuators[idx].nAtt, stBP2.astAttenuators[idx].nAtt);
+    ArbitrateBP.astAttenuators[idx].nTran := MIN(stBP1.astAttenuators[idx].nTran, stBP2.astAttenuators[idx].nTran);
 END_FOR
 
 //Apertures
@@ -269,7 +269,7 @@ IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are lef
     
     //The first entry in the hash table is taken as the setting to arbitrate against
     stOutputBP := F_SetBeamParams(
-        fAtt := getBPStruct.fAtt,
+        nTran := getBPStruct.nTran,
         astAuxAtt := getBPStruct.astAttenuators,
         fPP_mJ := getBPStruct.fPP_mJ,
         neVRange    := getBPStruct.neVRange,

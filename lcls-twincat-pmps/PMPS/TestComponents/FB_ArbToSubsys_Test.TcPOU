@@ -22,7 +22,7 @@ VAR CONSTANT
 END_VAR
 VAR   
     nId    :    DWORD := 1;
-    stReq    :    ST_BeamParams := (fAtt:=12);
+    stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
@@ -31,7 +31,7 @@ VAR_INST
     
     stBPRIO : ST_BeamParams_IO := (
         nCohortInt := 1,
-        fAtt := 35); // Simulates subsystem BP request
+        nTran := 35); // Simulates subsystem BP request
     
     fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
     pBPC : POINTER TO ST_BeamParams_IO;
@@ -94,7 +94,7 @@ TEST('Request has become active');
     AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.nActiveCohort, 'ReqCohort and qBP Cohort do not match, and they should');
     AssertTrue(fbArbiter.CheckRequest(SysID), 'ArbToSubSys request should be in arbiter pool now');
     AssertTrue(fbArbToSubSys.nActiveCohort = stBPRIO.nCohortInt, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
-    AssertTrue(fbBPR.q_ReqBP.fAtt = stBPRIO.fAtt, 'BPR and requested BP should match');
+    AssertTrue(fbBPR.q_ReqBP.nTran = stBPRIO.nTran, 'BPR and requested BP should match');
 TEST_FINISHED_NAMED('Request has become active');
 
 ]]></ST>

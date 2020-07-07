@@ -27,14 +27,14 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-xAttOK := BeamParam1.fAtt >= BeamParam2.fAtt;
+xAttOK := BeamParam1.nTran <= BeamParam2.nTran;
 xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
 xZeroRate    := BeamParam1.nRate = 0;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
-    xAuxAttOK R= BeamParam1.astAttenuators[idx].nAtt < BeamParam2.astAttenuators[idx].nAtt;    
+    xAuxAttOK R= BeamParam1.astAttenuators[idx].nTran > BeamParam2.astAttenuators[idx].nTran;    
 END_FOR
 
 FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
