@@ -165,7 +165,9 @@ VAR
     FF : REFERENCE TO ST_FF;
     logIdx : DINT := 1; 
 END_VAR
-]]></Declaration>
+VAR_INST
+    HelloTimer : TOF := ( PT:=T#24h );
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
@@ -231,6 +233,19 @@ IF tFFRegFail.Q THEN
     fbLogger(sMsg := 'Fast fault registration failure cleared. This may be bad as a fast fault could go unoticed.', 
         eSevr:=TcEventSeverity.Warning);  
 END_IF
+
+// Say hello
+HelloTimer.IN := NOT HelloTimer.Q;
+HelloTimer();
+IF HelloTimer.IN THEN
+    pmpsTypeCode := 10;
+    FormulateLogJson(FF);   
+    fbLogger(eSubsystem:=E_Subsystem.NILVALUE,
+        eSevr := TcEventSeverity.Info,
+        sMsg := 'FFO is alive');
+    fbLogger.eSubsystem := E_Subsystem.MPS;
+END_IF
+
 ]]></ST>
       </Implementation>
     </Method>
