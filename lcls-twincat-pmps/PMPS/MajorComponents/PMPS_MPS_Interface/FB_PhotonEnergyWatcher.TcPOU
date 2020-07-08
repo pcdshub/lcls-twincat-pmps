@@ -38,10 +38,20 @@ VAR
         i_DevName := sName,
         i_Desc := 'Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.',
         i_TypeCode := 7 );
+        
+   {attribute 'pytmc' := '
+        pv: eVResidual
+        archive: 1Hz monitor
+        field: DESC Portions of beam eV not permitted
+        field: EGU eV-bitmask
+    '}
+    evResidual : WORD;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[xPhotonEnergyWithinBounds := (i_stCurrentBeamParams.neVRange AND i_stRequestedBeamParams.neVRange) = i_stCurrentBeamParams.neVRange;
+
+evResidual := (i_stCurrentBeamParams.neVRange XOR i_stRequestedBeamParams.neVRange) AND i_stCurrentBeamParams.neVRange;
 
 fbFF(i_xOK := xPhotonEnergyWithinBounds,
     i_xReset := i_xReset,

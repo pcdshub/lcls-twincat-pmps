@@ -68,31 +68,37 @@ VAR_GLOBAL CONSTANT
     {warning restore C0228}
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
-    reVHyst: REAL := 0.05; // 
     g_cBoundaries    :    INT    := 15;
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)eVRangeHyst
+        archive: 1Hz monitor
+        field: DESC eV Range hystersis
+        field: EGU eV
+    '}
+    reVHyst: REAL := 5; // 
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeCnst
         archive: 1Hz monitor
         field: DESC eV Range constants
-        field: EGU keV
+        field: EGU eV
     '}
     g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [ 
-    0.2,
-    0.3,
-    0.4,
-    0.5,
-    0.6,
-    0.7,
-    0.8,
-    0.9,
-    1.0,
-    1.1,
-    1.2,
-    1.3,
-    1.4,
-    1.5,
-    1.6,
-    1.7
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1E3,
+    1.1E3,
+    1.2E3,
+    1.3E3,
+    1.4E3,
+    1.5E3,
+    1.6E3,
+    1.7E3
 ];
 
 
