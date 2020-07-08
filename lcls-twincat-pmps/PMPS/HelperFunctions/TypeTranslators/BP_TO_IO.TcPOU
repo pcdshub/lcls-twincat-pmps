@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="BP_TO_IO" Id="{99655e6a-0c9e-47fa-acc0-f263faf87725}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION BP_TO_IO : ST_BeamParams_IO
+VAR_INPUT
+    BP : ST_BeamParams;
+END_VAR
+VAR
+    idx : UINT := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+    BP_TO_IO.astAttenuators[idx] := ATT_TO_IO(BP.astAttenuators[idx]);
+END_FOR
+
+FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+    BP_TO_IO.astApertures[idx] := APT_TO_IO(BP.astApertures[idx]);
+END_FOR
+
+BP_TO_IO.aStoppers := BP.aStoppers;
+BP_TO_IO.nTran := BP.nTran;
+BP_TO_IO.fPP_mJ := BP.fPP_mJ;
+BP_TO_IO.nCohortInt := ULINT_TO_UDINT(BP.nCohortInt);
+BP_TO_IO.neVRange := BP.neVRange;
+BP_TO_IO.nRate := BP.nRate;
+BP_TO_IO.xValid := BP.xValid;
+BP_TO_IO.xValidToggle := BP.xValidToggle;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

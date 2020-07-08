@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_FastFault" Id="{4f87b098-c3de-4b74-a706-919749bcb97f}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Fast Fault
+2019-9-13 A. Wallace
+
+Use this block to generate a beam-off fault. Connects to a fast fault hardware output 
+function block to contribute to the state of the fast fault output (FFO).
+
+If the i_xOK goes false, the associated FFO will go false, despite the state of any other
+contributing fast faults, unless the FFO is currently vetoed.
+
+*)
+{attribute 'reflection'}
+FUNCTION_BLOCK FB_FastFault
+VAR_INPUT
+
+    i_xOK        :    BOOL; // Connect to fast-fault condition (false produces fault)
+    i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
+    i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
+    i_xVetoable : BOOL := TRUE; // Mask this fast fault if the FFO veto device is true
+    
+    i_DevName : T_MaxString := ''; // Device name for diagnostic
+    i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
+    i_TypeCode : UINT; // Error code for classifying fast faults
+END_VAR
+VAR_OUTPUT
+    o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like (Optional)
+END_VAR
+VAR_IN_OUT
+    io_fbFFHWO        :    FB_HardwareFFOutput; //Point to FB_HardwareFFOutput of your choice
+END_VAR
+VAR
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
+    
+    FFInfo : ST_FFInfo;
+    
+    RegistrationIdx : UINT := 1; // The index this FF was registered in the FFO
+    
+    xInit    :    BOOL :=TRUE;
+    
+    InfoStringFmtr : FB_FormatString;
+    
+    InUse : T_MaxString;
+    AutoReset : T_MaxString;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xInit    THEN
+    FFInfo.sPath := sPath;
+    FFInfo.InUse := True;
+    FFInfo.TypeCode := i_TypeCode;
+    FFInfo.DevName := i_DevName;
+    FFInfo.Desc := i_Desc;
+    FFInfo.AutoReset := i_xAutoReset;
+    FFInfo.Vetoable := i_xVetoable;
+    
+    InUse := BOOL_TO_STRING(FFInfo.InUse);
+    AutoReset := BOOL_TO_STRING(FFInfo.AutoReset);
+    InfoStringFmtr(sFormat:='%s;%s;%X;%s;%s;%s;',
+        arg1 := F_STRING(FFinfo.sPath),
+        arg2 := F_STRING(InUse),
+        arg3 := F_WORD(FFInfo.TypeCode),
+        arg4 := F_STRING(FFInfo.DevName),
+        arg5 := F_STRING(FFInfo.Desc),
+        arg6 := F_STRING(AutoReset),
+        sOut=>FFInfo.InfoString);
+    io_fbFFHWO.Register(
+        stFFInfo:=FFInfo, 
+        Idx=>RegistrationIdx);
+    //<TODO> if registration doesn't succeed, send warning to diagnostic
+    xInit := FALSE;
+END_IF
+
+io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := i_xOK, Reset:= i_xReset);
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

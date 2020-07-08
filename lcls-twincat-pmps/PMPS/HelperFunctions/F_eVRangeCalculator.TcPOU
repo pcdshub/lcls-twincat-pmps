@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_eVRangeCalculator" Id="{a4835126-795e-4742-8c6c-c3fd14467c35}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+A. Wallace 2019-8-8
+
+Provides bit range of eV.
+
+LastWord = 0 (Result)
+----------------------------------
+reV = 300 = (0000_0000_0000_0010)
+reV = 301 = (0000_0000_0000_0100)
+
+LastWord = 0000_0000_0000_0010 (Result)
+----------------------------------
+reV = 300 + <rHyst = (0000_0000_0000_0110)
+reV = 300 + >rHyst = (0000_0000_0000_0100)
+
+*)
+FUNCTION F_eVRangeCalculator : WORD // Bit-range of current photon energy
+VAR_INPUT
+    reV    :    REAL; // Photon energy (keV)
+    LastWord    :    WORD; // Range word of previous cycle
+END_VAR
+VAR
+    nIndex: INT;
+    RangeWord: WORD;
+    rPreviousBoundary: REAL := 0;
+    
+    MaxEv    :    REAL := PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries]*1000;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF reV < 0 THEN F_eVRangeCalculator := 16#FFFF; RETURN; END_IF // Failsafe
+
+FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+    
+    // If previously active then check if it should be cleared
+    IF LastWord.0 THEN 
+        // Hysteresis condition
+        IF (reV > MIN(PMPS_GVL.g_areVBoundaries[nIndex] + PMPS_GVL.reVHyst, MaxEv) ) OR
+        (reV < MAX(rPreviousBoundary - PMPS_GVL.reVHyst, 0) ) THEN
+            RangeWord.0 := 0; // If out of range of hys. mark inactive
+        ELSE
+            RangeWord.0 := 1;
+        END_IF
+    ELSE // Check if we should mark as active
+        IF (reV <= PMPS_GVL.g_areVBoundaries[nIndex]) AND
+        (reV > rPreviousBoundary) THEN
+            RangeWord.0 := 1;
+        END_IF
+    END_IF
+    
+    // Catch if the hysteresis is set too large for the range
+    IF rPreviousBoundary + PMPS_GVL.reVHyst >= PMPS_GVL.g_areVBoundaries[nIndex] THEN
+        RangeWord.0 := 1; // Setting the bit true here as a failsafe
+        //<TODO> Add major error or warning here
+    END_IF
+    
+    rPreviousBoundary := PMPS_GVL.g_areVBoundaries[nIndex];
+    // Shift to next bit
+    RangeWord := ROR(RangeWord, 1);
+    LastWord := SHR(LastWord, 1);
+    
+END_FOR
+
+F_eVRangeCalculator := RangeWord;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

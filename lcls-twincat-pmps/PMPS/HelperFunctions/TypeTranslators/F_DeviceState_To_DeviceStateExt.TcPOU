@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_DeviceState_To_DeviceStateExt" Id="{647f5b20-e140-4a4a-b23d-0cce310441de}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_DeviceState_To_DeviceStateExt : ST_DeviceStateExt
+VAR_INPUT
+    stDeviceState    :    ST_DeviceState;
+    xValid    :    BOOL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_DeviceState_To_DeviceStateExt.nStateRef := stDeviceState.nStateRef;
+F_DeviceState_To_DeviceStateExt.rPosition    :=    stDeviceState.rPosition;
+F_DeviceState_To_DeviceStateExt.rTolerance    :=    stDeviceState.rTolerance;
+F_DeviceState_To_DeviceStateExt.sStateName    := stDeviceState.sStateName;
+F_DeviceState_To_DeviceStateExt.stReqBeamParam    := stDeviceState.stReqBeamParam;
+F_DeviceState_To_DeviceStateExt.xValid := xValid;
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

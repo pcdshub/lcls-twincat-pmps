@@ -2,191 +2,54 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
 	<DataTypes>
 		<DataType>
-			<Name GUID="{CD9A5CB4-772A-4C5D-92CC-8611A9FB1859}" AutoDeleteType="true">ST_PMPS_Attenuator</Name>
-			<BitSize>48</BitSize>
+			<Name GUID="{67AC048F-B785-4A4D-B941-B11E2213F502}" PersistentType="true">ST_PMPS_Aperture_IO</Name>
+			<BitSize>96</BitSize>
 			<SubItem>
-				<Name>nReqAtt</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>0</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>nAttCur</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>16</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>xAttOK</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>32</BitOffs>
-			</SubItem>
-			<Hides>
-				<Hide GUID="{A6175640-219D-4EFE-96DC-913F7DAE0CBA}"/>
-				<Hide GUID="{E56E3FA8-55E9-40D5-A85F-9A19737EB6BA}"/>
-			</Hides>
-		</DataType>
-		<DataType>
-			<Name GUID="{95EE78E5-EC39-42F1-A1EE-C5B10F8BDB57}" PersistentType="true">ST_BeamParams_IO</Name>
-			<BitSize>1856</BitSize>
-			<SubItem>
-				<Name>fAtt</Name>
+				<Name>Width</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
 				<Comment>
-					<![CDATA[  Requested pre-optic attenuation %  ]]>
+					<![CDATA[ distance between horizontal slits (x)]]>
 				</Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>0</BitOffs>
-				<Default>
-					<Value>100</Value>
-				</Default>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Attenuation
-        io: i</Value>
+						<Value>pv: Width
+            io: i
+            field: EGU mm</Value>
 					</Property>
 				</Properties>
 			</SubItem>
 			<SubItem>
-				<Name>nRate</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
+				<Name>Height</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
 				<Comment>
-					<![CDATA[ Pulse-rate ]]>
+					<![CDATA[ distance between vertical slits (y)]]>
 				</Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>32</BitOffs>
-				<Default>
-					<Value>10</Value>
-				</Default>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Rate
-        io: i</Value>
+						<Value>pv: Height
+            io: i
+            field: EGU mm</Value>
 					</Property>
 				</Properties>
 			</SubItem>
 			<SubItem>
-				<Name>fPP_mJ</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<Name>xOK</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
 				<Comment>
-					<![CDATA[ Per pulse max energy (mJ) ]]>
+					<![CDATA[ status of aperture, false if error or in motion]]>
 				</Comment>
-				<BitSize>32</BitSize>
+				<BitSize>8</BitSize>
 				<BitOffs>64</BitOffs>
-				<Default>
-					<Value>20</Value>
-				</Default>
 				<Properties>
 					<Property>
 						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: PulseEnergy
-        io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>neVRange</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
-				<Comment>
-					<![CDATA[ Photon energy ranges ]]>
-				</Comment>
-				<BitSize>16</BitSize>
-				<BitOffs>96</BitOffs>
-				<Default>
-					<Value>65535</Value>
-				</Default>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: PhotonEnergy
-        io: i</Value>
-					</Property>
-					<Property>
-						<Name>plcAttribute_displaymode</Name>
-						<Value>binary</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>astAttenuators</Name>
-				<Type GUID="{CD9A5CB4-772A-4C5D-92CC-8611A9FB1859}">ST_PMPS_Attenuator</Type>
-				<ArrayInfo>
-					<LBound>1</LBound>
-					<Elements>32</Elements>
-				</ArrayInfo>
-				<Comment>
-					<![CDATA[ Beamline attenuators ]]>
-				</Comment>
-				<BitSize>1536</BitSize>
-				<BitOffs>112</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: AuxAttenuator
-        io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>aStoppers</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<ArrayInfo>
-					<LBound>1</LBound>
-					<Elements>16</Elements>
-				</ArrayInfo>
-				<Comment>
-					<![CDATA[ Stopper statuses ]]>
-				</Comment>
-				<BitSize>128</BitSize>
-				<BitOffs>1648</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: AuxAttenuator
-        io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>xValidToggle</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<Comment>
-					<![CDATA[ Toggle for watchdog]]>
-				</Comment>
-				<BitSize>8</BitSize>
-				<BitOffs>1776</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>xValid</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<Comment>
-					<![CDATA[ Beam parameter set is valid (if readback), or acknowledged (if request)]]>
-				</Comment>
-				<BitSize>8</BitSize>
-				<BitOffs>1784</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Valid
-        io: i</Value>
-					</Property>
-				</Properties>
-			</SubItem>
-			<SubItem>
-				<Name>nCohortInt</Name>
-				<Type GUID="{18071995-0000-0000-0000-00000000000B}">ULINT</Type>
-				<Comment>
-					<![CDATA[ Cohort index. Identifies which cohort this BP set was included in arbitration]]>
-				</Comment>
-				<BitSize>64</BitSize>
-				<BitOffs>1792</BitOffs>
-				<Properties>
-					<Property>
-						<Name>plcAttribute_pytmc</Name>
-						<Value>pv: Attenuation
+						<Value>pv: OK
         io: i</Value>
 					</Property>
 				</Properties>
@@ -223,29 +86,28 @@
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{76269EAC-36F0-4513-B811-3725FD02409A}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
-			<BitSize>48</BitSize>
+			<Name GUID="{D01709AA-9B4A-464A-B4D1-4BF476CFE7DE}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
+			<BitSize>32</BitSize>
 			<SubItem>
-				<Name>nReqAtt</Name>
+				<Name>nTran</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
 				<BitSize>16</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
 			<SubItem>
-				<Name>nAttCur</Name>
+				<Name>xAttOK</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
 				<BitSize>16</BitSize>
 				<BitOffs>16</BitOffs>
 			</SubItem>
-			<SubItem>
-				<Name>xAttOK</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>32</BitOffs>
-			</SubItem>
+			<Hides>
+				<Hide GUID="{76269EAC-36F0-4513-B811-3725FD02409A}"/>
+				<Hide GUID="{E96BEA56-6301-4A6A-BF6A-F08340C87594}"/>
+				<Hide GUID="{FE32F9A9-7E7A-413D-8D77-0C99C34D8CD9}"/>
+			</Hides>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="172.21.148.215.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x106">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -257,7 +119,7 @@
 			</TypeSystem>
 		</System>
 		<Plc>
-			<Project File="Library.xti"/>
+			<Project File="PMPS.xti"/>
 		</Plc>
 	</Project>
 </TcSmProject>

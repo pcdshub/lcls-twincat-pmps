@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_FFInfo" Id="{08ec9521-6652-4b3e-81e8-b83ee8052a30}">
+    <Declaration><![CDATA[
+// These elements should be set at init and never changed.
+
+TYPE ST_FFInfo :
+STRUCT
+    {attribute 'pytmc' := '
+        pv: Path
+        io: i
+     '}
+    sPath   :    T_MaxString; // Full PLC path to FF object
+    {attribute 'pytmc' := '
+        pv: Desc
+        io: i
+     '}
+    Desc    :   T_MaxString; // Set at instantiation to a helpful description of the fast fault purpose
+    {attribute 'pytmc' := '
+        pv: DevName
+        io: i
+     '}
+    DevName :   T_MaxString; // Component name, used in diagnostic to help narrow down where beam faults are coming from
+    {attribute 'pytmc' := '
+        pv: TypeCode
+        io: i
+     '}
+    TypeCode    :   UINT; // Set at instantiation to fault class code
+
+///////////////////////////////////////////
+// Warning, this variable is effectively a VETO of the fast fault if set FALSE
+// Do not alter the state of this variable unless you really know what you're doing.
+///////////////////////////////////////////
+    {attribute 'pytmc' := '
+        pv: InUse
+        io: i
+     '}
+    InUse   :   BOOL := FALSE; // If this FF is currently in-use
+///////////////////////////////////////////
+
+ 
+    AutoReset   :   BOOL; // Automatically clear fast fault (latching vs non-latching)
+    Vetoable  : BOOL := TRUE; // Can this fast fault be masked by the veto device input?
+
+      {attribute 'pytmc' := '
+        pv: InfoString
+        io: i
+     '}
+    InfoString : STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

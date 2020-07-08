@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_ArbiterToSubSys_IO" Id="{1a7d9761-dced-4384-823d-a5e0b037bf80}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Exchanges preemption requests and current beam state with subsystems in arbiter
+network.
+
+2019-12-2, A. Wallace
+
+Use in conjunction with FB_SubSysToArbiter_IO.
+
+This FB runs in the beamline arbiter PLC (BAP). There should be one of these for every
+subsystem interfaced to the BAP. Each subsystem PLC should run a sibling FB_SubSysToArbiter_IO FB.
+
+This FB and its sibling communicate through the ethercat connection between the subsystem PLC and the BAP.
+
+*)
+FUNCTION_BLOCK FB_ArbiterToSubSys_IO
+VAR_INPUT
+	RequestingSystemID	:	DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // System ID for making requests to the supreme arbiter
+    sName : STRING := 'ArbiterToSubSys';
+    Reset : BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	Arbiter	: FB_Arbiter;
+    fbFFHWO : FB_HardwareFFOutput;
+END_VAR
+VAR
+    
+	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
+    {attribute 'pytmc' := '
+        pv: RequestedBP:FromSubSys
+    '}
+    RequestedBP: ST_BeamParams;
+    
+	o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
+    
+    // EL6692 Diagnostics
+    i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
+    {attribute 'pytmc' := 'pv: WcState
+        io: i
+        field: DESC Working counter state.
+        field: ZNAM OK
+        field: ONAM Error'}
+    i_WcState AT %I* : BOOL; // WcState^WcState
+    {attribute 'pytmc' := 'pv: TxPDO_state
+        io: i
+        field: DESC PDO Transmission is OK
+        field: ZNAM OK
+        field: ONAM Error'}
+    i_TxPDOState AT %I* : BOOL; // SYNC Inputs^TxPDO state
+    {attribute 'pytmc' := 'pv: TxPDO_toggle
+        io: i
+        field: DESC PDO Transmission is OK
+        field: ZNAM OK
+        field: ONAM Error'}
+    i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
+    
+    // Fast faults
+    ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Issue w/ arbiter interface to subsystem, verify subsystem is OK, or ethercat connection.'); // Fast fault for ethercat issues
+    nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
+    nRequestedCohort : UDINT := 0;
+    rtToggle : R_TRIG;
+
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// Incoming request from subsystem PLC
+RequestedBP := IO_TO_BP(i_RequestedBP);
+
+// Update Arbiter with our request
+rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
+// xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
+// If subsystem cohort has incremented, update beam parameter request with our arbiter
+IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
+    Arbiter.RemoveRequest(RequestingSystemID);
+    Arbiter.AddRequest(RequestingSystemID, RequestedBP);
+    nRequestedCohort := i_RequestedBP.nCohortInt;
+END_IF
+
+
+// Check if latest request is acknowledged by this arbiter
+// Acknowledgement happens after an arbitration cycle, which means if RequestedCohort just incremented
+// due to a new request, CheckRequest will be false.
+IF Arbiter.CheckRequest(RequestingSystemID) THEN
+    nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
+END_IF
+
+// Sending current beam parameter set to subsystems 
+o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
+o_CurrentBP.nCohortInt := nActiveCohort;
+
+
+//////////////////////////////////////
+// Verifying the ethercat interface health
+/////////////////////////////////////
+// Both of these values should be 0 for a fully valid exchange
+ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
+
+ffPMPSIO_Disconnect(
+    io_fbFFHWO := fbFFHWO,
+    i_xReset := Reset,
+    i_DevName := sName,
+    i_TypeCode:=5);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

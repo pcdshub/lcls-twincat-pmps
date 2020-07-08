@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_BeamClassOutputs" Id="{4a29fded-500d-49a8-af9c-1a0c32a74d5a}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Sets the beam class assertion lines for a given beam class.
+*)
+FUNCTION_BLOCK FB_BeamClassOutputs
+VAR_INPUT
+    BP : ST_BeamParams;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    nBeamClass   :    BYTE;
+    wBeamClass    :    BYTE;
+
+    InitCounter: BYTE;
+    counter    :    INT;
+    
+    // Beam class lines are restricted to 8 channels in the current design, since
+    // there are no plans to use all 16. Channels 1-7 may be allocated to any other
+    // beam classes so long as they are ordered least to greatest.
+    // Channel 8 is reserved for full beam.
+    {attribute 'pytmc' := 'pv: BeamClassChannel
+        io: i
+        field: DESC Hardwire channel state'}
+        epicsBitmap : WORD;
+        
+    {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
+                              [2] := TIIB[PMPS_Premp]^Channel 2^Output;
+                              [3] := TIIB[PMPS_Premp]^Channel 3^Output;
+                              [4] := TIIB[PMPS_Premp]^Channel 4^Output;
+                              
+                              [5] := TIIB[PMPS_Premp]^Channel 5^Output;
+                              [6] := TIIB[PMPS_Premp]^Channel 6^Output;
+                              [7] := TIIB[PMPS_Premp]^Channel 7^Output;
+                              [8] := TIIB[PMPS_Premp]^Channel 8^Output;'} // 8 - Full beam
+    q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
+END_VAR
+VAR CONSTANT
+    MAX_BEAM_CLASS_LINES : BYTE := 8;
+    BC_1HZ : BYTE := 1;
+    BC_10HZ : BYTE := 2;
+    BC_FULL : BYTE := 16;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// Determine BC
+IF BP.nRate >= 120 THEN
+    nBeamClass := BC_FULL;
+ELSIF BP.nRate >= 10 THEN
+    nBeamClass := BC_10HZ;
+ELSIF BP.nRate >= 1 THEN
+    nBeamClass := BC_1HZ;
+END_IF
+
+
+//Assert Beam Class
+////////////////////////////////////
+//0x0 = 0000 0000 0000 0000
+//0x1 = 0000 0000 0000 0001
+//0xF = 1111 1111 1111 1111
+
+//Initialize BC lines to zero on every pass
+FOR InitCounter := 1 TO MAX_BEAM_CLASS_LINES DO
+    q_BC_ASSERTION_LINES[InitCounter] := FALSE;
+END_FOR
+
+//Set BC lines according to beam class
+//A BC of 0x0 would pass over this loop, setting none of the lines high
+// , as FOR loops check the initialized variable at the top to see if it's >
+// than the "TO" variable.
+FOR wBeamClass:=1 TO MIN(MAX_BEAM_CLASS_LINES-1, nBeamClass) DO
+    q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
+END_FOR
+
+q_BC_ASSERTION_LINES[8] := nBeamClass = 16; //Set channel 8 true if BC is 16
+
+
+// Readbacks for EPICS
+epicsBitmap.0 := q_BC_ASSERTION_LINES[1];
+epicsBitmap.1 := q_BC_ASSERTION_LINES[2];
+epicsBitmap.2 := q_BC_ASSERTION_LINES[3];
+epicsBitmap.3 := q_BC_ASSERTION_LINES[4];
+
+epicsBitmap.4 := q_BC_ASSERTION_LINES[5];
+epicsBitmap.5 := q_BC_ASSERTION_LINES[6];
+epicsBitmap.6 := q_BC_ASSERTION_LINES[7];
+epicsBitmap.7 := q_BC_ASSERTION_LINES[8];
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

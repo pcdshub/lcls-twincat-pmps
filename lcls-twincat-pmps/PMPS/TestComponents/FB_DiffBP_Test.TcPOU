@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_DiffBP_Test" Id="{859894d6-6f21-4d8d-9285-ffb8a729f86b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_DiffBP_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+BPDiff();]]></ST>
+    </Implementation>
+    <Method Name="BPDiff" Id="{49d28a5a-3bd0-4b26-81de-3d22a0a28b94}">
+      <Declaration><![CDATA[//Verify BP comparison remains logical.
+METHOD BPDiff
+VAR_INPUT
+END_VAR
+VAR
+    BP1    :    ST_BeamParams;
+    BP2    :    ST_BeamParams;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('BPDiffCheck');
+
+BP2.nTran := 10; 
+    
+AssertTrue(
+    F_DifferentBeamParams(BP1, BP2),
+    'DifferentBP eval is broken (True)'); 
+
+BP1.nTran := BP2.nTran;   
+    
+AssertFalse(
+    F_DifferentBeamParams(BP2, BP1),
+    'DifferentBP eval is broken (False)');
+
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

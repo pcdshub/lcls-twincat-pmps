@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <GVL Name="GVL_CUSTOM_CONSTANTS" Id="{0c642a42-114b-4204-8a12-d2a480872481}">
+    <Declaration><![CDATA[VAR_GLOBAL CONSTANT
+    MAX_FAST_FAULTS : UINT := 50; // Maximum number of fast faults that can be associated with a FFO
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_MachineSimulator" Id="{02a1fb96-2edd-41f3-ad53-9a758bd2eac7}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Simulates the machine responding to requests by adding a bit of delay/ ramps
+*)
+FUNCTION_BLOCK FB_MachineSimulator
+VAR_INPUT
+    i_stAssertedParams    :    ST_BeamParams;
+    i_xFault    :    BOOL;
+    
+    xEnableAtt : BOOL;
+    xEnablePE : BOOL;
+    xEnableRate : BOOL;
+END_VAR
+VAR_IN_OUT
+    iq_stMachineParams    :    ST_BeamParams;
+END_VAR
+VAR
+    nTargetTran: UINT;
+    tonTranTimer    :    TON := (
+        PT := T#2S
+        );
+    fTargetPP_mJ: REAL;
+    tonPPETimer: TON := (
+        PT := T#2S
+    );
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//Attenuation
+IF xEnableAtt THEN
+    IF i_stAssertedParams.nTran <> nTargetTran THEN
+        tonTranTimer(IN:=FALSE);
+        nTargetTran := i_stAssertedParams.nTran;
+    ELSIF NOT tonTranTimer.Q THEN
+        tonTranTimer(IN:=TRUE);
+    ELSE
+        iq_stMachineParams.nTran := nTargetTran;
+    END_IF
+END_IF
+    
+//Pulse Energy
+IF xEnablePE THEN
+    IF i_stAssertedParams.fPP_mJ <> fTargetPP_mJ THEN
+        tonPPETimer(IN:=FALSE);
+        fTargetPP_mJ := i_stAssertedParams.fPP_mJ;
+    ELSIF NOT tonTranTimer.Q THEN
+        tonPPETimer(IN:=TRUE);
+    ELSE
+        iq_stMachineParams.fPP_mJ := fTargetPP_mJ;
+    END_IF
+END_IF
+
+//Rate
+IF xEnableRate THEN
+    IF i_xFault THEN
+        iq_stMachineParams.nRate := 0;
+    ELSE
+        iq_stMachineParams.nRate := i_stAssertedParams.nRate;
+    END_IF
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

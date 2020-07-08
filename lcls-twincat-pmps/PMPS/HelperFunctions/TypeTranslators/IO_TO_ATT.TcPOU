@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="IO_TO_ATT" Id="{3894235d-c53a-42f8-8be8-70feba0a504b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IO_TO_ATT : ST_PMPS_Attenuator
+VAR_INPUT
+    IO : ST_PMPS_Attenuator_IO;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IO_TO_ATT.nTran := IO.nTran;
+IO_TO_ATT.xAttOK := IO.xAttOK;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
