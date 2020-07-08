@@ -176,12 +176,10 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
         CONTINUE;
     ELSE
         IF FF.FaultAck THEN
-            
+
             pmpsTypeCode := 1;
             FormulateLogJson(FF);
-            
-            //Json is gen. in FormulateLogJson
-            fbLogger(sMsg := 'Fast Fault, beam off', eSevr:=TcEventSeverity.Critical);
+            fbLogger(sMsg := 'Fault, beam off', eSevr:=TcEventSeverity.Critical);
             
             FF.FaultAck := FALSE;
         END_IF
@@ -270,9 +268,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Idx := LIMIT(1,Idx,FF_ARRAY_UPPER_BOUND);
 stFF := THIS^.astFF[Idx];
 
-// Setting the log flag only on a state change.
-stFF.FaultAck S= stFF.OK AND NOT OK;
-
 // Updating internal fault state
 stFF.OK := OK;
 
@@ -294,6 +289,9 @@ IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1
 
 //Clear pushbuttons
 stFF.Reset := FALSE;
+
+// Log when this fault faults
+stFF.FaultAck S= stFF.BeamPermitted AND NOT BeamPermitted;
 
 // Log when this fault has cleared
 stFF.ClearAck S= BeamPermitted AND NOT stFF.BeamPermitted;
