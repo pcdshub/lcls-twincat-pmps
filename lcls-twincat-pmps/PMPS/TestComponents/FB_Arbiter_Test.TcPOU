@@ -250,6 +250,12 @@ AssertTrue(fbArbiter.RemoveRequest(nId),
 AssertFalse(fbArbiter.CheckRequest(nId),
     'Remove did not remove request');
     
+TEST_FINISHED();
+
+TEST('NoRequestsFullBeam');
+
+AssertFalse(F_DifferentBeamParams(fbArbiter.GetArbitratedBP(), PMPS_GVL.cstFullBeam), 'Arbitrated beam should be full with all requests removed');
+
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
