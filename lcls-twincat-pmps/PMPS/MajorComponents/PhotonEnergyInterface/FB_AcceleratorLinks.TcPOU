@@ -13,7 +13,7 @@ END_VAR
 VAR
 
     {attribute 'pytmc' := '
-        pv: ElectronEnergy:Hgvpu
+        pv: eEnrg:Hgvpu
         link: BEND:DMPH:400:BACT
         field: EGU GeV
         field: PREC 3
@@ -21,7 +21,7 @@ VAR
     fbHgvpuElectronEnergy : FB_LREALFromEPICS;
 
     {attribute 'pytmc' := '
-        pv: ElectronEnergy:SXU
+        pv: eEnrg:SXU
         link: BEND:DMPS:400:BACT
         field: EGU GeV
         field: PREC 3

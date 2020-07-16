@@ -10,7 +10,7 @@ END_VAR
 
 VAR_OUTPUT
     {attribute 'pytmc' := '
-        pv: PhotonEnergyAct
+        pv: eVAct
         field: DESC Calculated photon energy
         field: PREC 3
         field: EGU eV
@@ -18,7 +18,7 @@ VAR_OUTPUT
     fPhotonEnergyAct : LREAL;
 
     {attribute 'pytmc' := '
-        pv: PhotonEnergyDes
+        pv: eVDes
         field: DESC Calculated desired photon energy
         field: PREC 3
         field: EGU eV
