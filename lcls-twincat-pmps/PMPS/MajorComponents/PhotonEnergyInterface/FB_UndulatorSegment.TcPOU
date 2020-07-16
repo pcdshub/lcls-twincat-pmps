@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_UndulatorSegment" Id="{986484f4-a7ca-4f8c-bada-b360e7740d21}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_UndulatorSegment
+VAR_INPUT
+    (* Undulator period in millimeters, to be set by subclasses *)
+    fPeriod_mm : LREAL := 1.0;
+    fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+END_VAR
+
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: PhotonEnergyAct
+        field: DESC Calculated photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+    fPhotonEnergyAct : LREAL;
+
+    {attribute 'pytmc' := '
+        pv: PhotonEnergyDes
+        field: DESC Calculated desired photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+    fPhotonEnergyDes : LREAL;
+
+END_VAR
+
+VAR
+    {attribute 'pytmc' := '
+        pv: KDes
+        link: KDes
+    '}
+    fbKDesired : FB_LREALFromEPICS;
+
+    {attribute 'pytmc' := '
+        pv: KAct
+        link: KAct
+    '}
+    fbKActual : FB_LREALFromEPICS;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbKDesired();
+fbKActual();
+
+IF __ISVALIDREF(fbElectronEnergy) THEN
+
+    IF fbKActual.bValid AND fbElectronEnergy.bValid THEN
+        fPhotonEnergyAct := F_CalculatePhotonEnergy(
+            fElectronEnergy_GeV:=fbElectronEnergy.fValue,
+            fUndulatorPeriod_mm:=fPeriod_mm,
+            fUndulatorStrength:=fbKActual.fValue
+        );
+    END_IF
+
+    IF fbKDesired.bValid AND fbElectronEnergy.bValid THEN
+        fPhotonEnergyDes := F_CalculatePhotonEnergy(
+            fElectronEnergy_GeV:=fbElectronEnergy.fValue,
+            fUndulatorPeriod_mm:=fPeriod_mm,
+            fUndulatorStrength:=fbKDesired.fValue
+        );
+    END_IF
+
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_UndulatorSegment">
+      <LineId Id="3" Count="20" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

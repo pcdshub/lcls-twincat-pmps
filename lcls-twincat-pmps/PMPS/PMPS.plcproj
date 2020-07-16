@@ -134,6 +134,21 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_Hgvpu.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorSegment.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\F_CalculatePhotonEnergy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\Arbiter\FB_Arbiter.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -239,6 +254,7 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="HelperFunctions\TypeTranslators" />
     <Folder Include="MajorComponents" />
+    <Folder Include="MajorComponents\PhotonEnergyInterface" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
     <Folder Include="MajorComponents\FastFaults" />

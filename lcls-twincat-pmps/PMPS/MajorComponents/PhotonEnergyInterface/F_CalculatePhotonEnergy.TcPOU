@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_CalculatePhotonEnergy" Id="{98a6c884-5453-4269-81f4-62a502722fab}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_CalculatePhotonEnergy : LREAL
+VAR_INPUT
+    (* Electron energy in GeV *)
+    fElectronEnergy_GeV : LREAL;
+    (* Undulator period in mm *)
+    fUndulatorPeriod_mm : LREAL;
+    (* Unitless undulator K parameter / strength *)
+    fUndulatorStrength : LREAL;
+END_VAR
+
+VAR
+    fDenominator: LREAL;
+END_VAR
+
+VAR CONSTANT
+    (* GeV [electron rest mass/energy] *)
+    m_e : LREAL := 0.0005109989461;
+    (* Js [Planck's constant] *)
+    h 	: LREAL := 6.62607004E-34;
+    (* C [electron charge] *)
+    e 	: LREAL := 1.6021766208E-19;
+    (* m/s, speed of light *)
+    c 	: LREAL := 299792458;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*
+
+Reference Python implementation
+
+def calculate_photon_energy(electron_energy, period, k):
+    '''
+    Calculate photon energy, in eV.
+
+    Parameters
+    ----------
+    electron_energy : float
+        Electron energy in GeV
+
+    period : float
+        Undulator period, in mm
+
+    k : float
+        Undulator K parameter (strength), unitless
+    '''
+    m_e = 0.0005109989461  # GeV [electron rest mass/energy]
+    h = 6.62607004e-34  # Js [Planck's constant]
+    e = 1.6021766208e-19  # C [electron charge]
+    c = 299792458  # m/s, speed of light
+    return ((2. * (electron_energy / m_e) ** 2 * h * c) /
+            (e * period * 1e-3 * (1 + k ** 2 / 2.)))
+
+*)
+fDenominator := (e * fUndulatorPeriod_mm * 1E-3 * (1.0 + EXPT(fUndulatorStrength, 2.0) / 2.0));
+F_CalculatePhotonEnergy := (2.0 * EXPT(fElectronEnergy_GeV / m_e, 2.0) * h * c) / MAX(fDenominator, 1.0E-10);
+]]></ST>
+    </Implementation>
+    <LineIds Name="F_CalculatePhotonEnergy">
+      <LineId Id="3" Count="28" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
