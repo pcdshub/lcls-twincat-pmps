@@ -333,6 +333,9 @@ END_VAR
     END_IF
 END_IF
 
+// With any new request reset the internal arbiter "done" flag
+xRequestMade := FALSE;
+
 RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
       </Implementation>
     </Method>
