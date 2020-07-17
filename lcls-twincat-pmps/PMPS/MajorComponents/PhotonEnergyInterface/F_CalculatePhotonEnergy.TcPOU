@@ -56,7 +56,7 @@ def calculate_photon_energy(electron_energy, period, k):
 
 *)
 fDenominator := (e * fUndulatorPeriod_mm * 1E-3 * (1.0 + EXPT(fUndulatorStrength, 2.0) / 2.0));
-F_CalculatePhotonEnergy := (2.0 * EXPT(fElectronEnergy_GeV / m_e, 2.0) * h * c) / MAX(fDenominator, 1.0E-10);
+F_CalculatePhotonEnergy := (2.0 * EXPT(fElectronEnergy_GeV / m_e, 2.0) * h * c) / MAX(fDenominator, 4.94065645841247E-324);
 ]]></ST>
     </Implementation>
     <LineIds Name="F_CalculatePhotonEnergy">
