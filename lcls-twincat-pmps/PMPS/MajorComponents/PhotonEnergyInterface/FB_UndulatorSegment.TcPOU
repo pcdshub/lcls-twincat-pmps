@@ -24,7 +24,12 @@ VAR_OUTPUT
         field: EGU eV
     '}
     fPhotonEnergyDes : LREAL;
-
+	
+	{attribute 'pytmc' := '
+        pv: Active
+        field: DESC Calculated desired photon energy
+    '}
+	xActive : BOOL; // Undulator is considered active
 END_VAR
 
 VAR
