@@ -28,6 +28,9 @@
     <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\K_Apertures.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -132,6 +135,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
