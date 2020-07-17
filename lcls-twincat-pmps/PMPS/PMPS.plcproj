@@ -146,6 +146,9 @@
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_Hgvpu.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_LPhotonEnergy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">
       <SubType>Code</SubType>
     </Compile>
