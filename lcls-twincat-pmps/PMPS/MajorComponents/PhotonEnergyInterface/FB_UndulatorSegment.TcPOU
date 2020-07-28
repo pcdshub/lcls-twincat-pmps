@@ -6,6 +6,10 @@ VAR_INPUT
     (* Undulator period in millimeters, to be set by subclasses *)
     fPeriod_mm : LREAL := 1.0;
     fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+	
+	fLowK : LREAL := 0;
+	fHiK : LREAL := 6;
+	fKRangeHyst : LREAL := 0.01;
 END_VAR
 
 VAR_OUTPUT
@@ -27,7 +31,8 @@ VAR_OUTPUT
 	
 	{attribute 'pytmc' := '
         pv: Active
-        field: DESC Calculated desired photon energy
+		io: i
+        field: DESC Undulator is considered active
     '}
 	xActive : BOOL; // Undulator is considered active
 END_VAR
@@ -59,6 +64,12 @@ IF __ISVALIDREF(fbElectronEnergy) THEN
             fUndulatorPeriod_mm:=fPeriod_mm,
             fUndulatorStrength:=fbKActual.fValue
         );
+		
+		//Set this undulator active if actual K is within operational range
+		xActive S= fLowK <= fbKActual.fValue AND fbKActual.fValue <= fHiK AND
+		(fbKActual.bValid AND fbKActual.bValid);
+		xActive R= (fLowK - fKRangeHyst) > fbKActual.fValue OR fbKActual.fValue > (fHiK + fKRangeHyst) OR
+					(NOT fbKActual.bValid OR NOT fbKActual.bValid);
     END_IF
 
     IF fbKDesired.bValid AND fbElectronEnergy.bValid THEN
@@ -72,7 +83,12 @@ IF __ISVALIDREF(fbElectronEnergy) THEN
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_UndulatorSegment">
-      <LineId Id="3" Count="20" />
+      <LineId Id="3" Count="10" />
+      <LineId Id="73" Count="2" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="14" Count="9" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

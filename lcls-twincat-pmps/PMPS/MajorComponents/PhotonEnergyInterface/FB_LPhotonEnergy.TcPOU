@@ -6,19 +6,25 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
+VAR_IN_OUT
+	BP : ST_BeamParams;
+END_VAR
 VAR
 	{attribute 'pytmc' := '
-        pv: eEnrg:Hgvpu
+        pv: eEnrg
         link: BEND:DMPH:400:BACT
         field: EGU GeV
     '}
     fbHgvpuElectronEnergy : FB_LREALFromEPICS;
 	
-	    {attribute 'pytmc' := '
-        pv: @(PREFIX)Link:HGVPU
+	{attribute 'pytmc' := '
+        pv: UND
         link: USEG:UNDH:
     '}
     fbHgvpu : FB_Hgvpu;
+	
+	nCurrentPhotonEnergyBitmask : UINT;
+	nTargetPhotonEnergyBitmask : UINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -27,7 +33,11 @@ fbHgvpuElectronEnergy();
 
 fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
 
-//Determine seed undulator
+//Update BP
+nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(fbHgvpu.fCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
+nTargetPhotonEnergyBitmask := F_eVRangeCalculator(fbHgvpu.fTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
+
+BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_LPhotonEnergy">
@@ -37,6 +47,10 @@ fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
       <LineId Id="22" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
       <LineId Id="27" Count="0" />
     </LineIds>
   </POU>

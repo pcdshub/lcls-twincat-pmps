@@ -7,6 +7,28 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
+	{attribute 'pytmc' := '
+        pv: CurrentPhotonEnergy
+		io: i
+        field: DESC Calculated current photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+	fCurrentPhotonEnergy : LREAL;
+	{attribute 'pytmc' := '
+        pv: TargetPhotonEnergy
+		io: i
+        field: DESC Calculated desired photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+	fTargetPhotonEnergy : LREAL;
+	    {attribute 'pytmc' := '
+        pv: SeedUndulatorNumber
+		io: i
+        field: DESC Seed undulator number
+    '}
+	nSeedUndulator : UDINT; // Set to zero when no undulators are active
 END_VAR
 
 
@@ -99,12 +121,68 @@ VAR CONSTANT
         field: EGU mm
     '}
     fPeriod_mm : LREAL := 26.0;
+	{attribute 'pytmc' := '
+        pv: LowK
+        io: i
+    '}
+	fLowK : LREAL := 0.54;
+	{attribute 'pytmc' := '
+        pv: HiK
+        io: i
+    '}
+	fHiK : LREAL := 2.5;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT bInitialized THEN
+	Init();
+END_IF
 
-    fbSegment[24] := ADR(fbSegment_24);
+UndAdrUpdate();
+
+nSeedUndulator := 0;
+
+FOR iIndex := iLowBound TO iHighBound DO
+    IF fbSegment[iIndex] <> 0 THEN
+        fbCurrentSegment REF= fbSegment[iIndex]^;
+        fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+		
+		//Mark the seed undulator, first undulator operating within K bounds
+		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
+			nSeedUndulator := iIndex;
+			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
+		END_IF
+    END_IF
+END_FOR
+
+IF nSeedUndulator = 0 THEN
+	fCurrentPhotonEnergy := 0;
+	fTargetPhotonEnergy := 0;
+END_IF
+]]></ST>
+    </Implementation>
+    <Action Name="Init" Id="{944ed9cd-7f79-48c1-9c30-2a05b49f992a}">
+      <Implementation>
+        <ST><![CDATA[
+UndAdrUpdate();
+
+
+    FOR iIndex := iLowBound TO iHighBound DO
+            IF fbSegment[iIndex] <> 0 THEN
+            fbCurrentSegment REF= fbSegment[iIndex]^;
+            fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+			fbCurrentSegment.fLowK := fLowK;
+			fbCurrentSegment.fHiK := fHiK;
+        END_IF
+    END_FOR
+
+    bInitialized := TRUE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="UndAdrUpdate" Id="{16a3b724-bfc0-464d-94c1-29be51ee924d}">
+      <Implementation>
+        <ST><![CDATA[    fbSegment[24] := ADR(fbSegment_24);
     fbSegment[25] := ADR(fbSegment_25);
     fbSegment[26] := ADR(fbSegment_26);
     fbSegment[27] := ADR(fbSegment_27);
@@ -126,31 +204,37 @@ END_VAR
     fbSegment[43] := ADR(fbSegment_43);
     fbSegment[44] := ADR(fbSegment_44);
     fbSegment[45] := ADR(fbSegment_45);
-    fbSegment[46] := ADR(fbSegment_46);
-
-
-    FOR iIndex := iLowBound TO iHighBound DO
-            IF fbSegment[iIndex] <> 0 THEN
-            fbCurrentSegment REF= fbSegment[iIndex]^;
-            fbCurrentSegment.fPeriod_mm := fPeriod_mm;
-        END_IF
-    END_FOR
-
-    bInitialized := TRUE;
-END_IF
-
-FOR iIndex := iLowBound TO iHighBound DO
-    IF fbSegment[iIndex] <> 0 THEN
-        fbCurrentSegment REF= fbSegment[iIndex]^;
-        fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
-    END_IF
-END_FOR
-
-]]></ST>
-    </Implementation>
+    fbSegment[46] := ADR(fbSegment_46);]]></ST>
+      </Implementation>
+    </Action>
     <LineIds Name="FB_Hgvpu">
-      <LineId Id="3" Count="43" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="204" Count="1" />
+      <LineId Id="170" Count="1" />
+      <LineId Id="39" Count="4" />
+      <LineId Id="149" Count="2" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="181" Count="0" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Hgvpu.Init">
+      <LineId Id="2" Count="0" />
+      <LineId Id="25" Count="6" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Hgvpu.UndAdrUpdate">
+      <LineId Id="2" Count="21" />
+      <LineId Id="1" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
