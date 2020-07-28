@@ -137,6 +137,9 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\FB_BPControlDevice.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -208,6 +211,21 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="MajorComponents\SimulationFB\FB_eVSimulator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\SimulationFB\FB_MachineSimulator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_KStopper.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_LStopper.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_StopperWatcher.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -241,9 +259,6 @@
     <Compile Include="TestComponents\FB_FastFault_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestComponents\FB_MachineSimulator.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestComponents\FB_PhotonEnergyWatcher_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -263,6 +278,8 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="HelperFunctions\TypeTranslators" />
     <Folder Include="MajorComponents" />
+    <Folder Include="MajorComponents\SimulationFB" />
+    <Folder Include="MajorComponents\Stoppers" />
     <Folder Include="MajorComponents\PhotonEnergyInterface" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
@@ -298,11 +315,13 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
+    <SubObject Include="FB_BPControlDevice.FB_init" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
     <SubObject Include="FB_FastFault_Test.FFCombinedFunctionality" />
     <SubObject Include="FB_FastFault_Test.FFRegistration" />
+    <SubObject Include="FB_KStopper.FB_init" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Add" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Count" />
     <SubObject Include="FB_LinearDeviceStateTable.A_GetFirst" />
@@ -310,6 +329,7 @@
     <SubObject Include="FB_LinearDeviceStateTable.A_Lookup" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Remove" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Reset" />
+    <SubObject Include="FB_LStopper.FB_init" />
     <SubObject Include="FB_PhotonEnergyWatcher_Test.PEWatcherBasicFunction" />
     <SubObject Include="FB_SafeBPCompare_Test.BeamOffIsSafe" />
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />

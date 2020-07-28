@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_StopperWatcher" Id="{a8ba1c9e-0ec9-4e64-9a98-24aa43e040d0}" SpecialFunc="None">
+    <Declaration><![CDATA[// Relays stopper state and sends a message when stopper state changes.
+FUNCTION_BLOCK FB_StopperWatcher
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	stCurrentBP : ST_BeamParams;
+END_VAR
+VAR
+    i_StopperOutLS AT %I* : BOOL;
+    i_StopperInLS AT %I* : BOOL;
+
+    q_StopperOUT_Relay AT %Q* : BOOL;
+    q_StopperIN_Relay AT %Q* : BOOL;
+
+    Stopper : UINT;
+    StopperName : STRING;
+
+    // Logging
+    fbLogMsg : FB_LogMessage := (
+        eSubSystem := E_Subsystem.MPS);
+
+    rtIn : R_TRIG;
+    rtOut : R_TRIG;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+rtIn(CLK := i_StopperInLS);
+rtOut(CLK := i_StopperOutLS);
+
+IF rtIn.Q THEN
+    fbLogMsg.sMsg := CONCAT(StopperName, ' moved IN');
+    fbLogMsg();
+ELSIF rtOut.Q THEN
+    fbLogMsg.sMsg := CONCAT(StopperName, ' moved OUT');
+    fbLogMsg();
+END_IF
+
+q_StopperOUT_Relay := i_StopperOutLS;
+q_StopperIN_Relay := i_StopperInLS;
+
+// Update current beam parameters
+stCurrentBP.aStoppers[Stopper] := i_StopperInLS;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
