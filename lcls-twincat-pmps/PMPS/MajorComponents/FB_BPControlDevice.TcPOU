@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_BPControlDevice" Id="{c3303296-37d2-4688-9929-f388bfe14617}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Used to request a beam parameter set from EPICS.
+
+Technically just one of these is needed in the entire
+PMPS for a line.
+
+*)
+FUNCTION_BLOCK FB_BPControlDevice
+VAR_INPUT
+        (*  Requested pre-optic attenuation %  *)
+        {attribute 'pytmc' := 'pv: ReqBP:Transmission
+            io: o
+            field: EGU %
+        '}
+        nTran : UINT := 100;
+        (* Pulse-rate *)
+        {attribute 'pytmc' := 'pv: ReqBP:Rate
+            io: o
+            field: EGU Hz
+        '}
+        nRate : UDINT := 10;
+        (* Per pulse max energy (mJ) *)
+		// non-op
+        fPP_mJ : REAL := 20;
+        (* Photon energy ranges *)
+        {attribute 'pytmc' := 'pv: ReqBP:PhotonEnergyRanges
+            io: o
+            field: EGU eV'}
+        {attribute 'displaymode' := 'binary'}
+        neVRange : WORD := 65535;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+    Arbiter : FB_Arbiter;
+END_VAR
+VAR
+    EpicsReqBP : ST_BeamParams;
+    {attribute 'pytmc' := '
+        pv: ReqBP:Apply
+        io: o
+    '}
+    bApply : BOOL;
+
+    nControlDeviceID : DWORD;
+
+    rtApply : R_TRIG;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+EpicsReqBP.nTran := nTran;
+EpicsReqBP.neVRange := neVRange;
+EpicsReqBP.nRate := nRate;
+EpicsReqBP.fPP_mJ := fPP_mJ;
+
+rtApply(CLK:=bApply);
+IF rtApply.Q THEN
+    Arbiter.RemoveRequest(nControlDeviceID);
+    Arbiter.AddRequest(nControlDeviceID, EpicsReqBP);
+    bApply := FALSE;
+END_IF]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{d7dd8caa-2a9b-478e-8c53-254b06d26293}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nControlDeviceID:= nID;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

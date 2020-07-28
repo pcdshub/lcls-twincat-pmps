@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_eVSimulator" Id="{fb6d6dd1-5362-48f0-8f42-6dd4698772cb}" SpecialFunc="None">
+    <Declaration><![CDATA[(* eV Simulator
+A. Wallace 2019-8-30
+
+Adds noise to the eV and changes eV position occasionally.
+*)
+FUNCTION_BLOCK FB_eVSimulator
+VAR_INPUT
+    NoiseLevel	:	REAL	:= 0; // eV Noise
+    ChangeTime : TIME := T#10S;
+END_VAR
+VAR_OUTPUT
+    eV	:	REAL := 300;
+END_VAR
+VAR
+    eVRange : REAL := 1600;
+    timer: TON;
+    eVRand	:	DRAND :=(Seed:=0);
+    NoiseRand : DRAND := (Seed:=0);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+timer(in:=TRUE, PT:=ChangeTime);
+
+//Occasionally change eV
+IF timer.Q THEN
+    timer(in:=FALSE);
+    eVRand();
+    eV := LIMIT(0, eVRange*LREAL_TO_REAL(eVRand.Num), eVRange);
+END_IF
+
+// Noise generation
+NoiseRand();
+eV := eV + NoiseLevel*LREAL_TO_REAL(NoiseRand.Num);
+NoiseRand();
+eV := LIMIT(0, ev - NoiseLevel*LREAL_TO_REAL(NoiseRand.Num), eVRange);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
