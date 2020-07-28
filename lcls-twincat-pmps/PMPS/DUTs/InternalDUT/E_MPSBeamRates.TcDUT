@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="E_MPSBeamRates" Id="{881a4a25-f3c4-470c-8758-d4dffb0d9f39}">
+    <Declaration><![CDATA[
+TYPE E_MPSBeamRates :
+(
+	MPSRateInvalid            :=  0,
+    MPSRate0Hz                :=  1,
+    (* Previously used 2 and 3 for single shot and burst *)
+    MPSRate1Hz                :=  4,
+    MPSRate10Hz               :=  5,
+    MPSRate30Hz               :=  6,
+    MPSRate60Hz               :=  7,
+    MPSRate120Hz              :=  8,
+    MPSRateUnknown            :=  9,
+    MPSRateSingleShot         := 10,
+    MPSRateBurstMode          := 11,
+    MPSRateBurstModeNotActive := 12,
+    MPSNumberOfBeamRates      := 13,
+    MPSRateBurstInvalid       := 14
+)UINT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

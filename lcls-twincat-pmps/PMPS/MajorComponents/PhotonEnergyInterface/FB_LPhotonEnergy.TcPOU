@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_LPhotonEnergy" Id="{bdcefa0d-d4a1-4d69-beca-093e09b6a2b2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LPhotonEnergy
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	BP : ST_BeamParams;
+END_VAR
+VAR
+	{attribute 'pytmc' := '
+        pv: eEnrg
+        link: BEND:DMPH:400:BACT
+        field: EGU GeV
+    '}
+    fbHgvpuElectronEnergy : FB_LREALFromEPICS;
+	
+	{attribute 'pytmc' := '
+        pv: UND
+        link: USEG:UNDH:
+    '}
+    fbHgvpu : FB_Hgvpu;
+	
+	nCurrentPhotonEnergyBitmask : UINT;
+	nTargetPhotonEnergyBitmask : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Update PVs
+fbHgvpuElectronEnergy();
+
+fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
+
+//Update BP
+nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(fbHgvpu.fCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
+nTargetPhotonEnergyBitmask := F_eVRangeCalculator(fbHgvpu.fTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
+
+BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_LPhotonEnergy">
+      <LineId Id="26" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="27" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -28,6 +28,9 @@
     <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\K_Apertures.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -132,6 +135,27 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_Hgvpu.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_LPhotonEnergy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorSegment.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\F_CalculatePhotonEnergy.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\Arbiter\FB_Arbiter.TcPOU">
@@ -239,6 +263,7 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="HelperFunctions\TypeTranslators" />
     <Folder Include="MajorComponents" />
+    <Folder Include="MajorComponents\PhotonEnergyInterface" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
     <Folder Include="MajorComponents\FastFaults" />

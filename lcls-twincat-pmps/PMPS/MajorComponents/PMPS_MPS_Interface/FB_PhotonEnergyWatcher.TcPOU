@@ -40,7 +40,8 @@ VAR
         i_TypeCode := 7 );
         
    {attribute 'pytmc' := '
-        pv: eVResidual
+        pv: ResidualPhotonEnergies
+		io: i
         archive: 1Hz monitor
         field: DESC Portions of beam eV not permitted
         field: EGU eV-bitmask
@@ -58,5 +59,9 @@ fbFF(i_xOK := xPhotonEnergyWithinBounds,
     io_fbFFHWO := io_fbFFHWO);
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_PhotonEnergyWatcher">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

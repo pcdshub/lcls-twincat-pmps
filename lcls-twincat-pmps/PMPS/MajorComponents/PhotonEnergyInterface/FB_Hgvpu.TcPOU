@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_Hgvpu" Id="{8947838d-e4b5-4cb8-b661-9299e64a0856}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Hgvpu
+VAR_INPUT
+    fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+END_VAR
+
+VAR_OUTPUT
+	{attribute 'pytmc' := '
+        pv: CurrentPhotonEnergy
+		io: i
+        field: DESC Calculated current photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+	fCurrentPhotonEnergy : LREAL;
+	{attribute 'pytmc' := '
+        pv: TargetPhotonEnergy
+		io: i
+        field: DESC Calculated desired photon energy
+        field: PREC 3
+        field: EGU eV
+    '}
+	fTargetPhotonEnergy : LREAL;
+	    {attribute 'pytmc' := '
+        pv: SeedUndulatorNumber
+		io: i
+        field: DESC Seed undulator number
+    '}
+	nSeedUndulator : UDINT; // Set to zero when no undulators are active
+END_VAR
+
+
+VAR
+    // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/ioc-undh-uc*/iocInfo/IOC.pvlist |sort
+
+    {attribute 'pytmc' := 'pv: 24; link: 2450:'}
+    fbSegment_24 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 25; link: 2550:'}
+    fbSegment_25 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 26; link: 2650:'}
+    fbSegment_26 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 27; link: 2750:'}
+    fbSegment_27 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 29; link: 2950:'}
+    fbSegment_29 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 30; link: 3050:'}
+    fbSegment_30 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 31; link: 3150:'}
+    fbSegment_31 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 32; link: 3250:'}
+    fbSegment_32 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 33; link: 3350:'}
+    fbSegment_33 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 34; link: 3450:'}
+    fbSegment_34 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 35; link: 3550:'}
+    fbSegment_35 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 36; link: 3650:'}
+    fbSegment_36 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 37; link: 3750:'}
+    fbSegment_37 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 38; link: 3850:'}
+    fbSegment_38 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 39; link: 3950:'}
+    fbSegment_39 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 40; link: 4050:'}
+    fbSegment_40 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 41; link: 4150:'}
+    fbSegment_41 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 42; link: 4250:'}
+    fbSegment_42 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 43; link: 4350:'}
+    fbSegment_43 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 44; link: 4450:'}
+    fbSegment_44 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 45; link: 4550:'}
+    fbSegment_45 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 46; link: 4650:'}
+    fbSegment_46 : FB_UndulatorSegment;
+
+    fbSegment : ARRAY [iLowBound..iHighBound] OF POINTER TO FB_UndulatorSegment;
+    fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
+
+    iIndex : UDINT;
+
+    bInitialized : BOOL := FALSE;
+
+END_VAR
+
+VAR CONSTANT
+    {attribute 'pytmc' := 'pv: FirstSegment; io: i'}
+    iLowBound  : UDINT := 24;
+    {attribute 'pytmc' := 'pv: LastSegment; io: i'}
+    iHighBound : UDINT := 46;
+    {attribute 'pytmc' := '
+        pv: Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm : LREAL := 26.0;
+	{attribute 'pytmc' := '
+        pv: LowK
+        io: i
+    '}
+	fLowK : LREAL := 0.54;
+	{attribute 'pytmc' := '
+        pv: HiK
+        io: i
+    '}
+	fHiK : LREAL := 2.5;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bInitialized THEN
+	Init();
+END_IF
+
+UndAdrUpdate();
+
+nSeedUndulator := 0;
+
+FOR iIndex := iLowBound TO iHighBound DO
+    IF fbSegment[iIndex] <> 0 THEN
+        fbCurrentSegment REF= fbSegment[iIndex]^;
+        fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+		
+		//Mark the seed undulator, first undulator operating within K bounds
+		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
+			nSeedUndulator := iIndex;
+			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
+		END_IF
+    END_IF
+END_FOR
+
+IF nSeedUndulator = 0 THEN
+	fCurrentPhotonEnergy := 0;
+	fTargetPhotonEnergy := 0;
+END_IF
+]]></ST>
+    </Implementation>
+    <Action Name="Init" Id="{944ed9cd-7f79-48c1-9c30-2a05b49f992a}">
+      <Implementation>
+        <ST><![CDATA[
+UndAdrUpdate();
+
+
+    FOR iIndex := iLowBound TO iHighBound DO
+            IF fbSegment[iIndex] <> 0 THEN
+            fbCurrentSegment REF= fbSegment[iIndex]^;
+            fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+			fbCurrentSegment.fLowK := fLowK;
+			fbCurrentSegment.fHiK := fHiK;
+        END_IF
+    END_FOR
+
+    bInitialized := TRUE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="UndAdrUpdate" Id="{16a3b724-bfc0-464d-94c1-29be51ee924d}">
+      <Implementation>
+        <ST><![CDATA[    fbSegment[24] := ADR(fbSegment_24);
+    fbSegment[25] := ADR(fbSegment_25);
+    fbSegment[26] := ADR(fbSegment_26);
+    fbSegment[27] := ADR(fbSegment_27);
+    fbSegment[28] := 0;
+    fbSegment[29] := ADR(fbSegment_29);
+    fbSegment[30] := ADR(fbSegment_30);
+    fbSegment[31] := ADR(fbSegment_31);
+    fbSegment[32] := ADR(fbSegment_32);
+    fbSegment[33] := ADR(fbSegment_33);
+    fbSegment[34] := ADR(fbSegment_34);
+    fbSegment[35] := ADR(fbSegment_35);
+    fbSegment[36] := ADR(fbSegment_36);
+    fbSegment[37] := ADR(fbSegment_37);
+    fbSegment[38] := ADR(fbSegment_38);
+    fbSegment[39] := ADR(fbSegment_39);
+    fbSegment[40] := ADR(fbSegment_40);
+    fbSegment[41] := ADR(fbSegment_41);
+    fbSegment[42] := ADR(fbSegment_42);
+    fbSegment[43] := ADR(fbSegment_43);
+    fbSegment[44] := ADR(fbSegment_44);
+    fbSegment[45] := ADR(fbSegment_45);
+    fbSegment[46] := ADR(fbSegment_46);]]></ST>
+      </Implementation>
+    </Action>
+    <LineIds Name="FB_Hgvpu">
+      <LineId Id="3" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="204" Count="1" />
+      <LineId Id="170" Count="1" />
+      <LineId Id="39" Count="4" />
+      <LineId Id="149" Count="2" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Hgvpu.Init">
+      <LineId Id="2" Count="0" />
+      <LineId Id="25" Count="6" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Hgvpu.UndAdrUpdate">
+      <LineId Id="2" Count="21" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
