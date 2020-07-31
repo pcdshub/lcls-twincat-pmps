@@ -44,7 +44,10 @@ VAR
     xEntry : BOOL;
     rTransition : R_TRIG;
     xNewTarget : BOOL;
-    
+	
+	bTransAssertionFailed : BOOL;
+    bFinalAssertionFailed : BOOL;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -81,7 +84,7 @@ CASE eBPTMState OF
         END_IF
             
     WaitingForTransitionAssertion:
-        IF xEntry THEN
+        IF xEntry OR bTransAssertionFailed THEN
             AssertTransitionBP();
         ELSIF xTranBP THEN
             WaitingForTransitionAssertion_EXIT();
@@ -91,7 +94,7 @@ CASE eBPTMState OF
         END_IF
         
     WaitingForFinalAssertion:
-        IF xEntry THEN
+        IF xEntry OR bFinalAssertionFailed THEN
             AssertFinalBP();
         ELSIF xFinalBP THEN
             WaitingForFinalAssertion_EXIT();
@@ -134,19 +137,21 @@ current or target state beam parameters
 fbArbiter.RemoveRequest( nCurrentAssertionID );
 
 //Asserting target parameters
-fbArbiter.AddRequest(
+bFinalAssertionFailed := NOT fbArbiter.AddRequest(
     nTargetAssertionID,
     stTargetAssertion
 );
 
 //Remembering final assertionID for removal later
-nCurrentAssertionID := nTargetAssertionID;]]></ST>
+IF NOT bFinalAssertionFailed THEN
+	nCurrentAssertionID := nTargetAssertionID;
+END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="AssertTransitionBP" Id="{b83a9501-a83d-470d-a69e-33ae3b34fe7a}">
       <Implementation>
         <ST><![CDATA[
-fbArbiter.AddRequest(
+bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_TransitionAssertionID,
     i_stTransitionAssertion
 );
