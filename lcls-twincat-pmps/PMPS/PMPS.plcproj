@@ -88,6 +88,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\PMPS_TOOLS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="HelperFunctions\F_DifferentBeamParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -111,6 +115,9 @@
     <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\F_PMPS_JSON.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">
       <SubType>Code</SubType>

@@ -19,6 +19,9 @@ VAR
 
     Stopper : UINT;
     StopperName : STRING;
+	{attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
 
     // Logging
     fbLogMsg : FB_LogMessage := (
@@ -27,10 +30,16 @@ VAR
     rtIn : R_TRIG;
     rtOut : R_TRIG;
 
+	bInit: BOOL := TRUE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[IF bInit THEN
+	fbLogMsg.sJson := F_PMPS_JSON(StopperName, sPath, 1000);
+	bInit := FALSE;
+END_IF
+
+
 rtIn(CLK := i_StopperInLS);
 rtOut(CLK := i_StopperOutLS);
 
