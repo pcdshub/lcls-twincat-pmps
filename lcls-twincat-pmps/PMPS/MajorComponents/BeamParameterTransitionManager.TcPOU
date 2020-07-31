@@ -111,6 +111,8 @@ CASE eBPTMState OF
     CleaningUp:
         IF xEntry THEN
             RemoveTransitionAssertion();
+		ELSE
+			eBPTMState := E_BPTMState.Idle;
 		END_IF
 END_CASE
 
