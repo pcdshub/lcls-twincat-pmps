@@ -53,6 +53,8 @@ ELSIF BP.nRate >= 10 THEN
     nBeamClass := BC_10HZ;
 ELSIF BP.nRate >= 1 THEN
     nBeamClass := BC_1HZ;
+ELSE
+	nBeamClass := 0;
 END_IF
 
 
