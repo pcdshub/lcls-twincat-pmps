@@ -63,6 +63,8 @@ VAR
         field: DESC True if this arbiter's req is included
      '}
     xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations
+	
+	nEntryCount : UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -98,13 +100,17 @@ IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
 END_IF
     
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
-    fbLog(sMsg:='Addition to arbiter assertion pool failed',
+    fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Addition to arbiter assertion pool failed'),
             eSevr:=TcEventSeverity.Warning,
             eSubsystem:=E_Subsystem.MPS);
+ELSIF THIS^.fbBPAssertionPool.bOk THEN
+	(*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Added to pool'),
+            eSevr:=TcEventSeverity.Verbose,
+            eSubsystem:=E_Subsystem.MPS);*)
 END_IF
 
 // With any new request reset the internal arbiter "done" flag
-xRequestMade := FALSE;
+xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
 AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
       </Implementation>
@@ -199,7 +205,7 @@ CheckRequestInPool := THIS^.fbBPAssertionPool.bOk;]]></ST>
 // Elevates the arbitrated BP set to something above.
 // Could be another arbiter, or a BP requester/ IO, 
 // or an FB that locks in a specific portion of the BP set.
-METHOD INTERNAL ElevateRequest : BOOL 
+METHOD ElevateRequest : BOOL 
 VAR_INPUT
     HigherAuthority : I_HigherAuthority;
 END_VAR
@@ -312,6 +318,11 @@ GetArbitratedBP := stOutputBP;
 
 GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;
 
+fbBPAssertionPool.A_Count();
+IF fbBPAssertionPool.bOk THEN
+	nEntryCount := fbBPAssertionPool.nCount ;
+END_IF
+
 xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
@@ -321,20 +332,26 @@ METHOD RemoveRequest : BOOL
 VAR_INPUT
     nReqId    :    DWORD;
 END_VAR
-]]></Declaration>
+VAR_INST
+    fbLog : FB_LogMessage;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
     
     IF THIS^.fbBPAssertionPool.bOk THEN
-        ;
+        	(*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Removed from pool'),
+            eSevr:=TcEventSeverity.Verbose,
+            eSubsystem:=E_Subsystem.MPS);*)
     ELSE
-        ;
+        (*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Failed to remove from pool'),
+            eSevr:=TcEventSeverity.Warning,
+            eSubsystem:=E_Subsystem.MPS);*)
     END_IF
 END_IF
 
 // With any new request reset the internal arbiter "done" flag
-xRequestMade := FALSE;
+xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
 RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
       </Implementation>
