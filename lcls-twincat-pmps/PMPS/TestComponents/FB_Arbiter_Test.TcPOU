@@ -253,5 +253,33 @@ AssertFalse(fbArbiter.CheckRequest(nId),
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="StackArbiters" Id="{5b162f4a-6e36-4555-a86c-acebabc10d57}">
+      <Declaration><![CDATA[METHOD StackArbiters
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (nTran:=12);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    fbHigherArb : FB_Arbiter(2);
+
+    Cycle : INT := 0;
+    
+    CycleLimit : INT := 20;
+    
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbArbiter.ElevateRequest(fbHigherArb);
+
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
