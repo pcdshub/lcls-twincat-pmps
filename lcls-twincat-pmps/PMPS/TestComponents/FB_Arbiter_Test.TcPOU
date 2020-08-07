@@ -13,7 +13,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[Arbitration();
 RequestCheckRemoveBP();
-FullArbitrationStack();]]></ST>
+FullArbitrationStack();
+StackArbiters();]]></ST>
     </Implementation>
     <Method Name="Arbitration" Id="{c3caf704-ac1c-41da-98d7-fd2af820601b}">
       <Declaration><![CDATA[METHOD Arbitration
@@ -265,6 +266,8 @@ VAR_INST
     fbArbiter    :    FB_Arbiter(1);
     
     fbHigherArb : FB_Arbiter(2);
+	
+	ArbBP : ST_BeamParams;
 
     Cycle : INT := 0;
     
@@ -276,8 +279,17 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbArbiter.ElevateRequest(fbHigherArb);
+        <ST><![CDATA[
+TEST('StackingArbiters');
+fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq);
 
+fbArbiter.ElevateRequest(fbHigherArb);
+
+ArbBP := fbHigherArb.GetArbitratedBP();
+
+AssertTrue(ArbBP.nTran = 12, 'We should see the transmission number here');
+
+TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>

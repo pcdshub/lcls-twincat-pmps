@@ -92,8 +92,8 @@ CheckRequest := nRequestCohort <= nActiveCohort;]]></ST>
     <Method Name="RemoveRequest" Id="{d73fcee0-bda0-40f1-90f5-f8e021f35983}">
       <Declaration><![CDATA[METHOD RemoveRequest : BOOL
 VAR_INPUT
-END_VAR
-]]></Declaration>
+	nReqID    :    DWORD; //StateID to remove
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
       </Implementation>

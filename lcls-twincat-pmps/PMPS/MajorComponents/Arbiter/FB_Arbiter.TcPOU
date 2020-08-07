@@ -217,7 +217,7 @@ This method should only be used with one higher level component.
 *)
 
 IF NOT xRequestMade THEN
-	HigherAuthority.RemoveBP(nReqID:= nArbiterID);
+	HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
     xRequestMade := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
     xActiveInArbitration := FALSE;
 END_IF

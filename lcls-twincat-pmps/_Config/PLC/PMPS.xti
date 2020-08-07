@@ -21,7 +21,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{12553481-002F-4F4E-A6CC-B95AC65F55FF}" Name="PMPS" PrjFilePath="..\..\PMPS\PMPS.plcproj" TmcFilePath="..\..\PMPS\PMPS.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Library\Library.tmc">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="PMPS\PMPS.tmc">
 			<Name>PMPS Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">

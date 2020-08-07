@@ -10,8 +10,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Method Name="RemoveBP" Id="{b1106367-19fe-4d3d-86ca-02340ce0c1d7}">
-      <Declaration><![CDATA[METHOD RemoveBP : BOOL
+    <Method Name="RemoveRequest" Id="{b1106367-19fe-4d3d-86ca-02340ce0c1d7}">
+      <Declaration><![CDATA[METHOD RemoveRequest : BOOL
 VAR_INPUT
 	nReqID    :    DWORD; //StateID to remove
 END_VAR
