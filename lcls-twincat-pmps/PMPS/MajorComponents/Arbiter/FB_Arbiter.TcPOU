@@ -80,6 +80,9 @@ VAR_INPUT
     nReqID    :    DWORD; // Unique ID within aribter for the request. Make sure this is unique for every device + state combination
     stReqBP        :    ST_BeamParams; //Requested beam params
 END_VAR
+VAR
+	BP_Int : ST_BP_ArbInternal;
+END_VAR
 VAR_INST
     fbLog : FB_LogMessage;
 END_VAR
@@ -94,10 +97,14 @@ END_IF
 
 IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
     stReqBP.nCohortInt := nArbiterCohort; // Set the cohort number for this BP request.
-    
+	
+	// Pack the ID with the request
+    MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
+	BP_Int.nId := nReqID;
+	
     THIS^.fbBPAssertionPool.A_Add(
         key := nReqID,
-        putValue := stReqBP
+        putValue := BP_Int
     );
 END_IF
     
@@ -252,8 +259,10 @@ VAR_INPUT
 END_VAR
 VAR
     getPosPtr    : POINTER TO T_HashTableEntry := 0;
-    getBPStruct    :    ST_BeamParams;
+    getBPStructInt    :    ST_BP_ArbInternal;
     
+	getBPStruct : ST_BeamParams; // stripped of ID
+	
     stOutputBP    :    ST_BeamParams; //Holding struct for arbitration process
 END_VAR
 VAR_INST
@@ -275,21 +284,22 @@ all asserters.
 
 *)
 
-THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStruct );
+THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
 IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
     
     //The first entry in the hash table is taken as the setting to arbitrate against
     stOutputBP := F_SetBeamParams(
-        nTran := getBPStruct.nTran,
-        astAuxAtt := getBPStruct.astAttenuators,
-        fPP_mJ := getBPStruct.fPP_mJ,
-        neVRange    := getBPStruct.neVRange,
-        nRate := getBPStruct.nRate
+        nTran := getBPStructInt.nTran,
+        astAuxAtt := getBPStructInt.astAttenuators,
+        fPP_mJ := getBPStructInt.fPP_mJ,
+        neVRange    := getBPStructInt.neVRange,
+        nRate := getBPStructInt.nRate
     );
 
     REPEAT
-        THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStruct );
+        THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
         IF THIS^.fbBPAssertionPool.bOk THEN
+			MEMCPY(ADR(getBPStruct), ADR(getBPStructInt), SIZEOF(getBPStruct));
             stOutputBP := ArbitrateBP(stOutputBP, getBPStruct);
         END_IF
     UNTIL NOT fbBPAssertionPool.bOk
