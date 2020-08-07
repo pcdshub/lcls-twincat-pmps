@@ -64,6 +64,8 @@ VAR
      '}
     xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations
 	
+	rtActiveInArbitration : R_TRIG;
+	
 	nEntryCount : UDINT;
 END_VAR
 ]]></Declaration>
@@ -104,9 +106,9 @@ IF NOT THIS^.fbBPAssertionPool.bOk THEN
             eSevr:=TcEventSeverity.Warning,
             eSubsystem:=E_Subsystem.MPS);
 ELSIF THIS^.fbBPAssertionPool.bOk THEN
-	(*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Added to pool'),
+	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Added to pool'),
             eSevr:=TcEventSeverity.Verbose,
-            eSubsystem:=E_Subsystem.MPS);*)
+            eSubsystem:=E_Subsystem.MPS);
 END_IF
 
 // With any new request reset the internal arbiter "done" flag
@@ -180,8 +182,7 @@ BP := fbBPAssertionPool.getValue;
 // Is the Aribter itself active in arbitration?
 CheckRequest := fbBPAssertionPool.bOk AND 
                 BP.nCohortInt < nArbiterCohort AND
-                BP.nCohortInt > 0 AND 
-                xActiveInArbitration;
+                BP.nCohortInt > 0;
 ]]></ST>
       </Implementation>
     </Method>
@@ -216,13 +217,17 @@ This method should only be used with one higher level component.
 *)
 
 IF NOT xRequestMade THEN
+	HigherAuthority.RemoveBP(nReqID:= nArbiterID);
     xRequestMade := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
     xActiveInArbitration := FALSE;
 END_IF
 
-IF HigherAuthority.CheckRequest(nReqID := nArbiterID) AND NOT xActiveInArbitration THEN // Check request must verify the ID is present and accounted for in arbitration
+
+xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
+rtActiveInArbitration(CLK:=xActiveInArbitration);
+
+IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
     nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
-    xActiveInArbitration := TRUE;
 END_IF
 ]]></ST>
       </Implementation>

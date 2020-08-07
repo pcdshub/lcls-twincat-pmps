@@ -89,6 +89,15 @@ nActiveCohort := ULINT_TO_UDINT(i_stCurrentBP.nCohortInt);
 CheckRequest := nRequestCohort <= nActiveCohort;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="RemoveRequest" Id="{d73fcee0-bda0-40f1-90f5-f8e021f35983}">
+      <Declaration><![CDATA[METHOD RemoveRequest : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">
       <Declaration><![CDATA[METHOD RequestBP : BOOL
 VAR_INPUT
