@@ -345,13 +345,13 @@ END_VAR]]></Declaration>
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
     
     IF THIS^.fbBPAssertionPool.bOk THEN
-        	(*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Removed from pool'),
+        	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Removed from pool'),
             eSevr:=TcEventSeverity.Verbose,
-            eSubsystem:=E_Subsystem.MPS);*)
+            eSubsystem:=E_Subsystem.MPS);
     ELSE
-        (*fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Failed to remove from pool'),
+        fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Failed to remove from pool'),
             eSevr:=TcEventSeverity.Warning,
-            eSubsystem:=E_Subsystem.MPS);*)
+            eSubsystem:=E_Subsystem.MPS);
     END_IF
 END_IF
 

@@ -84,6 +84,9 @@ END_VAR
 VAR   
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
+	
+	nIdDoS : DWORD := 13;
+	stDoSReq : ST_BeamParams := PMPS_GVL.cstFullBeam;
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);

@@ -342,7 +342,7 @@
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="LCLS General,newest,SLAC">
+    <LibraryReference Include="LCLS General,0.0.0,SLAC">
       <Namespace>LCLS_General</Namespace>
       <HideWhenReferencedAsDependency>true</HideWhenReferencedAsDependency>
     </LibraryReference>
