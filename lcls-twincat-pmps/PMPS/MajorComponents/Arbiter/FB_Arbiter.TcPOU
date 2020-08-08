@@ -133,7 +133,7 @@ AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
       <Declaration><![CDATA[// Kernel of the arbiter
 // Logic for determining which beam parameter is the most conservative across all request sets.
-METHOD INTERNAL ArbitrateBP : ST_BeamParams
+METHOD INTERNAL ArbitrateBP : ST_BP_ArbInternal
 VAR_INPUT
     stBP1    :    ST_BP_ArbInternal;
     stBP2    :    ST_BP_ArbInternal;
@@ -291,13 +291,7 @@ THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getVal
 IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
     
     //The first entry in the hash table is taken as the setting to arbitrate against
-    stOutputBP := F_SetBeamParams(
-        nTran := getBPStructInt.nTran,
-        astAuxAtt := getBPStructInt.astAttenuators,
-        fPP_mJ := getBPStructInt.fPP_mJ,
-        neVRange    := getBPStructInt.neVRange,
-        nRate := getBPStructInt.nRate
-    );
+    stOutputBP := getBPStructInt;
 
     REPEAT
         THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
@@ -308,7 +302,7 @@ IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are lef
     END_REPEAT
 ELSE
     //Full beam if there are no arbitration requests
-    stOutputBP := PMPS_GVL.cstFullBeam;
+    MEMCPY(ADR(stOutputBP), ADR(PMPS_GVL.cstFullBeam), SIZEOF(PMPS_GVL.cstFullBeam));
 END_IF
 
 MEMCPY(ADR(q_stBeamParams),ADR(stOutputBP), SIZEOF(q_stBeamParams)); 

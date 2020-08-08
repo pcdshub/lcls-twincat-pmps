@@ -107,7 +107,7 @@
 			</SubItem>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{2F7F879E-70BA-412F-A719-FB0D9E9036EF}" TargetNetId="172.21.148.227.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="5.40.55.128.1.1" ShowHideConfigurations="#x106">
 		<System>
 			<Licenses>
 				<Target>
