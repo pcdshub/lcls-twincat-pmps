@@ -67,6 +67,11 @@ VAR
 	rtActiveInArbitration : R_TRIG;
 	
 	nEntryCount : UDINT;
+	
+	// The following IDs are set by the last BP request that was most conservative
+	// ie. other requests may limit the parameter, but this one is the most recent to limit it
+	idTransmission : DWORD; // ID of BP limiting transmission
+	idRate : DWORD; // ID of BP limiting rate
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -101,6 +106,7 @@ IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
 	// Pack the ID with the request
     MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
 	BP_Int.nId := nReqID;
+	BP_Int.LiveInTable := TRUE;
 	
     THIS^.fbBPAssertionPool.A_Add(
         key := nReqID,
@@ -129,8 +135,8 @@ AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
 // Logic for determining which beam parameter is the most conservative across all request sets.
 METHOD INTERNAL ArbitrateBP : ST_BeamParams
 VAR_INPUT
-    stBP1    :    ST_BeamParams;
-    stBP2    :    ST_BeamParams;
+    stBP1    :    ST_BP_ArbInternal;
+    stBP2    :    ST_BP_ArbInternal;
 END_VAR
 VAR
     idx : UINT := 1;
@@ -260,10 +266,7 @@ END_VAR
 VAR
     getPosPtr    : POINTER TO T_HashTableEntry := 0;
     getBPStructInt    :    ST_BP_ArbInternal;
-    
-	getBPStruct : ST_BeamParams; // stripped of ID
-	
-    stOutputBP    :    ST_BeamParams; //Holding struct for arbitration process
+	stOutputBP    :    ST_BP_ArbInternal; //Holding struct for arbitration process
 END_VAR
 VAR_INST
     xFirstPass : BOOL := TRUE;
@@ -299,8 +302,7 @@ IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are lef
     REPEAT
         THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
         IF THIS^.fbBPAssertionPool.bOk THEN
-			MEMCPY(ADR(getBPStruct), ADR(getBPStructInt), SIZEOF(getBPStruct));
-            stOutputBP := ArbitrateBP(stOutputBP, getBPStruct);
+            stOutputBP := ArbitrateBP(stOutputBP, getBPStructInt);
         END_IF
     UNTIL NOT fbBPAssertionPool.bOk
     END_REPEAT
@@ -308,26 +310,8 @@ ELSE
     //Full beam if there are no arbitration requests
     stOutputBP := PMPS_GVL.cstFullBeam;
 END_IF
-(*
-stOutputBP.AckInt := stOutputBP.AckInt + 1; // Arbitration cycle
 
-// Verify this function hasn't been run twice this cycle
-IF xFirstPass THEN
-    fbGetCurTaskIdx();
-END_IF
-
-IF LastCycleCount <> _TaskInfo[fbGetCurTaskIdx.index].CycleCount THEN
-    // Good
-    LastCycleCount := _TaskInfo[fbGetCurTaskIdx.index].CycleCount;
-ELSE
-    fbLogMessage(i_sMsg := 'GetArbitratedBP run more than once in a cycle.',
-        i_eSevr := E_MesgSevr.Error,
-        i_eSubsystem := E_Subsystem.MPS);
-END_IF
-*)
-
-
-q_stBeamParams := stOutputBP;
+MEMCPY(ADR(q_stBeamParams),ADR(stOutputBP), SIZEOF(q_stBeamParams)); 
 
 GetArbitratedBP := stOutputBP;
 
@@ -349,9 +333,18 @@ VAR_INPUT
 END_VAR
 VAR_INST
     fbLog : FB_LogMessage;
+END_VAR
+VAR CONSTANT
+	BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+	// Include an A_Add action here to
+	// update this entry with a dummy filler (ID = 0, LiveInTable= False)
+	// before removing it since this hash
+	// table needs to be viewed with a diagnostic
+	// and so the entries need to appear clean.
+	THIS^.fbBPAssertionPool.A_Add(key := nReqID, putValue := BP_Int);
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
     
     IF THIS^.fbBPAssertionPool.bOk THEN
