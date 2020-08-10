@@ -8,7 +8,8 @@
     WaitingForTransitionAssertion := 2,
     WaitingForFinalAssertion := 3,
     Transitioning := 4,
-    CleaningUp := 5
+    CleaningUp := 5,
+	Idle := 6
 );
 END_TYPE
 ]]></Declaration>

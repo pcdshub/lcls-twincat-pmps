@@ -101,7 +101,7 @@ VAR
     {attribute 'pytmc' := 'pv: 46; link: 4650:'}
     fbSegment_46 : FB_UndulatorSegment;
 
-    fbSegment : ARRAY [iLowBound..iHighBound] OF POINTER TO FB_UndulatorSegment;
+    fbSegment : ARRAY [PMPS_GVL.iLowBound_LUnd..PMPS_GVL.iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
     fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
 
     iIndex : UDINT;
@@ -111,26 +111,7 @@ VAR
 END_VAR
 
 VAR CONSTANT
-    {attribute 'pytmc' := 'pv: FirstSegment; io: i'}
-    iLowBound  : UDINT := 24;
-    {attribute 'pytmc' := 'pv: LastSegment; io: i'}
-    iHighBound : UDINT := 46;
-    {attribute 'pytmc' := '
-        pv: Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm : LREAL := 26.0;
-	{attribute 'pytmc' := '
-        pv: LowK
-        io: i
-    '}
-	fLowK : LREAL := 0.54;
-	{attribute 'pytmc' := '
-        pv: HiK
-        io: i
-    '}
-	fHiK : LREAL := 2.5;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -142,7 +123,7 @@ UndAdrUpdate();
 
 nSeedUndulator := 0;
 
-FOR iIndex := iLowBound TO iHighBound DO
+FOR iIndex := PMPS_GVL.iLowBound_LUnd TO PMPS_GVL.iHighBound_LUnd DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
@@ -168,12 +149,12 @@ END_IF
 UndAdrUpdate();
 
 
-    FOR iIndex := iLowBound TO iHighBound DO
+    FOR iIndex := PMPS_GVL.iLowBound_LUnd TO PMPS_GVL.iHighBound_LUnd DO
             IF fbSegment[iIndex] <> 0 THEN
             fbCurrentSegment REF= fbSegment[iIndex]^;
-            fbCurrentSegment.fPeriod_mm := fPeriod_mm;
-			fbCurrentSegment.fLowK := fLowK;
-			fbCurrentSegment.fHiK := fHiK;
+            fbCurrentSegment.fPeriod_mm := PMPS_GVL.fPeriod_mm_LUnd;
+			fbCurrentSegment.fLowK := PMPS_GVL.fLowK_LUnd;
+			fbCurrentSegment.fHiK := PMPS_GVL.fHiK_LUnd;
         END_IF
     END_FOR
 
@@ -207,34 +188,5 @@ UndAdrUpdate();
     fbSegment[46] := ADR(fbSegment_46);]]></ST>
       </Implementation>
     </Action>
-    <LineIds Name="FB_Hgvpu">
-      <LineId Id="3" Count="0" />
-      <LineId Id="37" Count="1" />
-      <LineId Id="204" Count="1" />
-      <LineId Id="170" Count="1" />
-      <LineId Id="39" Count="4" />
-      <LineId Id="149" Count="2" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="177" Count="1" />
-      <LineId Id="153" Count="0" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="179" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="180" Count="0" />
-      <LineId Id="182" Count="0" />
-      <LineId Id="181" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Hgvpu.Init">
-      <LineId Id="2" Count="0" />
-      <LineId Id="25" Count="6" />
-      <LineId Id="35" Count="1" />
-      <LineId Id="32" Count="2" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Hgvpu.UndAdrUpdate">
-      <LineId Id="2" Count="21" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

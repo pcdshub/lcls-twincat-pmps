@@ -6,12 +6,12 @@ FUNCTION_BLOCK FB_BeamParamAssertionPool
 VAR_INPUT
     key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
     putPosPtr    : POINTER TO T_HashTableEntry := 0;(* Hash table entry position pointer (used by A_Find, A_GetNext, A_GetPrev) *)
-    putValue     : ST_BeamParams;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
+    putValue     : ST_BP_ArbInternal;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
 END_VAR
 VAR_OUTPUT
     bOk            : BOOL := FALSE;(* TRUE = Success, FALSE = Failed *)
     getPosPtr    : POINTER TO T_HashTableEntry := 0;(* Returned hash table entry position pointer *)
-    getValue     : ST_BeamParams;(* Returned hash table entry value *)
+    getValue     : ST_BP_ArbInternal;(* Returned hash table entry value *)
     nCount        : UDINT := 0;(* Hash table size (number of used entries, used by A_Count) *)
 END_VAR
 VAR
@@ -19,7 +19,7 @@ VAR
         pv: Entry
         io: i
      '}
-    dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF ST_BeamParams;(* Structured data element pool *)
+    dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF ST_BP_ArbInternal;(* Structured data element pool *)
     {attribute 'pytmc' := '
         pv: Key
         io: i
@@ -27,7 +27,7 @@ VAR
     entries        : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
     fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
     hTable         : T_HHASHTABLE;(* hash table handle *)
-    pRefPtr        : POINTER TO ST_BeamParams := 0;
+    pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
     indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
 END_VAR
 ]]></Declaration>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_BPWithID" Id="{e3bfa99b-9d0a-4973-9793-594c4c68e1ba}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_BPWithID : ST_BP_ArbInternal
+VAR_INPUT
+	BP : REFERENCE TO ST_BeamParams;
+	ID : DWORD;
+END_VAR
+VAR
+	BpInt : ST_BP_ArbInternal;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[MEMCPY(ADR(F_BPWithID), ADR(BP), SIZEOF(BP));
+F_BPWithID.nId := ID;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

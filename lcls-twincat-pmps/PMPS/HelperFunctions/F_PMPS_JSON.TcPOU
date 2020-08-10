@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_PMPS_JSON" Id="{b8964841-9199-4a13-8d4e-26257c18b849}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_PMPS_JSON : STRING
+VAR_INPUT
+	sDevName : STRING := '';
+	sPath : STRING := '';
+	nTypeCode : UINT := 0;
+END_VAR
+VAR
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+PMPS_TOOLS.fbJson.StartObject();
+PMPS_TOOLS.fbJson.AddKey('pmps_typecode');
+PMPS_TOOLS.fbJson.AddUdint(nTypeCode);
+PMPS_TOOLS.fbJson.AddKey('pmps_path');
+PMPS_TOOLS.fbJson.AddString(sPath);
+PMPS_TOOLS.fbJson.AddKey('pmps_device_name');
+PMPS_TOOLS.fbJson.AddString(sDevName);
+PMPS_TOOLS.fbJson.EndObject();
+F_PMPS_JSON := PMPS_TOOLS.fbJson.GetDocument();
+PMPS_TOOLS.fbJson.ResetDocument();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

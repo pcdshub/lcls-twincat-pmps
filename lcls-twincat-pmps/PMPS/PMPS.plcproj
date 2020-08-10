@@ -43,6 +43,9 @@
     <Compile Include="DUTs\InternalDUT\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\ST_BP_ArbInternal.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\ST_FF.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +91,13 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\PMPS_TOOLS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\F_BPWithID.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_DifferentBeamParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -111,6 +121,9 @@
     <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="HelperFunctions\F_PMPS_JSON.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">
       <SubType>Code</SubType>
@@ -335,7 +348,7 @@
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="LCLS General,newest,SLAC">
+    <LibraryReference Include="LCLS General,0.0.0,SLAC">
       <Namespace>LCLS_General</Namespace>
       <HideWhenReferencedAsDependency>true</HideWhenReferencedAsDependency>
     </LibraryReference>
