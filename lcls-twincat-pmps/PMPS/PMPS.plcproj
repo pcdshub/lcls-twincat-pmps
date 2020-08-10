@@ -23,6 +23,18 @@
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
     <ProjectVersion>0.0.0</ProjectVersion>
+    <CompilerDefines>
+    </CompilerDefines>
+    <DeploymentEvents>
+      <Events xmlns="">
+        <Event>
+          <CommandType>Copy</CommandType>
+          <DeploymentType>ActivateConfiguration</DeploymentType>
+          <Command1 />
+          <Command2 />
+        </Event>
+      </Events>
+    </DeploymentEvents>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">

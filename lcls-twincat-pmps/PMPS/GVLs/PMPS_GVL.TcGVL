@@ -75,7 +75,9 @@ VAR_GLOBAL CONSTANT
         field: DESC eV Range hystersis
         field: EGU eV
     '}
-    reVHyst: REAL := 5; // 
+    reVHyst: REAL := 5; //
+    
+{IF defined (L)}
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeCnst
         archive: 1Hz monitor
@@ -100,7 +102,33 @@ VAR_GLOBAL CONSTANT
     24.8E3,
     25E3
 ];
-
+{END_IF}
+{IF defined (K)}
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)eVRangeCnst
+        archive: 1Hz monitor
+        field: DESC eV Range constants
+        field: EGU eV
+    '}
+    g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
+    250,
+    270,
+    400,
+    540,
+    850,
+    1.15E3,
+    1.25E3,
+    1.45E3,
+    1.55E3,
+    1.65E3,
+    1.75E3,
+    1.82E3,
+    2.0E3,
+    3.2E3,
+    5.0E3,
+    7.1E3
+];
+{END_IF}
 
 //////////////////////////
 // Undulator constants
