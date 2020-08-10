@@ -2,7 +2,7 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{12553481-002f-4f4e-a6cc-b95ac65f55ff}</ProjectGuid>
+    <ProjectGuid>{4a2ea28d-9787-4749-a702-72c51e7bbb9e}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
@@ -23,6 +23,18 @@
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
     <ProjectVersion>0.0.0</ProjectVersion>
+    <CompilerDefines>
+    </CompilerDefines>
+    <DeploymentEvents>
+      <Events xmlns="">
+        <Event>
+          <CommandType>Copy</CommandType>
+          <DeploymentType>ActivateConfiguration</DeploymentType>
+          <Command1 />
+          <Command2 />
+        </Event>
+      </Events>
+    </DeploymentEvents>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">
@@ -123,6 +135,9 @@
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="HelperFunctions\F_PMPS_JSON.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\PE_Ranges.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">

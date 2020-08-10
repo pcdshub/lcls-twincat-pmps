@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="F_eVWithinSpec" Id="{ad5603cd-deff-4556-b0bb-d0d6587d070e}" SpecialFunc="None">
     <Declaration><![CDATA[//reV must be within permitted range.
 FUNCTION F_eVWithinSpec : BOOL
@@ -14,6 +14,7 @@ VAR
     nIndex    :    INT;
     // Lower boundary for range check 
     rPreviousBoundary: REAL := 0;
+	Boundaries: ARRAY [0..PMPS_GVL.g_cBoundaries] OF REAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -26,17 +27,24 @@ below the boundary at the index position of the boundary array, and the previous
 Then, we stash the upper boundary as the lower boundary for the next comparison,
 and shift the holding register right, which moves the next bit to the zero position.
 *)
+
+{IF defined (L)}
+	Boundaries := PMPS_GVL.g_areVBoundariesL;
+{ELSIF defined (K)}
+	Boundaries := PMPS_GVL.g_areVBoundariesK;
+{END_IF}
+
 nPermittedRangeHolding := nPermittedRange;
 
 FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
         
     F_eVWithinSpec S= nPermittedRangeHolding.0 AND( 
-        (reV <= PMPS_GVL.g_areVBoundaries[nIndex]*1000) AND
-        (reV >= rPreviousBoundary*1000) );
+        (reV <= Boundaries[nIndex]) AND
+        (reV >= rPreviousBoundary) );
         
     IF F_eVWithinSpec THEN RETURN; END_IF
     
-    rPreviousBoundary := PMPS_GVL.g_areVBoundaries[nIndex];
+    rPreviousBoundary := Boundaries[nIndex];
     nPermittedRangeHolding := SHR(nPermittedRangeHolding, 1);
 END_FOR
 ]]></ST>
