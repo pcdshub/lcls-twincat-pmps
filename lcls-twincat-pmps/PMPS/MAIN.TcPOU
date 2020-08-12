@@ -10,6 +10,7 @@ VAR
     //fbPEWTest    :    FB_PhotonEnergyWatcher_Test;
     fbFFTest    :    FB_FastFault_Test;
     fbArbiterTest    :    FB_Arbiter_Test;
+	fbVetoArbiterTest : FB_VetoArbiter_Test;
     fbevRangeCalcTest : FB_evRangeCalculator_Test;
     fbSubSysToArbTest : FB_SubsysToArb_Test;
     fbArbToSubSysTest : FB_ArbToSubsys_Test;
