@@ -107,6 +107,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\FB_DummyHA.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_BPWithID.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -165,10 +168,16 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\Arbiter\FB_VetoArbiter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\FB_BPControlDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
@@ -261,6 +270,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_Arbiter_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_VetoArbiter_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_AttenuatorSimulator.TcPOU">

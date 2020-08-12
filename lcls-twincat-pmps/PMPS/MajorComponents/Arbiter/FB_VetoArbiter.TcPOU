@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_VetoArbiter" Id="{c3c91f40-d3bf-4445-afff-e5f72e704ac3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_VetoArbiter IMPLEMENTS I_HigherAuthority
+VAR_INPUT
+	bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
+	HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
+	LowerAuthority : I_LowerAuthority; // Lower authority to be vetoed
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	FFO : FB_HardwareFFOutput; // This should be the FFO upstream of the veto device
+END_VAR
+VAR
+	ffKeepItSecretKeepItSafe : FB_FastFault := (
+		i_xAutoReset := TRUE,
+		i_Desc := 'Holds beam off until request is back in arbitration',
+		i_TypeCode := 200,
+		i_xVetoable := TRUE
+	);
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF bVeto THEN
+	LowerAuthority.ElevateRequest(THIS^);
+ELSE
+	LowerAuthority.ElevateRequest(HigherAuthority);
+END_IF
+
+//Fast fault that holds beam off until the request is added back into the system
+// when bVeto goes false.
+ffKeepItSecretKeepItSafe.i_xOK := HigherAuthority.CheckRequest(LowerAuthority.nLowerAuthorityID) OR bVeto;
+ffKeepItSecretKeepItSafe(io_fbFFHWO:=FFO);
+]]></ST>
+    </Implementation>
+    <Method Name="CheckRequest" Id="{8542f884-22de-4d08-986f-1ea5e1ef3319}">
+      <Declaration><![CDATA[
+METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bVeto THEN
+	CheckRequest := TRUE;
+ELSE
+	CheckRequest := HigherAuthority.CheckRequest(nReqID);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveRequest" Id="{c64dfed1-7c7a-4598-861a-0c445d025399}">
+      <Declaration><![CDATA[
+METHOD RemoveRequest : BOOL
+VAR_INPUT
+	(*StateID to remove*)
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+HigherAuthority.RemoveRequest(nReqID);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{2865d873-c7e0-45e5-b830-5a750b9c89aa}">
+      <Declaration><![CDATA[METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bVeto THEN
+	HigherAuthority.RemoveRequest(nReqID);
+	RequestBP := TRUE;
+ELSE
+	// Pass request along to higher authority
+	RequestBP := HigherAuthority.RequestBP(nReqID, stReqBP);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

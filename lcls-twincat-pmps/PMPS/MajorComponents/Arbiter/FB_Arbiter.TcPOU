@@ -21,7 +21,7 @@ the hash table will tell you when you reach the end of all the entries, and enab
 These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
 *)
 
-FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority
+FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -319,6 +319,17 @@ END_IF
 xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="nLowerAuthorityID" Id="{1fc1fd51-255d-436a-8bc9-caa51a4c9d82}">
+      <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
+      <Get Name="Get" Id="{30bc21b7-6ca8-40ff-b8a0-c2f0cc071beb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nLowerAuthorityID := nArbiterID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="RemoveRequest" Id="{79807308-416c-48f2-9db0-385196c0e213}">
       <Declaration><![CDATA[(* Removes request from abritration. *)
 METHOD RemoveRequest : BOOL
