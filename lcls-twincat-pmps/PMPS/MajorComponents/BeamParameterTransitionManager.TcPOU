@@ -48,8 +48,13 @@ VAR
 	bTransAssertionFailed : BOOL;
     bFinalAssertionFailed : BOOL;
 	
+	LogStrBuffer : ARRAY [0..LogBuffSize] OF STRING;
+	LogBuffIdx : FB_Index := (LowerLimit:=0, UpperLimit:=LogBuffSize);
+	
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	LogBuffSize : INT := 40;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 // Execute exit actions before transition back to NewTarget
@@ -115,6 +120,7 @@ CASE eBPTMState OF
         IF xEntry THEN
             RemoveTransitionAssertion();
 		ELSE
+			LogActions('Returning to idle');
 			eBPTMState := E_BPTMState.Idle;
 		END_IF
 END_CASE
@@ -136,11 +142,16 @@ current or target state beam parameters
 *)
 fbArbiter.RemoveRequest( nCurrentAssertionID );
 
+LogActions(CONCAT('Removing final/current request: ', DWORD_TO_STRING(nCurrentAssertionID)) );
+LogActions(CONCAT('Asserting target req.: ', DWORD_TO_STRING(nTargetAssertionID)) );
+
 //Asserting target parameters
 bFinalAssertionFailed := NOT fbArbiter.AddRequest(
     nTargetAssertionID,
     stTargetAssertion
 );
+
+LogActions( LogStr:=CONCAT('Asserting final/target request worked: ', BOOL_TO_STRING(bFinalAssertionFailed)) );
 
 //Remembering final assertionID for removal later
 IF NOT bFinalAssertionFailed THEN
@@ -155,19 +166,33 @@ bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_TransitionAssertionID,
     i_stTransitionAssertion
 );
-    ]]></ST>
+
+LogActions( CONCAT('Assert trans. succ. ', BOOL_TO_STRING(bTransAssertionFailed)) );    ]]></ST>
       </Implementation>
     </Action>
     <Action Name="AuthorizeTransition" Id="{54c27c7d-d192-4622-86ba-b9bfdddeaf4c}">
       <Implementation>
-        <ST><![CDATA[q_xTransitionAuthorized := TRUE;]]></ST>
+        <ST><![CDATA[q_xTransitionAuthorized := TRUE;
+
+LogActions('Authorizing transition');]]></ST>
       </Implementation>
     </Action>
     <Action Name="DeauthorizeTransition" Id="{f0778326-a9fa-4efe-a8f9-c035d4f8f750}">
       <Implementation>
-        <ST><![CDATA[q_xTransitionAuthorized := FALSE;]]></ST>
+        <ST><![CDATA[q_xTransitionAuthorized := FALSE;
+LogActions('Deauthorizing transition');]]></ST>
       </Implementation>
     </Action>
+    <Method Name="LogActions" Id="{41e851fc-2139-47b9-addb-eed4474544fc}">
+      <Declaration><![CDATA[METHOD LogActions : BOOL
+VAR_INPUT
+	LogStr : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LogStrBuffer[LogBuffIdx.IncVal] := LogStr;]]></ST>
+      </Implementation>
+    </Method>
     <Action Name="NewTarget_ENTRY" Id="{74162cbe-7b3e-460c-acdc-81cb450d0fca}">
       <Implementation>
         <ST><![CDATA[xNewBP := False;]]></ST>
@@ -180,7 +205,7 @@ bTransAssertionFailed := NOT fbArbiter.AddRequest(
 //Removing transition assertion
 fbArbiter.RemoveRequest( i_TransitionAssertionID );
 
-
+LogActions('Removing transition req');
 
 //TODO add something to verify removal]]></ST>
       </Implementation>
@@ -192,6 +217,9 @@ fbArbiter.RemoveRequest( i_TransitionAssertionID );
     
     stTargetAssertion := i_stRequestedAssertion;
     nTargetAssertionID := i_nRequestedAssertionID;
+	
+	LogActions('New target set');
+	
     xNewBP := TRUE;
 END_IF
 ]]></ST>
