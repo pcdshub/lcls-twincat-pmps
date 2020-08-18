@@ -22,11 +22,16 @@ VAR_INPUT
     
     stCurrentBeamParameters    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Connect to current beam parameters
     
+    // Rising edge to cycle back through the BPTM process. Use if something in the process timed out or failed. This will interrupt a current process
+    bRetry : BOOL := FALSE; 
 END_VAR
 VAR_OUTPUT
 
     q_xTransitionAuthorized    :    BOOL := FALSE; //Rising edge indicating the device is safe to move, use as input to move execute (which requires a rising edge)
 
+    bError : BOOL; // Set if some issue occurs within the bptm
+    nErrId : INT; // Set to non-zero to help understand the error.
+    
 END_VAR
 
 VAR
@@ -50,15 +55,28 @@ VAR
 	
 	LogStrBuffer : ARRAY [0..LogBuffSize] OF STRING;
 	LogBuffIdx : FB_Index := (LowerLimit:=0, UpperLimit:=LogBuffSize);
+    
+    nAssrtAttempt : INT; // Number of times we have tried asserting a BP set
+    
+    rtRetry : R_TRIG;
 	
 END_VAR
 VAR CONSTANT
 	LogBuffSize : INT := 40;
+    cAssrtMax : INT := 3;
+    
+    BadTargetID : INT := 1001;
+    BadTransID : INT := 1002;
+    TransAssrtFail : INT := 2001;
+    FinalAssrtFail : INT := 3001;
+    
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+rtRetry(CLK:=bRetry);
+
 // Execute exit actions before transition back to NewTarget
-IF nTargetAssertionID <> i_nRequestedAssertionID THEN
+IF nTargetAssertionID <> i_nRequestedAssertionID OR rtRetry.Q THEN
     CASE eBPTMState OF
         //NewTarget:
         WaitingForTransitionAssertion:
@@ -70,12 +88,19 @@ IF nTargetAssertionID <> i_nRequestedAssertionID THEN
         //CleaningUp: 
 	END_CASE
     
+    bError := FALSE;
+    nErrID := 0;
+    
     eBPTMState := E_BPTMState.NewTarget;
     xEntry := eBPTMState <> ePrevState;
     
 END_IF
 
+IF xEntry THEN nAssrtAttempt := 0; END_IF
 
+IF bError THEN
+    eBPTMState := E_BPTMState.Error;
+END_IF
 
 // States
 CASE eBPTMState OF
@@ -151,7 +176,14 @@ bFinalAssertionFailed := NOT fbArbiter.AddRequest(
     stTargetAssertion
 );
 
-LogActions( LogStr:=CONCAT('Asserting final/target request worked: ', BOOL_TO_STRING(bFinalAssertionFailed)) );
+IF bTransAssertionFailed THEN
+    LogActions('Assert final failed. ');
+    nAssrtAttempt := nAssrtAttempt + 1;
+    IF nAssrtAttempt > cAssrtMax THEN
+        bError := TRUE;
+        nErrID := FinalAssrtFail;
+    END_IF    
+END_IF
 
 //Remembering final assertionID for removal later
 IF NOT bFinalAssertionFailed THEN
@@ -167,7 +199,15 @@ bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_stTransitionAssertion
 );
 
-LogActions( CONCAT('Assert trans. succ. ', BOOL_TO_STRING(bTransAssertionFailed)) );    ]]></ST>
+IF bTransAssertionFailed THEN
+    LogActions('Assert trans. failed. ');
+    nAssrtAttempt := nAssrtAttempt + 1;
+    IF nAssrtAttempt > cAssrtMax THEN
+        bError := TRUE;
+        nErrID := TransAssrtFail;
+    END_IF    
+END_IF
+    ]]></ST>
       </Implementation>
     </Action>
     <Action Name="AuthorizeTransition" Id="{54c27c7d-d192-4622-86ba-b9bfdddeaf4c}">
@@ -212,8 +252,8 @@ LogActions('Removing transition req');
     </Action>
     <Action Name="SetNewTarget" Id="{9b0c4cad-05e5-418b-8504-1d8c52f619a4}">
       <Implementation>
-        <ST><![CDATA[IF i_nRequestedAssertionID <> 0 AND
-    i_nRequestedAssertionID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+        <ST><![CDATA[IF F_ValidReqID(i_nRequestedAssertionID) AND
+    F_ValidReqID(i_TransitionAssertionID) THEN
     
     stTargetAssertion := i_stRequestedAssertion;
     nTargetAssertionID := i_nRequestedAssertionID;
@@ -221,6 +261,16 @@ LogActions('Removing transition req');
 	LogActions('New target set');
 	
     xNewBP := TRUE;
+    
+ELSE
+    IF NOT F_ValidReqID(nTargetAssertionID) THEN
+        
+        nErrID := BadTargetID;
+    ELSIF NOT F_ValidReqID(i_TransitionAssertionID) THEN
+        nErrID := BadTransID;
+	END_IF
+    LogActions('Error in set new target');
+    bError := TRUE;
 END_IF
 ]]></ST>
       </Implementation>
@@ -237,7 +287,8 @@ xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion) AND
       <Implementation>
         <ST><![CDATA[//Set this bool false so we can get a rising edge on the next try
 xFinalBP := FALSE;
-PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
+PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;
+]]></ST>
       </Implementation>
     </Action>
     <Action Name="WaitingForTransitionAssertion_DO" Id="{efd5ef21-1274-446e-b4e2-eb587c706e95}">
@@ -250,19 +301,42 @@ xTranBP    := F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) 
     <Action Name="WaitingForTransitionAssertion_EXIT" Id="{97cb140a-13c7-46d0-9d70-2452731d3375}">
       <Implementation>
         <ST><![CDATA[xTranBP := FALSE;
-PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
+PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;
+]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="BeamParameterTransitionManager">
-      <LineId Id="3" Count="72" />
+      <LineId Id="136" Count="1" />
+      <LineId Id="3" Count="13" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="152" Count="1" />
+      <LineId Id="23" Count="52" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.AssertFinalBP">
-      <LineId Id="2" Count="22" />
+      <LineId Id="2" Count="16" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="6" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="21" Count="3" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.AssertTransitionBP">
-      <LineId Id="2" Count="5" />
+      <LineId Id="2" Count="4" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="10" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.AuthorizeTransition">
@@ -284,7 +358,16 @@ PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.SetNewTarget">
-      <LineId Id="2" Count="9" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="4" Count="6" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="11" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.WaitingForFinalAssertion_DO">
@@ -294,6 +377,7 @@ PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
     <LineIds Name="BeamParameterTransitionManager.WaitingForFinalAssertion_EXIT">
       <LineId Id="2" Count="1" />
       <LineId Id="1" Count="0" />
+      <LineId Id="4" Count="0" />
     </LineIds>
     <LineIds Name="BeamParameterTransitionManager.WaitingForTransitionAssertion_DO">
       <LineId Id="2" Count="1" />
@@ -302,6 +386,7 @@ PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;]]></ST>
     <LineIds Name="BeamParameterTransitionManager.WaitingForTransitionAssertion_EXIT">
       <LineId Id="2" Count="0" />
       <LineId Id="1" Count="0" />
+      <LineId Id="3" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

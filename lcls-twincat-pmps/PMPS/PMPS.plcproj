@@ -139,6 +139,9 @@
     <Compile Include="HelperFunctions\F_PMPS_JSON.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HelperFunctions\F_ValidReqID.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\PE_Ranges.TcPOU">
       <SubType>Code</SubType>
     </Compile>
