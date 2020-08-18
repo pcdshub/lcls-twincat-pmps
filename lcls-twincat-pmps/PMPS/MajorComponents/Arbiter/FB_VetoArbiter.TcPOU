@@ -23,6 +23,7 @@ VAR
 		i_xVetoable := TRUE
 	);
 	
+    stStandbyBP : ST_BeamParams;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,6 +33,9 @@ ftVeto(CLK:=bVeto);
 
 IF rtVeto.Q THEN
     HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+ELSIF ftVeto.Q THEN
+    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+    HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, stStandbyBP);
 END_IF
 
 IF bVeto THEN
@@ -92,6 +96,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 IF bVeto THEN
+    stStandbyBP := stReqBP;
 	RequestBP := TRUE;
 ELSE
 	// Pass request along to higher authority
@@ -100,7 +105,9 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_VetoArbiter">
-      <LineId Id="38" Count="6" />
+      <LineId Id="38" Count="5" />
+      <LineId Id="71" Count="2" />
+      <LineId Id="44" Count="0" />
       <LineId Id="3" Count="2" />
       <LineId Id="7" Count="7" />
       <LineId Id="2" Count="0" />
@@ -119,6 +126,7 @@ END_IF]]></ST>
     </LineIds>
     <LineIds Name="FB_VetoArbiter.RequestBP">
       <LineId Id="3" Count="1" />
+      <LineId Id="17" Count="0" />
       <LineId Id="6" Count="3" />
       <LineId Id="2" Count="0" />
     </LineIds>
