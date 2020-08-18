@@ -2,7 +2,7 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4a2ea28d-9787-4749-a702-72c51e7bbb9e}</ProjectGuid>
+    <ProjectGuid>{12553481-002f-4f4e-a6cc-b95ac65f55ff}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
@@ -23,8 +23,7 @@
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
     <ProjectVersion>0.0.0</ProjectVersion>
-    <CompilerDefines>
-    </CompilerDefines>
+    <CompilerDefines>L</CompilerDefines>
     <DeploymentEvents>
       <Events xmlns="">
         <Event>
@@ -107,6 +106,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\FB_DummyHA.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_BPWithID.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -137,6 +139,9 @@
     <Compile Include="HelperFunctions\F_PMPS_JSON.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HelperFunctions\F_ValidReqID.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\PE_Ranges.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -165,10 +170,16 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\Arbiter\FB_VetoArbiter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\FB_BPControlDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
@@ -261,6 +272,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_Arbiter_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestComponents\FB_VetoArbiter_Test.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_AttenuatorSimulator.TcPOU">

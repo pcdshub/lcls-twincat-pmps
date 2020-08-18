@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <Itf Name="I_LowerAuthority" Id="{99891ecc-c797-4643-bae6-a2321f534778}">
+    <Declaration><![CDATA[INTERFACE I_LowerAuthority
+]]></Declaration>
+    <Method Name="ElevateRequest" Id="{7b91e0f7-0ecb-4354-af40-944e958abd7b}">
+      <Declaration><![CDATA[// <Arbiter Internal>
+// Elevates the arbitrated BP set to something above.
+// Could be another arbiter, or a BP requester/ IO, 
+// or an FB that locks in a specific portion of the BP set.
+METHOD ElevateRequest : BOOL 
+VAR_INPUT
+    HigherAuthority : I_HigherAuthority;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="nLowerAuthorityID" Id="{aa311dee-db63-431d-b060-55dc42f449e4}">
+      <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
+      <Get Name="Get" Id="{a80bf1a7-cb9d-4dfb-870e-2eaf0155bc28}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

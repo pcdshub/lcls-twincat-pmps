@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_DummyHA" Id="{670c3d93-34b2-4592-94f3-5ed3a0dba153}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DummyHA IMPLEMENTS I_HigherAuthority, I_LowerAuthority
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CheckRequest" Id="{6032c3d9-45c7-4cc0-b102-000af7719efd}">
+      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CheckRequest := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ElevateRequest" Id="{f71f404d-56b3-451d-b2b2-c6689b13e32e}">
+      <Declaration><![CDATA[// <Arbiter Internal>
+// Elevates the arbitrated BP set to something above.
+// Could be another arbiter, or a BP requester/ IO, 
+// or an FB that locks in a specific portion of the BP set.
+METHOD ElevateRequest : BOOL 
+VAR_INPUT
+    HigherAuthority : I_HigherAuthority;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="nLowerAuthorityID" Id="{32132f8f-263b-4eb5-946b-8283dbd45b0c}">
+      <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
+      <Get Name="Get" Id="{e7806d6e-95f6-4d6c-bc9b-d36d07b4562a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nLowerAuthorityID := PMPS_GVL.EXCLUDED_ASSERTION_ID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RemoveRequest" Id="{8cc18e1a-c7b1-4978-8d42-4efdc8839d77}">
+      <Declaration><![CDATA[
+METHOD RemoveRequest : BOOL
+VAR_INPUT
+	(*StateID to remove*)
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RemoveRequest := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{55d2a094-bf30-435f-a214-786bf412cbdf}">
+      <Declaration><![CDATA[
+METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RequestBP := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_DummyHA">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.CheckRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.ElevateRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.nLowerAuthorityID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.RemoveRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.RequestBP">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

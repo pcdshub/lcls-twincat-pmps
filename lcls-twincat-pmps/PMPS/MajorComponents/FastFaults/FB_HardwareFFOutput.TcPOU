@@ -151,8 +151,8 @@ END_VAR
     </Method>
     <Action Name="Execute" Id="{f8057b03-4d9a-40d4-a5d5-e679c5b7e795}">
       <Implementation>
-        <ST><![CDATA[EvaluateOutput();
-EvaluateOverrides();
+        <ST><![CDATA[EvaluateOverrides();
+EvaluateOutput();
 ExecuteLogging();
 ]]></ST>
       </Implementation>
@@ -249,6 +249,14 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Action Name="ExecuteNoLog" Id="{a5cbc903-644b-4d9d-92a3-d1a33065eafd}">
+      <Implementation>
+        <ST><![CDATA[EvaluateOverrides();
+EvaluateOutput();
+//ExecuteLogging();
+]]></ST>
+      </Implementation>
+    </Action>
     <Method Name="FormulateLogJson" Id="{1e592e14-8e12-4b07-bc53-a921f8f882df}">
       <Declaration><![CDATA[METHOD INTERNAL FormulateLogJson : STRING
 VAR_INPUT
@@ -363,5 +371,47 @@ ELSE
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_HardwareFFOutput">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.EvaluateOutput">
+      <LineId Id="2" Count="14" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.EvaluateOverrides">
+      <LineId Id="3" Count="34" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.EvaluateVetos">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.Execute">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.ExecuteLogging">
+      <LineId Id="3" Count="76" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.ExecuteNoLog">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.FormulateLogJson">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.IdxCheckIn">
+      <LineId Id="3" Count="33" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_HardwareFFOutput.Register">
+      <LineId Id="3" Count="25" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

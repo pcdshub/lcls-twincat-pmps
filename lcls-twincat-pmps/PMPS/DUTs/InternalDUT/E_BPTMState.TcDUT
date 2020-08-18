@@ -4,12 +4,13 @@
     <Declaration><![CDATA[TYPE E_BPTMState :
 (
     Init := 0,
-	NewTarget := 1,
-    WaitingForTransitionAssertion := 2,
-    WaitingForFinalAssertion := 3,
-    Transitioning := 4,
-    CleaningUp := 5,
-	Idle := 6
+	NewTarget := 1000,
+    WaitingForTransitionAssertion := 2000,
+    WaitingForFinalAssertion := 3000,
+    Transitioning := 4000,
+    CleaningUp := 5000,
+	Idle := 6000,
+    Error := 9000
 );
 END_TYPE
 ]]></Declaration>

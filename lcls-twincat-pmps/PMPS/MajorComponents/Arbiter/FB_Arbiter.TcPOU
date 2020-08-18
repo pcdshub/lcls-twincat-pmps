@@ -21,7 +21,7 @@ the hash table will tell you when you reach the end of all the entries, and enab
 These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
 *)
 
-FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority
+FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -235,9 +235,9 @@ IF NOT xRequestMade THEN
     xActiveInArbitration := FALSE;
 END_IF
 
-
-xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
 rtActiveInArbitration(CLK:=xActiveInArbitration);
+xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
+
 
 IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
     nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
@@ -319,6 +319,17 @@ END_IF
 xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="nLowerAuthorityID" Id="{1fc1fd51-255d-436a-8bc9-caa51a4c9d82}">
+      <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
+      <Get Name="Get" Id="{30bc21b7-6ca8-40ff-b8a0-c2f0cc071beb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nLowerAuthorityID := nArbiterID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="RemoveRequest" Id="{79807308-416c-48f2-9db0-385196c0e213}">
       <Declaration><![CDATA[(* Removes request from abritration. *)
 METHOD RemoveRequest : BOOL
@@ -371,5 +382,46 @@ END_VAR
         <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP);]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Arbiter">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.AddRequest">
+      <LineId Id="3" Count="33" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.ArbitrateBP">
+      <LineId Id="3" Count="21" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.CheckRequest">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.CheckRequestInPool">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.ElevateRequest">
+      <LineId Id="3" Count="16" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.FB_init">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.GetArbitratedBP">
+      <LineId Id="3" Count="40" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.nLowerAuthorityID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.RemoveRequest">
+      <LineId Id="3" Count="22" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.RequestBP">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

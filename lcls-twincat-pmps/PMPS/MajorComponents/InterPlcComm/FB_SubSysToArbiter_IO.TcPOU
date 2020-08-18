@@ -40,6 +40,7 @@ VAR
         io: i'}
     nActiveCohort : UDINT := 0; // Active cohort, updated by incoming BP from arbiter PLC, in the ElevateRequest arbiter call
 
+	fbLog : FB_LogMessage;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -79,7 +80,7 @@ END_VAR]]></Declaration>
 IF xFirstTime THEN
     nId := nReqId;
 ELSIF nId <> nReqId THEN
-    PMPS_GVL.fbLog(sMsg := 'SubSysToArbiter Check mismatched with a different ID', eSevr := TcEventSeverity.Error);
+    fbLog(sMsg := 'SubSysToArbiter Check mismatched with a different ID', eSevr := TcEventSeverity.Error);
     RETURN;
 END_IF
 

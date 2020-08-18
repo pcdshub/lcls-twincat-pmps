@@ -9,6 +9,9 @@ VAR_OUTPUT
 END_VAR
 VAR
 END_VAR
+VAR CONSTANT
+    RandomBoundary : INT := 2;
+END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[BasicFunction();]]></ST>
@@ -31,9 +34,15 @@ VAR
     
     
     fbStr : FB_FormatString;
+    
+    MiscNumber : INT;
 END_VAR
 VAR CONSTANT
     nLowerLimitBoundary : INT := 0;
+    
+    RandomBoundary : INT := 2;
+    MNU : INT := 3; //RandomBoundary + 1
+    MND : INT := 1; //RandomBoundary - 1
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -46,13 +55,33 @@ Result := F_eVRangeCalculator(tEv, 0);
 AssertTrue(
     Result = tEvW,
     'Lower limit not inclusive');
-//Mid range
+    
+// Lower range flags
+tEvW.nLowerLimitBoundary := TRUE;
+tEv := PMPS_GVL.g_areVBoundaries[nLowerLimitBoundary] / 2;
+Result := F_eVRangeCalculator(tEv, 0);
 AssertTrue(
-    F_eVRangeCalculator(251, 0) = 2#0000_0000_0000_0010,
+    Result = tEvW,
+    'eV below lower range should come back true');
+    
+//Mid range
+tEvW := 0;
+tEvW.RandomBoundary := TRUE;
+//ev result that is smack dab in the middle of a range
+tEv := PMPS_GVL.g_areVBoundaries[RandomBoundary] - ((PMPS_GVL.g_areVBoundaries[RandomBoundary] - PMPS_GVL.g_areVBoundaries[MND]) / 2);
+Result := F_eVRangeCalculator(tEv, 0);
+AssertTrue(
+    Result = tEvW,
     'In range failed, whatever you did, it broke this really bad.');
+
 //Out of range
+tEvW := 0;
+tEvW.RandomBoundary := TRUE;
+//Ev result that is beyond the current range (midway into the next range up)
+tEv := PMPS_GVL.g_areVBoundaries[MNU] - (PMPS_GVL.g_areVBoundaries[MNU]-PMPS_GVL.g_areVBoundaries[RandomBoundary])/2;
+Result := F_eVRangeCalculator(tEv, 0);
 AssertFalse(
-    F_eVRangeCalculator(301, 0) = 2#0000_0000_0000_0010,
+    Result = tEvW,
     'Out of range failed, whatever you did, it broke this really bad.');
 
 TEST_FINISHED();
@@ -67,14 +96,32 @@ TEST_FINISHED();
 
 Test('Check hyst keeps');
 
-LastWord := F_eVRangeCalculator(250, 2#0000_0000_0000_0000);
+LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#0000_0000_0000_0000);
 
-AssertTrue(
-    F_eVRangeCalculator(304, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0110,
-    'Moving up does not stick.');
+// Last word should be 2#0000_0000_0000_0100
+
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst - PMPS_GVL.reVHyst/2,
+         LastWord);
+    TestEV := 0;
+    TestEV.RandomBoundary := TRUE;
+    TestEV.MNU := True;
+ 
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.sFormat := 'Moving up does not stick. Result: %b vs. Test: %b';
+    fbStr();
+        
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
     
-    Result := F_eVRangeCalculator(196, 2#0000_0000_0000_0010);
-    TestEV := 2#0000_0000_0000_0011;
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[RandomBoundary - 1] - PMPS_GVL.reVHyst + PMPS_GVL.reVHyst/2, 
+        LastWord);
+    TestEV := 0;
+    TestEV.RandomBoundary := TRUE;
+    TestEV.MND := True;
+    
     fbStr.arg1 := F_WORD(Result);
     fbStr.arg2 := F_WORD(TestEV);
     fbStr.sFormat := 'Moving down does not stick. Result: %b vs. Test: %b';
@@ -87,16 +134,89 @@ TEST_FINISHED();
 
 Test('Check hyst drops');
 
-AssertTrue(
-    F_eVRangeCalculator(351, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0100,
-    'Moving up does not drop.');
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[MND] - PMPS_GVL.reVHyst*1.1, 
+        LastWord);
+    TestEV := 0;
+    TestEV.MND := TRUE;
     
-AssertTrue(
-    F_eVRangeCalculator(149, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0001,
-    'Moving down does not drop.');
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.sFormat := 'Moving down does not drop. Result: %b vs. Test: %b';
+    fbStr();
+    
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
+
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst*1.1, 
+        LastWord);
+    TestEV := 0;
+    TestEV.MNU := TRUE;
+    
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.sFormat := 'Moving up does not drop. Result: %b vs. Test: %b';
+    fbStr();
+    
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
 
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_evRangeCalculator_Test">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_evRangeCalculator_Test.BasicFunction">
+      <LineId Id="3" Count="8" />
+      <LineId Id="82" Count="1" />
+      <LineId Id="85" Count="1" />
+      <LineId Id="88" Count="2" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="17" Count="16" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="109" Count="1" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="121" Count="2" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="2" />
+      <LineId Id="100" Count="1" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="102" Count="1" />
+      <LineId Id="41" Count="10" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="170" Count="4" />
+      <LineId Id="176" Count="6" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="183" Count="12" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

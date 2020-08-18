@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_VetoArbiter_Test" Id="{daba1fa5-6e89-42bf-806d-ba0ef2cd7891}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'call_after_init'}
+FUNCTION_BLOCK FB_VetoArbiter_Test EXTENDS TcUnit.FB_TestSuite
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+VAR CONSTANT
+    ArbID : DWORD := 1;
+	HigherArbID : DWORD := 2;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[VetoArbiter();]]></ST>
+    </Implementation>
+    <Method Name="VetoArbiter" Id="{a5c8ad88-db82-4ef4-9e88-b2188ba974f3}">
+      <Declaration><![CDATA[METHOD VetoArbiter
+
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+	nId2 : DWORD := 10;
+    stReq    :    ST_BeamParams := (nTran:=12);
+	stReq2	:	ST_BeamParams := (nTran:=10);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    fbHigherArb : FB_Arbiter(2);
+	
+	ArbBP : ST_BeamParams;
+	
+	VetoArb : FB_VetoArbiter;
+	
+	FFO : FB_HardwareFFOutput;
+	
+	fbHA : FB_DummyHA;
+    
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('VetoNotIn');
+fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq);
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb,
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+    
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb,
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
+
+TEST_FINISHED();
+
+TEST('VetoIn');
+// Veto device is in
+// This should effectively remove the fbArbiter request from the higher arbiter pool
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := TRUE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := TRUE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+    
+AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
+AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
+AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
+
+TEST_FINISHED();
+
+TEST('AnotherRequest');
+// Another request is added, should be approved immediately, and with no effect on the final set
+fbArbiter.RequestBP(nReqID := nId2, stReqBP:=stReq2);
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := TRUE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+    
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := TRUE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+AssertTrue(ArbBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device remained in, trans should still be 100');
+AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (2)');
+AssertTrue(fbArbiter.CheckRequest(nId2), '2nd Request should be considered valid');
+
+TEST_FINISHED();
+
+TEST('RemoveVeto');
+// Removal of veto device, should produce a fault
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+AssertFalse(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Should produce a fast fault at this point because the request is not yet back in the pool');
+
+//////////////////// Cycle  
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+
+//////////////////// Cycle    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);    
+    
+AssertTrue(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Fault should be gone.');
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_VetoArbiter_Test">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter_Test.VetoArbiter">
+      <LineId Id="3" Count="3" />
+      <LineId Id="143" Count="5" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="151" Count="5" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="134" Count="2" />
+      <LineId Id="14" Count="2" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="157" Count="5" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="167" Count="5" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="137" Count="2" />
+      <LineId Id="27" Count="3" />
+      <LineId Id="173" Count="5" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="181" Count="5" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="37" Count="3" />
+      <LineId Id="140" Count="2" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="187" Count="5" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="49" Count="6" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="94" Count="4" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="128" Count="5" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="57" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_VetoArbiter" Id="{c3c91f40-d3bf-4445-afff-e5f72e704ac3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_VetoArbiter IMPLEMENTS I_HigherAuthority
+VAR_INPUT
+	bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
+	HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
+	LowerAuthority : I_LowerAuthority; // Lower authority to be vetoed
+    
+    rtVeto : R_TRIG;
+    ftVeto : F_TRIG;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	FFO : FB_HardwareFFOutput; // This should be the FFO upstream of the veto device
+END_VAR
+VAR
+	ffKeepItSecretKeepItSafe : FB_FastFault := (
+		i_xAutoReset := TRUE,
+		i_Desc := 'Holds beam off until request is back in arbitration',
+		i_TypeCode := 200,
+		i_xVetoable := TRUE
+	);
+	
+    stStandbyBP : ST_BeamParams;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+rtVeto(CLK:=bVeto);
+ftVeto(CLK:=bVeto);
+
+IF rtVeto.Q THEN
+    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+ELSIF ftVeto.Q THEN
+    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+    HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, stStandbyBP);
+END_IF
+
+IF bVeto THEN
+	LowerAuthority.ElevateRequest(THIS^);
+ELSE
+	LowerAuthority.ElevateRequest(HigherAuthority);
+END_IF
+
+//Fast fault that holds beam off until the request is added back into the system
+// when bVeto goes false.
+ffKeepItSecretKeepItSafe.i_xOK := HigherAuthority.CheckRequest(LowerAuthority.nLowerAuthorityID) OR bVeto;
+ffKeepItSecretKeepItSafe(io_fbFFHWO:=FFO);
+]]></ST>
+    </Implementation>
+    <Method Name="CheckRequest" Id="{8542f884-22de-4d08-986f-1ea5e1ef3319}">
+      <Declaration><![CDATA[
+METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bVeto THEN
+	CheckRequest := TRUE;
+ELSE
+	CheckRequest := HigherAuthority.CheckRequest(nReqID);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveRequest" Id="{c64dfed1-7c7a-4598-861a-0c445d025399}">
+      <Declaration><![CDATA[
+METHOD RemoveRequest : BOOL
+VAR_INPUT
+	(*StateID to remove*)
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bVeto THEN
+    RemoveRequest := TRUE;
+ELSE
+    HigherAuthority.RemoveRequest(nReqID);    
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{2865d873-c7e0-45e5-b830-5a750b9c89aa}">
+      <Declaration><![CDATA[METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bVeto THEN
+    stStandbyBP := stReqBP;
+	RequestBP := TRUE;
+ELSE
+	// Pass request along to higher authority
+	RequestBP := HigherAuthority.RequestBP(nReqID, stReqBP);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_VetoArbiter">
+      <LineId Id="38" Count="5" />
+      <LineId Id="71" Count="2" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="3" Count="2" />
+      <LineId Id="7" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.CheckRequest">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.RemoveRequest">
+      <LineId Id="10" Count="0" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.RequestBP">
+      <LineId Id="3" Count="1" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="6" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -10,10 +10,14 @@ END_VAR
 VAR
 
 END_VAR
+VAR CONSTANT
+    OvrdTime : TIME := T#2s;
+END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[FFCombinedFunctionality();
-FFRegistration();]]></ST>
+FFRegistration();
+FFOvrdAndNextFault();]]></ST>
     </Implementation>
     <Method Name="FFCombinedFunctionality" Id="{a87e81fa-eb2b-44b4-80d9-4461fa087530}">
       <Declaration><![CDATA[METHOD FFCombinedFunctionality
@@ -85,6 +89,92 @@ AssertFalse(fbFFO.q_xFastFaultOut,
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="FFOvrdAndNextFault" Id="{b17e0363-eca4-4d26-afa9-1c5d39a76914}">
+      <Declaration><![CDATA[METHOD FFOvrdAndNextFault
+VAR_INPUT
+END_VAR
+VAR_INST
+    fbFF    :    FB_FastFault :=(
+        i_xAutoReset := TRUE);
+    fbFFO    :    FB_HardwareFFOutput := (
+        bAutoReset := TRUE);
+    rFF : REFERENCE TO ST_FF;
+    
+    FirstPass : BOOL := TRUE;
+    OvrdActvTstDone : BOOL := FALSE;
+    
+    TestsDone : BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('FFVetoAndNextFault');
+
+// I noticed something weird going on with the PEWatcher on the L line. It was faulted, and the fast fault
+// was not tripping off beam. It had been previously overridden so I was wondering why it wasn't causing a trip.
+
+IF FirstPass THEN
+
+    fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
+        i_xOK := TRUE);
+    
+    fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+        
+    AssertTrue(fbFFO.q_xFastFaultOut,
+        'Fast fault did not clear');
+    
+    
+    //Induce fault with FF
+    
+    fbFF(io_fbFFHWO := fbFFO, //FF faulted
+        i_xOK := FALSE); 
+        
+    fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+    
+    AssertFalse(fbFFO.q_xFastFaultOut,
+        'Fast fault did not trip the beam');
+
+
+    rFF REF= fbFFO.astFF[fbFF.RegistrationIdx];
+
+    
+    // Overrides set from EPICS
+    WRITE_PROTECTED_TIME(ADR(rFF.Ovrd.Duration), OvrdTime);
+    WRITE_PROTECTED_BOOL(ADR(rFF.Ovrd.Activate), TRUE);
+    
+    
+    FirstPass := FALSE;
+    
+END_IF
+
+// On every cycle:
+fbFF(io_fbFFHWO := fbFFO, //FF faulted
+    i_xOK := FALSE); 
+    
+fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+
+
+IF rFF.Ovrd.Active AND rFF.BeamPermitted THEN
+
+    AssertTrue(fbFFO.q_xFastFaultOut,
+        'Fast fault should be overridden so FFO should be true');
+    
+    OvrdActvTstDone := TRUE;
+END_IF
+
+IF OvrdActvTstDone and NOT rFF.Ovrd.Active and not rff.BeamPermitted THEN
+    
+    AssertFalse(fbFFO.q_xFastFaultOut,
+        'Fast fault override expired so beam should be off.');
+   // AssertFalse(rFF.BeamPermitted, 'Beam should not be permitted now');
+    
+    TestsDone := TRUE;
+END_IF
+
+
+IF TestsDone THEN    
+    TEST_FINISHED_NAMED('FFVetoAndNextFault');
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FFRegistration" Id="{3ff41afd-9e3c-4c36-9c04-7ce787b90bc6}">
       <Declaration><![CDATA[METHOD FFRegistration
 VAR_INPUT
@@ -105,5 +195,57 @@ AssertEquals_STRING(fbFF.sPath, fbFFO.astFF[fbFF.RegistrationIdx].Info.sPath,
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_FastFault_Test">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FastFault_Test.FFCombinedFunctionality">
+      <LineId Id="3" Count="56" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FastFault_Test.FFOvrdAndNextFault">
+      <LineId Id="3" Count="0" />
+      <LineId Id="69" Count="2" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="6" Count="3" />
+      <LineId Id="11" Count="7" />
+      <LineId Id="21" Count="7" />
+      <LineId Id="93" Count="1" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="111" Count="1" />
+      <LineId Id="140" Count="1" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="149" Count="3" />
+      <LineId Id="147" Count="1" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="88" Count="1" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="127" Count="1" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="143" Count="1" />
+      <LineId Id="132" Count="1" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FastFault_Test.FFRegistration">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
