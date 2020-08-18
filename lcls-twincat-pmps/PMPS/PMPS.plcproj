@@ -23,7 +23,7 @@
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
     <ProjectVersion>0.0.0</ProjectVersion>
-    <CompilerDefines>K</CompilerDefines>
+    <CompilerDefines>L</CompilerDefines>
     <DeploymentEvents>
       <Events xmlns="">
         <Event>

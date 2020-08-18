@@ -65,12 +65,23 @@ AssertTrue(
     'eV below lower range should come back true');
     
 //Mid range
+tEvW := 0;
+tEvW.RandomBoundary := TRUE;
+//ev result that is smack dab in the middle of a range
+tEv := PMPS_GVL.g_areVBoundaries[RandomBoundary] - ((PMPS_GVL.g_areVBoundaries[RandomBoundary] - PMPS_GVL.g_areVBoundaries[MND]) / 2);
+Result := F_eVRangeCalculator(tEv, 0);
 AssertTrue(
-    F_eVRangeCalculator(251, 0) = 2#0000_0000_0000_0010,
+    Result = tEvW,
     'In range failed, whatever you did, it broke this really bad.');
+
 //Out of range
+tEvW := 0;
+tEvW.RandomBoundary := TRUE;
+//Ev result that is beyond the current range (midway into the next range up)
+tEv := PMPS_GVL.g_areVBoundaries[MNU] - (PMPS_GVL.g_areVBoundaries[MNU]-PMPS_GVL.g_areVBoundaries[RandomBoundary])/2;
+Result := F_eVRangeCalculator(tEv, 0);
 AssertFalse(
-    F_eVRangeCalculator(301, 0) = 2#0000_0000_0000_0010,
+    Result = tEvW,
     'Out of range failed, whatever you did, it broke this really bad.');
 
 TEST_FINISHED();
@@ -123,13 +134,33 @@ TEST_FINISHED();
 
 Test('Check hyst drops');
 
-AssertTrue(
-    F_eVRangeCalculator(351, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0100,
-    'Moving up does not drop.');
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[MND] - PMPS_GVL.reVHyst*1.1, 
+        LastWord);
+    TestEV := 0;
+    TestEV.MND := TRUE;
     
-AssertTrue(
-    F_eVRangeCalculator(149, 2#0000_0000_0000_0010) = 2#0000_0000_0000_0001,
-    'Moving down does not drop.');
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.sFormat := 'Moving down does not drop. Result: %b vs. Test: %b';
+    fbStr();
+    
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
+
+    Result := F_eVRangeCalculator(
+        PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst*1.1, 
+        LastWord);
+    TestEV := 0;
+    TestEV.MNU := TRUE;
+    
+    fbStr.arg1 := F_WORD(Result);
+    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.sFormat := 'Moving up does not drop. Result: %b vs. Test: %b';
+    fbStr();
+    
+AssertTrue(Result = TestEV,
+    fbStr.sOut);
 
 TEST_FINISHED();]]></ST>
       </Implementation>
@@ -144,7 +175,21 @@ TEST_FINISHED();]]></ST>
       <LineId Id="88" Count="2" />
       <LineId Id="87" Count="0" />
       <LineId Id="84" Count="0" />
-      <LineId Id="12" Count="21" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="17" Count="16" />
       <LineId Id="94" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="107" Count="0" />
@@ -163,7 +208,14 @@ TEST_FINISHED();]]></ST>
       <LineId Id="117" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="102" Count="1" />
-      <LineId Id="41" Count="19" />
+      <LineId Id="41" Count="10" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="170" Count="4" />
+      <LineId Id="176" Count="6" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="183" Count="12" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="60" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
