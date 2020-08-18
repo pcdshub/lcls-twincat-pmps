@@ -55,12 +55,12 @@ END_VAR
 evResidual := (i_stCurrentBeamParams.neVRange XOR i_stRequestedBeamParams.neVRange) AND i_stCurrentBeamParams.neVRange;
 
 fbFF(i_xOK := xPhotonEnergyWithinBounds,
-    i_xReset := i_xReset,
     io_fbFFHWO := io_fbFFHWO);
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_PhotonEnergyWatcher">
-      <LineId Id="3" Count="6" />
+      <LineId Id="3" Count="4" />
+      <LineId Id="9" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

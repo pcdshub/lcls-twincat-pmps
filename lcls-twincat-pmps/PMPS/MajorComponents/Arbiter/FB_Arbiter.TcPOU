@@ -382,5 +382,46 @@ END_VAR
         <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP);]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Arbiter">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.AddRequest">
+      <LineId Id="3" Count="33" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.ArbitrateBP">
+      <LineId Id="3" Count="21" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.CheckRequest">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.CheckRequestInPool">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.ElevateRequest">
+      <LineId Id="3" Count="16" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.FB_init">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.GetArbitratedBP">
+      <LineId Id="3" Count="40" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.nLowerAuthorityID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.RemoveRequest">
+      <LineId Id="3" Count="22" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Arbiter.RequestBP">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

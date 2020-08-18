@@ -107,8 +107,9 @@
 			</SubItem>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{2F7F879E-70BA-412F-A719-FB0D9E9036EF}" TargetNetId="172.21.148.227.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" Target64Bit="true" ShowHideConfigurations="#x106">
 		<System>
+			<Settings DontCheckTarget="192.168.1.11.1.1"/>
 			<Licenses>
 				<Target>
 					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>

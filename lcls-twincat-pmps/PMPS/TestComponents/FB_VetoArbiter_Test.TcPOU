@@ -9,12 +9,16 @@ VAR_OUTPUT
 END_VAR
 VAR
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+    ArbID : DWORD := 1;
+	HigherArbID : DWORD := 2;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[VetoArbiter();]]></ST>
     </Implementation>
     <Method Name="VetoArbiter" Id="{a5c8ad88-db82-4ef4-9e88-b2188ba974f3}">
       <Declaration><![CDATA[METHOD VetoArbiter
+
 VAR_INPUT
 END_VAR
 VAR   
@@ -24,9 +28,9 @@ VAR
 	stReq2	:	ST_BeamParams := (nTran:=10);
 END_VAR
 VAR_INST
-    fbArbiter    :    FB_Arbiter(ArbID);
+    fbArbiter    :    FB_Arbiter(1);
     
-    fbHigherArb : FB_Arbiter(HigherArbID);
+    fbHigherArb : FB_Arbiter(2);
 	
 	ArbBP : ST_BeamParams;
 	
@@ -37,10 +41,7 @@ VAR_INST
 	fbHA : FB_DummyHA;
     
 END_VAR
-VAR CONSTANT
-    ArbID : DWORD := 1;
-	HigherArbID : DWORD := 2;
-END_VAR
+
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
@@ -103,5 +104,12 @@ TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_VetoArbiter_Test">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter_Test.VetoArbiter">
+      <LineId Id="3" Count="56" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

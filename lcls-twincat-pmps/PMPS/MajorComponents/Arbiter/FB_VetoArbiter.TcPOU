@@ -26,6 +26,7 @@ END_VAR
       <ST><![CDATA[
 IF bVeto THEN
 	LowerAuthority.ElevateRequest(THIS^);
+    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
 ELSE
 	LowerAuthority.ElevateRequest(HigherAuthority);
 END_IF
@@ -85,5 +86,21 @@ ELSE
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_VetoArbiter">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.CheckRequest">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.RemoveRequest">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VetoArbiter.RequestBP">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

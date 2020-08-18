@@ -3,6 +3,8 @@
   <POU Name="MAIN" Id="{87d6bba0-cac0-4c5b-b8ef-b01bdb9ad7f6}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+    fbSetPERanges : PE_Ranges;    
+
     fbDiffBPTest    :    FB_DiffBP_Test;
     fbBPTMTest    :    FB_BPTM_Test;
     fbSafeBPCompareTest    :    FB_SafeBPCompare_Test;
@@ -20,5 +22,9 @@ END_VAR
       <ST><![CDATA[TcUnit.RUN();
 ]]></ST>
     </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

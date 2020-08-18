@@ -48,7 +48,7 @@ END_VAR
       </Get>
     </Property>
     <Method Name="RemoveRequest" Id="{8cc18e1a-c7b1-4978-8d42-4efdc8839d77}">
-      <Declaration><![CDATA[{warning 'add method implementation'}
+      <Declaration><![CDATA[
 METHOD RemoveRequest : BOOL
 VAR_INPUT
 	(*StateID to remove*)
@@ -56,11 +56,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[RemoveRequest := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{55d2a094-bf30-435f-a214-786bf412cbdf}">
-      <Declaration><![CDATA[{warning 'add method implementation'}
+      <Declaration><![CDATA[
 METHOD RequestBP : BOOL
 VAR_INPUT
 	(*StateID of state requesting beam parameter set*)
@@ -70,8 +70,26 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[RequestBP := TRUE;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_DummyHA">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.CheckRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.ElevateRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.nLowerAuthorityID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.RemoveRequest">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DummyHA.RequestBP">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
