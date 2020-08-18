@@ -66,7 +66,7 @@ VetoArb(HigherAuthority:=fbHigherArb,
 fbHigherArb.ElevateRequest(fbHA);
 
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
-AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid');
+AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
 AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
 
 // Another request is added, should be approved immediately, and with no effect on the final set
@@ -79,13 +79,20 @@ VetoArb(HigherAuthority:=fbHigherArb, // Veto still in
 	
 fbHigherArb.ElevateRequest(fbHA);
 
+VetoArb.bVeto := TRUE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto still in
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+	
+fbHigherArb.ElevateRequest(fbHA);
+
 AssertTrue(ArbBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device remained in, trans should still be 100');
-AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid');
+AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (2)');
 AssertTrue(fbArbiter.CheckRequest(nId2), '2nd Request should be considered valid');
 
 // Removal of veto device, should produce a fault
 VetoArb.bVeto := FALSE;
-VetoArb(HigherAuthority:=fbHigherArb, // Veto still in
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
 	LowerAuthority:=fbArbiter,
 	FFO:=FFO);
 
@@ -94,7 +101,14 @@ AssertFalse(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Should produce a fast fault
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
-VetoArb(HigherAuthority:=fbHigherArb, // Veto still in
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+	LowerAuthority:=fbArbiter,
+	FFO:=FFO);
+    
+fbHigherArb.ElevateRequest(fbHA);
+
+VetoArb.bVeto := FALSE;
+VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
 	LowerAuthority:=fbArbiter,
 	FFO:=FFO);
 
@@ -108,7 +122,14 @@ TEST_FINISHED();
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_VetoArbiter_Test.VetoArbiter">
-      <LineId Id="3" Count="56" />
+      <LineId Id="3" Count="33" />
+      <LineId Id="86" Count="5" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="37" Count="18" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="94" Count="4" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="56" Count="3" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

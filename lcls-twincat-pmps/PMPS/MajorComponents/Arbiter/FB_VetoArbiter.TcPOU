@@ -6,6 +6,9 @@ VAR_INPUT
 	bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
 	HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
 	LowerAuthority : I_LowerAuthority; // Lower authority to be vetoed
+    
+    rtVeto : R_TRIG;
+    ftVeto : F_TRIG;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -24,9 +27,15 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+rtVeto(CLK:=bVeto);
+ftVeto(CLK:=bVeto);
+
+IF rtVeto.Q THEN
+    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+END_IF
+
 IF bVeto THEN
 	LowerAuthority.ElevateRequest(THIS^);
-    HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
 ELSE
 	LowerAuthority.ElevateRequest(HigherAuthority);
 END_IF
@@ -63,7 +72,12 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-HigherAuthority.RemoveRequest(nReqID);]]></ST>
+IF bVeto THEN
+    RemoveRequest := TRUE;
+ELSE
+    HigherAuthority.RemoveRequest(nReqID);    
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{2865d873-c7e0-45e5-b830-5a750b9c89aa}">
@@ -78,7 +92,6 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 IF bVeto THEN
-	HigherAuthority.RemoveRequest(nReqID);
 	RequestBP := TRUE;
 ELSE
 	// Pass request along to higher authority
@@ -87,7 +100,9 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_VetoArbiter">
-      <LineId Id="3" Count="11" />
+      <LineId Id="38" Count="6" />
+      <LineId Id="3" Count="2" />
+      <LineId Id="7" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_VetoArbiter.CheckRequest">
@@ -95,11 +110,16 @@ END_IF]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_VetoArbiter.RemoveRequest">
+      <LineId Id="10" Count="0" />
       <LineId Id="3" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_VetoArbiter.RequestBP">
-      <LineId Id="3" Count="6" />
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="3" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

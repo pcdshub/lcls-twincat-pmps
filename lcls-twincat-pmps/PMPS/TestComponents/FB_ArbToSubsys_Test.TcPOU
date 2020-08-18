@@ -50,6 +50,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 // Simulate an initial cycle with no new requests coming in
+fbBPR(Arbiter:=fbArbiter);
 fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
 
 TEST('Init');
@@ -62,6 +63,7 @@ pBPR^ := stBPRIO;
 
 ///////////////////////////////////////
 //Sub system cycle
+fbBPR(Arbiter:=fbArbiter);
 fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
 //END of sub system cycle
 ///////////////////////////////////////
@@ -89,6 +91,12 @@ fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
 //END of sub system cycle
 ///////////////////////////////////////
 
+///////////////////////////////////////
+//Sub system cycle
+fbBPR(Arbiter:=fbArbiter);
+fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+//END of sub system cycle
+///////////////////////////////////////
 
 TEST('Request has become active');
     AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.nActiveCohort, 'ReqCohort and qBP Cohort do not match, and they should');
@@ -100,5 +108,18 @@ TEST_FINISHED_NAMED('Request has become active');
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_ArbToSubsys_Test">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ArbToSubsys_Test.BasicFunction">
+      <LineId Id="3" Count="1" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="5" Count="11" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="17" Count="25" />
+      <LineId Id="86" Count="5" />
+      <LineId Id="43" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

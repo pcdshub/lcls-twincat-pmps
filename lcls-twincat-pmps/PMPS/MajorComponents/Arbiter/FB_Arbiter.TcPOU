@@ -235,9 +235,9 @@ IF NOT xRequestMade THEN
     xActiveInArbitration := FALSE;
 END_IF
 
-
-xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
 rtActiveInArbitration(CLK:=xActiveInArbitration);
+xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
+
 
 IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
     nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
