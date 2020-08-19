@@ -179,6 +179,9 @@
     <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\FB_RateFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
