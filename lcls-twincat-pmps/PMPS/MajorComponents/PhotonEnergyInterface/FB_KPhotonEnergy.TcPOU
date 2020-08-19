@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_KPhotonEnergy" Id="{a3b33140-6a40-4107-8e0d-e87a2f35f3b3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_KPhotonEnergy
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	BP : ST_BeamParams;
+END_VAR
+VAR
+    {attribute 'pytmc' := '
+        pv: eEnrg:SXU
+        link: BEND:DMPS:400:BACT
+        field: EGU GeV
+    '}
+    fbSxuElectronEnergy : FB_LREALFromEPICS;
+	
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)Link:SXU
+        link: USEG:UNDS:
+    '}
+    fbSxu : FB_SXU;
+
+	
+	nCurrentPhotonEnergyBitmask : UINT;
+	nTargetPhotonEnergyBitmask : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Update PVs
+fbSxuElectronEnergy();
+
+fbSxu(fbElectronEnergy:=fbSxuElectronEnergy);
+
+//Update BP
+nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(fbSxu.fCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
+nTargetPhotonEnergyBitmask := F_eVRangeCalculator(fbSxu.fTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
+
+BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

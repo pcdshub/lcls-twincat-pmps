@@ -194,6 +194,8 @@ END_IF]]></ST>
     <Action Name="AssertTransitionBP" Id="{b83a9501-a83d-470d-a69e-33ae3b34fe7a}">
       <Implementation>
         <ST><![CDATA[
+fbArbiter.RemoveRequest(i_TransitionAssertionID);
+
 bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_TransitionAssertionID,
     i_stTransitionAssertion
@@ -305,88 +307,5 @@ PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;
 ]]></ST>
       </Implementation>
     </Action>
-    <LineIds Name="BeamParameterTransitionManager">
-      <LineId Id="136" Count="1" />
-      <LineId Id="3" Count="13" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="143" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="17" Count="3" />
-      <LineId Id="155" Count="0" />
-      <LineId Id="154" Count="0" />
-      <LineId Id="151" Count="0" />
-      <LineId Id="150" Count="0" />
-      <LineId Id="152" Count="1" />
-      <LineId Id="23" Count="52" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.AssertFinalBP">
-      <LineId Id="2" Count="16" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="27" Count="6" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="21" Count="3" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.AssertTransitionBP">
-      <LineId Id="2" Count="4" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="11" Count="1" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="16" Count="1" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.AuthorizeTransition">
-      <LineId Id="2" Count="1" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.DeauthorizeTransition">
-      <LineId Id="2" Count="0" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.LogActions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.NewTarget_ENTRY">
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.RemoveTransitionAssertion">
-      <LineId Id="2" Count="6" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.SetNewTarget">
-      <LineId Id="2" Count="0" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="4" Count="6" />
-      <LineId Id="13" Count="2" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="18" Count="1" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="20" Count="1" />
-      <LineId Id="11" Count="0" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.WaitingForFinalAssertion_DO">
-      <LineId Id="2" Count="2" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.WaitingForFinalAssertion_EXIT">
-      <LineId Id="2" Count="1" />
-      <LineId Id="1" Count="0" />
-      <LineId Id="4" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.WaitingForTransitionAssertion_DO">
-      <LineId Id="2" Count="1" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="BeamParameterTransitionManager.WaitingForTransitionAssertion_EXIT">
-      <LineId Id="2" Count="0" />
-      <LineId Id="1" Count="0" />
-      <LineId Id="3" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
