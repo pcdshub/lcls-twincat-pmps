@@ -24,30 +24,6 @@ VAR_GLOBAL
         field: EGU eV
     '}
 	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
-
-
-//////////////////////////
-// Undulator constants
-//////////////////////////
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:FirstSegment
-		io: i
-	'}
-    iLowBound_Und  : UDINT := 24;
-	
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:LastSegment
-		io: i
-	'}
-    iHighBound_Und : UDINT := 46;
-	
-    {attribute 'pytmc' := '
-        pv: Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm_Und : LREAL := 26.0;
-	
    
 
 END_VAR
