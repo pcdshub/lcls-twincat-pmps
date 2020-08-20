@@ -5,17 +5,20 @@
 VAR_GLOBAL
     {attribute 'pytmc' := '
         pv: @(PREFIX)RequestedBP
+		io: i
         archive: 1Hz monitor
     '}
     stRequestedBeamParameters    :    ST_BeamParams; //Summarized request for the line, as recognized by the line arbiter PLC
     {attribute 'pytmc' := '
         pv: @(PREFIX)CurrentBP
+		io: i
         archive: 1Hz monitor
     '}
     stCurrentBeamParameters    :    ST_BeamParams; //Currently active BP set, broadcast by the line arbiter PLC
 	
     {attribute 'pytmc' := '
-        pv: @(PREFIX):eVRangeCnst
+        pv: @(PREFIX)eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Active eV Range constants
         field: EGU eV
@@ -45,6 +48,7 @@ VAR_GLOBAL CONSTANT
     MAX_STOPPERS    :   UINT := 16;
     {attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Full beam constant
     '}    
@@ -56,6 +60,7 @@ VAR_GLOBAL CONSTANT
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Safe beam constant
     '} 
@@ -76,8 +81,78 @@ VAR_GLOBAL CONSTANT
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
+	
+	
+//////////////////////////
+// L Undulator constants
+//////////////////////////
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:FirstSegment
+		io: i
+	'}
+    iLowBound_LUnd  : UDINT := 24;
+	
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:LastSegment
+		io: i
+	'}
+    iHighBound_LUnd : UDINT := 46;
+	
+    {attribute 'pytmc' := '
+        pv: Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm_LUnd : LREAL := 26.0;
+	
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)L:UND:LowK
+        io: i
+    '}
+	fLowK_LUnd : LREAL := 0.54;
+	
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)L:UND:HiK
+        io: i
+    '}
+	fHiK_LUnd : LREAL := 2.5;
+	
+//////////////////////////
+// K Undulator constants
+//////////////////////////
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)K:UND:FirstSegment
+		io: i
+        archive: 1Hz monitor
+        field: DESC eV Range constants
+        field: EGU eV
+    '}
+    iLowBound_KUnd  : UDINT := 26;
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)K:UND:LastSegment
+		io: i
+	'}
+    iHighBound_KUnd : UDINT := 47;
+    {attribute 'pytmc' := '
+        pv: @(PREFIX)K:UND:Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm_KUnd : LREAL := 39.0;
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)K:UND:LowK
+        io: i
+    '}
+	fLowK_KUnd : LREAL := 1.5;
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)K:UND:HiK
+        io: i
+    '}
+	fHiK_KUnd : LREAL := 5.5;	
+	
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeHyst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range hystersis
         field: EGU eV
@@ -87,6 +162,7 @@ VAR_GLOBAL CONSTANT
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)L:eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
@@ -113,6 +189,7 @@ VAR_GLOBAL CONSTANT
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)K:eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
@@ -136,36 +213,6 @@ VAR_GLOBAL CONSTANT
     7.1E3
 	];
 
-
-//////////////////////////
-// Undulator constants
-//////////////////////////
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:FirstSegment 
-		io: i
-	'}
-    iLowBound_LUnd  : UDINT := 24;
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:LastSegment
-		io: i
-	'}
-    iHighBound_LUnd : UDINT := 46;
-    {attribute 'pytmc' := '
-        pv: Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm_LUnd : LREAL := 26.0;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:LowK
-        io: i
-    '}
-	fLowK_LUnd : LREAL := 0.54;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:HiK
-        io: i
-    '}
-	fHiK_LUnd : LREAL := 2.5;
 
 END_VAR]]></Declaration>
   </GVL>

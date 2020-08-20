@@ -136,7 +136,7 @@ UndAdrUpdate();
 
 nSeedUndulator := 0;
 
-FOR iIndex := PMPS_GVL.iLowBound_LUnd TO PMPS_GVL.iHighBound_LUnd DO
+FOR iIndex := PMPS_GVL.iLowBound_KUnd TO PMPS_GVL.iHighBound_KUnd DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
@@ -163,7 +163,9 @@ UndAdrUpdate();
 FOR iIndex := iLowBound TO iHighBound DO
         IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
-        fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+		fbCurrentSegment.fPeriod_mm := PMPS_GVL.fPeriod_mm_KUnd;
+		fbCurrentSegment.fLowK := PMPS_GVL.fLowK_KUnd;
+		fbCurrentSegment.fHiK := PMPS_GVL.fHiK_KUnd;
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>
