@@ -123,6 +123,17 @@ VAR CONSTANT
         field: EGU mm
     '}
     fPeriod_mm : LREAL := 39.0;
+    {attribute 'pytmc' := '
+        pv: LowK
+        io: i
+    '}
+	fLowK : LREAL := 0.54;
+	
+	{attribute 'pytmc' := '
+        pv: HiK
+        io: i
+    '}
+	fHiK : LREAL := 2.5; 
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -136,7 +147,7 @@ UndAdrUpdate();
 
 nSeedUndulator := 0;
 
-FOR iIndex := PMPS_GVL.iLowBound_KUnd TO PMPS_GVL.iHighBound_KUnd DO
+FOR iIndex := iLowBound TO iHighBound DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
@@ -163,9 +174,9 @@ UndAdrUpdate();
 FOR iIndex := iLowBound TO iHighBound DO
         IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
-		fbCurrentSegment.fPeriod_mm := PMPS_GVL.fPeriod_mm_KUnd;
-		fbCurrentSegment.fLowK := PMPS_GVL.fLowK_KUnd;
-		fbCurrentSegment.fHiK := PMPS_GVL.fHiK_KUnd;
+		fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+		fbCurrentSegment.fLowK := fLowK;
+		fbCurrentSegment.fHiK := fHiK;
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>

@@ -23,7 +23,32 @@ VAR_GLOBAL
         field: DESC Active eV Range constants
         field: EGU eV
     '}
-	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;    
+	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+
+
+//////////////////////////
+// Undulator constants
+//////////////////////////
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:FirstSegment
+		io: i
+	'}
+    iLowBound_Und  : UDINT := 24;
+	
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:LastSegment
+		io: i
+	'}
+    iHighBound_Und : UDINT := 46;
+	
+    {attribute 'pytmc' := '
+        pv: Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm_Und : LREAL := 26.0;
+	
+   
 
 END_VAR
 VAR_GLOBAL RETAIN    
@@ -116,39 +141,7 @@ VAR_GLOBAL CONSTANT
         io: i
     '}
 	fHiK_LUnd : LREAL := 2.5;
-	
-//////////////////////////
-// K Undulator constants
-//////////////////////////
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)K:UND:FirstSegment
-		io: i
-        archive: 1Hz monitor
-        field: DESC eV Range constants
-        field: EGU eV
-    '}
-    iLowBound_KUnd  : UDINT := 26;
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)K:UND:LastSegment
-		io: i
-	'}
-    iHighBound_KUnd : UDINT := 47;
-    {attribute 'pytmc' := '
-        pv: @(PREFIX)K:UND:Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm_KUnd : LREAL := 39.0;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)K:UND:LowK
-        io: i
-    '}
-	fLowK_KUnd : LREAL := 1.5;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)K:UND:HiK
-        io: i
-    '}
-	fHiK_KUnd : LREAL := 5.5;	
+///////////////////////////////////////		
 	
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeHyst
