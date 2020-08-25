@@ -113,9 +113,13 @@ VAR
 END_VAR
 
 VAR CONSTANT
-    {attribute 'pytmc' := 'pv: FirstSegment; io: i'}
+    {attribute 'pytmc' := '
+		pv: FirstSegment
+		io: i'}
     iLowBound  : UDINT := 26;
-    {attribute 'pytmc' := 'pv: LastSegment; io: i'}
+    {attribute 'pytmc' := '
+		pv: LastSegment
+	 	io: i'}
     iHighBound : UDINT := 47;
     {attribute 'pytmc' := '
         pv: Period

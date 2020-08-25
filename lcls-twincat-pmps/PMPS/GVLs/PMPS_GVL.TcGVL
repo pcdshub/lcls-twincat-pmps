@@ -41,6 +41,7 @@ VAR_GLOBAL RETAIN
     AccumulatedFF : UDINT; // Any time a FF occurs
 END_VAR
 VAR_GLOBAL CONSTANT
+	MAX_FAST_FAULTS	:	DINT := 50;
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
