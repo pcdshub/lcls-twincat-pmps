@@ -94,10 +94,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="GVLs\GVL_CUSTOM_CONSTANTS.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="GVLs\PMPS_GVL.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -179,6 +175,9 @@
     <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\FB_RateFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -189,6 +188,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_LPhotonEnergy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_KPhotonEnergy.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">

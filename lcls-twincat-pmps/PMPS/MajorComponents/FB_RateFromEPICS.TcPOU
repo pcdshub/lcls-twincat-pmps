@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_RateFromEPICS" Id="{1e21f3bc-80d5-47ca-8c4a-554964f1c13d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_RateFromEPICS
+
+(*
+enum MPSBeamRates {
+    MPSRateInvalid            =  0,
+    MPSRate0Hz                =  1,
+    /* Previously used 2 and 3 for single shot and burst */
+    MPSRate1Hz                =  4,
+    MPSRate10Hz               =  5,
+    MPSRate30Hz               =  6,
+    MPSRate60Hz               =  7,
+    MPSRate120Hz              =  8,
+    MPSRateUnknown            =  9,
+    MPSRateSingleShot         = 10,
+    MPSRateBurstMode          = 11,
+    MPSRateBurstModeNotActive = 12,
+    MPSNumberOfBeamRates      = 13,
+    MPSRateBurstInvalid       = 14
+}
+*)
+
+VAR_IN_OUT
+	BP : ST_BeamParams;
+    fbBYKIK_Rate : FB_LREALFromEPICS;
+END_VAR
+VAR_OUTPUT
+	xError : BOOL;
+END_VAR
+VAR
+
+	
+	eMPSRate : E_MPSBeamRates;
+END_VAR
+VAR CONSTANT
+	cFailSafeRate : UINT := 120;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbBYKIK_Rate();
+
+eMPSRate := LREAL_TO_UINT(fbBYKIK_Rate.fValue);
+
+CASE eMPSRate OF
+	MPSRateInvalid:
+		BP.nRate := cFailSafeRate;
+	MPSRate0Hz:
+		BP.nRate := 0;
+	MPSRate1Hz:
+		BP.nRate := 1;
+	MPSRate10Hz:
+		BP.nRate := 10;
+	MPSRate30Hz:
+		BP.nRate := 30;
+	MPSRate60Hz:
+		BP.nRate := 60;
+	MPSRate120Hz:
+		BP.nRate := 120;
+	MPSRateUnknown:
+		BP.nRate := cFailSafeRate;
+	
+ELSE
+	BP.nRate := cFailSafeRate;
+END_CASE
+
+BP.xValid R= NOT fbBYKIK_Rate.bValid OR
+			eMPSRate = MPSRateUnknown OR
+			eMPSRate = MPSRateInvalid;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

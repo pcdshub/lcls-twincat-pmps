@@ -5,22 +5,26 @@
 VAR_GLOBAL
     {attribute 'pytmc' := '
         pv: @(PREFIX)RequestedBP
+		io: i
         archive: 1Hz monitor
     '}
     stRequestedBeamParameters    :    ST_BeamParams; //Summarized request for the line, as recognized by the line arbiter PLC
     {attribute 'pytmc' := '
         pv: @(PREFIX)CurrentBP
+		io: i
         archive: 1Hz monitor
     '}
     stCurrentBeamParameters    :    ST_BeamParams; //Currently active BP set, broadcast by the line arbiter PLC
 	
     {attribute 'pytmc' := '
-        pv: @(PREFIX):eVRangeCnst
+        pv: @(PREFIX)eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Active eV Range constants
         field: EGU eV
     '}
-	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;    
+	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+   
 
 END_VAR
 VAR_GLOBAL RETAIN    
@@ -37,6 +41,7 @@ VAR_GLOBAL RETAIN
     AccumulatedFF : UDINT; // Any time a FF occurs
 END_VAR
 VAR_GLOBAL CONSTANT
+	MAX_FAST_FAULTS	:	DINT := 50;
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
@@ -45,6 +50,7 @@ VAR_GLOBAL CONSTANT
     MAX_STOPPERS    :   UINT := 16;
     {attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Full beam constant
     '}    
@@ -56,6 +62,7 @@ VAR_GLOBAL CONSTANT
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
+		io: i
         archive: 1Hz monitor
         field: DESC Safe beam constant
     '} 
@@ -76,8 +83,46 @@ VAR_GLOBAL CONSTANT
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
+	
+	
+//////////////////////////
+// L Undulator constants
+//////////////////////////
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:FirstSegment
+		io: i
+	'}
+    iLowBound_LUnd  : UDINT := 24;
+	
+    {attribute 'pytmc' := '
+		pv: @(PREFIX)L:UND:LastSegment
+		io: i
+	'}
+    iHighBound_LUnd : UDINT := 46;
+	
+    {attribute 'pytmc' := '
+        pv: Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm_LUnd : LREAL := 26.0;
+	
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)L:UND:LowK
+        io: i
+    '}
+	fLowK_LUnd : LREAL := 0.54;
+	
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)L:UND:HiK
+        io: i
+    '}
+	fHiK_LUnd : LREAL := 2.5;
+///////////////////////////////////////		
+	
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeHyst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range hystersis
         field: EGU eV
@@ -87,6 +132,7 @@ VAR_GLOBAL CONSTANT
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)L:eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
@@ -113,6 +159,7 @@ VAR_GLOBAL CONSTANT
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)K:eVRangeCnst
+		io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
@@ -136,36 +183,6 @@ VAR_GLOBAL CONSTANT
     7.1E3
 	];
 
-
-//////////////////////////
-// Undulator constants
-//////////////////////////
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:FirstSegment 
-		io: i
-	'}
-    iLowBound_LUnd  : UDINT := 24;
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:LastSegment
-		io: i
-	'}
-    iHighBound_LUnd : UDINT := 46;
-    {attribute 'pytmc' := '
-        pv: Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm_LUnd : LREAL := 26.0;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:LowK
-        io: i
-    '}
-	fLowK_LUnd : LREAL := 0.54;
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:HiK
-        io: i
-    '}
-	fHiK_LUnd : LREAL := 2.5;
 
 END_VAR]]></Declaration>
   </GVL>
