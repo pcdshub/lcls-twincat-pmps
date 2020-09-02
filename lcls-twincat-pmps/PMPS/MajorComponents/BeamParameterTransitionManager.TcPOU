@@ -194,8 +194,10 @@ END_IF]]></ST>
     <Action Name="AssertTransitionBP" Id="{b83a9501-a83d-470d-a69e-33ae3b34fe7a}">
       <Implementation>
         <ST><![CDATA[
+LogActions( CONCAT('Removing transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
 fbArbiter.RemoveRequest(i_TransitionAssertionID);
 
+LogActions( CONCAT('Requesting transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
 bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_TransitionAssertionID,
     i_stTransitionAssertion

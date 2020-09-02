@@ -12,6 +12,7 @@ VAR_INPUT
     
 END_VAR
 VAR_OUTPUT
+    q_stSimulatedBPReadback : ST_BeamParams; // Updated to 
 END_VAR
 VAR_IN_OUT
     FFO : FB_HardwareFFOutput;
