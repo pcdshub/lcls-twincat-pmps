@@ -25,7 +25,7 @@ VAR_GLOBAL
     '}
 	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
    
-
+    PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR
 VAR_GLOBAL RETAIN    
     // Statistics

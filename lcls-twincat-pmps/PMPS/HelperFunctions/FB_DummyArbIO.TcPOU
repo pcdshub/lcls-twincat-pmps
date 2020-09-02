@@ -8,11 +8,12 @@
 FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
     //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
+    LA : I_LowerAuthority;
+    
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-    LA : I_LowerAuthority;
     FFO : FB_HardwareFFOutput;
 END_VAR
 VAR

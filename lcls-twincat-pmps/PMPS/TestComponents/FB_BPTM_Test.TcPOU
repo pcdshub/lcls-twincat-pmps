@@ -27,10 +27,14 @@ VAR
     
     fbMachine    :    FB_MachineSimulator;    
     
+    
+    
 END_VAR
 VAR_INST
     fbBPTM_TestBasicFunction    :    BeamParameterTransitionManager;
     fbArbiter    :    FB_Arbiter(1);
+    ffo : FB_HardwareFFOutput;
+    fbSubSysIO : FB_DummyArbIO;
     fbBPR :  FB_BPRequestor;
     xFirstPass    :    BOOL := TRUE;
     eTestStep: eBPTMTestStates := eBPTMTestStates.Init;
@@ -127,7 +131,7 @@ END_CASE
 // Completes arbiter request elevation process
 // Necessary for CheckRequest to return true, ever
 fbBPR(Arbiter:=fbArbiter);
-]]></ST>
+fbSubSysIO(LA := fbArbiter, FFO := ffo);]]></ST>
       </Implementation>
     </Method>
   </POU>
