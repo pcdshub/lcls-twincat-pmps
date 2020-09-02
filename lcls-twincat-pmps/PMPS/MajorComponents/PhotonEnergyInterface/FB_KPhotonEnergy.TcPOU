@@ -16,6 +16,21 @@ VAR
         field: EGU GeV
     '}
     fbSxuElectronEnergy : FB_LREALFromEPICS;
+    
+    {attribute 'pytmc' := '
+        pv: EEnergy
+		io: i
+        field: DESC Electron Energy
+        field: EGU GeV
+    '}
+    fElectronEnergyVal : LREAL;
+    
+    {attribute 'pytmc' := '
+        pv: EEnergyValid
+		io: i
+        field: DESC Electron Energy Valid
+    '}
+    bElectronEnergyValid : BOOL;
 	
     {attribute 'pytmc' := '
         pv: UND
@@ -31,6 +46,9 @@ END_VAR
     <Implementation>
       <ST><![CDATA[// Update PVs
 fbSxuElectronEnergy();
+
+fElectronEnergyVal := fbSxuElectronEnergy.fValue;
+bElectronEnergyValid := fbSxuElectronEnergy.bValid;
 
 fbSxu(fbElectronEnergy:=fbSxuElectronEnergy);
 

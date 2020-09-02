@@ -35,6 +35,35 @@ VAR_OUTPUT
         field: DESC Undulator is considered active
     '}
 	xActive : BOOL; // Undulator is considered active
+    
+    {attribute 'pytmc' := '
+        pv: KAct
+		io: i
+        field: DESC Current K
+    '}
+    fKAct : LREAL;
+    
+    {attribute 'pytmc' := '
+        pv: KDes
+		io: i
+        field: DESC Target K
+    '}
+    fKDes : LREAL;
+    
+        {attribute 'pytmc' := '
+        pv: KActValid
+		io: i
+        field: DESC Current K Readback Valid
+    '}
+    bKActValid : BOOL;
+    
+    {attribute 'pytmc' := '
+        pv: KDesValid
+		io: i
+        field: DESC Target K Readback Valid
+    '}
+    bKDesValid : BOOL;
+    
 END_VAR
 
 VAR
@@ -55,6 +84,11 @@ END_VAR
     <Implementation>
       <ST><![CDATA[fbKDesired();
 fbKActual();
+
+fKAct := fbKActual.fValue;
+bKActValid := fbKActual.bValid;
+fKDes := fbKDesired.fValue;
+bKDesValid := fbKDesired.bvalid;
 
 IF __ISVALIDREF(fbElectronEnergy) THEN
 
@@ -82,14 +116,5 @@ IF __ISVALIDREF(fbElectronEnergy) THEN
 
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="FB_UndulatorSegment">
-      <LineId Id="3" Count="10" />
-      <LineId Id="73" Count="2" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="80" Count="0" />
-      <LineId Id="14" Count="9" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

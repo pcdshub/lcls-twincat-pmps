@@ -17,6 +17,21 @@ VAR
     '}
     fbHgvpuElectronEnergy : FB_LREALFromEPICS;
 	
+    {attribute 'pytmc' := '
+        pv: EEnergy
+		io: i
+        field: DESC Electron Energy
+        field: EGU GeV
+    '}
+    fElectronEnergyVal : LREAL;
+    
+    {attribute 'pytmc' := '
+        pv: EEnergyValid
+		io: i
+        field: DESC Electron Energy Valid
+    '}
+    bElectronEnergyValid : BOOL;
+    
 	{attribute 'pytmc' := '
         pv: UND
         link: USEG:UNDH:
@@ -31,6 +46,9 @@ END_VAR
       <ST><![CDATA[// Update PVs
 fbHgvpuElectronEnergy();
 
+fElectronEnergyVal := fbHgvpuElectronEnergy.fValue;
+bElectronEnergyValid := fbHgvpuElectronEnergy.bValid;
+
 fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
 
 //Update BP
@@ -40,18 +58,5 @@ nTargetPhotonEnergyBitmask := F_eVRangeCalculator(fbHgvpu.fTargetPhotonEnergy, n
 BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_LPhotonEnergy">
-      <LineId Id="26" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="27" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
