@@ -7,18 +7,32 @@
 {warning: 'DO NOT USE THIS BLOCK IN PRODUCTION, it will overwrite the contents of PMPS_GVL.stCurrentBeamParameters which is vital for other PMPS functionality'}
 FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
+    //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
 END_VAR
 VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+    LA : I_LowerAuthority;
+    FFO : FB_HardwareFFOutput;
 END_VAR
 VAR
    bAutoUpdateBP : BOOL := FALSE; // Set by AutoUpdateBP property, if true causes this FB to update PMPS_GVL.stCurrentBP to the
    // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
-   stReqOutBP : ST_BeamParams;
-   stSaveCurrentBP : ST_BeamParams;
+   stNewReqBP : ST_BeamParams;
+   
+   stReqOutBP : ST_BeamParams; // To be written on next ApplyBPReq call
+   
+   stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
+   
+   nSavedID : DWORD; // Used to simulate CheckRequest method
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[
+LA.ElevateRequest(THIS^);
+
+ApplyBPReq(FALSE); //If autoupdate is set, this will propagate the request to PMPS_GVL.stCurrentBP;
+]]></ST>
     </Implementation>
     <Folder Name="HA_Interface" Id="{36d93f79-3cf6-48dd-9ba0-27e717cb8a67}" />
     <Folder Name="LA_Interface" Id="{48de026b-268f-476a-a3cb-a1bbfa687eac}" />
@@ -28,10 +42,17 @@ METHOD ApplyBPReq
 VAR_INPUT
     bUpdateBP : BOOL := FALSE; // Set true and call this method to set PMPS_GVL.stCurrentBP to the request
 END_VAR
-]]></Declaration>
+VAR
+    BP : REFERENCE TO ST_BeamParams;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 IF bAutoUpdateBP OR bUpdateBP THEN
+(*    IF __ISVALIDREF(stCurrentBP) THEN
+        BP := stCurrentBP;
+    ELSE
+        
+	END_IF*)
     stSaveCurrentBP := PMPS_GVL.stCurrentBeamParameters;
     PMPS_GVL.stCurrentBeamParameters := stReqOutBP;
 END_IF]]></ST>
@@ -63,7 +84,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CheckRequest := TRUE;]]></ST>
+        <ST><![CDATA[CheckRequest := nReqID = nSavedID AND (nReqID <> 0) AND (nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ElevateRequest" Id="{79fc0fa0-8f3b-4b40-940c-90dad8ef33eb}" FolderPath="LA_Interface\">
@@ -101,7 +122,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-RestoreBPReq(FALSE);
+nSavedID := 0;
+
+stReqOutBP := stSaveCurrentBP;
 
 RemoveRequest := TRUE;]]></ST>
       </Implementation>
@@ -117,23 +140,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-ApplyBPReq(FALSE); //If autoupdate is set, this will propagate the request to PMPS_GVL.stCurrentBP;
-
-RequestBP := TRUE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RestoreBPReq" Id="{a518c175-e775-4b5d-95f3-b27c5a650040}">
-      <Declaration><![CDATA[//Restores the previous stCurrentBP from before the ApplyBPReq method was called
-METHOD RestoreBPReq
-VAR_INPUT
-    bUpdateBP : BOOL := FALSE; // Set true and call this method to reset PMPS_GVL.stCurrentBP to its value before ApplyBPReq was called
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-IF bAutoUpdateBP OR bUpdateBP THEN
-    PMPS_GVL.stCurrentBeamParameters := stSaveCurrentBP;
+        <ST><![CDATA[IF nReqID <> 0 AND nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+    nSavedID := nReqID;
+    stReqOutBP := stReqBP;
+    
+    RequestBP := TRUE;
+ELSE
+    RequestBP := FALSE;
 END_IF
 ]]></ST>
       </Implementation>
