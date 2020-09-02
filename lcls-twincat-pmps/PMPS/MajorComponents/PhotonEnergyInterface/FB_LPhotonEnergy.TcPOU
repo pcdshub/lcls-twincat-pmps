@@ -46,6 +46,9 @@ END_VAR
       <ST><![CDATA[// Update PVs
 fbHgvpuElectronEnergy();
 
+fElectronEnergyVal := fbHgvpuElectronEnergy.fValue;
+bElectronEnergyValid := fbHgvpuElectronEnergy.bValid;
+
 fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
 
 //Update BP

@@ -47,6 +47,9 @@ END_VAR
       <ST><![CDATA[// Update PVs
 fbSxuElectronEnergy();
 
+fElectronEnergyVal := fbSxuElectronEnergy.fValue;
+bElectronEnergyValid := fbSxuElectronEnergy.bValid;
+
 fbSxu(fbElectronEnergy:=fbSxuElectronEnergy);
 
 //Update BP
