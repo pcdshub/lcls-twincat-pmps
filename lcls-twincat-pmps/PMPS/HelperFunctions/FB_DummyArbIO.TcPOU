@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_DummyArbIO" Id="{2832ee2c-eae8-4c8f-9ee2-8e9eb8d3e7f9}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Use to test other library integrations of PMPS preemptive functionality *)
+(* Use this as a higher authority in the arbiter elevate request. *)
+(* This block stands in for the FB_SubSysToArb_IO block. *)
+{warning: 'DO NOT USE THIS BLOCK IN PRODUCTION, it will overwrite the contents of PMPS_GVL.stCurrentBeamParameters which is vital for other PMPS functionality'}
+FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+   bAutoUpdateBP : BOOL := FALSE; // Set by AutoUpdateBP property, if true causes this FB to update PMPS_GVL.stCurrentBP to the
+   // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
+   stReqOutBP : ST_BeamParams;
+   stSaveCurrentBP : ST_BeamParams;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="HA_Interface" Id="{36d93f79-3cf6-48dd-9ba0-27e717cb8a67}" />
+    <Folder Name="LA_Interface" Id="{48de026b-268f-476a-a3cb-a1bbfa687eac}" />
+    <Method Name="ApplyBPReq" Id="{b5f776ae-98aa-4cf9-ac27-36dc43564cdb}">
+      <Declaration><![CDATA[// Call this method to update PMPS_GVL.stCurrentBP at will, used if auto-update is set to false
+METHOD ApplyBPReq
+VAR_INPUT
+    bUpdateBP : BOOL := FALSE; // Set true and call this method to set PMPS_GVL.stCurrentBP to the request
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bAutoUpdateBP OR bUpdateBP THEN
+    stSaveCurrentBP := PMPS_GVL.stCurrentBeamParameters;
+    PMPS_GVL.stCurrentBeamParameters := stReqOutBP;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="AutoUpdateBP" Id="{2d5cb5c0-e6e6-466f-ae2e-a59433cf2c5e}">
+      <Declaration><![CDATA[PROPERTY AutoUpdateBP : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9ec8088f-802b-48c7-b80a-bc57959fbd49}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AutoUpdateBP := bAutoUpdateBP;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{67edcff4-9a2e-41f9-a20d-1918fa1b5a03}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[bAutoUpdateBP := AutoUpdateBP;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="CheckRequest" Id="{1e6cb171-7319-46e7-96e6-0934e38acd54}" FolderPath="HA_Interface\">
+      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+VAR_INPUT
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CheckRequest := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ElevateRequest" Id="{79fc0fa0-8f3b-4b40-940c-90dad8ef33eb}" FolderPath="LA_Interface\">
+      <Declaration><![CDATA[// <Arbiter Internal>
+// Elevates the arbitrated BP set to something above.
+// Could be another arbiter, or a BP requester/ IO, 
+// or an FB that locks in a specific portion of the BP set.
+METHOD ElevateRequest : BOOL 
+VAR_INPUT
+    HigherAuthority : I_HigherAuthority;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="nLowerAuthorityID" Id="{cee0e465-a9e4-4853-b4e3-00b3569862c5}" FolderPath="LA_Interface\">
+      <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
+      <Get Name="Get" Id="{ccec6f5d-8fc3-4735-9eb5-1c6c12363ace}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nLowerAuthorityID := PMPS_GVL.EXCLUDED_ASSERTION_ID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RemoveRequest" Id="{bda32f73-2cf9-4f7c-a781-b32a7ad371ae}" FolderPath="HA_Interface\">
+      <Declaration><![CDATA[
+METHOD RemoveRequest : BOOL
+VAR_INPUT
+	(*StateID to remove*)
+	nReqID	: DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+RestoreBPReq(FALSE);
+
+RemoveRequest := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RequestBP" Id="{d7612d18-f07c-4606-9df7-22ace3d9fcc1}" FolderPath="HA_Interface\">
+      <Declaration><![CDATA[// Request a BP from this higher authority
+METHOD RequestBP : BOOL
+VAR_INPUT
+	(*StateID of state requesting beam parameter set*)
+	nReqID	: DWORD;
+	(*Requested beam params*)
+	stReqBP	: ST_BeamParams;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ApplyBPReq(FALSE); //If autoupdate is set, this will propagate the request to PMPS_GVL.stCurrentBP;
+
+RequestBP := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RestoreBPReq" Id="{a518c175-e775-4b5d-95f3-b27c5a650040}">
+      <Declaration><![CDATA[//Restores the previous stCurrentBP from before the ApplyBPReq method was called
+METHOD RestoreBPReq
+VAR_INPUT
+    bUpdateBP : BOOL := FALSE; // Set true and call this method to reset PMPS_GVL.stCurrentBP to its value before ApplyBPReq was called
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF bAutoUpdateBP OR bUpdateBP THEN
+    PMPS_GVL.stCurrentBeamParameters := stSaveCurrentBP;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

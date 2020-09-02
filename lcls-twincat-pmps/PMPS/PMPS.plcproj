@@ -105,6 +105,9 @@
     <Compile Include="HelperFunctions\FB_DummyHA.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HelperFunctions\FB_DummyArbIO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_BPWithID.TcPOU">
       <SubType>Code</SubType>
     </Compile>

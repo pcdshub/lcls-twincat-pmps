@@ -4,21 +4,24 @@
     <Declaration><![CDATA[INTERFACE I_HigherAuthority
 ]]></Declaration>
     <Method Name="CheckRequest" Id="{2b6572a7-0464-4365-87a4-ea55112db4f2}">
-      <Declaration><![CDATA[METHOD CheckRequest : BOOL
+      <Declaration><![CDATA[//Verify with this higher authority that the request is being included
+METHOD CheckRequest : BOOL
 VAR_INPUT
     nReqID    :    DWORD;
 END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="RemoveRequest" Id="{b1106367-19fe-4d3d-86ca-02340ce0c1d7}">
-      <Declaration><![CDATA[METHOD RemoveRequest : BOOL
+      <Declaration><![CDATA[//Remove the request from this higher authority
+METHOD RemoveRequest : BOOL
 VAR_INPUT
 	nReqID    :    DWORD; //StateID to remove
 END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="RequestBP" Id="{3e1739a1-1ad7-458f-aff2-92eb7b0d02d9}">
-      <Declaration><![CDATA[METHOD RequestBP : BOOL
+      <Declaration><![CDATA[// Request a BP from this higher authority
+METHOD RequestBP : BOOL
 VAR_INPUT
     nReqID    :    DWORD; //StateID of state requesting beam parameter set
     stReqBP        :    ST_BeamParams; //Requested beam params
