@@ -273,7 +273,7 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestComponents\eBPTMTestStates.TcDUT">
+    <Compile Include="TestComponents\DUT\eBPTMTestStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_Arbiter_Test.TcPOU">
@@ -333,6 +333,7 @@
     <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="TestComponents" />
+    <Folder Include="TestComponents\DUT" />
     <Folder Include="VISUs" />
   </ItemGroup>
   <ItemGroup>

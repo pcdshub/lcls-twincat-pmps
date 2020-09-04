@@ -4,7 +4,7 @@
     <Declaration><![CDATA[(* Use to test other library integrations of PMPS preemptive functionality *)
 (* Use this as a higher authority in the arbiter elevate request. *)
 (* This block stands in for the FB_SubSysToArb_IO block. *)
-{warning: 'DO NOT USE THIS BLOCK IN PRODUCTION, it will overwrite the contents of PMPS_GVL.stCurrentBeamParameters which is vital for other PMPS functionality'}
+
 FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
     //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
@@ -39,10 +39,10 @@ ApplyBPReq(FALSE); //If autoupdate is set, this will propagate the request to PM
     <Folder Name="HA_Interface" Id="{36d93f79-3cf6-48dd-9ba0-27e717cb8a67}" />
     <Folder Name="LA_Interface" Id="{48de026b-268f-476a-a3cb-a1bbfa687eac}" />
     <Method Name="ApplyBPReq" Id="{b5f776ae-98aa-4cf9-ac27-36dc43564cdb}">
-      <Declaration><![CDATA[// Call this method to update PMPS_GVL.stCurrentBP at will, used if auto-update is set to false
+      <Declaration><![CDATA[// Call this method to update q_stSimulatedBPReadback at will, used if auto-update is set to false
 METHOD ApplyBPReq
 VAR_INPUT
-    bUpdateBP : BOOL := FALSE; // Set true and call this method to set PMPS_GVL.stCurrentBP to the request
+    bUpdateBP : BOOL := FALSE; // Set true and call this method to set q_stSimulatedBPReadback to the request
 END_VAR
 VAR
     BP : REFERENCE TO ST_BeamParams;
@@ -50,13 +50,8 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 IF bAutoUpdateBP OR bUpdateBP THEN
-(*    IF __ISVALIDREF(stCurrentBP) THEN
-        BP := stCurrentBP;
-    ELSE
-        
-	END_IF*)
-    stSaveCurrentBP := PMPS_GVL.stCurrentBeamParameters;
-    PMPS_GVL.stCurrentBeamParameters := stReqOutBP;
+    stSaveCurrentBP := q_stSimulatedBPReadback;
+    q_stSimulatedBPReadback := stReqOutBP;
 END_IF]]></ST>
       </Implementation>
     </Method>

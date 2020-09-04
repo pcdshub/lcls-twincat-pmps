@@ -115,11 +115,11 @@ IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
 END_IF
     
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
-    fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Addition to arbiter assertion pool failed'),
+    fbLog(sMsg:=CONCAT('Addition to arbiter assertion pool failed ', DWORD_TO_STRING(nReqID)),
             eSevr:=TcEventSeverity.Warning,
             eSubsystem:=E_Subsystem.MPS);
 ELSIF THIS^.fbBPAssertionPool.bOk THEN
-	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Added to pool'),
+	fbLog(sMsg:=CONCAT('Added to pool ',DWORD_TO_STRING(nReqID)),
             eSevr:=TcEventSeverity.Verbose,
             eSubsystem:=E_Subsystem.MPS);
 END_IF
@@ -353,11 +353,11 @@ END_VAR]]></Declaration>
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
     
     IF THIS^.fbBPAssertionPool.bOk THEN
-        	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Removed from pool'),
+        	fbLog(sMsg:=CONCAT('Removed from pool: ', DWORD_TO_STRING(nReqID)),
             eSevr:=TcEventSeverity.Verbose,
             eSubsystem:=E_Subsystem.MPS);
     ELSE
-        fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Failed to remove from pool'),
+        fbLog(sMsg:=CONCAT('Failed to remove from pool: ', DWORD_TO_STRING(nReqID)),
             eSevr:=TcEventSeverity.Warning,
             eSubsystem:=E_Subsystem.MPS);
     END_IF
@@ -382,46 +382,5 @@ END_VAR
         <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Arbiter">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.AddRequest">
-      <LineId Id="3" Count="33" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.ArbitrateBP">
-      <LineId Id="3" Count="21" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.CheckRequest">
-      <LineId Id="3" Count="11" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.CheckRequestInPool">
-      <LineId Id="3" Count="1" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.ElevateRequest">
-      <LineId Id="3" Count="16" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.FB_init">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.GetArbitratedBP">
-      <LineId Id="3" Count="40" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.nLowerAuthorityID.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.RemoveRequest">
-      <LineId Id="3" Count="22" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.RequestBP">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -59,6 +59,8 @@ VAR
     nAssrtAttempt : INT; // Number of times we have tried asserting a BP set
     
     rtRetry : R_TRIG;
+    
+    rtError : R_TRIG;
 	
 END_VAR
 VAR CONSTANT
@@ -98,7 +100,9 @@ END_IF
 
 IF xEntry THEN nAssrtAttempt := 0; END_IF
 
-IF bError THEN
+rtError(CLK:=bError);
+
+IF rtError.Q THEN
     eBPTMState := E_BPTMState.Error;
 END_IF
 
@@ -148,6 +152,14 @@ CASE eBPTMState OF
 			LogActions('Returning to idle');
 			eBPTMState := E_BPTMState.Idle;
 		END_IF
+        
+    Error:
+        LogActions( CONCAT('Error, removing transition ID: ', DWORD_TO_STRING(i_TransitionAssertionID) ) );
+        fbArbiter.RemoveRequest(i_TransitionAssertionID);
+        
+        LogActions( CONCAT('Error, removing target ID: ', DWORD_TO_STRING(i_nRequestedAssertionID) ) );
+        fbArbiter.RemoveRequest(i_nRequestedAssertionID);
+        eBPTMState := E_BPTMState.Idle;
 END_CASE
 
 xEntry := ePrevState <> eBPTMState;
@@ -165,9 +177,11 @@ ePrevState := eBPTMState;
 state beam parameters should always be safer than the
 current or target state beam parameters
 *)
-fbArbiter.RemoveRequest( nCurrentAssertionID );
+IF nCurrentAssertionID <> 0 THEN
+    LogActions(CONCAT('Removing final/current request: ', DWORD_TO_STRING(nCurrentAssertionID)) );
+    fbArbiter.RemoveRequest( nCurrentAssertionID );
+END_IF
 
-LogActions(CONCAT('Removing final/current request: ', DWORD_TO_STRING(nCurrentAssertionID)) );
 LogActions(CONCAT('Asserting target req.: ', DWORD_TO_STRING(nTargetAssertionID)) );
 
 //Asserting target parameters
@@ -176,7 +190,7 @@ bFinalAssertionFailed := NOT fbArbiter.AddRequest(
     stTargetAssertion
 );
 
-IF bTransAssertionFailed THEN
+IF bFinalAssertionFailed THEN
     LogActions('Assert final failed. ');
     nAssrtAttempt := nAssrtAttempt + 1;
     IF nAssrtAttempt > cAssrtMax THEN
@@ -291,7 +305,6 @@ xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion) AND
       <Implementation>
         <ST><![CDATA[//Set this bool false so we can get a rising edge on the next try
 xFinalBP := FALSE;
-PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;
 ]]></ST>
       </Implementation>
     </Action>
@@ -305,7 +318,7 @@ xTranBP    := F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) 
     <Action Name="WaitingForTransitionAssertion_EXIT" Id="{97cb140a-13c7-46d0-9d70-2452731d3375}">
       <Implementation>
         <ST><![CDATA[xTranBP := FALSE;
-PMPS_GVL.SuccessfulPreemption := PMPS_GVL.SuccessfulPreemption + 1;
+
 ]]></ST>
       </Implementation>
     </Action>
