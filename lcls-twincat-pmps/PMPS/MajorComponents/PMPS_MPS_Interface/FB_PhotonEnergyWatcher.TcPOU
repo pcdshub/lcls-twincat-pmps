@@ -18,6 +18,7 @@ Note, this protection logic does not account for beam-off when determining fast-
 status. If a device is requesting a limited range of eV, this request must be honored,
 regardless of current beam-rate.
 *)
+{attribute 'reflection'}
 FUNCTION_BLOCK FB_PhotonEnergyWatcher
 VAR_INPUT
     i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
@@ -47,21 +48,56 @@ VAR
         field: EGU eV-bitmask
     '}
     evResidual : WORD;
+    
+    fbLog : FB_LogMessage := (
+        eSubSystem := E_Subsystem.MPS,
+        eSevr := TcEventSeverity.Critical
+        );
+    bLogOneShot : BOOL;
+    sDevName : T_MaxString := 'Photon Energy Watcher';
+    
+    fbGetHN : FB_GetHostName;
+    bInit : BOOL := TRUE;
+    
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
+    
+    fbStr : FB_FormatString (
+        sOut := 'Non-zero photon energy residual: %16b; Req: %16b; Act: %16b');
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[xPhotonEnergyWithinBounds := (i_stCurrentBeamParams.neVRange AND i_stRequestedBeamParams.neVRange) = i_stCurrentBeamParams.neVRange;
+      <ST><![CDATA[IF bInit THEN
+    fbGetHN(bExecute:=TRUE);
+    bInit R= NOT fbGetHN.bBusy;
+END_IF
+    
+xPhotonEnergyWithinBounds := (i_stCurrentBeamParams.neVRange AND i_stRequestedBeamParams.neVRange) = i_stCurrentBeamParams.neVRange;
 
 evResidual := (i_stCurrentBeamParams.neVRange XOR i_stRequestedBeamParams.neVRange) AND i_stCurrentBeamParams.neVRange;
 
+IF evResidual <> 0 AND bLogOneShot THEN
+    fbLog.sJson := F_PMPS_JSON(
+        CONCAT(fbGetHN.sHostName, sDevName),
+        sPath,
+        PMPS_CODES.PEW_FAULT);
+    
+    fbStr.arg1 := F_WORD(evResidual);
+    fbStr.arg2 := F_WORD(i_stCurrentBeamParams.neVRange);
+    fbStr.arg3 := F_WORD(i_stRequestedBeamParams.neVRange);
+    
+    fbStr();
+        
+    fbLog(sMsg:=fbStr.sOut);
+    bLogOneShot := FALSE;
+ELSIF evResidual = 0 THEN
+    bLogOneShot := TRUE;
+END_IF
+
 fbFF(i_xOK := xPhotonEnergyWithinBounds,
-    io_fbFFHWO := io_fbFFHWO);
+    io_fbFFHWO := io_fbFFHWO,);
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_PhotonEnergyWatcher">
-      <LineId Id="3" Count="4" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
