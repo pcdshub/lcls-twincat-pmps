@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="PMPS_CODES" Id="{a478420e-6a59-487b-89cb-8d5f4267d9aa}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE PMPS_CODES :
+(
+	FAST_FAULT := 16#1, // Generic fast fault
+    PEW_FAULT := 16#7, // Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.    
+    
+    // Arbiter codes
+    //////////////////////////////////
+        ARB_FULL := 16#201 // Arbiter pool is full.
+    
+    //BPTM Codes
+    //////////////////////////////////
+        BadTargetID := 16#300,
+        BadTransID := 16#301,
+        TransAssrtFail := 16#302,
+        FinalAssrtFail := 16#303,
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
