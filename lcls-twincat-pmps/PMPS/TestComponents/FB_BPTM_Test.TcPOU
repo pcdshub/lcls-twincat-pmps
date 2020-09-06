@@ -15,7 +15,8 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[BPTMBasicFunction();
 InterruptedTransition();
-FailedRequestAtTransition();]]></ST>
+FailedRequestAtTransition();
+FailedRequestAtFinal();]]></ST>
     </Implementation>
     <Method Name="BPTMBasicFunction" Id="{70f68025-dfe3-432b-8778-ea5b6ded4985}">
       <Declaration><![CDATA[METHOD BPTMBasicFunction
@@ -208,7 +209,7 @@ eBPTMTestStates.Error:
         AssertTrue(fbBPTM_TestFailureRecovery.bError AND fbBPTM_TestFailureRecovery.nErrId = fbBPTM_TestFailureRecovery.FinalAssrtFail,
             'No error from failed final assertion.');
             
-        TEST_FINISHED_NAMED('BPTM Error on Transition');
+        TEST_FINISHED_NAMED('BPTM Error on Final');
         
         eTestStep := eBPTMTestStates.Retry;
         
@@ -242,7 +243,7 @@ eBPTMTestStates.Retry:
 	END_IF
 
 eBPTMTestStates.CleaningUp:
-    TEST_FINISHED_NAMED('BPTMFailedTran');    
+    TEST_FINISHED_NAMED('BPTMFailedFinal');    
     
 END_CASE
 

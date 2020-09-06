@@ -9,6 +9,8 @@ VAR_IN_OUT
     
     fbArbiter    :    FB_Arbiter; //Connect to local arbiter
     
+    FFO : FB_HardwareFFOutput;
+    
 END_VAR
 VAR_INPUT
     i_TransitionAssertionID    :    UDINT := 0;
@@ -61,17 +63,17 @@ VAR
     rtRetry : R_TRIG;
     
     rtError : R_TRIG;
+    
+    ffTimeout : FB_FastFault := (
+        i_Desc := 'Preemptive requests timed out in BPTM',
+        i_TypeCode := 16#A,
+        i_xAutoReset := FALSE);
+        
 	
 END_VAR
 VAR CONSTANT
 	LogBuffSize : INT := 40;
     cAssrtMax : INT := 3;
-    
-    BadTargetID : INT := 1001;
-    BadTransID : INT := 1002;
-    TransAssrtFail : INT := 2001;
-    FinalAssrtFail : INT := 3001;
-    
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -153,7 +155,13 @@ CASE eBPTMState OF
 			eBPTMState := E_BPTMState.Idle;
 		END_IF
         
-    Error:
+    Error:    
+    (* NOTE TO SELF
+    I really don't like this idea of auto-removing requests.
+    
+    If we're going to do this we should only do it in such a way that the fast fault is only recovered when we make it back to a target BP + state.
+    
+    *)
         LogActions( CONCAT('Error, removing transition ID: ', DWORD_TO_STRING(i_TransitionAssertionID) ) );
         fbArbiter.RemoveRequest(i_TransitionAssertionID);
         
@@ -165,7 +173,13 @@ END_CASE
 xEntry := ePrevState <> eBPTMState;
 ePrevState := eBPTMState;
 
+// Fast fault
+ffTimeout.i_xOK R= bError OR nErrId <> 0;
+ffTimeout.i_xOK S= NOT bError AND nErrId = 0;
 
+
+
+ffTimeout(io_fbFFHWO:=FFO);
 ]]></ST>
     </Implementation>
     <Action Name="AssertFinalBP" Id="{4d723d61-220d-405f-a182-a1465a63ec6c}">
