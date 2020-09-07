@@ -80,7 +80,7 @@ VAR_GLOBAL CONSTANT
     {warning disable C0228}
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     {warning restore C0228}
-    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
+    MAX_ASSERTIONS    :    UDINT := 300; //Maximum number of assertions permitted in the arbiter
     
     g_cBoundaries    :    INT    := 15;
 	

@@ -5,11 +5,14 @@
 (
     Init := 0,
 	NewTarget := 1000,
+    RequestBP := 1500,
+    WaitForBP := 2500,
     WaitingForTransitionAssertion := 2000,
     WaitingForFinalAssertion := 3000,
     Transitioning := 4000,
     CleaningUp := 5000,
 	Idle := 6000,
+    Done := 8000,
     Error := 9000
 );
 END_TYPE

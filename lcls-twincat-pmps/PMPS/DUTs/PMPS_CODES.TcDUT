@@ -10,7 +10,7 @@ TYPE PMPS_CODES :
     
     // Arbiter codes
     //////////////////////////////////
-        ARB_FULL := 16#201 // Arbiter pool is full.
+        ARB_FULL := 16#201, // Arbiter pool is full.
     
     //BPTM Codes
     //////////////////////////////////
@@ -18,7 +18,8 @@ TYPE PMPS_CODES :
         BadTransID := 16#301,
         TransAssrtFail := 16#302,
         FinalAssrtFail := 16#303,
-);
+        NoRoomInArb := 16#304
+) UINT;
 END_TYPE
 ]]></Declaration>
   </DUT>

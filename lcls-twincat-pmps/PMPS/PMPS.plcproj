@@ -276,7 +276,7 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestComponents\DUT\eBPTMTestStates.TcDUT">
+    <Compile Include="TestComponents\DUT\E_BPTMTestStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestComponents\FB_Arbiter_Test.TcPOU">

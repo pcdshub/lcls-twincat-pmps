@@ -22,19 +22,9 @@ These features efficiently address the addition, removal, and verification of be
 *)
 {attribute 'reflection'}
 FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-    {attribute 'pytmc' := '
-        pv: ArbitratedBP
-        io: i
-        field: DESC Arbitrated BP
-     '}
-    q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
-    
-    q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
-END_VAR
 VAR
+    nRequestsCount : UDINT; // How many requests are currently in the arbiter
+    
     {attribute 'pytmc' := '
         pv: AP
         io: i
@@ -66,8 +56,6 @@ VAR
 	
 	rtActiveInArbitration : R_TRIG;
 	
-	nEntryCount : UDINT;
-	
 	// The following IDs are set by the last BP request that was most conservative
 	// ie. other requests may limit the parameter, but this one is the most recent to limit it
 	idTransmission : DWORD; // ID of BP limiting transmission
@@ -83,6 +71,19 @@ VAR
     
     bVerbose : BOOL := FALSE;
 END_VAR
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: ArbitratedBP
+        io: i
+        field: DESC Arbitrated BP
+     '}
+    q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+    
+    q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
+END_VAR
+
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -140,7 +141,9 @@ END_IF
 // With any new request reset the internal arbiter "done" flag
 xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
-AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+AddRequest := THIS^.fbBPAssertionPool.bOk;
+
+nRequestsCount := nEntryCount;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
@@ -326,14 +329,24 @@ GetArbitratedBP := stOutputBP;
 
 GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;
 
-fbBPAssertionPool.A_Count();
-IF fbBPAssertionPool.bOk THEN
-	nEntryCount := fbBPAssertionPool.nCount ;
-END_IF
-
 xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="nEntryCount" Id="{69cbd72e-a198-4efd-872d-53cc3bb7c334}">
+      <Declaration><![CDATA[// How many entries are in the arbiter now
+PROPERTY nEntryCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{d25a2080-a286-42b6-ae86-fa04a141b063}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbBPAssertionPool.A_Count();
+IF fbBPAssertionPool.bOk THEN
+	nEntryCount := fbBPAssertionPool.nCount ;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="nLowerAuthorityID" Id="{1fc1fd51-255d-436a-8bc9-caa51a4c9d82}">
       <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
       <Get Name="Get" Id="{30bc21b7-6ca8-40ff-b8a0-c2f0cc071beb}">
@@ -383,7 +396,9 @@ END_IF
 // With any new request reset the internal arbiter "done" flag
 xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
-RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+RemoveRequest := THIS^.fbBPAssertionPool.bOk;
+
+nRequestsCount := nEntryCount;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{d19219fe-34dd-4096-83ea-674a98690de1}">
