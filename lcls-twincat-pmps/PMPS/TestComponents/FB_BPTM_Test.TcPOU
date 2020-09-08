@@ -39,12 +39,21 @@ VAR_INST
     eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE eTestStep OF
+        <ST><![CDATA[
+// Completes arbiter request elevation process
+// Necessary for CheckRequest to return true, ever
+    fbBPTM_TestBasicFunction(
+        fbArbiter := fbArbiter,
+        stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback);
+
+fbSubSysIO(LA := fbArbiter, FFO := ffo);
+
+CASE eTestStep OF
 
 E_BPTMTestStates.Init:
     
     TEST('BPTMTest');
-    eTestStep := E_BPTMTestStates.WaitingForTransitionAssertion;
+    eTestStep := E_BPTMTestStates.WaitingForBeam;
 
 E_BPTMTestStates.WaitingForBeam:
     TEST('BPTM Waits for Beam');
@@ -64,6 +73,10 @@ E_BPTMTestStates.WaitingForBeam:
                 
         AssertFalse(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
             'Transition should not be authorized until requests are in and beam is ready');
+            
+        AssertTrue(fbBPTM_TestBasicFunction.bBusy, 'Busy should be true here');
+        AssertFalse(fbBPTM_TestBasicFunction.bDone, 'Done should be false');
+        AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be false here');
             
         TEST_FINISHED_NAMED('BPTM Waits for Beam');
         
@@ -100,6 +113,8 @@ E_BPTMTestStates.CleaningUp:
 
     TEST('Cleaning up');
     
+    fbBPTM_TestBasicFunction.i_xDoneMoving := TRUE;
+    
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Done THEN
         
         AssertFalse(fbArbiter.CheckRequestInPool(nTransitionID), 'Transition req should be removed from arb now');
@@ -110,17 +125,16 @@ E_BPTMTestStates.CleaningUp:
 	END_IF
 
 E_BPTMTestStates.Done:
+
+    
+    AssertTrue(fbBPTM_TestBasicFunction.bDone, 'Done should be set');
+    AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be cleared');
+    AssertFalse(fbBPTM_TestBasicFunction.bBusy, 'Busy should be false');
+    
     TEST_FINISHED_NAMED('BPTMTest');    
     
 END_CASE
-
-// Completes arbiter request elevation process
-// Necessary for CheckRequest to return true, ever
-    fbBPTM_TestBasicFunction(
-        fbArbiter := fbArbiter,
-        stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback);
-
-fbSubSysIO(LA := fbArbiter, FFO := ffo);]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FullArbError" Id="{b24cff8a-98df-48c0-95b3-ca157e608fb9}">
@@ -162,11 +176,9 @@ E_BPTMTestStates.Init:
     TEST('BPTMErrorFullArb');
     
     // Fill the arbiter
-    FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS + 1 // plus 1 for starting at zero, this fills the arbiter
+    FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS // this fills the arbiter
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
-        fbRand();            
-        nRandID := REAL_TO_DWORD(fbRand.Num*1E6);
-        fbArbFullErr.AddRequest(nReqID := nRandID, stReqBP := testReq);
+        fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq);
     END_FOR
     
     fbSubSysIO.AutoUpdateBP := TRUE;
@@ -219,7 +231,7 @@ E_BPTMTestStates.Retry:
 	END_IF
 
 E_BPTMTestStates.CleaningUp:
-    TEST_FINISHED_NAMED('BPTMFailedFinal');    
+    TEST_FINISHED_NAMED('BPTMErrorFullArb');    
     
 END_CASE
 

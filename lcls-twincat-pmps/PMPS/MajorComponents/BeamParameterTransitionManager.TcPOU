@@ -140,6 +140,7 @@ CASE eBPTMState OF
             eBPTMState := E_BPTMState.WaitForBP;
 		ELSE
             LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
+            nErrId := PMPS_CODES.NoRoomInArb;
             bError := TRUE;
         END_IF
     
@@ -160,12 +161,12 @@ CASE eBPTMState OF
         IF xEntry THEN
             RemoveTransitionAssertion();
 		ELSE
-			LogActions('Returning to idle');
-			eBPTMState := E_BPTMState.Idle;
+			eBPTMState := E_BPTMState.Done;
 		END_IF
 
     Done:
         bDone := TRUE;
+        LogActions('Returning to idle');
         eBPTMState := E_BPTMState.Idle;
     
     Error:
