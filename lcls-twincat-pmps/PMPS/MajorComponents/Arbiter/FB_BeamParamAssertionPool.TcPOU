@@ -20,7 +20,7 @@ VAR
         io: i
      '}
     dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF ST_BP_ArbInternal;(* Structured data element pool *)
-    entries        : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
+    entries        : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS*3] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
     fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
     hTable         : T_HHASHTABLE;(* hash table handle *)
     pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;

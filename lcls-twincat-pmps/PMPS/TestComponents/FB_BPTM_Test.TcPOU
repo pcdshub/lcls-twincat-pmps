@@ -139,6 +139,7 @@ VAR
     idx : UDINT;
     
     nRandID : DWORD;
+    testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
     
 END_VAR
 VAR_INST
@@ -165,7 +166,7 @@ E_BPTMTestStates.Init:
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
         fbRand();            
         nRandID := REAL_TO_DWORD(fbRand.Num*1E6);
-        fbArbFullErr.AddRequest(nReqID := nRandID, stReqBP := PMPS_GVL.cstFullBeam);
+        fbArbFullErr.AddRequest(nReqID := nRandID, stReqBP := testReq);
     END_FOR
     
     fbSubSysIO.AutoUpdateBP := TRUE;
