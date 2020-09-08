@@ -5,7 +5,7 @@
 {attribute 'strict'}
 TYPE K_Stopper :
 (
-	ST3K4 := 1, // TMO PPS stopper
+	ST3K4 := 1 // TMO PPS stopper
     //ST2 := 2
 );
 END_TYPE

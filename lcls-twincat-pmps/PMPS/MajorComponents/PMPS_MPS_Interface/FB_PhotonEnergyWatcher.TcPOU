@@ -63,7 +63,7 @@ VAR
     {attribute 'noinit'}
     sPath    :    T_MaxString;
     
-    fbStr : FB_FormatString (
+    fbStr : FB_FormatString := (
         sOut := 'Non-zero photon energy residual: %16b; Req: %16b; Act: %16b');
 END_VAR
 ]]></Declaration>
