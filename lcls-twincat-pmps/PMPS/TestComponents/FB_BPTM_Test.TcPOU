@@ -138,12 +138,12 @@ VAR
     
     idx : UDINT;
     
-    
+    nRandID : DWORD;
     
 END_VAR
 VAR_INST
     fbBPTM_TestFullArb    :    BeamParameterTransitionManager;
-    fbArbiter    :    FB_Arbiter(1);
+    fbArbFullErr    :    FB_Arbiter(1);
     ffo : FB_HardwareFFOutput;
     fbSubSysIO : FB_DummyArbIO;
     fbBPR :  FB_BPRequestor;
@@ -151,6 +151,7 @@ VAR_INST
     eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
     tonRetryTimeout : TON := (PT:=T#5s);
     entryToRetry : bool := true;
+    fbRand : DRAND := (Seed :=1);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[CASE eTestStep OF
@@ -162,12 +163,14 @@ E_BPTMTestStates.Init:
     // Fill the arbiter
     FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS + 1 // plus 1 for starting at zero, this fills the arbiter
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
-        fbArbiter.AddRequest(nReqID := idx, stReqBP := PMPS_GVL.cstFullBeam);
+        fbRand();            
+        nRandID := REAL_TO_DWORD(fbRand.Num*1E6);
+        fbArbFullErr.AddRequest(nReqID := nRandID, stReqBP := PMPS_GVL.cstFullBeam);
     END_FOR
     
     fbSubSysIO.AutoUpdateBP := TRUE;
     
-    AssertTrue(PMPS_GVL.MAX_ASSERTIONS - fbArbiter.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
+    AssertTrue(PMPS_GVL.MAX_ASSERTIONS - fbArbFullErr.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
         'Arbiter is not full enough, rest of tests will be invalid'); 
     
     eTestStep := E_BPTMTestStates.Error;
@@ -194,7 +197,7 @@ E_BPTMTestStates.Retry:
     // Clear the arbiter
     if entryToRetry THEN
         FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS + 1 DO
-            fbArbiter.RemoveRequest(idx);
+            fbArbFullErr.RemoveRequest(idx);
         END_FOR
         entryToRetry := FALSE;
     END_IF
@@ -206,8 +209,8 @@ E_BPTMTestStates.Retry:
     
     IF tonRetryTimeout.Q OR fbBPTM_TestFullArb.q_xTransitionAuthorized THEN
         AssertTrue(fbBPTM_TestFullArb.q_xTransitionAuthorized, 'Transition should have been authorized by now');
-        AssertTrue(fbArbiter.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
-        AssertTrue(fbArbiter.CheckRequest(nReqID), 'Final ID is missing from arbiter while transition is authorized');
+        AssertTrue(fbArbFullErr.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
+        AssertTrue(fbArbFullErr.CheckRequest(nReqID), 'Final ID is missing from arbiter while transition is authorized');
         
         TEST_FINISHED_NAMED('Test Retry Post Failed Final');
         
@@ -220,7 +223,7 @@ E_BPTMTestStates.CleaningUp:
 END_CASE
 
 fbBPTM_TestFullArb(
-    fbArbiter := fbArbiter,
+    fbArbiter := fbArbFullErr,
     i_TransitionAssertionID := nTransitionID,
     i_stTransitionAssertion := stTransitionAssertion,
     
@@ -230,7 +233,7 @@ fbBPTM_TestFullArb(
     stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback,
 );
 
-fbSubSysIO(LA := fbArbiter, FFO := ffo);]]></ST>
+fbSubSysIO(LA := fbArbFullErr, FFO := ffo);]]></ST>
       </Implementation>
     </Method>
     <Method Name="InterruptAtAllSteps" Id="{57f1a367-2f35-4862-95b6-e41c9bfb9e3f}">
