@@ -169,8 +169,17 @@ END_FOR
 
 //Apertures
 FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
-    ArbitrateBP.astApertures[idx].Height := MIN(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
-    ArbitrateBP.astApertures[idx].Width := MIN(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+    IF stBP1.astApertures[idx].Height = 0 OR stBP2.astApertures[idx].Height =0 THEN
+        ArbitrateBP.astApertures[idx].Height := MAX(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
+    ELSE
+        ArbitrateBP.astApertures[idx].Height := MIN(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
+	END_IF
+    
+    IF stBP1.astApertures[idx].Width = 0 OR stBP2.astApertures[idx].Width =0 THEN
+        ArbitrateBP.astApertures[idx].Width := MAX(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+    ELSE
+        ArbitrateBP.astApertures[idx].Width := MIN(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+	END_IF
 END_FOR
 
 //Pulse energy
