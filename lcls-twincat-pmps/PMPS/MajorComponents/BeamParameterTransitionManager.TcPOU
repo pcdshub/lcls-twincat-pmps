@@ -75,7 +75,8 @@ VAR
         i_xAutoReset := FALSE);
         
 	rtDoneMoving : R_TRIG;
-        
+    
+    bFirstMove : BOOL := TRUE;    
         
 END_VAR
 VAR CONSTANT
@@ -152,7 +153,7 @@ CASE eBPTMState OF
     Transitioning:
         IF xEntry THEN
             AuthorizeTransition();
-        ELSIF rtDoneMoving.Q THEN
+        ELSIF rtDoneMoving.Q OR (bFirstMove AND i_xDoneMoving) THEN
             DeauthorizeTransition();
             eBPTMState := E_BPTMState.CleaningUp;
 		END_IF
@@ -166,6 +167,7 @@ CASE eBPTMState OF
 
     Done:
         bDone := TRUE;
+        bFirstMove := FALSE;
         LogActions('Returning to idle');
         eBPTMState := E_BPTMState.Idle;
     

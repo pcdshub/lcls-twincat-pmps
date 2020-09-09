@@ -368,6 +368,12 @@
   <ItemGroup>
     <SubObject Include="FB_BPControlDevice.FB_init" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
+    <SubObject Include="FB_BPTM_Test.InterruptAtAllSteps">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_BPTM_Test.InterruptedTransition">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
     <SubObject Include="FB_FastFault_Test.FFCombinedFunctionality" />
