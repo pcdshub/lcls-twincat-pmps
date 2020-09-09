@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_LinearDeviceStateTable" Id="{cf647613-9770-466a-9d39-8f1704ddbb4a}" SpecialFunc="None">
     <Declaration><![CDATA[(* This function block implements simple database. Data element values are stored in the hash table.  *)
 FUNCTION_BLOCK FB_LinearDeviceStateTable
@@ -32,7 +32,7 @@ END_VAR
 MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
 getPosPtr := 0;
 
-fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(PMPS_GVL.cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
+fbTable.A_Add( hTable := hTable, key := key, putValue := 16#0000_0000(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
 IF fbTable.bOk THEN(* Success *)
     fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
     IF fbTable.bOk THEN(* Success *)

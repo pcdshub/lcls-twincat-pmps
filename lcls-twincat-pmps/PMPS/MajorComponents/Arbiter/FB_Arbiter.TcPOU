@@ -20,21 +20,11 @@ the hash table will tell you when you reach the end of all the entries, and enab
 
 These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
 *)
-
+{attribute 'reflection'}
 FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-    {attribute 'pytmc' := '
-        pv: ArbitratedBP
-        io: i
-        field: DESC Arbitrated BP
-     '}
-    q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
-    
-    q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
-END_VAR
 VAR
+    nRequestsCount : UDINT; // How many requests are currently in the arbiter
+    
     {attribute 'pytmc' := '
         pv: AP
         io: i
@@ -66,13 +56,34 @@ VAR
 	
 	rtActiveInArbitration : R_TRIG;
 	
-	nEntryCount : UDINT;
-	
 	// The following IDs are set by the last BP request that was most conservative
 	// ie. other requests may limit the parameter, but this one is the most recent to limit it
 	idTransmission : DWORD; // ID of BP limiting transmission
 	idRate : DWORD; // ID of BP limiting rate
+    
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
+    
+    sArbName : T_MaxString;
+    
+    InfoStringFmtr : FB_FormatString;
+    
+    bVerbose : BOOL := FALSE;
 END_VAR
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: ArbitratedBP
+        io: i
+        field: DESC Arbitrated BP
+     '}
+    q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+    
+    q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
+END_VAR
+
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -90,8 +101,7 @@ VAR
 END_VAR
 VAR_INST
     fbLog : FB_LogMessage;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// If the request is already in the pool, then skip the rest.
 // This is flawed, needs to update the request if it's already in the pool, despite having the same ID
@@ -115,11 +125,15 @@ IF nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
 END_IF
     
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
-    fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Addition to arbiter assertion pool failed'),
+    fbLog(sMsg:=CONCAT('Addition to arbiter assertion pool failed ', DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
             eSevr:=TcEventSeverity.Warning,
-            eSubsystem:=E_Subsystem.MPS);
-ELSIF THIS^.fbBPAssertionPool.bOk THEN
-	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Added to pool'),
+            eSubsystem:=E_Subsystem.MPS,
+            sJson := F_PMPS_JSON(
+                        sArbName,
+                        sPath,
+                        PMPS_CODES.ARB_FULL));
+ELSIF THIS^.fbBPAssertionPool.bOk AND bVerbose THEN
+	fbLog(sMsg:=CONCAT('Added to pool ',DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
             eSevr:=TcEventSeverity.Verbose,
             eSubsystem:=E_Subsystem.MPS);
 END_IF
@@ -127,7 +141,9 @@ END_IF
 // With any new request reset the internal arbiter "done" flag
 xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
-AddRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+AddRequest := THIS^.fbBPAssertionPool.bOk;
+
+nRequestsCount := nEntryCount;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
@@ -255,7 +271,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[nArbiterID := nId;
-fbBPAssertionPool.A_Reset();]]></ST>
+fbBPAssertionPool.A_Reset();
+
+sArbName := CONCAT('Arbiter ID: 0x', DWORD_TO_HEXSTR(nID, 4, FALSE));]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetArbitratedBP" Id="{aa6541e9-3c4b-40dc-96cf-1afc4ec47cdb}">
@@ -311,14 +329,24 @@ GetArbitratedBP := stOutputBP;
 
 GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;
 
-fbBPAssertionPool.A_Count();
-IF fbBPAssertionPool.bOk THEN
-	nEntryCount := fbBPAssertionPool.nCount ;
-END_IF
-
 xFirstPass := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="nEntryCount" Id="{69cbd72e-a198-4efd-872d-53cc3bb7c334}">
+      <Declaration><![CDATA[// How many entries are in the arbiter now
+PROPERTY nEntryCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{d25a2080-a286-42b6-ae86-fa04a141b063}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbBPAssertionPool.A_Count();
+IF fbBPAssertionPool.bOk THEN
+	nEntryCount := fbBPAssertionPool.nCount ;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="nLowerAuthorityID" Id="{1fc1fd51-255d-436a-8bc9-caa51a4c9d82}">
       <Declaration><![CDATA[PROPERTY nLowerAuthorityID : DWORD]]></Declaration>
       <Get Name="Get" Id="{30bc21b7-6ca8-40ff-b8a0-c2f0cc071beb}">
@@ -352,21 +380,25 @@ END_VAR]]></Declaration>
 	THIS^.fbBPAssertionPool.A_Add(key := nReqID, putValue := BP_Int);
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
     
-    IF THIS^.fbBPAssertionPool.bOk THEN
-        	fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Removed from pool'),
-            eSevr:=TcEventSeverity.Verbose,
-            eSubsystem:=E_Subsystem.MPS);
-    ELSE
-        fbLog(sMsg:=CONCAT(DWORD_TO_STRING(nReqID),'Failed to remove from pool'),
-            eSevr:=TcEventSeverity.Warning,
-            eSubsystem:=E_Subsystem.MPS);
+    IF bVerbose THEN
+        IF THIS^.fbBPAssertionPool.bOk THEN
+                fbLog(sMsg:=CONCAT('Removed from pool: ', DWORD_TO_HEXSTR(nReqID,4,FALSE)),
+                eSevr:=TcEventSeverity.Verbose,
+                eSubsystem:=E_Subsystem.MPS);
+        ELSE
+            fbLog(sMsg:=CONCAT('Failed to remove from pool: ', DWORD_TO_HEXSTR(nReqID,4,FALSE)),
+                eSevr:=TcEventSeverity.Warning,
+                eSubsystem:=E_Subsystem.MPS);
+        END_IF
     END_IF
 END_IF
 
 // With any new request reset the internal arbiter "done" flag
 xRequestMade R= THIS^.fbBPAssertionPool.bOk;
 
-RemoveRequest := THIS^.fbBPAssertionPool.bOk;]]></ST>
+RemoveRequest := THIS^.fbBPAssertionPool.bOk;
+
+nRequestsCount := nEntryCount;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{d19219fe-34dd-4096-83ea-674a98690de1}">
@@ -382,46 +414,5 @@ END_VAR
         <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Arbiter">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.AddRequest">
-      <LineId Id="3" Count="33" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.ArbitrateBP">
-      <LineId Id="3" Count="21" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.CheckRequest">
-      <LineId Id="3" Count="11" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.CheckRequestInPool">
-      <LineId Id="3" Count="1" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.ElevateRequest">
-      <LineId Id="3" Count="16" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.FB_init">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.GetArbitratedBP">
-      <LineId Id="3" Count="40" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.nLowerAuthorityID.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.RemoveRequest">
-      <LineId Id="3" Count="22" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Arbiter.RequestBP">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -5,8 +5,8 @@
 {attribute 'strict'}
 TYPE K_Stopper :
 (
-	ST1 := 1,
-    ST2 := 2
+	ST3K4 := 1 // TMO PPS stopper
+    //ST2 := 2
 );
 END_TYPE
 ]]></Declaration>
@@ -15,13 +15,8 @@ END_TYPE
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
-              <v n="TextID">"ST1"</v>
+              <v n="TextID">"ST3K4"</v>
               <v n="TextDefault">"1"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"ST2"</v>
-              <v n="TextDefault">"2"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
