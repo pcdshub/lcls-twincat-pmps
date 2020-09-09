@@ -58,7 +58,8 @@ VAR_GLOBAL CONSTANT
         nTran := 100,
         fPP_mJ := 1E4,
         neVRange := 2#1111_1111_1111_1111,
-        nRate    := UDINT#1000000
+        nRate    := UDINT#1000000,
+        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst

@@ -16,6 +16,44 @@ RequestCheckRemoveBP();
 FullArbitrationStack();
 StackArbiters();]]></ST>
     </Implementation>
+    <Method Name="ArbiterCapacity" Id="{f24e572d-11ee-48d8-ae26-2ae1990f129e}">
+      <Declaration><![CDATA[METHOD ArbiterCapacity
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (nTran:=12);
+    
+    nRandID : DWORD;
+    testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
+    
+    idx : DWORD;
+
+END_VAR
+VAR_INST
+    fbArbCapacityTest    :    FB_Arbiter(1);
+
+    Cycle : INT := 0;
+    
+    CycleLimit : INT := 20;
+    
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+TEST('Arbiter Capcity');
+    // Fill the arbiter
+    FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS DO
+        fbArbCapacityTest.AddRequest(nReqID := idx, stReqBP := testReq);
+    END_FOR
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Arbitration" Id="{c3caf704-ac1c-41da-98d7-fd2af820601b}">
       <Declaration><![CDATA[METHOD Arbitration
 VAR_INPUT
