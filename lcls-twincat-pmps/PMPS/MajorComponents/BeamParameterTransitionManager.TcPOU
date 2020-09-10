@@ -135,7 +135,7 @@ CASE eBPTMState OF
         END_IF
         
     RequestBP:
-        IF PMPS_GVL.MAX_ASSERTIONS - fbArbiter.nEntryCount >= cReqArbCapacity THEN
+        IF PMPS_PARAM.MAX_ASSERTIONS - fbArbiter.nEntryCount >= cReqArbCapacity THEN
             AssertTransitionBP();
             AssertFinalBP();
             eBPTMState := E_BPTMState.WaitForBP;

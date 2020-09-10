@@ -101,6 +101,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\PMPS_PARAM.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\PMPS_TOOLS.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
