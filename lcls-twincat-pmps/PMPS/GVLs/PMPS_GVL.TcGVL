@@ -41,7 +41,7 @@ VAR_GLOBAL RETAIN
     AccumulatedFF : UDINT; // Any time a FF occurs
 END_VAR
 VAR_GLOBAL CONSTANT
-	MAX_FAST_FAULTS	:	DINT := 50;
+	
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
@@ -82,7 +82,7 @@ VAR_GLOBAL CONSTANT
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     {warning restore C0228}
     
-    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
+    
     
     g_cBoundaries    :    INT    := 15;
 	

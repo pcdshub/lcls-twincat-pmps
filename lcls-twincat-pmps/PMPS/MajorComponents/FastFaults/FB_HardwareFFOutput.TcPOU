@@ -4,7 +4,7 @@
     <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_HardwareFFOutput
 VAR CONSTANT
-    FF_ARRAY_UPPER_BOUND : DINT := PMPS_GVL.MAX_FAST_FAULTS;
+    FF_ARRAY_UPPER_BOUND : DINT := PMPS_PARAM.MAX_FAST_FAULTS;
 END_VAR
 VAR_INPUT
     {attribute 'pytmc' := '

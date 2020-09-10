@@ -19,9 +19,9 @@ VAR
         pv: Entry
         io: i
      '}
-    epicsDataPool    : ARRAY[1..PMPS_GVL.MAX_ASSERTIONS] OF ST_BP_ArbInternal;(* Structured data element pool for display in EPICS*)
-    dataPool    : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS*3] OF ST_BP_ArbInternal;(* Structured data element pool *)
-    entries        : ARRAY[0..PMPS_GVL.MAX_ASSERTIONS*3] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
+    epicsDataPool    : ARRAY[1..PMPS_PARAM.MAX_ASSERTIONS] OF ST_BP_ArbInternal;(* Structured data element pool for display in EPICS*)
+    dataPool    : ARRAY[0..PMPS_PARAM.MAX_ASSERTIONS*3] OF ST_BP_ArbInternal;(* Structured data element pool *)
+    entries        : ARRAY[0..PMPS_PARAM.MAX_ASSERTIONS*3] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
     fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
     hTable         : T_HHASHTABLE;(* hash table handle *)
     pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
@@ -130,7 +130,7 @@ nCount := 0;]]></ST>
     <Action Name="DataPoolToEpics" Id="{47946703-b251-42a6-b725-16ba7f72b5bf}">
       <Implementation>
         <ST><![CDATA[
-MEMCPY(ADR(epicsDataPool), ADR(dataPool), (PMPS_GVL.MAX_ASSERTIONS) * SIZEOF(ST_BP_ArbInternal));]]></ST>
+MEMCPY(ADR(epicsDataPool), ADR(dataPool), (PMPS_PARAM.MAX_ASSERTIONS) * SIZEOF(ST_BP_ArbInternal));]]></ST>
       </Implementation>
     </Action>
   </POU>

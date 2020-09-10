@@ -10,7 +10,7 @@ END_VAR
 VAR
 END_VAR
 VAR CONSTANT
-    BPTM_ARR : UDINT := PMPS_GVL.MAX_ASSERTIONS;
+    BPTM_ARR : UDINT := PMPS_PARAM.MAX_ASSERTIONS;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[BPTMBasicFunction();
@@ -176,14 +176,14 @@ E_BPTMTestStates.Init:
     TEST('BPTMErrorFullArb');
     
     // Fill the arbiter
-    FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS // this fills the arbiter
+    FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS // this fills the arbiter
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
         fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq);
     END_FOR
     
     fbSubSysIO.AutoUpdateBP := TRUE;
     
-    AssertTrue(PMPS_GVL.MAX_ASSERTIONS - fbArbFullErr.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
+    AssertTrue(PMPS_PARAM.MAX_ASSERTIONS - fbArbFullErr.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
         'Arbiter is not full enough, rest of tests will be invalid'); 
     
     eTestStep := E_BPTMTestStates.Error;
@@ -209,7 +209,7 @@ E_BPTMTestStates.Retry:
     
     // Clear the arbiter
     if entryToRetry THEN
-        FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS + 1 DO
+        FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS + 1 DO
             fbArbFullErr.RemoveRequest(idx);
         END_FOR
         entryToRetry := FALSE;

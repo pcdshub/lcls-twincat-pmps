@@ -46,7 +46,7 @@ END_VAR
         <ST><![CDATA[
 TEST('Arbiter Capcity');
     // Fill the arbiter
-    FOR idx := 1 TO PMPS_GVL.MAX_ASSERTIONS DO
+    FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS DO
         fbArbCapacityTest.AddRequest(nReqID := idx, stReqBP := testReq);
     END_FOR
 
