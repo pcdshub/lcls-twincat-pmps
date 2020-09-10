@@ -56,7 +56,8 @@ FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
         END_IF
     ELSE // Check if we should mark as active
         IF (reV <= Boundaries[nIndex]) AND
-        (reV > rPreviousBoundary) THEN
+        (reV > rPreviousBoundary) OR
+         (nIndex = 0 AND reV = 0 ) THEN
             RangeWord.0 := 1;
         END_IF
     END_IF
