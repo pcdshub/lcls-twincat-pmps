@@ -134,6 +134,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\F_SafeBPCompare0Rate.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="HelperFunctions\F_SetBeamParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

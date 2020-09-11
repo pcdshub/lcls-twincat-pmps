@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_SafeBPCompare0Rate" Id="{61333098-b080-43b8-8c0d-b267fc83ae7a}" SpecialFunc="None">
+    <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
+the result will be true. *)
+FUNCTION F_SafeBPCompare0Rate : BOOL
+VAR_INPUT
+    BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
+    BeamParam2    :    ST_BeamParams;
+END_VAR
+VAR
+    // Beam-rate is zero, masks all others considerations.
+    xZeroRate: BOOL;
+    
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+xZeroRate    := BeamParam1.nRate = 0;
+
+F_SafeBPCompare0Rate := xZeroRate OR F_SafeBPCompare(BeamParam1, BeamParam2);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

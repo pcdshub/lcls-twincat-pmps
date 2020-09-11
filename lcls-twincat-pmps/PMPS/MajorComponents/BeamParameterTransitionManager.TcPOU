@@ -356,7 +356,7 @@ xFinalBP := FALSE;
     <Action Name="WaitingForTransitionAssertion_DO" Id="{efd5ef21-1274-446e-b4e2-eb587c706e95}">
       <Implementation>
         <ST><![CDATA[//Transition Assertion Verification
-xTranBP    := F_SafeBPCompare(stCurrentBeamParameters, i_stTransitionAssertion) AND
+xTranBP    := F_SafeBPCompare0Rate(stCurrentBeamParameters, i_stTransitionAssertion) AND
     fbArbiter.CheckRequest(i_TransitionAssertionID);]]></ST>
       </Implementation>
     </Action>
