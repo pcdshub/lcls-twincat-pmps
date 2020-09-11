@@ -17,8 +17,6 @@ VAR
     xEvOK: BOOL := FALSE;
     // Internal Beam Rate OK boolean
     xRateOK: BOOL;
-    // Beam-rate is zero, masks all others considerations.
-    xZeroRate: BOOL;
     
     idx : UINT;
     xAuxAttOK : BOOL := TRUE;
@@ -30,7 +28,6 @@ END_VAR
 xAttOK := BeamParam1.nTran <= BeamParam2.nTran;
 xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
-xZeroRate    := BeamParam1.nRate = 0;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
@@ -42,7 +39,7 @@ FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
     BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
 END_FOR
 
-F_SafeBPCompare := xZeroRate OR (xAttOK AND xPPmjOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK);
+F_SafeBPCompare := xAttOK AND xPPmjOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
 ]]></ST>
     </Implementation>
   </POU>

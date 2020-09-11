@@ -26,14 +26,14 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[stBeamOn_MoreConservative  := F_SetBeamParams(
-    50, //50% attenuation is more conservative than 0
+    0, //0% transmission is more conservative than 50
     10,
     16#FFFF,
     120, //rate
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stBeamOff_LessConservative:= F_SetBeamParams(
-    0, //0% attenuation, less conservative, without 0-rate this beam parameter set would be less safe than above
+    50, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
     10,
     16#FFFF,
     0, //rate, hence, more conservative
@@ -42,7 +42,7 @@ stBeamOff_LessConservative:= F_SetBeamParams(
 TEST('BeamOffIsSafe');
     
 AssertTrue(
-    F_SafeBPCompare(stBeamOff_LessConservative, stBeamOn_MoreConservative),
+    F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
     'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
 TEST_FINISHED();]]></ST>
       </Implementation>

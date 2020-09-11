@@ -44,9 +44,12 @@ END_VAR]]></Declaration>
 // Necessary for CheckRequest to return true, ever
     fbBPTM_TestBasicFunction(
         fbArbiter := fbArbiter,
-        stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback);
+        );
 
 fbSubSysIO(LA := fbArbiter, FFO := ffo);
+
+// Note: this struct may also be (over)written to in the tests below, specifically rate.
+fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
 
 CASE eTestStep OF
 
@@ -80,10 +83,24 @@ E_BPTMTestStates.WaitingForBeam:
             
         TEST_FINISHED_NAMED('BPTM Waits for Beam');
         
-        eTestStep := E_BPTMTestStates.Transitioning;
+        eTestStep := E_BPTMTestStates.WaitingForFinalAssertion;
     END_IF
 
-
+E_BPTMTestStates.WaitingForFinalAssertion:
+    TEST('BPTM Waits for final BP');
+    
+        fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request
+    
+    IF fbBPTM_TestBasicFunction.xTranBP THEN
+        
+        AssertFalse(fbBPTM_TestBasicFunction.xFinalBP, 'Final should not be approved until all BP are propagated back');    
+        
+        TEST_FINISHED_NAMED('BPTM Waits for final BP');
+        
+        eTestStep := E_BPTMTestStates.Transitioning;
+    END_IF    
+    
+    
 E_BPTMTestStates.Transitioning:
     TEST('BPTM Authorizes Transition');
 

@@ -39,7 +39,7 @@
         aStoppers : ARRAY [1..PMPS_GVL.MAX_STOPPERS] OF BOOL;
         
         (* Apertures *)
-        astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture;
+        astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
         
         // Toggle for watchdog
         xValidToggle : BOOL;
