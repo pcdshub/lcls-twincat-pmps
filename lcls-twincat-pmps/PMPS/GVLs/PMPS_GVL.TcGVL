@@ -90,36 +90,7 @@ VAR_GLOBAL CONSTANT
 //////////////////////////
 // L Undulator constants
 //////////////////////////
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:FirstSegment
-		io: i
-	'}
-    iLowBound_LUnd  : UDINT := 24;
-	
-    {attribute 'pytmc' := '
-		pv: @(PREFIX)L:UND:LastSegment
-		io: i
-	'}
-    iHighBound_LUnd : UDINT := 46;
-	
-    {attribute 'pytmc' := '
-        pv: Period
-        io: i
-        field: EGU mm
-    '}
-    fPeriod_mm_LUnd : LREAL := 26.0;
-	
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:LowK
-        io: i
-    '}
-	fLowK_LUnd : LREAL := 0.54;
-	
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)L:UND:HiK
-        io: i
-    '}
-	fHiK_LUnd : LREAL := 2.5;
+
 ///////////////////////////////////////		
 	
     {attribute 'pytmc' := '

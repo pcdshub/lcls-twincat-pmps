@@ -101,7 +101,7 @@ VAR
     {attribute 'pytmc' := 'pv: 46; link: 4650:'}
     fbSegment_46 : FB_UndulatorSegment;
 
-    fbSegment : ARRAY [PMPS_GVL.iLowBound_LUnd..PMPS_GVL.iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
+    fbSegment : ARRAY [iLowBound_LUnd..iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
     fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
 
     iIndex : UDINT;
@@ -111,7 +111,36 @@ VAR
 END_VAR
 
 VAR CONSTANT
-
+    {attribute 'pytmc' := '
+		pv: FirstSegment
+		io: i
+	'}
+    iLowBound_LUnd  : UDINT := 24;
+	
+    {attribute 'pytmc' := '
+		pv: LastSegment
+		io: i
+	'}
+    iHighBound_LUnd : UDINT := 46;
+	
+    {attribute 'pytmc' := '
+        pv: Period
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_mm_LUnd : LREAL := 26.0;
+	
+	{attribute 'pytmc' := '
+        pv: LowK
+        io: i
+    '}
+	fLowK_LUnd : LREAL := 0.54;
+	
+	{attribute 'pytmc' := '
+        pv: HiK
+        io: i
+    '}
+	fHiK_LUnd : LREAL := 2.6;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -123,7 +152,7 @@ UndAdrUpdate();
 
 nSeedUndulator := 0;
 
-FOR iIndex := PMPS_GVL.iLowBound_LUnd TO PMPS_GVL.iHighBound_LUnd DO
+FOR iIndex := iLowBound_LUnd TO iHighBound_LUnd DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
@@ -149,12 +178,12 @@ END_IF
 UndAdrUpdate();
 
 
-    FOR iIndex := PMPS_GVL.iLowBound_LUnd TO PMPS_GVL.iHighBound_LUnd DO
+    FOR iIndex := iLowBound_LUnd TO iHighBound_LUnd DO
             IF fbSegment[iIndex] <> 0 THEN
             fbCurrentSegment REF= fbSegment[iIndex]^;
-            fbCurrentSegment.fPeriod_mm := PMPS_GVL.fPeriod_mm_LUnd;
-			fbCurrentSegment.fLowK := PMPS_GVL.fLowK_LUnd;
-			fbCurrentSegment.fHiK := PMPS_GVL.fHiK_LUnd;
+            fbCurrentSegment.fPeriod_mm := fPeriod_mm_LUnd;
+			fbCurrentSegment.fLowK := fLowK_LUnd;
+			fbCurrentSegment.fHiK := fHiK_LUnd;
         END_IF
     END_FOR
 
