@@ -36,9 +36,6 @@
     </DeploymentEvents>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\InternalDUT\E_BPTMState.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -183,6 +180,12 @@
     <Compile Include="MajorComponents\Arbiter\FB_VetoArbiter.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\BPTM\BeamParameterTransitionManager.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\BPTM\E_BPTMState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\FB_BPControlDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -193,6 +196,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\I_UndulatorComplex.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_AcceleratorLinks.TcPOU">
@@ -207,7 +213,13 @@
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_KPhotonEnergy.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_PhotonEnergy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorComplex.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorSegment.TcPOU">
@@ -223,9 +235,6 @@
     <Compile Include="MajorComponents\Arbiter\FB_BeamParamAssertionPool.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="MajorComponents\BeamParameterTransitionManager.TcPOU">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\FastFaults\FB_FastFault.TcPOU">
       <SubType>Code</SubType>
@@ -336,6 +345,7 @@
     <Folder Include="HelperFunctions" />
     <Folder Include="HelperFunctions\TypeTranslators" />
     <Folder Include="MajorComponents" />
+    <Folder Include="MajorComponents\BPTM" />
     <Folder Include="MajorComponents\SimulationFB" />
     <Folder Include="MajorComponents\Stoppers" />
     <Folder Include="MajorComponents\PhotonEnergyInterface" />

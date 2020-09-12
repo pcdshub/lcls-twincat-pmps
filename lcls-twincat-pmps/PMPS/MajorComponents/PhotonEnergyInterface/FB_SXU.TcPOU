@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_SXU" Id="{23188e56-6a28-4c8b-9089-611f5a306284}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_SXU
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SXU IMPLEMENTS I_UndulatorComplex
 VAR_INPUT
     fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
 END_VAR
@@ -29,7 +29,12 @@ VAR_OUTPUT
         field: DESC Seed undulator number
     '}
 	nSeedUndulator : UDINT; // Set to zero when no undulators are active
-
+    {attribute 'pytmc' := '
+        pv: TargetSeedUndulatorNumber
+		io: i
+        field: DESC Seed undulator number for target K
+    '}
+	nTargetSeedUndulator : UDINT; // Set to zero when no undulators are active
 END_VAR
 
 
@@ -150,6 +155,7 @@ END_IF
 UndAdrUpdate();
 
 nSeedUndulator := 0;
+nTargetSeedUndulator := 0;
 
 FOR iIndex := iLowBound TO iHighBound DO
     IF fbSegment[iIndex] <> 0 THEN
@@ -160,6 +166,10 @@ FOR iIndex := iLowBound TO iHighBound DO
 		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
 			nSeedUndulator := iIndex;
 			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+		END_IF
+        
+        IF fbCurrentSegment.xTargetActive AND nSeedUndulator = 0 THEN
+			nTargetSeedUndulator := iIndex;
 			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
 		END_IF
     END_IF
@@ -167,7 +177,10 @@ END_FOR
 
 IF nSeedUndulator = 0 THEN
 	fCurrentPhotonEnergy := 0;
-	fTargetPhotonEnergy := 0;
+END_IF
+
+IF nTargetSeedUndulator = 0 THEN
+    fTargetPhotonEnergy := 0;
 END_IF]]></ST>
     </Implementation>
     <Action Name="Init" Id="{b18c28c9-4cec-4f7b-a8df-d7ac2bd6cf79}">
@@ -186,6 +199,28 @@ END_FOR
 bInitialized := TRUE;]]></ST>
       </Implementation>
     </Action>
+    <Property Name="rCurrentPhotonEnergy" Id="{d6508ae9-62bd-47d4-8045-17d8194bcb0e}">
+      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : REAL]]></Declaration>
+      <Get Name="Get" Id="{4950ba64-6d8a-4cb3-aee3-047f448b2987}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[rCurrentPhotonEnergy := fCurrentPhotonEnergy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="rTargetPhotonEnergy" Id="{507d5e9d-15ad-4d67-9e3e-af15774112b3}">
+      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : REAL]]></Declaration>
+      <Get Name="Get" Id="{6bd4edd2-5414-41a9-bcdd-1c056c339291}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[rTargetPhotonEnergy := fTargetPhotonEnergy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
         <ST><![CDATA[
