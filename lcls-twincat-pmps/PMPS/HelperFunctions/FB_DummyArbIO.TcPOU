@@ -10,6 +10,11 @@ VAR_INPUT
     //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
     LA : I_LowerAuthority;
     
+    tRateDelay : TIME; // Delay until rate is looped back into q_stSimulatedBPReadback
+    tTransDelay : TIME; // Delay until transmission is looped back into q_stSimulatedBPReadback
+    tPEDelay : TIME; // Delay until PE is looped back into q_stSimulatedBPReadback
+    tAptDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+    
 END_VAR
 VAR_OUTPUT
     q_stSimulatedBPReadback : ST_BeamParams; // Updated to 
@@ -27,6 +32,12 @@ VAR
    stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
    
    nSavedID : DWORD; // Used to simulate CheckRequest method
+   
+   tonRate : TON;
+   tonTrans : TON;
+   tonPE : TON;
+   tonApt : TON;
+      
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -49,9 +60,29 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF bAutoUpdateBP OR bUpdateBP THEN
+IF bUpdateBP THEN
     stSaveCurrentBP := q_stSimulatedBPReadback;
     q_stSimulatedBPReadback := stReqOutBP;
+ELSIF bAutoUpdateBP THEN
+    tonApt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astApertures), ADR(q_stSimulatedBPReadback.astApertures), SIZEOF(q_stSimulatedBPReadback.astApertures));
+    tonApt(PT:=tAptDelay);
+    IF tonApt.Q THEN q_stSimulatedBPReadback.astApertures := stReqOutBP.astApertures; END_IF
+    
+    tonRate(IN:=stReqOutBP.nRate<>q_stSimulatedBPReadback.nRate, PT:=tRateDelay);
+    IF tonRate.Q THEN q_stSimulatedBPReadback.nRate := stReqOutBP.nRate; END_IF
+    
+    tonTrans(IN:=stReqOutBP.nTran<>q_stSimulatedBPReadback.nTran, PT:=tTransDelay);
+    IF tonTrans.Q THEN q_stSimulatedBPReadback.nTran := stReqOutBP.nTran; END_IF
+    
+    tonPE(IN:=stReqOutBP.neVRange<>q_stSimulatedBPReadback.neVRange, PT:=tPEDelay);
+    IF tonPE.Q THEN
+        IF stReqOutBP.neVRange = 0 THEN
+            q_stSimulatedBPReadback.neVRange := 0;
+            q_stSimulatedBPReadback.neVRange.0 := TRUE;
+        ELSE
+            q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
+		END_IF
+	END_IF
 END_IF]]></ST>
       </Implementation>
     </Method>
