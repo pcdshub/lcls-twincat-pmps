@@ -219,9 +219,6 @@
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_SXU.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorComplex.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MajorComponents\PhotonEnergyInterface\FB_UndulatorSegment.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -386,9 +383,6 @@
   <ItemGroup>
     <SubObject Include="FB_BPControlDevice.FB_init" />
     <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
-    <SubObject Include="FB_BPTM_Test.InterruptAtAllSteps">
-      <ExcludeFromBuild>true</ExcludeFromBuild>
-    </SubObject>
     <SubObject Include="FB_BPTM_Test.InterruptedTransition">
       <ExcludeFromBuild>true</ExcludeFromBuild>
     </SubObject>

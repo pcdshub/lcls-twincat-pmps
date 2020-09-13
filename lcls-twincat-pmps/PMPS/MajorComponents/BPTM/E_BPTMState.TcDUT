@@ -10,8 +10,9 @@
     WaitingForTransitionAssertion := 2000,
     WaitingForFinalAssertion := 3000,
     Transitioning := 4000,
-    CleaningUp := 5000,
-	Idle := 6000,
+    WaitForFinalBP := 5000,
+    CleaningUp := 6000,
+	Idle := 10000,
     Done := 8000,
     Error := 9000
 );
