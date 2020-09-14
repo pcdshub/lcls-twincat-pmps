@@ -16,7 +16,7 @@ VAR_IN_OUT
 END_VAR
 VAR_INPUT
     i_TransitionAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
-    i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cstSafeBeam; //Assertion required during transition (always safer than anything inbetween)
+    i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
     
     i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
     i_stRequestedAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
@@ -48,6 +48,7 @@ VAR
     
     xNewBP    :    BOOL;
     xTranBP    :    BOOL;
+    xFinalBPInArb : BOOL;
     xFinalBP    :    BOOL;
     
     eBPTMState : E_BPTMState := Init;
@@ -75,6 +76,7 @@ VAR
         i_xAutoReset := FALSE);
         
 	rtDoneMoving : R_TRIG;
+    bLatchDoneMoving : BOOL;
     
     bFirstMove : BOOL := TRUE;    
         
@@ -90,11 +92,15 @@ VAR CONSTANT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+// Logic for retry button
 rtRetry(CLK:=bRetry);
 bRetry := FALSE;
 
+// Logic for catching Move Done rising edge
 rtDoneMoving(CLK:=i_xDoneMoving);
+bLatchDoneMoving S= rtDoneMoving.Q;
 
+// Logic for interrupting BPTM and changing requests
 IF nTargetAssertionID <> i_nRequestedAssertionID OR rtRetry.Q THEN
     
     bError := FALSE;
@@ -148,16 +154,22 @@ CASE eBPTMState OF
     WaitForBP:
         WaitingForTransitionAssertion_DO();
         WaitingForFinalAssertion_DO();
-        IF xTranBP AND xFinalBP THEN eBPTMState := E_BPTMState.Transitioning; END_IF
+        IF xTranBP AND xFinalBPInArb THEN eBPTMState := E_BPTMState.Transitioning; END_IF
         
     Transitioning:
         IF xEntry THEN
             AuthorizeTransition();
-        ELSIF rtDoneMoving.Q OR (bFirstMove AND i_xDoneMoving) THEN
+        ELSIF bLatchDoneMoving OR (bFirstMove AND i_xDoneMoving) THEN
             DeauthorizeTransition();
-            eBPTMState := E_BPTMState.CleaningUp;
+            eBPTMState := E_BPTMState.WaitForFinalBP;
 		END_IF
         
+    WaitForFinalBP:
+        xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion);
+        IF xFinalBP THEN
+            eBPTMState := E_BPTMState.CleaningUp;
+        END_IF
+    
     CleaningUp:
         IF xEntry THEN
             RemoveTransitionAssertion();
@@ -246,6 +258,8 @@ END_IF
       <Implementation>
         <ST><![CDATA[q_xTransitionAuthorized := TRUE;
 
+bLatchDoneMoving R= q_xTransitionAuthorized;
+
 LogActions('Authorizing transition');]]></ST>
       </Implementation>
     </Action>
@@ -326,7 +340,7 @@ IF F_ValidReqID(i_nRequestedAssertionID) AND
     xNewBP := TRUE;
     
 ELSE
-    IF NOT F_ValidReqID(nTargetAssertionID) THEN
+    IF NOT F_ValidReqID(i_nRequestedAssertionID) THEN
         
         nErrID := PMPS_CODES.BadTargetID;
     ELSIF NOT F_ValidReqID(i_TransitionAssertionID) THEN
@@ -342,8 +356,7 @@ END_IF
       <Implementation>
         <ST><![CDATA[//Final Assertion Verification
 
-xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion) AND
-    fbArbiter.CheckRequest( i_nRequestedAssertionID);;]]></ST>
+xFinalBPInArb := fbArbiter.CheckRequest( i_nRequestedAssertionID);;]]></ST>
       </Implementation>
     </Action>
     <Action Name="WaitingForFinalAssertion_EXIT" Id="{6032c85f-f58f-40a0-a7a9-09c0400dd89e}">

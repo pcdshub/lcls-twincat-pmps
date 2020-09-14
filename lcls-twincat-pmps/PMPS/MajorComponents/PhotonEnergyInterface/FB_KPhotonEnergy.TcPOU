@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_KPhotonEnergy" Id="{a3b33140-6a40-4107-8e0d-e87a2f35f3b3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_KPhotonEnergy
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_KPhotonEnergy EXTENDS FB_PhotonEnergy
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -38,9 +38,6 @@ VAR
     '}
     fbSxu : FB_SXU;
 
-	
-	nCurrentPhotonEnergyBitmask : UINT;
-	nTargetPhotonEnergyBitmask : UINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -52,11 +49,7 @@ bElectronEnergyValid := fbSxuElectronEnergy.bValid;
 
 fbSxu(fbElectronEnergy:=fbSxuElectronEnergy);
 
-//Update BP
-nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(fbSxu.fCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
-nTargetPhotonEnergyBitmask := F_eVRangeCalculator(fbSxu.fTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
-
-BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
+SUPER^(BP:=SUPER^.BP, Undulator:=fbSxu );
 ]]></ST>
     </Implementation>
   </POU>

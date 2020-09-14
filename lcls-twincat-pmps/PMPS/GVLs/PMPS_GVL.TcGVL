@@ -62,6 +62,19 @@ VAR_GLOBAL CONSTANT
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
     );
     {attribute 'pytmc' := '
+        pv: @(PREFIX)0RateBeamCnst
+		io: i
+        archive: 1Hz monitor
+        field: DESC 0-rate beam constant
+    '}    
+    cst0RateBeam    :    ST_BeamParams := ( // Use for transition requests
+        nTran := 100,
+        fPP_mJ := 1E4,
+        neVRange := 2#1111_1111_1111_1111,
+        nRate    := 0,
+        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
+    );
+    {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
 		io: i
         archive: 1Hz monitor
