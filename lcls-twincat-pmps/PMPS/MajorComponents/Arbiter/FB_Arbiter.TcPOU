@@ -275,7 +275,7 @@ END_IF
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-    nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // Arbiter ID, must be globally unique.
+    nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // Arbiter ID, must be globally unique cannot be zero or 16#FFFF
 END_VAR
 ]]></Declaration>
       <Implementation>
