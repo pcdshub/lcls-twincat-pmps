@@ -4,7 +4,7 @@
     <Declaration><![CDATA[{attribute 'reflection'}
 FUNCTION_BLOCK FB_HardwareFFOutput
 VAR CONSTANT
-    FF_ARRAY_UPPER_BOUND : DINT := PMPS_PARAM.MAX_FAST_FAULTS;
+    FF_ARRAY_UPPER_BOUND : UINT := PMPS_PARAM.MAX_FAST_FAULTS;
 END_VAR
 VAR_INPUT
     {attribute 'pytmc' := '
@@ -66,7 +66,8 @@ VAR
     pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
         eSevr := TcEventSeverity.Critical,
-        eSubsystem := E_Subsystem.MPS);
+        eSubsystem := E_Subsystem.MPS,
+        nMinTimeViolationAcceptable := PMPS_PARAM.MAX_FAST_FAULTS);
 
 END_VAR]]></Declaration>
     <Implementation>
