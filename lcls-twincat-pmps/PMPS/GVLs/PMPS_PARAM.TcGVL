@@ -3,7 +3,7 @@
   <GVL Name="PMPS_PARAM" Id="{a73b5237-920e-4906-b8ec-4aaa7f8c0e45}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    MAX_FAST_FAULTS	:	DINT := 50;
+    MAX_FAST_FAULTS	:	UINT := 50;
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
 END_VAR]]></Declaration>
   </GVL>

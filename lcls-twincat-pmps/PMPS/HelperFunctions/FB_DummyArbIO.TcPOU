@@ -83,7 +83,11 @@ ELSIF bAutoUpdateBP THEN
             q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
 		END_IF
 	END_IF
-END_IF]]></ST>
+END_IF
+
+ffo.ExecuteNoLog();
+
+IF NOT ffo.q_xFastFaultOut THEN q_stSimulatedBPReadback.nRate := 0; END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="AutoUpdateBP" Id="{2d5cb5c0-e6e6-466f-ae2e-a59433cf2c5e}">
