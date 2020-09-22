@@ -6,9 +6,6 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR_IN_OUT
-	BP : ST_BeamParams;
-END_VAR
 VAR
     {attribute 'pytmc' := '
         pv: eEnrg
