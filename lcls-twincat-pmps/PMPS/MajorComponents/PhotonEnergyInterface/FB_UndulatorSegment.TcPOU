@@ -37,7 +37,7 @@ VAR_OUTPUT
 	xActive : BOOL; // Undulator is considered active
     
     {attribute 'pytmc' := '
-        pv: Active
+        pv: TargetActive
 		io: i
         field: DESC Target K would make und active
     '}
