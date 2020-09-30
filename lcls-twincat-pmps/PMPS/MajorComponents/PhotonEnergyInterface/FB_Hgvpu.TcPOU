@@ -170,7 +170,7 @@ FOR iIndex := iLowBound_LUnd TO iHighBound_LUnd DO
 			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
 		END_IF
         
-        IF fbCurrentSegment.xTargetActive AND nSeedUndulator = 0 THEN
+        IF fbCurrentSegment.xTargetActive AND nTargetSeedUndulator = 0 THEN
 			nTargetSeedUndulator := iIndex;
 			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
 		END_IF
