@@ -38,7 +38,8 @@ VAR
 	ffRateReadBack : FB_FastFault := (
 		i_DevName := 'Arbiter',
 		i_Desc := 'Issue with rate readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
-		i_TypeCode := 16#203);
+		i_TypeCode := 16#203,
+		i_xAutoReset:=True);
 END_VAR
 VAR CONSTANT
 	cFailSafeRate : UDINT := 1000001;
