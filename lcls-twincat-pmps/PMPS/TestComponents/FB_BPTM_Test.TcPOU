@@ -286,7 +286,7 @@ END_VAR
 VAR_INST
     fbBPTM_InterruptionTest    :    BeamParameterTransitionManager;
     
-    ffo : FB_HardwareFFOutput;
+    ffo : FB_HardwareFFOutput := (bAutoReset:=TRUE);
     fbSubSysIO : FB_DummyArbIO;
     fbBPR :  FB_BPRequestor;
     xFirstPass    :    BOOL := TRUE;
