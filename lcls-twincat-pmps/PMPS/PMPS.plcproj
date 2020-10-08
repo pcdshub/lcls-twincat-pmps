@@ -189,9 +189,6 @@
     <Compile Include="MajorComponents\FB_BPControlDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\FB_LRateFromEPICS.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MajorComponents\FB_RateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
