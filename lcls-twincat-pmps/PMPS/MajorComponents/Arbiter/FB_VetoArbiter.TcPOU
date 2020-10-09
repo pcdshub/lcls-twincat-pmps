@@ -6,9 +6,6 @@ VAR_INPUT
 	bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
 	HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
 	LowerAuthority : I_LowerAuthority; // Lower authority to be vetoed
-    
-    rtVeto : R_TRIG;
-    ftVeto : F_TRIG;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -24,7 +21,12 @@ VAR
 	);
 	
     stStandbyBP : ST_BeamParams;
+    
+        
+    rtVeto : R_TRIG;
+    ftVeto : F_TRIG;
 END_VAR
+
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -33,6 +35,7 @@ ftVeto(CLK:=bVeto);
 
 IF rtVeto.Q THEN
     HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+    HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, PMPS_GVL.cstFullBeam);
 ELSIF ftVeto.Q THEN
     HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
     HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, stStandbyBP);
@@ -95,8 +98,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+stStandbyBP := stReqBP;
+
 IF bVeto THEN
-    stStandbyBP := stReqBP;
 	RequestBP := TRUE;
 ELSE
 	// Pass request along to higher authority
@@ -104,31 +108,5 @@ ELSE
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_VetoArbiter">
-      <LineId Id="38" Count="5" />
-      <LineId Id="71" Count="2" />
-      <LineId Id="44" Count="0" />
-      <LineId Id="3" Count="2" />
-      <LineId Id="7" Count="7" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_VetoArbiter.CheckRequest">
-      <LineId Id="3" Count="4" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_VetoArbiter.RemoveRequest">
-      <LineId Id="10" Count="0" />
-      <LineId Id="3" Count="0" />
-      <LineId Id="11" Count="0" />
-      <LineId Id="13" Count="1" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_VetoArbiter.RequestBP">
-      <LineId Id="3" Count="1" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="6" Count="3" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

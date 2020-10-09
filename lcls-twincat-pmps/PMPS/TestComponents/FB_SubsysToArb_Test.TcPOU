@@ -11,7 +11,8 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[BasicFunction();]]></ST>
+      <ST><![CDATA[BasicFunction();
+VetoFunction();]]></ST>
     </Implementation>
     <Method Name="BasicFunction" Id="{69a03e5d-8fdd-408d-93e6-d01b60c62c48}">
       <Declaration><![CDATA[METHOD BasicFunction
@@ -112,6 +113,87 @@ AssertTrue(fbSubSysToArb.nActiveCohort = fbSubSysToArb.nRequestCohort, 'Active c
 AssertTrue(fbArbiter.xActiveInArbitration, 'Arbiter does not indicate it is included in higher arbitration');
 TEST_FINISHED_NAMED('Active in arbitration');
 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VetoFunction" Id="{8b4005d2-7a3b-4495-8aa4-46fec0623f58}">
+      <Declaration><![CDATA[METHOD VetoFunction
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (nTran:=12);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+    fbArbToSubSys : FB_ArbiterToSubSys_IO;
+    
+    pBPC : POINTER TO ST_BeamParams_IO;
+    pBPR : POINTER TO ST_BeamParams_IO;
+    
+    ioCurrentBP : ST_BeamParams_IO; 
+    
+    FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+    
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+// trusted with a grain of salt.
+
+fbArbiter.AddRequest(nId, stReq); // some device asking its local arbiter for some beam parameters
+
+
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request propagated');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request not propagated');
+TEST_FINISHED();
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+//END of sub system cycle
+///////////////////////////////////////
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request sustained');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Request still being propagated');
+    AssertTrue(fbArbiter.CheckRequest(nId), 'Request still not valid');
+TEST_FINISHED();
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+//END of sub system cycle
+///////////////////////////////////////
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request restored');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request still being sustained');
+TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>
