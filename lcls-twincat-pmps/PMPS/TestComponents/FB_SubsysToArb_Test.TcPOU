@@ -11,7 +11,8 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[BasicFunction();]]></ST>
+      <ST><![CDATA[BasicFunction();
+VetoFunction();]]></ST>
     </Implementation>
     <Method Name="BasicFunction" Id="{69a03e5d-8fdd-408d-93e6-d01b60c62c48}">
       <Declaration><![CDATA[METHOD BasicFunction
@@ -30,6 +31,8 @@ VAR_INST
     ioCurrentBP : ST_BeamParams_IO; 
     
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+    
+    nCohortScratch : UDINT;
     
 END_VAR
 VAR CONSTANT
@@ -58,8 +61,10 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 TEST('Initial Elevation');
 AssertTrue(fbSubSysToArb.nRequestCohort = fbSubSysToArb.q_stRequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match');
 AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely');
-AssertTrue(fbSubSysToArb.nRequestCohort = 1, 'Cohort index should move to 1 with first request');
+AssertTrue(fbSubSysToArb.nRequestCohort <> 0, 'Cohort index should move to 1 with first request');
 TEST_FINISHED_NAMED('Initial Elevation');
+
+nCohortScratch := fbSubSysToArb.nRequestCohort;
     
 //Ethercat transfer simulation
 // Transfer of requested BP to arbiter PLC
@@ -85,7 +90,7 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 TEST('Not yet active in arbitration');
 AssertTrue(fbSubSysToArb.nActiveCohort = 0, 'Active cohort should still be zero, per ioCurrentBP.nCohortInt setting above.');
 AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely, checkrequest might be broken');
-AssertTrue(fbSubSysToArb.nRequestCohort = 1, 'Cohort index should remain at 1 because there have been no additional requests added to the arbiter');
+AssertTrue(fbSubSysToArb.nRequestCohort = nCohortScratch, 'Cohort index should not have changed because there have been no additional requests added to the arbiter');
 TEST_FINISHED_NAMED('Not yet active in arbitration');
 
 //Ethercat transfer simulation
@@ -95,7 +100,7 @@ TEST_FINISHED_NAMED('Not yet active in arbitration');
 
 ioCurrentBP := fbSubSysToArb.q_stRequestedBP;
 // NOTE: Now we simulate the FB_ArbiterToSubSys_IO updating the cohort number to the same value as the request cohort, indicating that cohort has been included
-ioCurrentBP.nCohortInt := 1;
+ioCurrentBP.nCohortInt := 2;
 
 // Transfer of current BP to sub system PLC
 pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
@@ -112,6 +117,89 @@ AssertTrue(fbSubSysToArb.nActiveCohort = fbSubSysToArb.nRequestCohort, 'Active c
 AssertTrue(fbArbiter.xActiveInArbitration, 'Arbiter does not indicate it is included in higher arbitration');
 TEST_FINISHED_NAMED('Active in arbitration');
 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VetoFunction" Id="{8b4005d2-7a3b-4495-8aa4-46fec0623f58}">
+      <Declaration><![CDATA[METHOD VetoFunction
+VAR_INPUT
+END_VAR
+VAR   
+    nId    :    DWORD := 1;
+    stReq    :    ST_BeamParams := (nTran:=12);
+END_VAR
+VAR_INST
+    fbArbiter    :    FB_Arbiter(1);
+    
+    fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+    fbArbToSubSys : FB_ArbiterToSubSys_IO;
+    
+    pBPC : POINTER TO ST_BeamParams_IO;
+    pBPR : POINTER TO ST_BeamParams_IO;
+    
+    ioCurrentBP : ST_BeamParams_IO; 
+    
+    FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+    
+END_VAR
+VAR CONSTANT
+    SysID : DWORD := 42;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+// trusted with a grain of salt.
+
+fbArbiter.AddRequest(nId, stReq); // some device asking its local arbiter for some beam parameters
+
+
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request propagated');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request not propagated');
+TEST_FINISHED();
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+//END of sub system cycle
+///////////////////////////////////////
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request sustained');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Request still being propagated');
+    AssertTrue(fbArbiter.CheckRequest(nId), 'Request still not valid');
+TEST_FINISHED();
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+//END of sub system cycle
+///////////////////////////////////////
+
+// Veto activated
+///////////////////////////////////////
+//Sub system cycle
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+//END of sub system cycle
+///////////////////////////////////////
+
+TEST('Request restored');
+    AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request still being sustained');
+TEST_FINISHED();
 ]]></ST>
       </Implementation>
     </Method>

@@ -260,15 +260,19 @@ IF NOT xRequestMade THEN
 	HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
     xRequestMade := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
     xActiveInArbitration := FALSE;
+    rtActiveInArbitration(CLK:=xActiveInArbitration);
+ELSE
+    xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
+    rtActiveInArbitration(CLK:=xActiveInArbitration);
+
+    IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
+        nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
+    END_IF
 END_IF
 
-rtActiveInArbitration(CLK:=xActiveInArbitration);
-xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
 
 
-IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
-    nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
-END_IF
+
 ]]></ST>
       </Implementation>
     </Method>
