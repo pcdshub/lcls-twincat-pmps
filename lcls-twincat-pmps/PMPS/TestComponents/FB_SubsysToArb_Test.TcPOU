@@ -32,6 +32,8 @@ VAR_INST
     
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
     
+    nCohortScratch : UDINT;
+    
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
@@ -59,8 +61,10 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 TEST('Initial Elevation');
 AssertTrue(fbSubSysToArb.nRequestCohort = fbSubSysToArb.q_stRequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match');
 AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely');
-AssertTrue(fbSubSysToArb.nRequestCohort = 1, 'Cohort index should move to 1 with first request');
+AssertTrue(fbSubSysToArb.nRequestCohort <> 0, 'Cohort index should move to 1 with first request');
 TEST_FINISHED_NAMED('Initial Elevation');
+
+nCohortScratch := fbSubSysToArb.nRequestCohort;
     
 //Ethercat transfer simulation
 // Transfer of requested BP to arbiter PLC
@@ -86,7 +90,7 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 TEST('Not yet active in arbitration');
 AssertTrue(fbSubSysToArb.nActiveCohort = 0, 'Active cohort should still be zero, per ioCurrentBP.nCohortInt setting above.');
 AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely, checkrequest might be broken');
-AssertTrue(fbSubSysToArb.nRequestCohort = 1, 'Cohort index should remain at 1 because there have been no additional requests added to the arbiter');
+AssertTrue(fbSubSysToArb.nRequestCohort = nCohortScratch, 'Cohort index should not have changed because there have been no additional requests added to the arbiter');
 TEST_FINISHED_NAMED('Not yet active in arbitration');
 
 //Ethercat transfer simulation
@@ -96,7 +100,7 @@ TEST_FINISHED_NAMED('Not yet active in arbitration');
 
 ioCurrentBP := fbSubSysToArb.q_stRequestedBP;
 // NOTE: Now we simulate the FB_ArbiterToSubSys_IO updating the cohort number to the same value as the request cohort, indicating that cohort has been included
-ioCurrentBP.nCohortInt := 1;
+ioCurrentBP.nCohortInt := 2;
 
 // Transfer of current BP to sub system PLC
 pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
