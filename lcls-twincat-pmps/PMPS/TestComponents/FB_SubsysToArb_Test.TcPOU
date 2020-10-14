@@ -188,6 +188,8 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
 ///////////////////////////////////////
 //Sub system cycle
 fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
 //END of sub system cycle
 ///////////////////////////////////////
 

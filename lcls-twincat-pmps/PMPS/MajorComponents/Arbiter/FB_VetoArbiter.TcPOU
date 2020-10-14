@@ -41,11 +41,7 @@ ELSIF ftVeto.Q THEN
     HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, stStandbyBP);
 END_IF
 
-IF bVeto THEN
-	LowerAuthority.ElevateRequest(THIS^);
-ELSE
-	LowerAuthority.ElevateRequest(HigherAuthority);
-END_IF
+LowerAuthority.ElevateRequest(THIS^);
 
 //Fast fault that holds beam off until the request is added back into the system
 // when bVeto goes false.
@@ -82,7 +78,7 @@ END_VAR
 IF bVeto THEN
     RemoveRequest := TRUE;
 ELSE
-    HigherAuthority.RemoveRequest(nReqID);    
+    RemoveRequest := HigherAuthority.RemoveRequest(nReqID);    
 END_IF
 ]]></ST>
       </Implementation>
@@ -98,13 +94,15 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-stStandbyBP := stReqBP;
-
-IF bVeto THEN
-	RequestBP := TRUE;
-ELSE
+IF NOT bVeto THEN
 	// Pass request along to higher authority
 	RequestBP := HigherAuthority.RequestBP(nReqID, stReqBP);
+ELSE
+    RequestBP := TRUE;
+END_IF
+
+IF RequestBP THEN
+    stStandbyBP := stReqBP;
 END_IF]]></ST>
       </Implementation>
     </Method>
