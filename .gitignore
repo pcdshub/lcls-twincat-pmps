@@ -1,29 +1,17 @@
-# Twincat ignores
 _Boot
 _Libraries
 _CompileInfo
-*.sln
-*.suo
-*~
-*.tpy
 *.bak
-*.~u
-TrialLicense.tclrs
-*.library
-LineIDs.dbg
-
-# EPICS ignores
-O.*
-archive
-autosave
-bin
-build
-db
-dbd
-
-# Vim ignores
-*.swp
-
-# Output from scope ignores
 *.csv
+*.dbg
+*.library
+*.suo
+*.svd
+*.sw[op]
 *.tmcRefac
+*.tpy
+*.~u
+*~
+.pytmc_build
+TrialLicense.tclrs
+UpgradeLog.htm
