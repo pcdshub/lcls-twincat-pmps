@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_AttenuatorOK" Id="{860b1a67-b309-4c7c-986b-4453f9f031c8}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Indicates if the attenuator can be considered safe for a device,
+given its status word.
+
+In local mode, the atteunator ignores PMPS requests, following a local
+setpoint. In this mode, a device cannot trust that the attenuator will not
+increase transmission beyond its own setpoint. Therefore any
+indication of a changing transmission should cause a fault.
+
+In PMPS mode, if a device has submitted a preemptive request and received
+acknowledgement, then the transmission setpoint will be governed at least
+by that device's setpoint. Therefore, the attenuator may be moving without
+generating a fault.
+*)
+FUNCTION F_AttenuatorOK : BOOL
+VAR_INPUT
+    xStatus : WORD;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xStatus.2 THEN // Local mode
+    F_AttenuatorOK := xStatus.0 and NOT xStatus.1;
+ELSIF xStatus.3 AND NOT xStatus.2 THEN // PMPS mode
+    F_AttenuatorOK := TRUE;
+END_IF
+
+F_AttenuatorOK := xStatus.4 AND F_AttenuatorOK;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

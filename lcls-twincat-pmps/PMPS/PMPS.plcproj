@@ -51,6 +51,9 @@
     <Compile Include="DUTs\InternalDUT\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\ST_AttenuatorStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\ST_BP_ArbInternal.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +153,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\PE_Ranges.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_AttenuatorOK.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">
