@@ -290,9 +290,6 @@
     <Compile Include="MajorComponents\Stoppers\FB_StopperWatcher.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PlcTask.TcTTO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestComponents\DUT\E_BPTMTestStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
