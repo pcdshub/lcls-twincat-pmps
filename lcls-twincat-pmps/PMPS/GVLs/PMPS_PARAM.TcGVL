@@ -5,7 +5,7 @@
 VAR_GLOBAL CONSTANT
     MAX_FAST_FAULTS	:	UINT := 50; // Max fast faults for an FFO
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of BP requests in the arbiter
-    ATT_MARGIN : UINT := 5; // Allowed margin above requested transmission level in SafeBPCompare (0.05 or 5% default)
+    ATT_MARGIN : UINT := 5; // Allowed margin above requested transmission level in SafeBPCompare (0.05 = 5% default)
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
