@@ -29,7 +29,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-xAttOK := BeamParam1.nTran <= (BeamParam2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR;
+xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
 xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
@@ -38,7 +38,7 @@ FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
     Att1 REF= BeamParam1.astAttenuators[idx];
     Att2 REF= BeamParam2.astAttenuators[idx];
 
-    xAuxAttOK R= (Att1.nTran > ( (Att2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/100 ) ) 
+    xAuxAttOK R= ( Att1.nTran > MIN( 100, ( (Att2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/100 ) ) )
                     OR NOT F_AttenuatorOK(Att1.xAttOK);    
 END_FOR
 
