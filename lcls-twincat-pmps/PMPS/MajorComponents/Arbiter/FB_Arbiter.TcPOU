@@ -269,10 +269,6 @@ ELSE
         nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
     END_IF
 END_IF
-
-
-
-
 ]]></ST>
       </Implementation>
     </Method>
@@ -386,7 +382,7 @@ VAR CONSTANT
 	BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+        <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND CheckRequestInPool(nReqId) THEN
 	// Include an A_Add action here to
 	// update this entry with a dummy filler (ID = 0, LiveInTable= False)
 	// before removing it since this hash
