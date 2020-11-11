@@ -673,7 +673,9 @@ PMPS_GVL
         g_areVBoundariesK    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
         250,
         270,
+        350,
         400,
+        450,
         540,
         850,
         1.15E3,
@@ -684,9 +686,7 @@ PMPS_GVL
         1.75E3,
         1.82E3,
         2.0E3,
-        3.2E3,
-        5.0E3,
-        7.1E3
+        2.3E3
     	];
 
 
