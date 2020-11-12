@@ -14,7 +14,8 @@ END_VAR
       <ST><![CDATA[Arbitration();
 RequestCheckRemoveBP();
 FullArbitrationStack();
-StackArbiters();]]></ST>
+StackArbiters();
+RemoveReq();]]></ST>
     </Implementation>
     <Method Name="ArbiterCapacity" Id="{f24e572d-11ee-48d8-ae26-2ae1990f129e}">
       <Declaration><![CDATA[METHOD ArbiterCapacity
@@ -239,6 +240,33 @@ ELSE
 END_IF
 
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveReq" Id="{0f0c060b-fb07-4a71-b5b6-828444ee58c6}">
+      <Declaration><![CDATA[METHOD RemoveReq
+VAR
+    
+    Arb : FB_Arbiter(20);
+    
+    DummyHA : FB_DummyHA;
+    
+    Result : BOOL;
+    
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+Arb.AddRequest(30, PMPS_GVL.cst0RateBeam);
+
+Arb.ElevateRequest(DummyHA);
+
+TEST('Remove Req');
+    Result := Arb.RemoveRequest(77);
+    
+    AssertFalse( Result, 'RemoveReq returned true, with nothing to remove');
+    AssertTrue( Arb.xRequestMade , 'RequestMade has been reset. Something is wrong');
+    
+TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestCheckRemoveBP" Id="{62a4c245-663e-41d8-901a-0a0faba360f7}">

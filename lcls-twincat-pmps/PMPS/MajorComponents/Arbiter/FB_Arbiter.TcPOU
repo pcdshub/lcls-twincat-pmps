@@ -269,10 +269,6 @@ ELSE
         nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
     END_IF
 END_IF
-
-
-
-
 ]]></ST>
       </Implementation>
     </Method>
@@ -386,7 +382,7 @@ VAR CONSTANT
 	BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+        <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND CheckRequestInPool(nReqId) THEN
 	// Include an A_Add action here to
 	// update this entry with a dummy filler (ID = 0, LiveInTable= False)
 	// before removing it since this hash
@@ -406,14 +402,16 @@ END_VAR]]></Declaration>
                 eSubsystem:=E_Subsystem.MPS);
         END_IF
     END_IF
+    
+    // With any new request reset the internal arbiter "done" flag
+    xRequestMade R= THIS^.fbBPAssertionPool.bOk;
+    
+    RemoveRequest := THIS^.fbBPAssertionPool.bOk;
+    
+    nRequestsCount := nEntryCount;
+    
 END_IF
-
-// With any new request reset the internal arbiter "done" flag
-xRequestMade R= THIS^.fbBPAssertionPool.bOk;
-
-RemoveRequest := THIS^.fbBPAssertionPool.bOk;
-
-nRequestsCount := nEntryCount;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{d19219fe-34dd-4096-83ea-674a98690de1}">
