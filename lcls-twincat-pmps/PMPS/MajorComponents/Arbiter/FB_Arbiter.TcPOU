@@ -402,14 +402,16 @@ END_VAR]]></Declaration>
                 eSubsystem:=E_Subsystem.MPS);
         END_IF
     END_IF
+    
+    // With any new request reset the internal arbiter "done" flag
+    xRequestMade R= THIS^.fbBPAssertionPool.bOk;
+    
+    RemoveRequest := THIS^.fbBPAssertionPool.bOk;
+    
+    nRequestsCount := nEntryCount;
+    
 END_IF
-
-// With any new request reset the internal arbiter "done" flag
-xRequestMade R= THIS^.fbBPAssertionPool.bOk;
-
-RemoveRequest := THIS^.fbBPAssertionPool.bOk;
-
-nRequestsCount := nEntryCount;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RequestBP" Id="{d19219fe-34dd-4096-83ea-674a98690de1}">
