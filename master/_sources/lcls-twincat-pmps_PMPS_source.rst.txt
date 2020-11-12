@@ -1743,6 +1743,7 @@ FB_Arbiter_Test
     RequestCheckRemoveBP();
     FullArbitrationStack();
     StackArbiters();
+    RemoveReq();
 
     END_FUNCTION_BLOCK
 
