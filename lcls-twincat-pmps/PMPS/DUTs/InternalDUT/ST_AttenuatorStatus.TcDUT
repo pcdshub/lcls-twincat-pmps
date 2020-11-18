@@ -9,6 +9,7 @@ STRUCT
     PMPSMode : BIT;     //3  (* means the attenuator is only taking setpoints from the pmps *)
     OK : BIT;           //4  
     Toggle : BIT;       //5  just here for fun
+    Include : BIT;      //6  Consider this device status
 END_STRUCT
 END_TYPE
 ]]></Declaration>

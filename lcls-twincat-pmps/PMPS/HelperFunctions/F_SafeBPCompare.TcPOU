@@ -3,6 +3,7 @@
   <POU Name="F_SafeBPCompare" Id="{688ded70-423f-032d-1c2c-e52a6cd87b7c}" SpecialFunc="None">
     <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
 the result will be true. *)
+// Does not consider status. Status must be evaluated elsewhere.
 FUNCTION F_SafeBPCompare : BOOL
 VAR_INPUT
     BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
@@ -29,7 +30,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
+xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
 xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
@@ -37,9 +38,7 @@ xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
     Att1 REF= BeamParam1.astAttenuators[idx];
     Att2 REF= BeamParam2.astAttenuators[idx];
-
-    xAuxAttOK R= ( Att1.nTran > MIN( 100, ( (Att2.nTran *(100+PMPS_PARAM.ATT_MARGIN))/100 ) ) )
-                    OR NOT F_AttenuatorOK(Att1.xAttOK);    
+    xAuxAttOK R= ( Att1.nTran > MIN( PMPS_GVL.TRANS_SCALING_FACTOR, ( (Att2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR ) ) );    
 END_FOR
 
 FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO

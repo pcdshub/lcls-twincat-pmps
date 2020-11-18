@@ -56,21 +56,23 @@ VAR
     stSafer    :    ST_BeamParams;
     stNotSoSafe    :    ST_BeamParams;
     idx : UINT;
+    
+    xResult : BOOL;
+    xFailedTest : BOOL; // To exit loops early
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-
 TEST('BPComparisonTran');
 //Attenuation
 stSafer := F_SetBeamParams(
-    0, //
+    500, //
     10,
     16#FFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
-    1, //
+    600, //
     10,
     16#FFFF,
     1,
@@ -83,11 +85,32 @@ AssertTrue(
 AssertFalse(
     F_SafeBPCompare(stNotSoSafe, stSafer),
     'Attenuation eval is broken (False)');
+    
+// Check at margin threshold
+stSafer.nTran := stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+AssertTrue(
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Attenuation eval is broken: should be safe up to margin.');
+
+stSafer.nTran := 1 + stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+
+AssertFalse(
+    F_SafeBPCompare(stSafer, stNotSoSafe),
+    'Attenuation eval is broken (False): should not be safe at all past margin');
 
 TEST_FINISHED();
+
+
     
 //Attenuator array    
 TEST('BPComparisonTranArray');
+
+stSafer := F_SetBeamParams(
+    0, //
+    10,
+    16#FFFF,
+    1,
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 stNotSoSafe := F_SetBeamParams(
     0, //
@@ -97,18 +120,46 @@ stNotSoSafe := F_SetBeamParams(
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    stSafer.astAttenuators[idx].nTran := 30;
-    stNotSoSafe.astAttenuators[idx].nTran := 50;
+    stSafer.astAttenuators[idx].nTran := 500;
+    stNotSoSafe.astAttenuators[idx].nTran := 600;
+    
+    xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
     
     AssertTrue(
-    F_SafeBPCompare(stSafer, stNotSoSafe),
-    'Attenuation array eval is broken (True)'); 
-
+    xResult,
+    'Attenuation array eval is broken (True)');
+ 
+    xFailedTest S= NOT xResult;
+    
+    xResult := F_SafeBPCompare(stNotSoSafe, stSafer);
     AssertFalse(
-    F_SafeBPCompare(stNotSoSafe, stSafer),
+    xResult,
     'Attenuation array eval is broken (False)');
     
-    IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+    xFailedTest S= xResult;
+    
+    // Check at margin threshold
+        stSafer.astAttenuators[idx].nTran := stNotSoSafe.astAttenuators[idx].nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+        
+        xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
+    
+        AssertTrue(
+            xResult,
+            'Attenuation eval is broken: should be safe up to margin.');
+        xFailedTest S= NOT xResult;
+            
+        stSafer.astAttenuators[idx].nTran := 1 + stNotSoSafe.astAttenuators[idx].nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+        
+        xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
+        AssertFalse(
+            xResult,
+            'Attenuation eval is broken (False): should not be safe at all past margin');
+        xFailedTest S= xResult;
+    //////////////////////
+    IF xFailedTest THEN
+        stSafer.astAttenuators[idx].nTran := 0;
+        stNotSoSafe.astAttenuators[idx].nTran := 0;
+        xFailedTest := FALSE;
         EXIT; // Exit this loop on the first failure.
 	END_IF
     

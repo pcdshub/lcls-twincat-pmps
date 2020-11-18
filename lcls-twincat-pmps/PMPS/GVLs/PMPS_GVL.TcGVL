@@ -47,7 +47,7 @@ VAR_GLOBAL CONSTANT
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
     
-    TRANS_SCALING_FACTOR : UINT := 100; // Scaling factor for fixed-point transmission
+    TRANS_SCALING_FACTOR : UINT := 10000; // Scaling factor for fixed-point transmission
 
     MAX_STOPPERS    :   UINT := 16;
     {attribute 'pytmc' := '
