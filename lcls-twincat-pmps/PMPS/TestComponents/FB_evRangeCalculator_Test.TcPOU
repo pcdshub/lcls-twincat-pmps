@@ -94,6 +94,14 @@ AssertTrue(
 
 TEST_FINISHED();
 
+Test('Out of range eV failsafes');
+// eV too high
+AssertTrue(
+    F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries] + 1, 0) = 16#FFFF,
+    'eV above the last threshold should failsafe.');    
+
+TEST_FINISHED();
+
 Test('Check hyst keeps');
 
 LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#0000_0000_0000_0000);
@@ -165,58 +173,5 @@ AssertTrue(Result = TestEV,
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_evRangeCalculator_Test">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_evRangeCalculator_Test.BasicFunction">
-      <LineId Id="3" Count="8" />
-      <LineId Id="82" Count="1" />
-      <LineId Id="85" Count="1" />
-      <LineId Id="88" Count="2" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="84" Count="0" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="163" Count="0" />
-      <LineId Id="157" Count="0" />
-      <LineId Id="166" Count="0" />
-      <LineId Id="158" Count="0" />
-      <LineId Id="156" Count="0" />
-      <LineId Id="13" Count="2" />
-      <LineId Id="159" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="164" Count="0" />
-      <LineId Id="161" Count="0" />
-      <LineId Id="165" Count="0" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="160" Count="0" />
-      <LineId Id="17" Count="16" />
-      <LineId Id="94" Count="0" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="107" Count="0" />
-      <LineId Id="109" Count="1" />
-      <LineId Id="108" Count="0" />
-      <LineId Id="118" Count="0" />
-      <LineId Id="113" Count="0" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="121" Count="2" />
-      <LineId Id="120" Count="0" />
-      <LineId Id="119" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="37" Count="2" />
-      <LineId Id="100" Count="1" />
-      <LineId Id="117" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="102" Count="1" />
-      <LineId Id="41" Count="10" />
-      <LineId Id="167" Count="0" />
-      <LineId Id="170" Count="4" />
-      <LineId Id="176" Count="6" />
-      <LineId Id="168" Count="0" />
-      <LineId Id="183" Count="12" />
-      <LineId Id="169" Count="0" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
