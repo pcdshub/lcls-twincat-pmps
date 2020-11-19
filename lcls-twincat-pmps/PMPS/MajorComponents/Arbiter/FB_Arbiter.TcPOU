@@ -265,8 +265,10 @@ IF bStartNewAckRequest AND NOT bAckInProgress THEN
     nAckInProgCohort := nNextCohort;
     HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
     bAckInProgress := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
-    bStartNewAckRequest := FALSE;
-    nNextCohort := nNextCohort + 1;
+    IF bAckInProgress THEN
+        bStartNewAckRequest := FALSE;
+        nNextCohort := nNextCohort + 1;
+    END_IF
 END_IF
 ]]></ST>
       </Implementation>
