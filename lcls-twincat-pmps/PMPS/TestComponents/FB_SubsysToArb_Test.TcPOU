@@ -60,7 +60,7 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 
 TEST('Initial Elevation');
 AssertTrue(fbSubSysToArb.nRequestCohort = fbSubSysToArb.q_stRequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match');
-AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely');
+AssertFalse(fbArbiter.nActiveCohort <> 0, 'Arbiter indicates it is included in arbitration prematurely');
 AssertTrue(fbSubSysToArb.nRequestCohort <> 0, 'Cohort index should move to 1 with first request');
 TEST_FINISHED_NAMED('Initial Elevation');
 
@@ -89,7 +89,7 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 
 TEST('Not yet active in arbitration');
 AssertTrue(fbSubSysToArb.nActiveCohort = 0, 'Active cohort should still be zero, per ioCurrentBP.nCohortInt setting above.');
-AssertFalse(fbArbiter.xActiveInArbitration, 'Arbiter indicates it is included in arbitration prematurely, checkrequest might be broken');
+AssertFalse(fbArbiter.nActiveCohort <> 0, 'Arbiter indicates it is included in arbitration prematurely, checkrequest might be broken');
 AssertTrue(fbSubSysToArb.nRequestCohort = nCohortScratch, 'Cohort index should not have changed because there have been no additional requests added to the arbiter');
 TEST_FINISHED_NAMED('Not yet active in arbitration');
 
@@ -114,7 +114,7 @@ fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
 
 TEST('Active in arbitration');
 AssertTrue(fbSubSysToArb.nActiveCohort = fbSubSysToArb.nRequestCohort, 'Active cohort and request cohort do not match');
-AssertTrue(fbArbiter.xActiveInArbitration, 'Arbiter does not indicate it is included in higher arbitration');
+AssertTrue(fbArbiter.nActiveCohort = 1, 'Arbiter does not indicate it is included in higher arbitration');
 TEST_FINISHED_NAMED('Active in arbitration');
 
 ]]></ST>
