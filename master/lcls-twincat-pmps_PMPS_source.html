@@ -98,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_PMPS_epics.html">Data Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_PMPS_epics.html#database-records">Database Records</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DUTs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#e-arbdosteststates">E_ArbDosTestStates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-bptmstate">E_BPTMState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-bptmteststates">E_BPTMTestStates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-mpsbeamrates">E_MPSBeamRates</a></li>
@@ -255,6 +256,22 @@
             
   <div class="section" id="duts">
 <h1>DUTs<a class="headerlink" href="#duts" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="e-arbdosteststates">
+<h2>E_ArbDosTestStates<a class="headerlink" href="#e-arbdosteststates" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">E_ArbDosTestStates</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">Init</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">SecondReq</span> <span class="o">:=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">WaitForAck</span> <span class="o">:=</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="n">WaitFor2ndAck</span> <span class="o">:=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">RunAsserts</span> <span class="o">:=</span> <span class="mi">8000</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="e-bptmstate">
 <h2>E_BPTMState<a class="headerlink" href="#e-bptmstate" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">E_BPTMState</span> <span class="p">:</span>
@@ -1852,21 +1869,18 @@ END_TYPE
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Arbiter</span> <span class="n">ID</span> <span class="k">for</span> <span class="n">elev</span><span class="o">.</span> <span class="n">req</span><span class="o">.</span>
      <span class="s1">&#39;}</span>
     <span class="n">nArbiterID</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">Arbiter</span> <span class="n">ID</span><span class="p">,</span> <span class="n">used</span> <span class="k">for</span> <span class="n">making</span> <span class="n">higher</span><span class="o">-</span><span class="n">level</span> <span class="n">BP</span> <span class="n">requests</span>
+
+    <span class="n">nNextCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">//</span> <span class="n">The</span> <span class="n">cohort</span> <span class="n">ID</span> <span class="nb">any</span> <span class="n">new</span> <span class="n">requests</span> <span class="n">will</span> <span class="n">adopt</span><span class="p">,</span> <span class="n">will</span> <span class="n">become</span> <span class="n">ReqInProgCohort</span> <span class="n">at</span> <span class="n">the</span> <span class="n">start</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">acknowledgement</span> <span class="n">cycle</span>
+    <span class="n">nAckInProgCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">The</span> <span class="n">cohort</span> <span class="n">ID</span> <span class="n">currently</span> <span class="n">being</span> <span class="n">acknowledged</span><span class="p">,</span> <span class="n">will</span> <span class="n">become</span> <span class="n">nActiveCohort</span> <span class="n">after</span> <span class="n">acknowledgement</span> <span class="kn">from</span> <span class="nn">HA</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">CohortCounter</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Intrnl</span> <span class="n">cohort</span> <span class="n">counter</span>
      <span class="s1">&#39;}</span>
-    <span class="n">nArbiterCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">//</span> <span class="n">The</span> <span class="n">cohort</span> <span class="n">index</span> <span class="n">keeps</span> <span class="n">track</span> <span class="n">of</span> <span class="n">which</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="n">requests</span> <span class="n">have</span> <span class="n">been</span> <span class="n">included</span> <span class="ow">in</span> <span class="n">higher</span><span class="o">-</span><span class="n">level</span> <span class="n">arbitrations</span>
-    <span class="o">//</span> <span class="n">Init</span> <span class="n">to</span> <span class="mi">1</span><span class="p">,</span> <span class="n">provides</span> <span class="n">a</span> <span class="n">guard</span> <span class="n">against</span> <span class="n">default</span> <span class="n">cohort</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">BP</span> <span class="n">requests</span><span class="o">.</span>
-    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">ActiveInArbitration</span>
-        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">this</span> <span class="n">arbiter</span><span class="s1">&#39;s req is included</span>
-     <span class="s1">&#39;}</span>
-    <span class="n">xActiveInArbitration</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="kc">True</span> <span class="n">when</span> <span class="n">this</span> <span class="n">arbiter</span><span class="s1">&#39;s request is included in all higher-level arbitrations</span>
+    <span class="n">nActiveCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">Requests</span> <span class="k">with</span> <span class="n">cohorts</span> <span class="o">&lt;=</span> <span class="n">to</span> <span class="n">this</span> <span class="n">value</span> <span class="n">will</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">active</span> <span class="ow">in</span> <span class="n">CheckRequest</span>
 
-    <span class="n">rtActiveInArbitration</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
+    <span class="n">bStartNewAckRequest</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Set</span> <span class="n">by</span> <span class="n">an</span> <span class="n">add</span> <span class="ow">or</span> <span class="n">remove</span> <span class="n">method</span> <span class="n">call</span><span class="p">,</span> <span class="n">triggers</span> <span class="n">an</span> <span class="n">ack</span> <span class="n">cycle</span>
+    <span class="n">bAckInProgress</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Set</span> <span class="n">by</span> <span class="n">ElevateReq</span> <span class="n">when</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">new</span> <span class="n">ack</span> <span class="n">request</span> <span class="ow">and</span> <span class="n">reset</span> <span class="n">when</span> <span class="n">the</span> <span class="n">ack</span> <span class="n">cycle</span> <span class="ow">is</span> <span class="n">complete</span>
 
     <span class="o">//</span> <span class="n">The</span> <span class="n">following</span> <span class="n">IDs</span> <span class="n">are</span> <span class="nb">set</span> <span class="n">by</span> <span class="n">the</span> <span class="n">last</span> <span class="n">BP</span> <span class="n">request</span> <span class="n">that</span> <span class="n">was</span> <span class="n">most</span> <span class="n">conservative</span>
     <span class="o">//</span> <span class="n">ie</span><span class="o">.</span> <span class="n">other</span> <span class="n">requests</span> <span class="n">may</span> <span class="n">limit</span> <span class="n">the</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">but</span> <span class="n">this</span> <span class="n">one</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">most</span> <span class="n">recent</span> <span class="n">to</span> <span class="n">limit</span> <span class="n">it</span>
@@ -1916,6 +1930,7 @@ END_TYPE
 <span class="n">FullArbitrationStack</span><span class="p">();</span>
 <span class="n">StackArbiters</span><span class="p">();</span>
 <span class="n">RemoveReq</span><span class="p">();</span>
+<span class="n">DoS</span><span class="p">();</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
@@ -2526,6 +2541,7 @@ END_FUNCTION_BLOCK
 <h2>FB_DummyHA<a class="headerlink" href="#fb-dummyha" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_DummyHA</span> <span class="n">IMPLEMENTS</span> <span class="n">I_HigherAuthority</span><span class="p">,</span> <span class="n">I_LowerAuthority</span>
 <span class="n">VAR_INPUT</span>
+    <span class="n">ReqAcknowledged</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span> <span class="o">//</span> <span class="n">Use</span> <span class="n">to</span> <span class="n">control</span> <span class="n">when</span> <span class="n">the</span> <span class="n">HA</span> <span class="n">CHeckRequest</span> <span class="n">Returns</span> <span class="n">TRUE</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
 <span class="n">END_VAR</span>

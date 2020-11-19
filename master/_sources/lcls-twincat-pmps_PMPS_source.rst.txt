@@ -4,6 +4,24 @@ DUTs
 ----
 
 
+E_ArbDosTestStates
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE E_ArbDosTestStates :
+    (
+    	Init := 0,
+        SecondReq := 100,
+        WaitForAck := 200,
+        WaitFor2ndAck := 300,
+        RunAsserts := 8000
+    );
+    END_TYPE
+
+
 E_BPTMState
 ^^^^^^^^^^^
 
@@ -1678,22 +1696,19 @@ FB_Arbiter
             field: DESC Arbiter ID for elev. req.
          '}
         nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
+        
+        nNextCohort : UDINT := 1; // The cohort ID any new requests will adopt, will become ReqInProgCohort at the start of the next acknowledgement cycle
+        nAckInProgCohort : UDINT := 0; // The cohort ID currently being acknowledged, will become nActiveCohort after acknowledgement from HA
         {attribute 'pytmc' := '
             pv: CohortCounter
             io: i
             field: DESC Intrnl cohort counter
          '}
-        nArbiterCohort : UDINT := 1; // The cohort index keeps track of which beam parameter requests have been included in higher-level arbitrations
-        // Init to 1, provides a guard against default cohort value in BP requests.
-        {attribute 'pytmc' := '
-            pv: ActiveInArbitration
-            io: i
-            field: DESC True if this arbiter's req is included
-         '}
-        xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations
-    	
-    	rtActiveInArbitration : R_TRIG;
-    	
+        nActiveCohort : UDINT := 0; // Requests with cohorts <= to this value will be considered active in CheckRequest
+        
+        bStartNewAckRequest : BOOL; // Set by an add or remove method call, triggers an ack cycle
+        bAckInProgress : BOOL; // Set by ElevateReq when there is a new ack request and reset when the ack cycle is complete
+        		
     	// The following IDs are set by the last BP request that was most conservative
     	// ie. other requests may limit the parameter, but this one is the most recent to limit it
     	idTransmission : DWORD; // ID of BP limiting transmission
@@ -1744,6 +1759,7 @@ FB_Arbiter_Test
     FullArbitrationStack();
     StackArbiters();
     RemoveReq();
+    DoS();
 
     END_FUNCTION_BLOCK
 
@@ -2378,6 +2394,7 @@ FB_DummyHA
 
     FUNCTION_BLOCK FB_DummyHA IMPLEMENTS I_HigherAuthority, I_LowerAuthority
     VAR_INPUT
+        ReqAcknowledged : BOOL := TRUE; // Use to control when the HA CHeckRequest Returns TRUE
     END_VAR
     VAR_OUTPUT
     END_VAR

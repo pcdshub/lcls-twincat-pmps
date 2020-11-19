@@ -24,7 +24,7 @@ Settings
 Pragmas
 -------
 
-Total pragmas found: 205
+Total pragmas found: 206
 Total linter errors: 0
 
 
@@ -64,15 +64,15 @@ Constants
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        Constants.bFPUSupport, BOOL, 949892304 (8)
-        Constants.bLittleEndian, BOOL, 949891872 (8)
-        Constants.bSimulationMode, BOOL, 949891880 (8)
-        Constants.CompilerVersion, VERSION, 949892224 (64)
-        Constants.CompilerVersionNumeric, DWORD, 949892352 (32)
-        Constants.nPackMode, UINT, 949892288 (16)
-        Constants.nRegisterSize, WORD, 949891888 (16)
-        Constants.RuntimeVersion, VERSION, 949892160 (64)
-        Constants.RuntimeVersionNumeric, DWORD, 949892320 (32)
+        Constants.bFPUSupport, BOOL, 949922128 (8)
+        Constants.bLittleEndian, BOOL, 949921696 (8)
+        Constants.bSimulationMode, BOOL, 949921704 (8)
+        Constants.CompilerVersion, VERSION, 949922048 (64)
+        Constants.CompilerVersionNumeric, DWORD, 949922176 (32)
+        Constants.nPackMode, UINT, 949922112 (16)
+        Constants.nRegisterSize, WORD, 949921712 (16)
+        Constants.RuntimeVersion, VERSION, 949921984 (64)
+        Constants.RuntimeVersionNumeric, DWORD, 949922144 (32)
 
 
 DefaultGlobals
@@ -470,16 +470,16 @@ MAIN
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        MAIN.fbArbiterTest, FB_Arbiter_Test, 774813824 (36797888)
-        MAIN.fbArbToSubSysTest, FB_ArbToSubsys_Test, 915458688 (34423872)
-        MAIN.fbBPTMTest, FB_BPTM_Test, 668179200 (37975744)
-        MAIN.fbDiffBPTest, FB_DiffBP_Test, 634627456 (33551744)
-        MAIN.fbevRangeCalcTest, FB_evRangeCalculator_Test, 846402624 (33551808)
-        MAIN.fbFFTest, FB_FastFault_Test, 739706688 (35107136)
-        MAIN.fbSafeBPCompareTest, FB_SafeBPCompare_Test, 706154944 (33551744)
-        MAIN.fbSetPERanges, PE_Ranges, 634627424 (32)
-        MAIN.fbSubSysToArbTest, FB_SubsysToArb_Test, 989258368 (35534016)
-        MAIN.fbVetoArbiterTest, FB_VetoArbiter_Test, 811611712 (34790912)
+        MAIN.fbArbiterTest, FB_Arbiter_Test, 773258560 (37170944)
+        MAIN.fbArbToSubSysTest, FB_ArbToSubsys_Test, 988714560 (34423872)
+        MAIN.fbBPTMTest, FB_BPTM_Test, 810429504 (37975744)
+        MAIN.fbDiffBPTest, FB_DiffBP_Test, 634627520 (33551744)
+        MAIN.fbevRangeCalcTest, FB_evRangeCalculator_Test, 739706752 (33551808)
+        MAIN.fbFFTest, FB_FastFault_Test, 668297216 (35107136)
+        MAIN.fbSafeBPCompareTest, FB_SafeBPCompare_Test, 706155008 (33551744)
+        MAIN.fbSetPERanges, PE_Ranges, 634607424 (32)
+        MAIN.fbSubSysToArbTest, FB_SubsysToArb_Test, 953180544 (35534016)
+        MAIN.fbVetoArbiterTest, FB_VetoArbiter_Test, 914438400 (34790912)
 
 
 PMPS_GVL
@@ -504,7 +504,7 @@ PMPS_GVL
         PMPS_GVL.EXCLUDED_ASSERTION_ID, UDINT, 949886080 (32)
         PMPS_GVL.FAST_TEST_VELOCITY, LREAL, 949886208 (64)
         PMPS_GVL.g_areVBoundaries, REAL, 949885536 (512)
-        PMPS_GVL.g_areVBoundariesK, REAL, 949891072 (512)
+        PMPS_GVL.g_areVBoundariesK, REAL, 949920864 (512)
         PMPS_GVL.g_areVBoundariesL, REAL, 949890560 (512)
         PMPS_GVL.g_cBoundaries, INT, 949890496 (16)
         PMPS_GVL.MAX_APERTURES, UINT, 949889968 (16)
@@ -530,8 +530,10 @@ PMPS_PARAM
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        PMPS_PARAM.MAX_ASSERTIONS, UDINT, 949891584 (32)
+        PMPS_PARAM.MAX_ASSERTIONS, UDINT, 949921408 (32)
         PMPS_PARAM.MAX_FAST_FAULTS, UINT, 949890512 (16)
+        PMPS_PARAM.MAX_FAST_FAULTS, UINT, 949921376 (16)
+        PMPS_PARAM.TRANS_MARGIN, UINT, 634627488 (16)
 
 
 PMPS_TOOLS
@@ -541,7 +543,7 @@ PMPS_TOOLS
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        PMPS_TOOLS.fbJson, FB_JsonSaxWriter, 949891616 (256)
+        PMPS_TOOLS.fbJson, FB_JsonSaxWriter, 949921440 (256)
 
 
 ParameterList
@@ -561,7 +563,7 @@ TC_EVENTS
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        TC_EVENTS.LCLSGeneralEventClass, LCLSGeneralEventClass, 949940512 (960)
+        TC_EVENTS.LCLSGeneralEventClass, LCLSGeneralEventClass, 949964448 (960)
 
 
 TwinCAT_SystemInfoVarList
@@ -571,10 +573,10 @@ TwinCAT_SystemInfoVarList
     :header: Symbol, Type, Offset/Size
     :align: center
 
-        TwinCAT_SystemInfoVarList.__PlcTask, _Implicit_Task_Info, 949895520 (704)
-        TwinCAT_SystemInfoVarList._AppInfo, PlcAppSystemInfo, 949892384 (2048)
-        TwinCAT_SystemInfoVarList._TaskInfo, PlcTaskSystemInfo, 949894464 (1024)
-        TwinCAT_SystemInfoVarList._TaskOid_PlcTask, OTCID, 949895488 (32)
-        TwinCAT_SystemInfoVarList._TaskPouOid_PlcTask, OTCID, 949894432 (32)
+        TwinCAT_SystemInfoVarList.__PlcTask, _Implicit_Task_Info, 949977632 (704)
+        TwinCAT_SystemInfoVarList._AppInfo, PlcAppSystemInfo, 949974496 (2048)
+        TwinCAT_SystemInfoVarList._TaskInfo, PlcTaskSystemInfo, 949976576 (1024)
+        TwinCAT_SystemInfoVarList._TaskOid_PlcTask, OTCID, 949977600 (32)
+        TwinCAT_SystemInfoVarList._TaskPouOid_PlcTask, OTCID, 949976544 (32)
 
 
