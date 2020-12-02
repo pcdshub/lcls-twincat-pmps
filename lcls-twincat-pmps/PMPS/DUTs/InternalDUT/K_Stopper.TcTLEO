@@ -5,8 +5,12 @@
 {attribute 'strict'}
 TYPE K_Stopper :
 (
-	ST3K4 := 1 // TMO PPS stopper
-    //ST2 := 2
+	ST3K4 := 1, // TMO PPS stopper in
+    ST1K2 := 2, // RIX PPS stopper in
+    MR1K1_IN := 3, // Monochromator focus optic vertical state
+    MR1K1_OUT := 4, // Monochromator focus optic vertical state
+    MR1K3_IN := 5, // TXI Offset Mirror horizontal state
+    MR1K3_OUT := 6 // TXI Offset Mirror horizontal state
 );
 END_TYPE
 ]]></Declaration>
@@ -17,6 +21,31 @@ END_TYPE
             <o>
               <v n="TextID">"ST3K4"</v>
               <v n="TextDefault">"1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST1K2"</v>
+              <v n="TextDefault">"2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MR1K1_IN"</v>
+              <v n="TextDefault">"3"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MR1K1_OUT"</v>
+              <v n="TextDefault">"4"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MR1K3_IN"</v>
+              <v n="TextDefault">"5"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MR1K3_OUT"</v>
+              <v n="TextDefault">"6"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
