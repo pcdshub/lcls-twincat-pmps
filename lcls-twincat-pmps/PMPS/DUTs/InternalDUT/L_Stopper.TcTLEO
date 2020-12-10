@@ -6,7 +6,8 @@
 TYPE L_Stopper :
 (
 	ST1L0 := 1, // ST1
-    ST1L1 := 2 // ST2
+    ST1L1 := 2, // ST2
+    DEFAULT := PMPS_GVL.MAX_STOPPERS // DO NOT USE FOR ANYTHING
 );
 END_TYPE
 ]]></Declaration>
@@ -22,6 +23,11 @@ END_TYPE
             <o>
               <v n="TextID">"ST1L1"</v>
               <v n="TextDefault">"2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"DEFAULT"</v>
+              <v n="TextDefault">"PMPS_GVL.MAX_STOPPERS"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
