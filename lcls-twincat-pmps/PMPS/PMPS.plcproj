@@ -278,10 +278,16 @@
     <Compile Include="MajorComponents\Stoppers\FB_KStopper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_KVetoDevice.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\Stoppers\FB_LStopper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\Stoppers\FB_StopperWatcher.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_VetoDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
