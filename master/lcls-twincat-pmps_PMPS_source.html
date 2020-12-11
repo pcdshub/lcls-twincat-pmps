@@ -164,6 +164,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-hgvpu">FB_Hgvpu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-kphotonenergy">FB_KPhotonEnergy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-kstopper">FB_KStopper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-kvetodevice">FB_KVetoDevice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lineardevicestatetable">FB_LinearDeviceStateTable</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lineargovernor">FB_LinearGovernor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lphotonenergy">FB_LPhotonEnergy</a></li>
@@ -182,6 +183,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-undulatorsegment">FB_UndulatorSegment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-vetoarbiter">FB_VetoArbiter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-vetoarbiter-test">FB_VetoArbiter_Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-vetodevice">FB_VetoDevice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#io-to-apt">IO_TO_APT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#io-to-att">IO_TO_ATT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#io-to-bp">IO_TO_BP</a></li>
@@ -3130,6 +3132,21 @@ END_FUNCTION_BLOCK
 </pre></div>
 </div>
 </div>
+<div class="section" id="fb-kvetodevice">
+<h2>FB_KVetoDevice<a class="headerlink" href="#fb-kvetodevice" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_KVetoDevice</span> <span class="n">EXTENDS</span> <span class="n">FB_VetoDevice</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">SUPER</span><span class="o">^</span><span class="p">(</span><span class="n">stCurrentBP</span><span class="o">:=</span><span class="n">SUPER</span><span class="o">^.</span><span class="n">stCurrentBP</span><span class="p">);</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="fb-lineardevicestatetable">
 <h2>FB_LinearDeviceStateTable<a class="headerlink" href="#fb-lineardevicestatetable" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span> <span class="n">This</span> <span class="n">function</span> <span class="n">block</span> <span class="n">implements</span> <span class="n">simple</span> <span class="n">database</span><span class="o">.</span> <span class="n">Data</span> <span class="n">element</span> <span class="n">values</span> <span class="n">are</span> <span class="n">stored</span> <span class="ow">in</span> <span class="n">the</span> <span class="nb">hash</span> <span class="n">table</span><span class="o">.</span>  <span class="o">*</span><span class="p">)</span>
@@ -4445,6 +4462,73 @@ END_FUNCTION_BLOCK
     <span class="n">HigherArbID</span> <span class="p">:</span> <span class="n">DWORD</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VetoArbiter</span><span class="p">();</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fb-vetodevice">
+<h2>FB_VetoDevice<a class="headerlink" href="#fb-vetodevice" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Relays</span> <span class="n">veto</span> <span class="n">device</span> <span class="n">state</span><span class="p">,</span> <span class="n">updates</span> <span class="n">current</span> <span class="n">BP</span> <span class="ow">and</span> <span class="n">sends</span> <span class="n">a</span> <span class="n">message</span> <span class="n">when</span> <span class="n">veto</span> <span class="n">state</span> <span class="n">changes</span><span class="o">.</span>
+<span class="n">FUNCTION_BLOCK</span> <span class="n">FB_VetoDevice</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">i_bIn</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">i_bOut</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+    <span class="n">q_bIn</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">q_bOut</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_IN_OUT</span>
+    <span class="n">stCurrentBP</span> <span class="p">:</span> <span class="n">ST_BeamParams</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+
+    <span class="n">VetoDevice_IN</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
+    <span class="n">VetoDevice_OUT</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
+
+    <span class="n">VetoDeviceName</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;instance-path&#39;</span><span class="p">}</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;noinit&#39;</span><span class="p">}</span>
+    <span class="n">sPath</span>    <span class="p">:</span>    <span class="n">T_MaxString</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">Logging</span>
+        <span class="n">fbLogMsg</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span>
+            <span class="n">eSubSystem</span> <span class="o">:=</span> <span class="n">E_Subsystem</span><span class="o">.</span><span class="n">MPS</span><span class="p">);</span>
+
+        <span class="n">rtIn</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
+        <span class="n">rtOut</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
+    <span class="o">////////////////////////////////</span>
+
+    <span class="n">bInit</span><span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">IF</span> <span class="n">bInit</span> <span class="n">THEN</span>
+    <span class="n">fbLogMsg</span><span class="o">.</span><span class="n">sJson</span> <span class="o">:=</span> <span class="n">F_PMPS_JSON</span><span class="p">(</span><span class="n">VetoDeviceName</span><span class="p">,</span> <span class="n">sPath</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="n">bInit</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Log</span>
+<span class="o">/////////////////////////////</span>
+    <span class="n">rtIn</span><span class="p">(</span><span class="n">CLK</span> <span class="o">:=</span> <span class="n">i_bIn</span><span class="p">);</span>
+    <span class="n">rtOut</span><span class="p">(</span><span class="n">CLK</span> <span class="o">:=</span> <span class="n">i_bOut</span><span class="p">);</span>
+
+    <span class="n">IF</span> <span class="n">rtIn</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+        <span class="n">fbLogMsg</span><span class="o">.</span><span class="n">sMsg</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">VetoDeviceName</span><span class="p">,</span> <span class="s1">&#39; moved IN&#39;</span><span class="p">);</span>
+        <span class="n">fbLogMsg</span><span class="p">();</span>
+    <span class="n">ELSIF</span> <span class="n">rtOut</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
+        <span class="n">fbLogMsg</span><span class="o">.</span><span class="n">sMsg</span> <span class="o">:=</span> <span class="n">CONCAT</span><span class="p">(</span><span class="n">VetoDeviceName</span><span class="p">,</span> <span class="s1">&#39; moved OUT&#39;</span><span class="p">);</span>
+        <span class="n">fbLogMsg</span><span class="p">();</span>
+    <span class="n">END_IF</span>
+
+<span class="o">//</span> <span class="n">Relay</span>
+<span class="o">///////////////////////</span>
+    <span class="n">q_bIn</span> <span class="o">:=</span> <span class="n">i_bIn</span><span class="p">;</span>
+    <span class="n">q_bOut</span> <span class="o">:=</span> <span class="n">i_bOut</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">Update</span> <span class="n">current</span> <span class="n">beam</span> <span class="n">parameters</span>
+<span class="o">/////////////////////////////////////</span>
+    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">VetoDevice_IN</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bIn</span><span class="p">;</span>
+    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">VetoDevice_OUT</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bOut</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>

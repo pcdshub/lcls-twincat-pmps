@@ -6,7 +6,7 @@ Pragmas
     :header: PLC Name, Total Pragmas, Errors
     :align: center
 
-    :ref:`PMPS <PMPS_overview_pragmas>`, 206, 0
+    :ref:`PMPS <PMPS_overview_pragmas>`, 208, 0
 
 
 .. _PMPS_overview_pragmas:
@@ -15,7 +15,7 @@ Pragmas
 PMPS
 ^^^^
 
-Total pragmas found: 206
+Total pragmas found: 208
 Total linter errors: 0
 
 
