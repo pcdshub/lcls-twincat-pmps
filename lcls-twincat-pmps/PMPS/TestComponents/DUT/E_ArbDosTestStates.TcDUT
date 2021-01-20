@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="E_ArbDosTestStates" Id="{26a63bf7-392d-46a9-8b46-ac3bdd4168f4}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_ArbDosTestStates :
+(
+	Init := 0,
+    SecondReq := 100,
+    WaitForAck := 200,
+    WaitFor2ndAck := 300,
+    RunAsserts := 8000
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_VetoDevice" Id="{23cb2824-120c-479d-8abf-179942f9afb5}" SpecialFunc="None">
+    <Declaration><![CDATA[// Relays veto device state, updates current BP and sends a message when veto state changes.
+FUNCTION_BLOCK FB_VetoDevice
+VAR_INPUT
+	i_bIn : BOOL;
+	i_bOut : BOOL;
+END_VAR
+VAR_OUTPUT
+    q_bIn : BOOL;
+    q_bOut : BOOL;
+END_VAR
+VAR_IN_OUT
+	stCurrentBP : ST_BeamParams;
+END_VAR
+VAR
+
+    VetoDevice_IN : UINT := PMPS_GVL.MAX_STOPPERS; // Veto device state array index
+	VetoDevice_OUT : UINT := PMPS_GVL.MAX_STOPPERS; // Veto device state array index
+    
+    VetoDeviceName : STRING;
+	{attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
+
+    // Logging
+        fbLogMsg : FB_LogMessage := (
+            eSubSystem := E_Subsystem.MPS);
+    
+        rtIn : R_TRIG;
+        rtOut : R_TRIG;
+    ////////////////////////////////
+    
+	bInit: BOOL := TRUE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bInit THEN
+	fbLogMsg.sJson := F_PMPS_JSON(VetoDeviceName, sPath, 1000);
+	bInit := FALSE;
+END_IF
+
+// Log
+/////////////////////////////
+    rtIn(CLK := i_bIn);
+    rtOut(CLK := i_bOut);
+    
+    IF rtIn.Q THEN
+        fbLogMsg.sMsg := CONCAT(VetoDeviceName, ' moved IN');
+        fbLogMsg();
+    ELSIF rtOut.Q THEN
+        fbLogMsg.sMsg := CONCAT(VetoDeviceName, ' moved OUT');
+        fbLogMsg();
+    END_IF
+
+// Relay
+///////////////////////
+    q_bIn := i_bIn;
+    q_bOut := i_bOut;
+
+// Update current beam parameters
+/////////////////////////////////////
+    stCurrentBP.aStoppers[VetoDevice_IN] := i_bIn;
+    stCurrentBP.aStoppers[VetoDevice_OUT] := i_bOut;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

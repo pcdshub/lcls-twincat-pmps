@@ -40,22 +40,19 @@ VAR
         field: DESC Arbiter ID for elev. req.
      '}
     nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
+    
+    nNextCohort : UDINT := 1; // The cohort ID any new requests will adopt, will become ReqInProgCohort at the start of the next acknowledgement cycle
+    nAckInProgCohort : UDINT := 0; // The cohort ID currently being acknowledged, will become nActiveCohort after acknowledgement from HA
     {attribute 'pytmc' := '
         pv: CohortCounter
         io: i
         field: DESC Intrnl cohort counter
      '}
-    nArbiterCohort : UDINT := 1; // The cohort index keeps track of which beam parameter requests have been included in higher-level arbitrations
-    // Init to 1, provides a guard against default cohort value in BP requests.
-    {attribute 'pytmc' := '
-        pv: ActiveInArbitration
-        io: i
-        field: DESC True if this arbiter's req is included
-     '}
-    xActiveInArbitration : BOOL; // True when this arbiter's request is included in all higher-level arbitrations
-	
-	rtActiveInArbitration : R_TRIG;
-	
+    nActiveCohort : UDINT := 0; // Requests with cohorts <= to this value will be considered active in CheckRequest
+    
+    bStartNewAckRequest : BOOL; // Set by an add or remove method call, triggers an ack cycle
+    bAckInProgress : BOOL; // Set by ElevateReq when there is a new ack request and reset when the ack cycle is complete
+    		
 	// The following IDs are set by the last BP request that was most conservative
 	// ie. other requests may limit the parameter, but this one is the most recent to limit it
 	idTransmission : DWORD; // ID of BP limiting transmission
@@ -113,7 +110,7 @@ IF THIS^.CheckRequestInPool(nReqID)
 END_IF
 
 
-stReqBP.nCohortInt := nArbiterCohort; // Set the cohort number for this BP request.
+stReqBP.nCohortInt := nNextCohort; // Set the cohort number for this BP request.
 
 // Pack the ID with the request
 MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
@@ -139,9 +136,8 @@ ELSIF THIS^.fbBPAssertionPool.bOk AND bVerbose THEN
             eSevr:=TcEventSeverity.Verbose,
             eSubsystem:=E_Subsystem.MPS);
 END_IF
-
-// With any new request reset the internal arbiter "done" flag
-xRequestMade R= THIS^.fbBPAssertionPool.bOk;
+// New request, make sure the ack cycle request flag is set
+bStartNewAckRequest S= THIS^.fbBPAssertionPool.bOk;
 
 AddRequest := THIS^.fbBPAssertionPool.bOk;
 
@@ -221,7 +217,7 @@ BP := fbBPAssertionPool.getValue;
 // Is the assertion cohort number less than the current cohort and greater than zero?
 // Is the Aribter itself active in arbitration?
 CheckRequest := fbBPAssertionPool.bOk AND 
-                BP.nCohortInt < nArbiterCohort AND
+                BP.nCohortInt <= nActiveCohort AND
                 BP.nCohortInt > 0;
 ]]></ST>
       </Implementation>
@@ -256,17 +252,22 @@ END_VAR
 This method should only be used with one higher level component.
 *)
 
-IF NOT xRequestMade THEN
-	HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
-    xRequestMade := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
-    xActiveInArbitration := FALSE;
-    rtActiveInArbitration(CLK:=xActiveInArbitration);
-ELSE
-    xActiveInArbitration := HigherAuthority.CheckRequest(nReqID := nArbiterID);
-    rtActiveInArbitration(CLK:=xActiveInArbitration);
+// Complete previous ack cycle
+IF bAckInProgress THEN
+    IF HigherAuthority.CheckRequest(nReqID := nArbiterID) THEN
+        nActiveCohort := nAckInProgCohort;
+        bAckInProgress := FALSE;
+	END_IF
+END_IF
 
-    IF  rtActiveInArbitration.Q THEN // Check request must verify the ID is present and accounted for in arbitration
-        nArbiterCohort := nArbiterCohort + 1; // This cohort number is for all subordinate requests within the arbiter
+// Kick off another ack cycle
+IF bStartNewAckRequest AND NOT bAckInProgress THEN
+    nAckInProgCohort := nNextCohort;
+    HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
+    bAckInProgress := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
+    IF bAckInProgress THEN
+        bStartNewAckRequest := FALSE;
+        nNextCohort := nNextCohort + 1;
     END_IF
 END_IF
 ]]></ST>
@@ -404,7 +405,7 @@ END_VAR]]></Declaration>
     END_IF
     
     // With any new request reset the internal arbiter "done" flag
-    xRequestMade R= THIS^.fbBPAssertionPool.bOk;
+    bStartNewAckRequest S= THIS^.fbBPAssertionPool.bOk;
     
     RemoveRequest := THIS^.fbBPAssertionPool.bOk;
     

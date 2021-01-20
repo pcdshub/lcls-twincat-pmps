@@ -15,7 +15,8 @@ END_VAR
 RequestCheckRemoveBP();
 FullArbitrationStack();
 StackArbiters();
-RemoveReq();]]></ST>
+RemoveReq();
+DoS();]]></ST>
     </Implementation>
     <Method Name="ArbiterCapacity" Id="{f24e572d-11ee-48d8-ae26-2ae1990f129e}">
       <Declaration><![CDATA[METHOD ArbiterCapacity
@@ -116,6 +117,77 @@ AssertFalse(F_DifferentBeamParams(stExpectedBP, stArbitratedBP),
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="DoS" Id="{24ac30e6-5d2c-49e1-805c-d238fae62a1b}">
+      <Declaration><![CDATA[METHOD DoS
+VAR
+    
+
+    
+    nOrigReqID : UDINT := 30;
+    nSecondReqID : UDINT := 35;
+    
+    nPeskyReqID : UDINT := 40;
+    
+    
+END_VAR
+VAR_INST
+    DosArb : FB_Arbiter(20);
+    
+    DummyHA : FB_DummyHA := (ReqAcknowledged:=FALSE); // Set req ack false to start so we can control when it is verified
+    nTimeoutCounter : UINT;
+    bInit : BOOL;
+    bSecond : BOOL;
+    eDosTestCases : E_ArbDosTestStates;
+END_VAR
+VAR CONSTANT
+        nTimeoutCounterMAX : UINT := 50;
+        nWaitCount : UINT := 10;
+        nWait2ndCount : UINT := nWaitCount + 5;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('DoS');
+
+CASE eDosTestCases OF
+    E_ArbDosTestStates.Init: // Init, first request
+        DosArb.AddRequest(nOrigReqID, PMPS_GVL.cst0RateBeam);
+        eDosTestCases := E_ArbDosTestStates.SecondReq;
+        
+    E_ArbDosTestStates.SecondReq: // Add second request
+        DosArb.AddRequest(nSecondReqID, PMPS_GVL.cst0RateBeam);
+        eDosTestCases := E_ArbDosTestStates.WaitForAck;
+        
+    E_ArbDosTestStates.WaitForAck:
+        IF nTimeoutCounter > nWaitCount THEN
+            DummyHA.ReqAcknowledged := TRUE;
+            eDosTestCases := E_ArbDosTestStates.WaitFor2ndAck;
+		END_IF
+    
+    E_ArbDosTestStates.WaitFor2ndAck:
+        DummyHA.ReqAcknowledged := False;
+        IF nTimeoutCounter > nWait2ndCount THEN
+            DummyHA.ReqAcknowledged := TRUE;
+            eDosTestCases := E_ArbDosTestStates.RunAsserts;
+		END_IF
+    
+END_CASE
+
+DosArb.ElevateRequest(DummyHA);
+
+// Pesky request always adding and removing
+DosArb.RemoveRequest(nPeskyReqID);
+DosArb.AddRequest(nPeskyReqID, PMPS_GVL.cst0RateBeam);
+
+
+nTimeoutCounter := nTimeoutCounter + 1;
+
+IF nTimeoutCounter > nTimeoutCounterMAX or eDosTestCases = E_ArbDosTestStates.RunAsserts THEN 
+    AssertTrue(DosArb.CheckRequest(nOrigReqID), 'Original request still not accepted');
+    AssertTrue(DosArb.CheckRequest(nSecondReqID), 'Second request still not accepted'); 
+   
+    TEST_FINISHED_NAMED('DoS');
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FullArbitrationStack" Id="{17fe9309-58be-432c-a642-5a1fae576773}">
       <Declaration><![CDATA[METHOD FullArbitrationStack
 VAR_INPUT
@@ -202,8 +274,8 @@ END_IF
 
 TEST('VerifyIncludedAtAllLevels');
 IF fbArbiter.CheckRequest(nId) THEN
-    AssertTrue(fbHigherArb.xActiveInArbitration, 'HigherArb is not yet included in arbitration');
-    AssertTrue(fbArbiter.xActiveInArbitration, 'Local Arb is not yet included in arbitration');
+    AssertTrue(fbHigherArb.CheckRequest(fbArbToSubSys.RequestingSystemID), 'HigherArb is not yet included in arbitration');
+    AssertTrue(fbSubSysToArb.CheckRequest(fbArbiter.nLowerAuthorityID), 'Local Arb is not yet included in arbitration');
     TEST_FINISHED_NAMED('VerifyIncludedAtAllLevels');
 END_IF
       
@@ -264,7 +336,7 @@ TEST('Remove Req');
     Result := Arb.RemoveRequest(77);
     
     AssertFalse( Result, 'RemoveReq returned true, with nothing to remove');
-    AssertTrue( Arb.xRequestMade , 'RequestMade has been reset. Something is wrong');
+    AssertFalse( Arb.bStartNewAckRequest , 'StartNewAckRequest is set. Something is wrong');
     
 TEST_FINISHED();]]></ST>
       </Implementation>
@@ -300,15 +372,14 @@ AssertFalse(fbArbiter.CheckRequest(nId),
 TEST_FINISHED();
 
 TEST('CheckBPArbitrated');
-WRITE_PROTECTED_ULINT(ADR(fbArbiter.nArbiterCohort), fbArbiter.nArbiterCohort + 1);
-WRITE_PROTECTED_BOOL(ADR(fbArbiter.xActiveInArbitration), TRUE);
+WRITE_PROTECTED_ULINT(ADR(fbArbiter.nActiveCohort), fbArbiter.nNextCohort);
 AssertTrue(fbArbiter.CheckRequest(nId),
     'Check should pass.');
 
 TEST_FINISHED();      
     
 TEST('IDDoesNotExist');
-WRITE_PROTECTED_ULINT(ADR(fbArbiter.nArbiterCohort), fbArbiter.nArbiterCohort + 1); 
+ 
 AssertFalse(fbArbiter.CheckRequest(nId+1),
     'Check returned true when ID does not exist');
 

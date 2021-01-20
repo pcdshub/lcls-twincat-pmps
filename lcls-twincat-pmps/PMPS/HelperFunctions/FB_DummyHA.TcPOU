@@ -3,6 +3,7 @@
   <POU Name="FB_DummyHA" Id="{670c3d93-34b2-4592-94f3-5ed3a0dba153}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DummyHA IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
+    ReqAcknowledged : BOOL := TRUE; // Use to control when the HA CHeckRequest Returns TRUE
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -19,7 +20,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CheckRequest := TRUE;]]></ST>
+        <ST><![CDATA[CheckRequest := ReqAcknowledged;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ElevateRequest" Id="{f71f404d-56b3-451d-b2b2-c6689b13e32e}">
@@ -73,23 +74,5 @@ END_VAR
         <ST><![CDATA[RequestBP := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_DummyHA">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_DummyHA.CheckRequest">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_DummyHA.ElevateRequest">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_DummyHA.nLowerAuthorityID.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_DummyHA.RemoveRequest">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_DummyHA.RequestBP">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
