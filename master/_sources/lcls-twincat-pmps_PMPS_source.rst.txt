@@ -1779,7 +1779,22 @@ FB_ArbiterToSubSys_IO
     This FB runs in the beamline arbiter PLC (BAP). There should be one of these for every
     subsystem interfaced to the BAP. Each subsystem PLC should run a sibling FB_SubSysToArbiter_IO FB.
 
-    This FB and its sibling communicate through the ethercat connection between the subsystem PLC and the BAP.
+    This FB and its subordinate communicate through the ethercat connection between the subsystem PLC and the BAP.
+
+    A beam parameter set request is sent from the subsystem to this PLC, and includes a cohort number.
+
+    This cohort number (i_RequestedBP.nCohortInt) is compared to a local cohort number (nRequestedCohort). 
+    A request from the subsystem to update or modify its current request is indicated by an increase in the
+    i_RequestedBP.nCohortInt value. Then this function block updates the local arbiter request for the subsystem
+    and awaits confirmation. Once the new request is confirmed in the preemptive system this function block increments
+    the ActiveCohort value to match the nRequestedCohort. ActiveCohort is also relayed back to the subsystem
+    as the active cohort value in the o_CurrentBP set. The subsystem then knows its request has been heard,
+    and can carry out its own acknowledgement to its various requestors.
+
+    Things to note:
+    If a subsystem has any new or changed preemptive requests you should see the cohort value increment a bit.
+    If the cohort number is incrementing out of control, it usually means the subsysetm has some preemptive
+    request loop (two arbiters elevating to each other), or there is a RequestAdd, RequestRemove loop.
 
     *)
     FUNCTION_BLOCK FB_ArbiterToSubSys_IO
@@ -1811,13 +1826,13 @@ FB_ArbiterToSubSys_IO
             field: DESC Working counter state.
             field: ZNAM OK
             field: ONAM Error'}
-        i_WcState AT %I* : BOOL; // WcState^WcState
+        i_WcState AT %I* : BOOL := TRUE; // WcState^WcState
         {attribute 'pytmc' := 'pv: TxPDO_state
             io: i
             field: DESC PDO Transmission is OK
             field: ZNAM OK
             field: ONAM Error'}
-        i_TxPDOState AT %I* : BOOL; // SYNC Inputs^TxPDO state
+        i_TxPDOState AT %I* : BOOL := TRUE; // SYNC Inputs^TxPDO state
         {attribute 'pytmc' := 'pv: TxPDO_toggle
             io: i
             field: DESC PDO Transmission is OK
@@ -1840,10 +1855,14 @@ FB_ArbiterToSubSys_IO
     rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
     // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
     // If subsystem cohort has incremented, update beam parameter request with our arbiter
+    IF rtToggle.Q THEN
+        nActiveCohort := 0;    
+    END_IF
+
     IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
         Arbiter.RemoveRequest(RequestingSystemID);
         Arbiter.AddRequest(RequestingSystemID, RequestedBP);
-        nRequestedCohort := i_RequestedBP.nCohortInt;
+        nRequestedCohort := i_RequestedBP.nCohortInt;    
     END_IF
 
 
