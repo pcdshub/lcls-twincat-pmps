@@ -1543,7 +1543,7 @@ END_TYPE
 
 <span class="n">MaxEv</span> <span class="o">:=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">];</span>
 
-<span class="n">IF</span> <span class="n">reV</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="n">OR</span> <span class="n">reV</span> <span class="o">&gt;</span> <span class="n">MaxEv</span> <span class="n">THEN</span> <span class="n">F_eVRangeCalculator</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFF; RETURN; END_IF // Failsafe</span>
+<span class="n">IF</span> <span class="n">reV</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="n">OR</span> <span class="n">reV</span> <span class="o">&gt;</span> <span class="n">MaxEv</span> <span class="n">THEN</span> <span class="n">F_eVRangeCalculator</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFF; RETURN; END_IF // Failsafe</span>
 
 <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span> <span class="n">DO</span>
 
