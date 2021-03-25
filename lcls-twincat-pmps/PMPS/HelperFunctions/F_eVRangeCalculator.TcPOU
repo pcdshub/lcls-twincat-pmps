@@ -41,7 +41,7 @@ END_VAR
 
 MaxEv := Boundaries[PMPS_GVL.g_cBoundaries];
 
-IF reV < 0 OR reV > MaxEv THEN F_eVRangeCalculator := 16#FFFF; RETURN; END_IF // Failsafe
+IF reV <= 0 OR reV > MaxEv THEN F_eVRangeCalculator := 16#FFFF; RETURN; END_IF // Failsafe
 
 FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
     
