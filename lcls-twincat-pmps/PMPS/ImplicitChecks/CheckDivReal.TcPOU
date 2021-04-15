@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="CheckDivReal" Id="{fc622135-2c22-407b-aa17-1bfd188632ea}" SpecialFunc="CheckDivReal32">
+    <Declaration><![CDATA[// Implicitly generated code : DO NOT EDIT
+FUNCTION CheckDivReal : REAL
+VAR_INPUT
+	divisor:REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Implicitly generated code : Only an Implementation suggestion
+{noflow}
+IF divisor = 0 THEN
+	CheckDivReal:=1;
+ELSE
+	CheckDivReal:=divisor;
+END_IF;
+{flow}]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

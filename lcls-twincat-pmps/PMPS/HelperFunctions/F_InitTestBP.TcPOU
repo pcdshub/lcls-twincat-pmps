@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_InitTestBP" Id="{872b1e54-dad7-464f-b50c-ec80c2c884b3}" SpecialFunc="None">
+    <Declaration><![CDATA[// Establishes a BP set for testing.
+// Specifically this means a BP that has all the status bits set to an OK state
+FUNCTION F_InitTestBP : ST_BeamParams
+VAR_INPUT
+    BP : ST_BeamParams;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

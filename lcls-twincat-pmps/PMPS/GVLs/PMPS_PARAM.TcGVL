@@ -3,8 +3,9 @@
   <GVL Name="PMPS_PARAM" Id="{a73b5237-920e-4906-b8ec-4aaa7f8c0e45}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    MAX_FAST_FAULTS	:	UINT := 50;
-    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of assertions permitted in the arbiter
+    MAX_FAST_FAULTS	:	UINT := 50; // Max fast faults for an FFO
+    MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of BP requests in the arbiter
+    TRANS_MARGIN : UINT := 500; // Allowed % margin above requested transmission level in SafeBPCompare (0.0500 = 500deci% default). Note: change this value if scaling factor changes.
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

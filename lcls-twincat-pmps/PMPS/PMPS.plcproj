@@ -51,6 +51,9 @@
     <Compile Include="DUTs\InternalDUT\L_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\ST_AttenuatorStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\ST_BP_ArbInternal.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -127,6 +130,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\F_InitTestBP.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_SafeBPCompare.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -139,6 +145,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\F_SetGoodAttStatus.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_SetStateParams.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -150,6 +159,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\PE_Ranges.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_AttenuatorOK.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\APT_TO_IO.TcPOU">
@@ -172,6 +184,36 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperFunctions\TypeTranslators\IO_TO_BP.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckBounds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckDivDInt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckDivLInt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckDivLReal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckDivReal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckLRangeSigned.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckLRangeUnsigned.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckPointer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckRangeSigned.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImplicitChecks\CheckRangeUnsigned.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MAIN.TcPOU">
@@ -356,6 +398,7 @@
     <Folder Include="MajorComponents\InterPlcComm" />
     <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
+    <Folder Include="ImplicitChecks" />
     <Folder Include="TestComponents" />
     <Folder Include="TestComponents\DUT" />
     <Folder Include="VISUs" />
