@@ -7,7 +7,7 @@ TYPE L_Stopper :
 (
 	ST1L0 := 1, // ST1
     ST1L1 := 2, // ST2
-    DEFAULT := PMPS_GVL.MAX_STOPPERS // DO NOT USE FOR ANYTHING
+    DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
 );
 END_TYPE
 ]]></Declaration>
@@ -27,7 +27,7 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"DEFAULT"</v>
-              <v n="TextDefault">"PMPS_GVL.MAX_STOPPERS"</v>
+              <v n="TextDefault">"PMPS_GVL.MAX_VETO_DEVICES"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

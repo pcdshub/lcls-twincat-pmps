@@ -84,12 +84,10 @@ END_VAR]]></Declaration>
         <ST><![CDATA[TEST('Arbitration');
 
 stAttReqBP.nTran := 50;
-stPPEReqBP.fPP_mJ := 1;
 stEVReqBP.neVRange := 2#1111_1100_1111_1111;
 stRateReqBP.nRate := 10;
 
 stExpectedBP.nTran     :=     stAttReqBP.nTran;
-stExpectedBP.fPP_mJ    :=  stPPEReqBP.fPP_mJ;
 stExpectedBP.neVRange := stEVReqBP.neVRange;
 stExpectedBP.nRate := stRateReqBP.nRate;
 

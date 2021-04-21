@@ -11,7 +11,7 @@ TYPE K_Stopper :
     MR1K1_OUT := 4, // Monochromator focus optic vertical state
     MR1K3_IN := 5, // TXI Offset Mirror horizontal state
     MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
-    DEFAULT := PMPS_GVL.MAX_STOPPERS // DO NOT USE FOR ANYTHING
+    DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
 );
 END_TYPE
 ]]></Declaration>
@@ -51,7 +51,7 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"DEFAULT"</v>
-              <v n="TextDefault">"PMPS_GVL.MAX_STOPPERS"</v>
+              <v n="TextDefault">"PMPS_GVL.MAX_VETO_DEVICES"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

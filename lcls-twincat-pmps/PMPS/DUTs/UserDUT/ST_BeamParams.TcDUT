@@ -8,35 +8,28 @@
             io: i
             field: EGU %
         '}
-		nTran : UINT := 100;
+		nTran : REAL := 1;
         (* Pulse-rate *)
         {attribute 'pytmc' := 'pv: Rate
             io: i
             field: EGU Hz
         '}
         nRate : UDINT := 120;
-        (* Per pulse max energy (mJ) *)
-        {attribute 'pytmc' := 'pv: PulseEnergy
-            io: i
-            field: EGU mJ
-            field: DESC This beam parameter is non-op for now.
-        '}
-        fPP_mJ : REAL := 20;
         (* Photon energy ranges *)
         {attribute 'pytmc' := 'pv: PhotonEnergyRanges
             io: i
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
-        neVRange : WORD := 2#1111_1111_1111_1111;
+        neVRange : DWORD := 2#1111_1111_1111_1111_1111_1111_1111_1111;
         (* Beamline attenuators *)
         {attribute 'pytmc' := 'pv: AuxAtt
         io: i'}
         astAttenuators : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
         
         (* Stoppers *)
-        {attribute 'pytmc' := 'pv: ST
+        {attribute 'pytmc' := 'pv: Veto
         io: i'}
-        aStoppers : ARRAY [1..PMPS_GVL.MAX_STOPPERS] OF BOOL;
+        aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
         
         (* Apertures *)
         astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];

@@ -17,7 +17,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[BeamParams.nTran := LIMIT(0,nTran,PMPS_GVL.TRANS_SCALING_FACTOR);
 BeamParams.astAttenuators := astAuxAtt;
-BeamParams.fPP_mJ := LIMIT(0,fPP_mJ,20);
 BeamParams.neVRange := neVRange;
 BeamParams.nRate    := MIN(nRate,1000000);
 

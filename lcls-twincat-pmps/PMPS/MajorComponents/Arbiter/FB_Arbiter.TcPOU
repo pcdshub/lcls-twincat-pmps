@@ -180,9 +180,6 @@ FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
 	END_IF
 END_FOR
 
-//Pulse energy
-ArbitrateBP.fPP_mJ := MIN(stBP1.fPP_mJ, stBP2.fPP_mJ);
-
 //Photon energy ranges
 ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
 

@@ -19,9 +19,8 @@ FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
     BP_TO_IO.astApertures[idx] := APT_TO_IO(BP.astApertures[idx]);
 END_FOR
 
-BP_TO_IO.aStoppers := BP.aStoppers;
+BP_TO_IO.aVetoDevices := BP.aVetoDevices;
 BP_TO_IO.nTran := BP.nTran;
-BP_TO_IO.fPP_mJ := BP.fPP_mJ;
 BP_TO_IO.nCohortInt := ULINT_TO_UDINT(BP.nCohortInt);
 BP_TO_IO.neVRange := BP.neVRange;
 BP_TO_IO.nRate := BP.nRate;

@@ -31,7 +31,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
-xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 

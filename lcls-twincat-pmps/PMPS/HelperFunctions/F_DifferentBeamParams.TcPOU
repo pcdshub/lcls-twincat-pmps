@@ -24,7 +24,6 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
-xPPmjOK := BeamParam1.fPP_mJ <> BeamParam2.fPP_mJ;
 xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
 xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
 
@@ -34,8 +33,8 @@ FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
 END_FOR
 
 // Stoppers
-FOR idx:=1 TO PMPS_GVL.MAX_STOPPERS DO
-    xaStopper S= (BeamParam1.aStoppers[idx] <> BeamParam2.aStoppers[idx]);
+FOR idx:=1 TO PMPS_GVL.MAX_VETO_DEVICES DO
+    xaStopper S= (BeamParam1.aVetoDevices[idx] <> BeamParam2.aVetoDevices[idx]);
 END_FOR
 
 // ast Apertures
