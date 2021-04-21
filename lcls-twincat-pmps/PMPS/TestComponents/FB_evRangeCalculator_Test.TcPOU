@@ -22,14 +22,14 @@ VAR_INPUT
 END_VAR
 VAR
     {attribute 'displaymode' := 'binary'}
-    LastWord : WORD := 2#0000_0000_0000_0010;
+    LastWord : DWORD := 2#0000_0000_0000_0000_0000_0000_0000_0010;
     {attribute 'displaymode' := 'binary'}
-    Result : WORD;
+    Result : DWORD;
     {attribute 'displaymode' := 'binary'}
-    TestEV : WORD;
+    TestEV : DWORD;
     
     {attribute 'displaymode' := 'binary'}
-    tEvW : WORD;
+    tEvW : DWORD;
     tEv : REAL;
     
     
@@ -104,7 +104,7 @@ TEST_FINISHED();
 
 Test('Check hyst keeps');
 
-LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#0000_0000_0000_0000);
+LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#0000_0000_0000_0000_0000_0000_0000_0000);
 
 // Last word should be 2#0000_0000_0000_0100
 

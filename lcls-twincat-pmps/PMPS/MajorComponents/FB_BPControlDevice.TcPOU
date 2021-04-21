@@ -30,7 +30,7 @@ VAR_INPUT
             io: o
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
-        neVRange : WORD := 65535;
+        neVRange : DWORD := 4294967295;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -56,7 +56,6 @@ END_VAR
 EpicsReqBP.nTran := nTran;
 EpicsReqBP.neVRange := neVRange;
 EpicsReqBP.nRate := nRate;
-EpicsReqBP.fPP_mJ := fPP_mJ;
 
 rtApply(CLK:=bApply);
 IF rtApply.Q THEN

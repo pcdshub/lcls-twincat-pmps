@@ -16,10 +16,6 @@ FUNCTION_BLOCK FB_FastFault
 VAR_INPUT
 
     i_xOK        :    BOOL; // Connect to fast-fault condition (false produces fault)
-	{attribute 'pytmc' := '
-        pv: Reset
-        io: io
-     '}
     i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
     i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
     i_xVetoable : BOOL := TRUE; // Mask this fast fault if the FFO veto device is true

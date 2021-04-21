@@ -5,11 +5,11 @@
 FUNCTION F_eVWithinSpec : BOOL
 VAR_INPUT
     reV    :    REAL;    //Photon energy to check if within permitted range
-    nPermittedRange    :    WORD; //Permitted range
+    nPermittedRange    :    DWORD; //Permitted range
 END_VAR
 VAR
     //Holding register for permitted ranges
-    nPermittedRangeHolding    :    WORD; 
+    nPermittedRangeHolding    :    DWORD; 
     //For loop counter
     nIndex    :    INT;
     // Lower boundary for range check 

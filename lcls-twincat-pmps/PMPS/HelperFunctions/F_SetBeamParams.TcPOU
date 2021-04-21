@@ -4,8 +4,7 @@
     <Declaration><![CDATA[FUNCTION F_SetBeamParams : ST_BeamParams
 VAR_INPUT
     nTran    :    UINT := 0;
-    fPP_mJ: REAL := 0;
-    neVRange    :    WORD := 0;
+    neVRange    :    DWORD := 0;
     nRate    :    UDINT := 0;
     astAuxAtt : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
 END_VAR
