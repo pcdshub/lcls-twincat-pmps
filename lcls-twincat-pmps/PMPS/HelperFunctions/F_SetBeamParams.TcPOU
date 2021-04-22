@@ -3,7 +3,7 @@
   <POU Name="F_SetBeamParams" Id="{a4b27d6a-ec21-4812-9b64-4caff94fb4ba}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_SetBeamParams : ST_BeamParams
 VAR_INPUT
-    nTran    :    UINT := 0;
+    nTran    :    REAL := 0;
     neVRange    :    DWORD := 0;
     nRate    :    UDINT := 0;
     astAuxAtt : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;

@@ -115,8 +115,8 @@ LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#000
     TestEV.RandomBoundary := TRUE;
     TestEV.MNU := True;
  
-    fbStr.arg1 := F_WORD(Result);
-    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.arg1 := F_DWORD(Result);
+    fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving up does not stick. Result: %b vs. Test: %b';
     fbStr();
         
@@ -130,8 +130,8 @@ AssertTrue(Result = TestEV,
     TestEV.RandomBoundary := TRUE;
     TestEV.MND := True;
     
-    fbStr.arg1 := F_WORD(Result);
-    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.arg1 := F_DWORD(Result);
+    fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving down does not stick. Result: %b vs. Test: %b';
     fbStr();
     
@@ -148,8 +148,8 @@ Test('Check hyst drops');
     TestEV := 0;
     TestEV.MND := TRUE;
     
-    fbStr.arg1 := F_WORD(Result);
-    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.arg1 := F_DWORD(Result);
+    fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving down does not drop. Result: %b vs. Test: %b';
     fbStr();
     
@@ -162,8 +162,8 @@ AssertTrue(Result = TestEV,
     TestEV := 0;
     TestEV.MNU := TRUE;
     
-    fbStr.arg1 := F_WORD(Result);
-    fbStr.arg2 := F_WORD(TestEV);
+    fbStr.arg1 := F_DWORD(Result);
+    fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving up does not drop. Result: %b vs. Test: %b';
     fbStr();
     
