@@ -45,7 +45,7 @@ FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
     BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
 END_FOR
 
-F_SafeBPCompare := xAttOK AND xPPmjOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
+F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
 ]]></ST>
     </Implementation>
   </POU>

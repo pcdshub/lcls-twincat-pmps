@@ -6,7 +6,9 @@
         (*  Requested pre-optic attenuation %  *)
 		{attribute 'pytmc' := 'pv: Transmission
             io: i
-            field: EGU %
+			field: HOPR 1;
+			field: LOPR 0;
+			field: PREC 2;
         '}
 		nTran : REAL := 1;
         (* Pulse-rate *)

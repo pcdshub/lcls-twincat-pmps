@@ -28,7 +28,7 @@ VAR
     stTransitionAssertion    :    ST_BeamParams := (nRate := 10);
     
     nReqID    :    UDINT    := 2;
-    stReqAssertion    :    ST_BeamParams := (nTran := 20);
+    stReqAssertion    :    ST_BeamParams := (nTran := 0.2);
     
 END_VAR
 VAR_INST

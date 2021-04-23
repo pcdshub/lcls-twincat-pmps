@@ -47,7 +47,7 @@ VAR_GLOBAL CONSTANT
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
 	
-	TRANS_SCALING_FACTOR : REAL := 1; // Scaling factor for fixed-point transmission
+	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
 
 	
     MAX_VETO_DEVICES   :   UINT := 16;
@@ -58,7 +58,7 @@ VAR_GLOBAL CONSTANT
         field: DESC Full beam constant
     '}    
     cstFullBeam    :    ST_BeamParams := (
-        nTran := 100,
+        nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
@@ -70,7 +70,7 @@ VAR_GLOBAL CONSTANT
         field: DESC 0-rate beam constant
     '}    
     cst0RateBeam    :    ST_BeamParams := ( // Use for transition requests
-        nTran := 100,
+        nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
