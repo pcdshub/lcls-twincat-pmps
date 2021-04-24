@@ -22,7 +22,6 @@
     <CombineIds>false</CombineIds>
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
-    <ProjectVersion>0.0.0</ProjectVersion>
     <CompilerDefines>L</CompilerDefines>
     <DeploymentEvents>
       <Events xmlns="">
@@ -34,6 +33,7 @@
         </Event>
       </Events>
     </DeploymentEvents>
+    <ProjectVersion>0.0.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
