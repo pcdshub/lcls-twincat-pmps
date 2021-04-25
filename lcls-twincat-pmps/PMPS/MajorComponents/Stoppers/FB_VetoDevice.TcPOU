@@ -16,8 +16,8 @@ VAR_IN_OUT
 END_VAR
 VAR
 
-    VetoDevice_IN : UINT := PMPS_GVL.MAX_STOPPERS; // Veto device state array index
-	VetoDevice_OUT : UINT := PMPS_GVL.MAX_STOPPERS; // Veto device state array index
+    VetoDevice_IN : UINT := PMPS_GVL.MAX_VETO_DEVICES; // Veto device state array index
+	VetoDevice_OUT : UINT := PMPS_GVL.MAX_VETO_DEVICES; // Veto device state array index
     
     VetoDeviceName : STRING;
 	{attribute 'instance-path'}
@@ -61,8 +61,8 @@ END_IF
 
 // Update current beam parameters
 /////////////////////////////////////
-    stCurrentBP.aStoppers[VetoDevice_IN] := i_bIn;
-    stCurrentBP.aStoppers[VetoDevice_OUT] := i_bOut;]]></ST>
+    stCurrentBP.aVetoDevices[VetoDevice_IN] := i_bIn;
+    stCurrentBP.aVetoDevices[VetoDevice_OUT] := i_bOut;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
