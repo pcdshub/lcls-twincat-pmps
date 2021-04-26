@@ -122,6 +122,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="HelperFunctions\F_eVExcludeRange.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HelperFunctions\F_eVIncludeRange.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HelperFunctions\F_eVRangeCalculator.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
