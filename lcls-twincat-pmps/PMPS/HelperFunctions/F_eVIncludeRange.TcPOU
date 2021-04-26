@@ -23,10 +23,11 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+      <ST><![CDATA[
+FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
     IF fLower <= fPrev AND fUpper >= PMPS_GVL.g_areVBoundaries[nIndex] THEN
         nBitmask := nBitmask + SHL(1, nBit);
-	END_IF
+    END_IF
     fPrev := PMPS_GVL.g_areVBoundaries[nIndex];
     nBit := nBit + 1;
 END_FOR

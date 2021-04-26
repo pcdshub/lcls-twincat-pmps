@@ -17,7 +17,8 @@ VAR_INPUT
     fUpper: REAL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[F_eVExcludeRange := F_eVIncludeRange(0, fLower) OR F_eVIncludeRange(fUpper, PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries]);]]></ST>
+      <ST><![CDATA[
+F_eVExcludeRange := F_eVIncludeRange(0, fLower) OR F_eVIncludeRange(fUpper, PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries]);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
