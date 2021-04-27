@@ -11,8 +11,8 @@ VAR_IN_OUT
 	BP : ST_BeamParams;
 END_VAR
 VAR
-    nCurrentPhotonEnergyBitmask : UINT;
-	nTargetPhotonEnergyBitmask : UINT;
+    nCurrentPhotonEnergyBitmask : UDINT;
+	nTargetPhotonEnergyBitmask : UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -55,7 +55,7 @@ q_StopperOUT_Relay := i_StopperOutLS;
 q_StopperIN_Relay := i_StopperInLS;
 
 // Update current beam parameters
-stCurrentBP.aStoppers[Stopper] := i_StopperInLS;]]></ST>
+stCurrentBP.aVetoDevices[Stopper] := i_StopperInLS;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

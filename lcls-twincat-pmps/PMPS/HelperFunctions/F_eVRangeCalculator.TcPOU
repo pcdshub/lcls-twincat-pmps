@@ -17,14 +17,14 @@ reV = 300 + <rHyst = (0000_0000_0000_0110)
 reV = 300 + >rHyst = (0000_0000_0000_0100)
 
 *)
-FUNCTION F_eVRangeCalculator : WORD // Bit-range of current photon energy
+FUNCTION F_eVRangeCalculator : DWORD // Bit-range of current photon energy
 VAR_INPUT
     reV    :    REAL; // Photon energy (keV)
-    LastWord    :    WORD; // Range word of previous cycle
+    LastWord    :    DWORD; // Range word of previous cycle
 END_VAR
 VAR
     nIndex: INT;
-    RangeWord: WORD;
+    RangeWord: DWORD;
     rPreviousBoundary: REAL := 0;
     
     MaxEv    :    REAL := PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries];

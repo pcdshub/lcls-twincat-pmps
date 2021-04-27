@@ -16,7 +16,7 @@ VAR_IN_OUT
     iq_stMachineParams    :    ST_BeamParams;
 END_VAR
 VAR
-    nTargetTran: UINT;
+    nTargetTran: REAL;
     tonTranTimer    :    TON := (
         PT := T#2S
         );
@@ -41,6 +41,7 @@ IF xEnableAtt THEN
 END_IF
     
 //Pulse Energy
+(*
 IF xEnablePE THEN
     IF i_stAssertedParams.fPP_mJ <> fTargetPP_mJ THEN
         tonPPETimer(IN:=FALSE);
@@ -51,7 +52,7 @@ IF xEnablePE THEN
         iq_stMachineParams.fPP_mJ := fTargetPP_mJ;
     END_IF
 END_IF
-
+*)
 //Rate
 IF xEnableRate THEN
     IF i_xFault THEN

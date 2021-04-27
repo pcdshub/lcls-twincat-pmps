@@ -46,10 +46,11 @@ VAR_GLOBAL CONSTANT
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
-    
-    TRANS_SCALING_FACTOR : UINT := 10000; // Scaling factor for fixed-point transmission
+	
+	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
 
-    MAX_STOPPERS    :   UINT := 16;
+	
+    MAX_VETO_DEVICES   :   UINT := 16;
     {attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
 		io: i
@@ -57,9 +58,8 @@ VAR_GLOBAL CONSTANT
         field: DESC Full beam constant
     '}    
     cstFullBeam    :    ST_BeamParams := (
-        nTran := 100,
-        fPP_mJ := 1E4,
-        neVRange := 2#1111_1111_1111_1111,
+        nTran := 1,
+        neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
     );
@@ -70,9 +70,8 @@ VAR_GLOBAL CONSTANT
         field: DESC 0-rate beam constant
     '}    
     cst0RateBeam    :    ST_BeamParams := ( // Use for transition requests
-        nTran := 100,
-        fPP_mJ := 1E4,
-        neVRange := 2#1111_1111_1111_1111,
+        nTran := 1,
+        neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
     );
@@ -84,7 +83,6 @@ VAR_GLOBAL CONSTANT
     '} 
     cstSafeBeam    :    ST_BeamParams := (
         nTran := 0,
-        fPP_mJ := 0,
         neVRange := 0,
         nRate    := 0
     );
@@ -99,7 +97,7 @@ VAR_GLOBAL CONSTANT
     
     
     
-    g_cBoundaries    :    INT    := 15;
+    g_cBoundaries    :    INT    := 31;
 	
 	
 //////////////////////////
@@ -126,22 +124,38 @@ VAR_GLOBAL CONSTANT
         field: EGU eV
     '}
     g_areVBoundariesL    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
-    1.7E3,
+    1.0E3,
+	1.7E3,
+	2.1E3,
     2.5E3,
+	3.8E3,
+	4.0E3,
     5.0E3,
     7.0E3,
+	7.5E3,
     7.7E3,
     8.9E3,
     10.0E3,
     11.1E3,
     12.0E3,
+	13.0E3,
+	13.5E3,
     14.0E3,
-    16.0E3,
     16.9E3,
     18.0E3,
     20.0E3,
     22.0E3,
-    24.0E3
+    24.0E3,
+	25.0E3,
+	25.5E3,
+	26.0E3,
+	27.0E3,
+	28.0E3,
+	28.5E3,
+	29.0E3,
+	30.0E3,
+	60.0E3,
+	90.0E3
 	];
 
 
@@ -153,22 +167,38 @@ VAR_GLOBAL CONSTANT
         field: EGU eV
     '}
     g_areVBoundariesK    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
-    250,
+    100,
+	250,
     270,
     350,
     400,
     450,
-    540,
+	480,
+	530,
+    680,
+	730,
     850,
+	1.10E3,
     1.15E3,
     1.25E3,
     1.45E3,
+	1.50E3,
     1.55E3,
     1.65E3,
+	1.70E3,
     1.75E3,
     1.82E3,
-    2.0E3,
-    2.3E3
+	1.85E3,
+	2.00E3,
+	2.20E3,
+	2.50E3,
+	2.80E3,
+	3.00E3,
+	3.15E3,
+	3.50E3,
+	4.00E3,
+	5.30E3,
+    7.00E3
 	];
 
 

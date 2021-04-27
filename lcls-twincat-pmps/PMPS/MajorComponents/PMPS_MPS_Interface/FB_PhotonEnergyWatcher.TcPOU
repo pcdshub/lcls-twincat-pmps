@@ -47,7 +47,7 @@ VAR
         field: DESC Portions of beam eV not permitted
         field: EGU eV-bitmask
     '}
-    evResidual : WORD;
+    evResidual : DWORD;
     
     fbLog : FB_LogMessage := (
         eSubSystem := E_Subsystem.MPS,
@@ -64,7 +64,7 @@ VAR
     sPath    :    T_MaxString;
     
     fbStr : FB_FormatString := (
-        sOut := 'Non-zero photon energy residual: %16b; Req: %16b; Act: %16b');
+        sOut := 'Non-zero photon energy residual: %32b; Req: %32b; Act: %32b');
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -83,9 +83,9 @@ IF evResidual <> 0 AND bLogOneShot THEN
         sPath,
         PMPS_CODES.PEW_FAULT);
     
-    fbStr.arg1 := F_WORD(evResidual);
-    fbStr.arg2 := F_WORD(i_stCurrentBeamParams.neVRange);
-    fbStr.arg3 := F_WORD(i_stRequestedBeamParams.neVRange);
+    fbStr.arg1 := F_DWORD(evResidual);
+    fbStr.arg2 := F_DWORD(i_stCurrentBeamParams.neVRange);
+    fbStr.arg3 := F_DWORD(i_stRequestedBeamParams.neVRange);
     
     fbStr();
         

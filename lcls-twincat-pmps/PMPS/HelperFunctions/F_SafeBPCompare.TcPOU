@@ -31,7 +31,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
-xPPmjOK := BeamParam1.fPP_mJ <= BeamParam2.fPP_mJ;
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
 xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
 
@@ -46,7 +45,7 @@ FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
     BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
 END_FOR
 
-F_SafeBPCompare := xAttOK AND xPPmjOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
+F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
 ]]></ST>
     </Implementation>
   </POU>

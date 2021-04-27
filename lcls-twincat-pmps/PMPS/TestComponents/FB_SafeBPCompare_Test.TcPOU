@@ -27,15 +27,13 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[stBeamOn_MoreConservative  := F_SetBeamParams(
     0, //0% transmission is more conservative than 50
-    10,
-    16#FFFF,
+    16#FFFF_FFFF,
     120, //rate
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stBeamOff_LessConservative:= F_SetBeamParams(
-    50, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
-    10,
-    16#FFFF,
+    0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
+    16#FFFF_FFFF,
     0, //rate, hence, more conservative
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
 
@@ -65,16 +63,14 @@ END_VAR]]></Declaration>
 TEST('BPComparisonTran');
 //Attenuation
 stSafer := F_SetBeamParams(
-    500, //
-    10,
-    16#FFFF,
+    0.51, //
+    16#FFFFFFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
-    600, //
-    10,
-    16#FFFF,
+    0.61, //
+    16#FFFFFFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
     
@@ -107,21 +103,19 @@ TEST('BPComparisonTranArray');
 
 stSafer := F_SetBeamParams(
     0, //
-    10,
-    16#FFFF,
+    16#FFFFFFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 stNotSoSafe := F_SetBeamParams(
     0, //
-    10,
-    16#FFFF,
+    16#FFFFFFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    stSafer.astAttenuators[idx].nTran := 500;
-    stNotSoSafe.astAttenuators[idx].nTran := 600;
+    stSafer.astAttenuators[idx].nTran := 0.00500;
+    stNotSoSafe.astAttenuators[idx].nTran := 0.00600;
     
     xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
     
@@ -224,15 +218,13 @@ TEST_FINISHED();
 TEST('BPComparisonRate');
 stSafer := F_SetBeamParams(
     0,
-    10,
-    16#FFFF,
+    16#FFFF_FFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
 
 stNotSoSafe := F_SetBeamParams(
     0,
-    10,
-    16#FFFF,
+    16#FFFF_FFFF,
     10,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
     
@@ -246,6 +238,7 @@ AssertFalse(
 TEST_FINISHED();
     
 //Pulse energy
+(*
 TEST('BPComparisonPulseEnergy');
 stSafer := F_SetBeamParams(
     0, 
@@ -260,7 +253,7 @@ stNotSoSafe := F_SetBeamParams(
     16#FFFF,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
-    
+    *)
 AssertTrue(
     F_SafeBPCompare(stSafer, stNotSoSafe),
     'Pulse energy eval is broken (True)'); 
@@ -275,15 +268,13 @@ TEST_FINISHED();
 TEST('BPComparisonPhotonEnergy');
 stSafer := F_SetBeamParams(
     0, 
-    1, 
-    2#0000_0000_0000_0010,
+    2#0000_0000_0000_0000_0000_0000_0000_0010,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
     0, 
-    1, 
-    2#0000_0000_0000_0110,
+    2#0000_0000_0000_0000_0000_0000_0000_0110,
     1,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
     
