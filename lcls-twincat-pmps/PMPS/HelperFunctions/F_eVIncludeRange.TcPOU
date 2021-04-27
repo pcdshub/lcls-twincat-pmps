@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="F_eVIncludeRange" Id="{c20a91a5-d8f4-4cbd-939c-1b32fa327175}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_eVIncludeRange : DWORD
+(*
+    Given an lower and upper end of an inclusion range, return the corresponding eV bitmask.
+    
+    eVs between fLower and fUpper will be considered safe, with the exception of the endpoints and values
+    near the endpoints if they land far from an eV boundary.
+    
+    Call this in your init cycle to set up your eV bitmasks for more readable code
+    that is also more resiliant to eV range definition adjustments.
+*)
+VAR_INPUT
+    fLower: REAL;
+    fUpper: REAL;
+END_VAR
+VAR
+    nBitmask: DWORD := 0;
+    nIndex: INT;
+    nBit: USINT := 0;
+    fPrev: REAL := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+    IF fLower <= fPrev AND fUpper >= PMPS_GVL.g_areVBoundaries[nIndex] THEN
+        nBitmask := nBitmask + SHL(1, nBit);
+    END_IF
+    fPrev := PMPS_GVL.g_areVBoundaries[nIndex];
+    nBit := nBit + 1;
+END_FOR
+
+F_eVIncludeRange := nBitmask;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
