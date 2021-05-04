@@ -89,7 +89,7 @@ TEST_FINISHED();
 Test('Negative eV failsafes');
 //Negative eV
 AssertTrue(
-    F_eVRangeCalculator(-300, 0) = 16#FFFF,
+    F_eVRangeCalculator(-300, 0) = 16#FFFF_FFFF,
     'Working with antimatter? Negative eV should failsafe to FFFF.');    
 
 TEST_FINISHED();
@@ -97,7 +97,7 @@ TEST_FINISHED();
 Test('Out of range eV failsafes');
 // eV too high
 AssertTrue(
-    F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries] + 1, 0) = 16#FFFF,
+    F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries] + 1, 0) = 16#FFFF_FFFF,
     'eV above the last threshold should failsafe.');    
 
 TEST_FINISHED();
