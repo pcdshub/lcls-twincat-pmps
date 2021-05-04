@@ -13,18 +13,17 @@ VAR_INPUT
         (*  Requested pre-optic attenuation %  *)
         {attribute 'pytmc' := 'pv: ReqBP:Transmission
             io: o
-            field: EGU %
+			field: HOPR 1;
+			field: LOPR 0;
+			field: PREC 2;
         '}
-        nTran : UINT := 100;
+        nTran : REAL := PMPS_GVL.TRANS_SCALING_FACTOR;
         (* Pulse-rate *)
         {attribute 'pytmc' := 'pv: ReqBP:Rate
             io: o
             field: EGU Hz
         '}
         nRate : UDINT := 10;
-        (* Per pulse max energy (mJ) *)
-		// non-op
-        fPP_mJ : REAL := 20;
         (* Photon energy ranges *)
         {attribute 'pytmc' := 'pv: ReqBP:PhotonEnergyRanges
             io: o
