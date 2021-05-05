@@ -197,7 +197,7 @@ E_BPTMTestStates.Init:
     // Fill the arbiter
     FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS // this fills the arbiter
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
-        fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq);
+        fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq, sDevName :='Device');
     END_FOR
     
     fbSubSysIO.AutoUpdateBP := TRUE;

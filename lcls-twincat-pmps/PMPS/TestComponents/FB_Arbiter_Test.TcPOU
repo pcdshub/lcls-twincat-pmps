@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Arbiter_Test" Id="{33ac0bc1-5ef2-4a28-bd81-83e3f5956062}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_Arbiter_Test EXTENDS TcUnit.FB_TestSuite
@@ -49,7 +49,7 @@ END_VAR
 TEST('Arbiter Capcity');
     // Fill the arbiter
     FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS DO
-        fbArbCapacityTest.AddRequest(nReqID := idx, stReqBP := testReq);
+        fbArbCapacityTest.AddRequest(nReqID := idx, stReqBP := testReq, sDevName:= CONCAT('Device #', TO_STRING(idx)));
     END_FOR
 
 TEST_FINISHED();
@@ -92,19 +92,19 @@ stExpectedBP.neVRange := stEVReqBP.neVRange;
 stExpectedBP.nRate := stRateReqBP.nRate;
 
 //Load arbiter with beam parameter sets
-AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP),
+AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP, sDevName:= 'Device' ),
                     'Safest attenuation request failed to load');
                     
 //Load arbiter with beam parameter sets
-AssertTrue(fbArbiter.AddRequest(nPPEReqID, stPPEReqBP),
+AssertTrue(fbArbiter.AddRequest(nPPEReqID, stPPEReqBP, sDevName:= 'Device'),
                     'Safest PPE request failed to load');
                     
 //Load arbiter with beam parameter sets
-AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP),
+AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP, sDevName:= 'Device'),
                     'Safest stEVReqBP request failed to load');
                     
 //Load arbiter with beam parameter sets
-AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP),
+AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP, sDevName:= 'Device'),
                     'Safest stRateReqBP request failed to load');
 
 stArbitratedBP := fbArbiter.GetArbitratedBP();
@@ -147,11 +147,11 @@ END_VAR]]></Declaration>
 
 CASE eDosTestCases OF
     E_ArbDosTestStates.Init: // Init, first request
-        DosArb.AddRequest(nOrigReqID, PMPS_GVL.cst0RateBeam);
+        DosArb.AddRequest(nOrigReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
         eDosTestCases := E_ArbDosTestStates.SecondReq;
         
     E_ArbDosTestStates.SecondReq: // Add second request
-        DosArb.AddRequest(nSecondReqID, PMPS_GVL.cst0RateBeam);
+        DosArb.AddRequest(nSecondReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
         eDosTestCases := E_ArbDosTestStates.WaitForAck;
         
     E_ArbDosTestStates.WaitForAck:
@@ -173,7 +173,7 @@ DosArb.ElevateRequest(DummyHA);
 
 // Pesky request always adding and removing
 DosArb.RemoveRequest(nPeskyReqID);
-DosArb.AddRequest(nPeskyReqID, PMPS_GVL.cst0RateBeam);
+DosArb.AddRequest(nPeskyReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
 
 
 nTimeoutCounter := nTimeoutCounter + 1;
@@ -233,7 +233,7 @@ CASE Cycle OF
 
 0: 
     IF NOT fbArbiter.CheckRequestInPool(nID) THEN
-        AssertTrue(fbArbiter.AddRequest(nId, stReq), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+        AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
     END_IF  
     
     TEST('JustEnteredRequest');
@@ -326,7 +326,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-Arb.AddRequest(30, PMPS_GVL.cst0RateBeam);
+Arb.AddRequest(30, PMPS_GVL.cst0RateBeam, 'Device');
 
 Arb.ElevateRequest(DummyHA);
 
@@ -353,13 +353,13 @@ VAR_INST
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('RequestBP');
-AssertTrue(fbArbiter.AddRequest(nId, stReq),
+AssertTrue(fbArbiter.AddRequest(nId, stReq, 'Device'),
     'Request failed');
 
 TEST_FINISHED();
     
 TEST('DuplicateID');
-AssertFalse(fbArbiter.AddRequest(nId, stReq),
+AssertFalse(fbArbiter.AddRequest(nId, stReq, 'Device'),
     'Duplicate request accepted, not good.');
 
 TEST_FINISHED();
@@ -425,7 +425,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 TEST('StackingArbiters');
-fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq);
+fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq, sDevName :='Device');
 
 fbArbiter.ElevateRequest(fbHigherArb);
 

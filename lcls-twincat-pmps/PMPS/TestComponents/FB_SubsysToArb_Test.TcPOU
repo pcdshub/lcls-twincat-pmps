@@ -46,7 +46,7 @@ END_VAR
 TEST('Add to arbiter');
 
 IF NOT fbArbiter.CheckRequestInPool(nID) THEN
-    AssertTrue(fbArbiter.AddRequest(nId, stReq), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+    AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
 END_IF  
    
 TEST_FINISHED();   
@@ -149,7 +149,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
 // trusted with a grain of salt.
 
-fbArbiter.AddRequest(nId, stReq); // some device asking its local arbiter for some beam parameters
+fbArbiter.AddRequest(nId, stReq,'Device'); // some device asking its local arbiter for some beam parameters
 
 
 ///////////////////////////////////////
