@@ -92,6 +92,7 @@ METHOD AddRequest : BOOL
 VAR_INPUT
     nReqID    :    DWORD; // Unique ID within aribter for the request. Make sure this is unique for every device + state combination
     stReqBP        :    ST_BeamParams; //Requested beam params
+	sDevName: STRING; // Name of the device making the request
 END_VAR
 VAR
 	BP_Int : ST_BP_ArbInternal;
@@ -116,6 +117,7 @@ stReqBP.nCohortInt := nNextCohort; // Set the cohort number for this BP request.
 MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
 BP_Int.nId := nReqID;
 BP_Int.LiveInTable := TRUE;
+BP_Int.sDevName := sDevName; 
 
 THIS^.fbBPAssertionPool.A_Add(
 	key := nReqID,
@@ -422,7 +424,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP);]]></ST>
+        <ST><![CDATA[RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP, sDevName:=sArbName);]]></ST>
       </Implementation>
     </Method>
   </POU>

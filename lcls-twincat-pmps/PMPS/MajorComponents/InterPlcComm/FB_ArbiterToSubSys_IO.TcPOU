@@ -96,7 +96,7 @@ END_IF
 
 IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
     Arbiter.RemoveRequest(RequestingSystemID);
-    Arbiter.AddRequest(RequestingSystemID, RequestedBP);
+    Arbiter.AddRequest(RequestingSystemID, RequestedBP,sName);
     nRequestedCohort := i_RequestedBP.nCohortInt;    
 END_IF
 

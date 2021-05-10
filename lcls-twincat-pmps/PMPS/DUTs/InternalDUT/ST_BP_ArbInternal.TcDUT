@@ -11,6 +11,10 @@ STRUCT
 		io: i
 	'}
 	LiveInTable : BOOL;
+	{attribute 'pytmc' := 'pv: Device
+		io: i
+	'}
+	sDevName: STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
