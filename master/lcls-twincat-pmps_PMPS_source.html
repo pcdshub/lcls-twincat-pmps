@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -105,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#e-bptmteststates">E_BPTMTestStates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-mpsbeamrates">E_MPSBeamRates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pmps-codes">PMPS_CODES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#st-attenuatorstatus">ST_AttenuatorStatus</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-bp-arbinternal">ST_BP_ArbInternal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-device">ST_Device</a></li>
@@ -130,16 +134,31 @@
 <li class="toctree-l2"><a class="reference internal" href="#att-to-io">ATT_TO_IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#beamparametertransitionmanager">BeamParameterTransitionManager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bp-to-io">BP_TO_IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkbounds">CheckBounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkdivdint">CheckDivDInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkdivlint">CheckDivLInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkdivlreal">CheckDivLReal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkdivreal">CheckDivReal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checklrangesigned">CheckLRangeSigned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checklrangeunsigned">CheckLRangeUnsigned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkpointer">CheckPointer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkrangesigned">CheckRangeSigned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkrangeunsigned">CheckRangeUnsigned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-attenuatorok">F_AttenuatorOK</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-bpwithid">F_BPWithID</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-calculatephotonenergy">F_CalculatePhotonEnergy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-devicestate-to-devicestateext">F_DeviceState_To_DeviceStateExt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-differentbeamparams">F_DifferentBeamParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-evexcluderange">F_eVExcludeRange</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-evincluderange">F_eVIncludeRange</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-evrangecalculator">F_eVRangeCalculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-evwithinspec">F_eVWithinSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-inittestbp">F_InitTestBP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-pmps-json">F_PMPS_JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-safebpcompare">F_SafeBPCompare</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-safebpcompare0rate">F_SafeBPCompare0Rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-setbeamparams">F_SetBeamParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#f-setgoodattstatus">F_SetGoodAttStatus</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-setstateparams">F_SetStateParams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#f-validreqid">F_ValidReqID</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-acceleratorlinks">FB_AcceleratorLinks</a></li>
@@ -370,6 +389,22 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="st-attenuatorstatus">
+<h2>ST_AttenuatorStatus<a class="headerlink" href="#st-attenuatorstatus" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_AttenuatorStatus</span> <span class="p">:</span>
+<span class="n">STRUCT</span>
+    <span class="n">AtTarget</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>     <span class="o">//</span><span class="mi">0</span>
+    <span class="n">Moving</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>       <span class="o">//</span><span class="mi">1</span>
+    <span class="n">LocalMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>    <span class="o">//</span><span class="mi">2</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">ignores</span> <span class="n">PMPS</span> <span class="n">preemptive</span> <span class="n">requests</span> <span class="ow">and</span> <span class="n">operates</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">local</span> <span class="n">setpoint</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">PMPSMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>     <span class="o">//</span><span class="mi">3</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">taking</span> <span class="n">setpoints</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">pmps</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">OK</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>           <span class="o">//</span><span class="mi">4</span>
+    <span class="n">Toggle</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>       <span class="o">//</span><span class="mi">5</span>  <span class="n">just</span> <span class="n">here</span> <span class="k">for</span> <span class="n">fun</span>
+    <span class="n">Include</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>      <span class="o">//</span><span class="mi">6</span>  <span class="n">Consider</span> <span class="n">this</span> <span class="n">device</span> <span class="n">status</span>
+<span class="n">END_STRUCT</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="st-beamparams">
 <h2>ST_BeamParams<a class="headerlink" href="#st-beamparams" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_BeamParams</span> <span class="p">:</span>
@@ -377,37 +412,32 @@
         <span class="p">(</span><span class="o">*</span>  <span class="n">Requested</span> <span class="n">pre</span><span class="o">-</span><span class="n">optic</span> <span class="n">attenuation</span> <span class="o">%</span>  <span class="o">*</span><span class="p">)</span>
             <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: Transmission</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="o">%</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">HOPR</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">LOPR</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">PREC</span> <span class="mi">2</span><span class="p">;</span>
         <span class="s1">&#39;}</span>
-            <span class="n">nTran</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">100</span><span class="p">;</span>
+            <span class="n">nTran</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
         <span class="p">(</span><span class="o">*</span> <span class="n">Pulse</span><span class="o">-</span><span class="n">rate</span> <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: Rate</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
             <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">Hz</span>
         <span class="s1">&#39;}</span>
         <span class="n">nRate</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">120</span><span class="p">;</span>
-        <span class="p">(</span><span class="o">*</span> <span class="n">Per</span> <span class="n">pulse</span> <span class="nb">max</span> <span class="n">energy</span> <span class="p">(</span><span class="n">mJ</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
-        <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: PulseEnergy</span>
-            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">mJ</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">This</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="ow">is</span> <span class="n">non</span><span class="o">-</span><span class="n">op</span> <span class="k">for</span> <span class="n">now</span><span class="o">.</span>
-        <span class="s1">&#39;}</span>
-        <span class="n">fPP_mJ</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">20</span><span class="p">;</span>
         <span class="p">(</span><span class="o">*</span> <span class="n">Photon</span> <span class="n">energy</span> <span class="n">ranges</span> <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: PhotonEnergyRanges</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
             <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">eV</span><span class="s1">&#39;}</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;displaymode&#39;</span> <span class="o">:=</span> <span class="s1">&#39;binary&#39;</span><span class="p">}</span>
-        <span class="n">neVRange</span> <span class="p">:</span> <span class="n">WORD</span> <span class="o">:=</span> <span class="mi">2</span><span class="c1">#1111_1111_1111_1111;</span>
+        <span class="n">neVRange</span> <span class="p">:</span> <span class="n">DWORD</span> <span class="o">:=</span> <span class="mi">2</span><span class="c1">#1111_1111_1111_1111_1111_1111_1111_1111;</span>
         <span class="p">(</span><span class="o">*</span> <span class="n">Beamline</span> <span class="n">attenuators</span> <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: AuxAtt</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
         <span class="n">astAttenuators</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">AUX_ATTENUATORS</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_PMPS_Attenuator</span><span class="p">;</span>
 
         <span class="p">(</span><span class="o">*</span> <span class="n">Stoppers</span> <span class="o">*</span><span class="p">)</span>
-        <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: ST</span>
+        <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: Veto</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
-        <span class="n">aStoppers</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BOOL</span><span class="p">;</span>
+        <span class="n">aVetoDevices</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span><span class="p">]</span> <span class="n">OF</span> <span class="n">BOOL</span><span class="p">;</span>
 
         <span class="p">(</span><span class="o">*</span> <span class="n">Apertures</span> <span class="o">*</span><span class="p">)</span>
         <span class="n">astApertures</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_APERTURES</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_PMPS_Aperture</span> <span class="o">:=</span> <span class="p">[(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),</span> <span class="p">(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">)];</span>
@@ -441,6 +471,10 @@
             <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
     <span class="n">LiveInTable</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: Device</span>
+            <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">sDevName</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
 <span class="n">END_STRUCT</span>
 <span class="n">END_TYPE</span>
 </pre></div>
@@ -805,7 +839,10 @@ END_TYPE
     <span class="n">FAST_TEST_VELOCITY</span>        <span class="p">:</span>    <span class="n">LREAL</span>    <span class="o">:=</span> <span class="mi">100</span><span class="p">;</span>
     <span class="n">MAX_DEVICE_STATES</span>        <span class="p">:</span>    <span class="n">UDINT</span>    <span class="o">:=</span> <span class="mi">300</span><span class="p">;</span>
 
-    <span class="n">MAX_STOPPERS</span>    <span class="p">:</span>   <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">16</span><span class="p">;</span>
+    <span class="n">TRANS_SCALING_FACTOR</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="n">REAL</span><span class="c1">#1.0; // Scaling factor for fixed-point transmission</span>
+
+
+    <span class="n">MAX_VETO_DEVICES</span>   <span class="p">:</span>   <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">16</span><span class="p">;</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="o">@</span><span class="p">(</span><span class="n">PREFIX</span><span class="p">)</span><span class="n">FullBeamCnst</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
@@ -813,9 +850,8 @@ END_TYPE
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Full</span> <span class="n">beam</span> <span class="n">constant</span>
     <span class="s1">&#39;}</span>
     <span class="n">cstFullBeam</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="p">(</span>
-        <span class="n">nTran</span> <span class="o">:=</span> <span class="mi">100</span><span class="p">,</span>
-        <span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="mf">1E4</span><span class="p">,</span>
-        <span class="n">neVRange</span> <span class="o">:=</span> <span class="mi">2</span><span class="c1">#1111_1111_1111_1111,</span>
+        <span class="n">nTran</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">neVRange</span> <span class="o">:=</span>  <span class="mi">2</span><span class="c1">#1111_1111_1111_1111_1111_1111_1111_1111,</span>
         <span class="n">nRate</span>    <span class="o">:=</span> <span class="n">UDINT</span><span class="c1">#1000000,</span>
         <span class="n">astApertures</span> <span class="o">:=</span> <span class="p">[(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),</span> <span class="p">(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">)]</span>
     <span class="p">);</span>
@@ -826,9 +862,8 @@ END_TYPE
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="mi">0</span><span class="o">-</span><span class="n">rate</span> <span class="n">beam</span> <span class="n">constant</span>
     <span class="s1">&#39;}</span>
     <span class="n">cst0RateBeam</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="p">(</span> <span class="o">//</span> <span class="n">Use</span> <span class="k">for</span> <span class="n">transition</span> <span class="n">requests</span>
-        <span class="n">nTran</span> <span class="o">:=</span> <span class="mi">100</span><span class="p">,</span>
-        <span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="mf">1E4</span><span class="p">,</span>
-        <span class="n">neVRange</span> <span class="o">:=</span> <span class="mi">2</span><span class="c1">#1111_1111_1111_1111,</span>
+        <span class="n">nTran</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">neVRange</span> <span class="o">:=</span>  <span class="mi">2</span><span class="c1">#1111_1111_1111_1111_1111_1111_1111_1111,</span>
         <span class="n">nRate</span>    <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">astApertures</span> <span class="o">:=</span> <span class="p">[(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),</span> <span class="p">(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">),(</span><span class="n">Width</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">,</span> <span class="n">Height</span><span class="o">:=</span><span class="mf">1E3</span><span class="p">)]</span>
     <span class="p">);</span>
@@ -840,7 +875,6 @@ END_TYPE
     <span class="s1">&#39;}</span>
     <span class="n">cstSafeBeam</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="p">(</span>
         <span class="n">nTran</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">neVRange</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">nRate</span>    <span class="o">:=</span> <span class="mi">0</span>
     <span class="p">);</span>
@@ -855,7 +889,7 @@ END_TYPE
 
 
 
-    <span class="n">g_cBoundaries</span>    <span class="p">:</span>    <span class="n">INT</span>    <span class="o">:=</span> <span class="mi">15</span><span class="p">;</span>
+    <span class="n">g_cBoundaries</span>    <span class="p">:</span>    <span class="n">INT</span>    <span class="o">:=</span> <span class="mi">31</span><span class="p">;</span>
 
 
 <span class="o">//////////////////////////</span>
@@ -882,22 +916,38 @@ END_TYPE
         <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">eV</span>
     <span class="s1">&#39;}</span>
     <span class="n">g_areVBoundariesL</span>    <span class="p">:</span>    <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">]</span>    <span class="n">OF</span>    <span class="n">REAL</span>    <span class="o">:=</span> <span class="p">[</span>
+    <span class="mf">1.0E3</span><span class="p">,</span>
     <span class="mf">1.7E3</span><span class="p">,</span>
+    <span class="mf">2.1E3</span><span class="p">,</span>
     <span class="mf">2.5E3</span><span class="p">,</span>
+    <span class="mf">3.8E3</span><span class="p">,</span>
+    <span class="mf">4.0E3</span><span class="p">,</span>
     <span class="mf">5.0E3</span><span class="p">,</span>
     <span class="mf">7.0E3</span><span class="p">,</span>
+    <span class="mf">7.5E3</span><span class="p">,</span>
     <span class="mf">7.7E3</span><span class="p">,</span>
     <span class="mf">8.9E3</span><span class="p">,</span>
     <span class="mf">10.0E3</span><span class="p">,</span>
     <span class="mf">11.1E3</span><span class="p">,</span>
     <span class="mf">12.0E3</span><span class="p">,</span>
+    <span class="mf">13.0E3</span><span class="p">,</span>
+    <span class="mf">13.5E3</span><span class="p">,</span>
     <span class="mf">14.0E3</span><span class="p">,</span>
-    <span class="mf">16.0E3</span><span class="p">,</span>
     <span class="mf">16.9E3</span><span class="p">,</span>
     <span class="mf">18.0E3</span><span class="p">,</span>
     <span class="mf">20.0E3</span><span class="p">,</span>
     <span class="mf">22.0E3</span><span class="p">,</span>
-    <span class="mf">24.0E3</span>
+    <span class="mf">24.0E3</span><span class="p">,</span>
+    <span class="mf">25.0E3</span><span class="p">,</span>
+    <span class="mf">25.5E3</span><span class="p">,</span>
+    <span class="mf">26.0E3</span><span class="p">,</span>
+    <span class="mf">27.0E3</span><span class="p">,</span>
+    <span class="mf">28.0E3</span><span class="p">,</span>
+    <span class="mf">28.5E3</span><span class="p">,</span>
+    <span class="mf">29.0E3</span><span class="p">,</span>
+    <span class="mf">30.0E3</span><span class="p">,</span>
+    <span class="mf">60.0E3</span><span class="p">,</span>
+    <span class="mf">90.0E3</span>
     <span class="p">];</span>
 
 
@@ -909,22 +959,38 @@ END_TYPE
         <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">eV</span>
     <span class="s1">&#39;}</span>
     <span class="n">g_areVBoundariesK</span>    <span class="p">:</span>    <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">]</span>    <span class="n">OF</span>    <span class="n">REAL</span>    <span class="o">:=</span> <span class="p">[</span>
+    <span class="mi">100</span><span class="p">,</span>
     <span class="mi">250</span><span class="p">,</span>
     <span class="mi">270</span><span class="p">,</span>
     <span class="mi">350</span><span class="p">,</span>
     <span class="mi">400</span><span class="p">,</span>
     <span class="mi">450</span><span class="p">,</span>
-    <span class="mi">540</span><span class="p">,</span>
+    <span class="mi">480</span><span class="p">,</span>
+    <span class="mi">530</span><span class="p">,</span>
+    <span class="mi">680</span><span class="p">,</span>
+    <span class="mi">730</span><span class="p">,</span>
     <span class="mi">850</span><span class="p">,</span>
+    <span class="mf">1.10E3</span><span class="p">,</span>
     <span class="mf">1.15E3</span><span class="p">,</span>
     <span class="mf">1.25E3</span><span class="p">,</span>
     <span class="mf">1.45E3</span><span class="p">,</span>
+    <span class="mf">1.50E3</span><span class="p">,</span>
     <span class="mf">1.55E3</span><span class="p">,</span>
     <span class="mf">1.65E3</span><span class="p">,</span>
+    <span class="mf">1.70E3</span><span class="p">,</span>
     <span class="mf">1.75E3</span><span class="p">,</span>
     <span class="mf">1.82E3</span><span class="p">,</span>
-    <span class="mf">2.0E3</span><span class="p">,</span>
-    <span class="mf">2.3E3</span>
+    <span class="mf">1.85E3</span><span class="p">,</span>
+    <span class="mf">2.00E3</span><span class="p">,</span>
+    <span class="mf">2.20E3</span><span class="p">,</span>
+    <span class="mf">2.50E3</span><span class="p">,</span>
+    <span class="mf">2.80E3</span><span class="p">,</span>
+    <span class="mf">3.00E3</span><span class="p">,</span>
+    <span class="mf">3.15E3</span><span class="p">,</span>
+    <span class="mf">3.50E3</span><span class="p">,</span>
+    <span class="mf">4.00E3</span><span class="p">,</span>
+    <span class="mf">5.30E3</span><span class="p">,</span>
+    <span class="mf">7.00E3</span>
     <span class="p">];</span>
 
 
@@ -936,8 +1002,9 @@ END_TYPE
 <h2>PMPS_PARAM<a class="headerlink" href="#pmps-param" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
 <span class="n">VAR_GLOBAL</span> <span class="n">CONSTANT</span>
-    <span class="n">MAX_FAST_FAULTS</span> <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">50</span><span class="p">;</span>
-    <span class="n">MAX_ASSERTIONS</span>    <span class="p">:</span>    <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">20</span><span class="p">;</span> <span class="o">//</span><span class="n">Maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">assertions</span> <span class="n">permitted</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">arbiter</span>
+    <span class="n">MAX_FAST_FAULTS</span> <span class="p">:</span>       <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">50</span><span class="p">;</span> <span class="o">//</span> <span class="n">Max</span> <span class="n">fast</span> <span class="n">faults</span> <span class="k">for</span> <span class="n">an</span> <span class="n">FFO</span>
+    <span class="n">MAX_ASSERTIONS</span>    <span class="p">:</span>    <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">20</span><span class="p">;</span> <span class="o">//</span><span class="n">Maximum</span> <span class="n">number</span> <span class="n">of</span> <span class="n">BP</span> <span class="n">requests</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">arbiter</span>
+    <span class="n">TRANS_MARGIN</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="n">REAL</span><span class="c1">#0.05; // Allowed % margin above requested transmission level in SafeBPCompare (0.0500 = 5deci% default). Note: change this value if scaling factor changes.</span>
 <span class="n">END_VAR</span>
 </pre></div>
 </div>
@@ -1001,6 +1068,8 @@ END_TYPE
 
 <span class="n">END_VAR</span>
 <span class="n">VAR_INPUT</span>
+    <span class="n">i_sDeviceName</span>   <span class="p">:</span>       <span class="n">STRING</span><span class="o">:=</span><span class="s1">&#39;Device&#39;</span><span class="p">;</span> <span class="o">//</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">device</span> <span class="n">requesting</span> <span class="n">the</span> <span class="n">transition</span>
+
     <span class="n">i_TransitionAssertionID</span>    <span class="p">:</span>    <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">Must</span> <span class="ow">not</span> <span class="n">be</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">EXCLUDED_ID</span>
     <span class="n">i_stTransitionAssertion</span> <span class="p">:</span> <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">cst0RateBeam</span><span class="p">;</span> <span class="o">//</span><span class="n">Assertion</span> <span class="n">required</span> <span class="n">during</span> <span class="n">transition</span> <span class="p">(</span><span class="n">always</span> <span class="n">safer</span> <span class="n">than</span> <span class="n">anything</span> <span class="n">inbetween</span><span class="p">)</span>
 
@@ -1197,7 +1266,8 @@ END_TYPE
 <span class="o">//</span><span class="n">Asserting</span> <span class="n">target</span> <span class="n">parameters</span>
 <span class="n">bFinalAssertionFailed</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="n">fbArbiter</span><span class="o">.</span><span class="n">AddRequest</span><span class="p">(</span>
     <span class="n">nTargetAssertionID</span><span class="p">,</span>
-    <span class="n">stTargetAssertion</span>
+    <span class="n">stTargetAssertion</span><span class="p">,</span>
+    <span class="n">i_sDeviceName</span>
 <span class="p">);</span>
 
 <span class="n">IF</span> <span class="n">bFinalAssertionFailed</span> <span class="n">THEN</span>
@@ -1219,7 +1289,8 @@ END_TYPE
 <span class="n">LogActions</span><span class="p">(</span> <span class="n">CONCAT</span><span class="p">(</span><span class="s1">&#39;Requesting transition id: &#39;</span><span class="p">,</span> <span class="n">DWORD_TO_STRING</span><span class="p">(</span><span class="n">i_TransitionAssertionID</span><span class="p">))</span> <span class="p">);</span>
 <span class="n">bTransAssertionFailed</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="n">fbArbiter</span><span class="o">.</span><span class="n">AddRequest</span><span class="p">(</span>
     <span class="n">i_TransitionAssertionID</span><span class="p">,</span>
-    <span class="n">i_stTransitionAssertion</span>
+    <span class="n">i_stTransitionAssertion</span><span class="p">,</span>
+    <span class="n">i_sDeviceName</span>
 <span class="p">);</span>
 
 <span class="n">IF</span> <span class="n">bTransAssertionFailed</span> <span class="n">THEN</span>
@@ -1265,7 +1336,8 @@ END_TYPE
     <span class="n">LogActions</span><span class="p">(</span> <span class="n">CONCAT</span><span class="p">(</span><span class="s1">&#39;Requesting transition id: &#39;</span><span class="p">,</span> <span class="n">DWORD_TO_STRING</span><span class="p">(</span><span class="n">i_TransitionAssertionID</span><span class="p">))</span> <span class="p">);</span>
     <span class="n">bTransAssertionFailed</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="n">fbArbiter</span><span class="o">.</span><span class="n">AddRequest</span><span class="p">(</span>
         <span class="n">i_TransitionAssertionID</span><span class="p">,</span>
-        <span class="n">i_stTransitionAssertion</span>
+        <span class="n">i_stTransitionAssertion</span><span class="p">,</span>
+            <span class="n">i_sDeviceName</span>
     <span class="p">);</span>
 
     <span class="n">IF</span> <span class="n">bTransAssertionFailed</span> <span class="n">THEN</span>
@@ -1342,14 +1414,256 @@ END_TYPE
     <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">:=</span> <span class="n">APT_TO_IO</span><span class="p">(</span><span class="n">BP</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
 <span class="n">END_FOR</span>
 
-<span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">aStoppers</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">;</span>
+<span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">aVetoDevices</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">;</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">nTran</span><span class="p">;</span>
-<span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">fPP_mJ</span><span class="p">;</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">nCohortInt</span> <span class="o">:=</span> <span class="n">ULINT_TO_UDINT</span><span class="p">(</span><span class="n">BP</span><span class="o">.</span><span class="n">nCohortInt</span><span class="p">);</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">neVRange</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">neVRange</span><span class="p">;</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">nRate</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">nRate</span><span class="p">;</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">xValid</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">xValid</span><span class="p">;</span>
 <span class="n">BP_TO_IO</span><span class="o">.</span><span class="n">xValidToggle</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">xValidToggle</span><span class="p">;</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkbounds">
+<h2>CheckBounds<a class="headerlink" href="#checkbounds" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckBounds</span> <span class="p">:</span> <span class="n">DINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">index</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span>  <span class="n">index</span> <span class="o">&lt;</span> <span class="n">lower</span> <span class="n">THEN</span>
+    <span class="n">CheckBounds</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span>
+<span class="n">ELSIF</span>  <span class="n">index</span> <span class="o">&gt;</span> <span class="n">upper</span> <span class="n">THEN</span>
+    <span class="n">CheckBounds</span> <span class="o">:=</span> <span class="n">upper</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckBounds</span> <span class="o">:=</span> <span class="n">index</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkdivdint">
+<h2>CheckDivDInt<a class="headerlink" href="#checkdivdint" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckDivDInt</span> <span class="p">:</span> <span class="n">DINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">divisor</span><span class="p">:</span><span class="n">DINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="n">divisor</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">CheckDivDInt</span><span class="o">:=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckDivDInt</span><span class="o">:=</span><span class="n">divisor</span><span class="p">;</span>
+<span class="n">END_IF</span><span class="p">;</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkdivlint">
+<h2>CheckDivLInt<a class="headerlink" href="#checkdivlint" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckDivLInt</span> <span class="p">:</span> <span class="n">LINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">divisor</span><span class="p">:</span><span class="n">LINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="n">divisor</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">CheckDivLInt</span><span class="o">:=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckDivLInt</span><span class="o">:=</span><span class="n">divisor</span><span class="p">;</span>
+<span class="n">END_IF</span><span class="p">;</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkdivlreal">
+<h2>CheckDivLReal<a class="headerlink" href="#checkdivlreal" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckDivLReal</span> <span class="p">:</span> <span class="n">LREAL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">divisor</span><span class="p">:</span><span class="n">LREAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="n">divisor</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">CheckDivLReal</span><span class="o">:=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckDivLReal</span><span class="o">:=</span><span class="n">divisor</span><span class="p">;</span>
+<span class="n">END_IF</span><span class="p">;</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkdivreal">
+<h2>CheckDivReal<a class="headerlink" href="#checkdivreal" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckDivReal</span> <span class="p">:</span> <span class="n">REAL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">divisor</span><span class="p">:</span><span class="n">REAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="n">divisor</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">CheckDivReal</span><span class="o">:=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckDivReal</span><span class="o">:=</span><span class="n">divisor</span><span class="p">;</span>
+<span class="n">END_IF</span><span class="p">;</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checklrangesigned">
+<h2>CheckLRangeSigned<a class="headerlink" href="#checklrangesigned" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckLRangeSigned</span> <span class="p">:</span> <span class="n">LINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="n">LINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckLRangeSigned</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span>
+<span class="n">ELSIF</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckLRangeSigned</span> <span class="o">:=</span> <span class="n">upper</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckLRangeSigned</span> <span class="o">:=</span> <span class="n">value</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checklrangeunsigned">
+<h2>CheckLRangeUnsigned<a class="headerlink" href="#checklrangeunsigned" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckLRangeUnsigned</span> <span class="p">:</span> <span class="n">ULINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="n">ULINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckLRangeUnsigned</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span>
+<span class="n">ELSIF</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckLRangeUnsigned</span> <span class="o">:=</span> <span class="n">upper</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckLRangeUnsigned</span> <span class="o">:=</span> <span class="n">value</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkpointer">
+<h2>CheckPointer<a class="headerlink" href="#checkpointer" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckPointer</span> <span class="p">:</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">BYTE</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">ptToTest</span> <span class="p">:</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">BYTE</span><span class="p">;</span> <span class="o">//</span> <span class="n">Destination</span> <span class="n">address</span> <span class="n">of</span> <span class="n">the</span> <span class="n">pointer</span>
+    <span class="n">iSize</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>                   <span class="o">//</span> <span class="n">Size</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">type</span> <span class="n">the</span> <span class="n">pointer</span> <span class="n">points</span> <span class="n">to</span><span class="o">.</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="p">:</span> <span class="mi">20</span> <span class="k">for</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..9</span><span class="p">]</span> <span class="n">OF</span> <span class="n">INT</span><span class="p">)</span>
+    <span class="n">iGran</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>                   <span class="o">//</span> <span class="n">Granularity</span> <span class="n">of</span> <span class="n">the</span> <span class="n">pointer</span> <span class="n">access</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">size</span> <span class="n">of</span> <span class="n">the</span> <span class="n">biggest</span> <span class="n">non</span><span class="o">-</span><span class="n">structured</span> <span class="n">data</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">the</span> <span class="nb">type</span> <span class="n">the</span> <span class="n">pointer</span> <span class="n">points</span> <span class="n">to</span><span class="o">.</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="p">:</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..9</span><span class="p">]</span> <span class="n">OF</span> <span class="n">INT</span><span class="p">)</span>
+    <span class="n">bWrite</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>                   <span class="o">//</span> <span class="n">Indicates</span> <span class="n">read</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">Access</span><span class="o">.</span> <span class="n">TRUE</span> <span class="o">=</span> <span class="n">write</span> <span class="n">access</span><span class="o">.</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">No</span> <span class="n">standard</span> <span class="n">way</span> <span class="n">of</span> <span class="n">implementation</span><span class="o">.</span> <span class="n">Fill</span> <span class="n">your</span> <span class="n">own</span> <span class="n">code</span> <span class="n">here</span>
+<span class="n">CheckPointer</span> <span class="o">:=</span> <span class="n">ptToTest</span><span class="p">;</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkrangesigned">
+<h2>CheckRangeSigned<a class="headerlink" href="#checkrangesigned" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckRangeSigned</span> <span class="p">:</span> <span class="n">DINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="n">DINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckRangeSigned</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span>
+<span class="n">ELSIF</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckRangeSigned</span> <span class="o">:=</span> <span class="n">upper</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckRangeSigned</span> <span class="o">:=</span> <span class="n">value</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checkrangeunsigned">
+<h2>CheckRangeUnsigned<a class="headerlink" href="#checkrangeunsigned" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">EDIT</span>
+<span class="n">FUNCTION</span> <span class="n">CheckRangeUnsigned</span> <span class="p">:</span> <span class="n">UDINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">Implicitly</span> <span class="n">generated</span> <span class="n">code</span> <span class="p">:</span> <span class="n">Only</span> <span class="n">an</span> <span class="n">Implementation</span> <span class="n">suggestion</span>
+<span class="p">{</span><span class="n">noflow</span><span class="p">}</span>
+<span class="n">IF</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">lower</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckRangeUnsigned</span> <span class="o">:=</span> <span class="n">lower</span><span class="p">;</span>
+<span class="n">ELSIF</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">CheckRangeUnsigned</span> <span class="o">:=</span> <span class="n">upper</span><span class="p">;</span>
+<span class="n">ELSE</span>
+    <span class="n">CheckRangeUnsigned</span> <span class="o">:=</span> <span class="n">value</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="p">{</span><span class="n">flow</span><span class="p">}</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-attenuatorok">
+<h2>F_AttenuatorOK<a class="headerlink" href="#f-attenuatorok" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span>
+<span class="n">Indicates</span> <span class="k">if</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">can</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">safe</span> <span class="k">for</span> <span class="n">a</span> <span class="n">device</span><span class="p">,</span>
+<span class="n">given</span> <span class="n">its</span> <span class="n">status</span> <span class="n">word</span><span class="o">.</span>
+
+<span class="n">In</span> <span class="n">local</span> <span class="n">mode</span><span class="p">,</span> <span class="n">the</span> <span class="n">atteunator</span> <span class="n">ignores</span> <span class="n">PMPS</span> <span class="n">requests</span><span class="p">,</span> <span class="n">following</span> <span class="n">a</span> <span class="n">local</span>
+<span class="n">setpoint</span><span class="o">.</span> <span class="n">In</span> <span class="n">this</span> <span class="n">mode</span><span class="p">,</span> <span class="n">a</span> <span class="n">device</span> <span class="n">cannot</span> <span class="n">trust</span> <span class="n">that</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">will</span> <span class="ow">not</span>
+<span class="n">increase</span> <span class="n">transmission</span> <span class="n">beyond</span> <span class="n">its</span> <span class="n">own</span> <span class="n">setpoint</span><span class="o">.</span> <span class="n">Therefore</span> <span class="nb">any</span>
+<span class="n">indication</span> <span class="n">of</span> <span class="n">a</span> <span class="n">changing</span> <span class="n">transmission</span> <span class="n">should</span> <span class="n">cause</span> <span class="n">a</span> <span class="n">fault</span><span class="o">.</span>
+
+<span class="n">In</span> <span class="n">PMPS</span> <span class="n">mode</span><span class="p">,</span> <span class="k">if</span> <span class="n">a</span> <span class="n">device</span> <span class="n">has</span> <span class="n">submitted</span> <span class="n">a</span> <span class="n">preemptive</span> <span class="n">request</span> <span class="ow">and</span> <span class="n">received</span>
+<span class="n">acknowledgement</span><span class="p">,</span> <span class="n">then</span> <span class="n">the</span> <span class="n">transmission</span> <span class="n">setpoint</span> <span class="n">will</span> <span class="n">be</span> <span class="n">governed</span> <span class="n">at</span> <span class="n">least</span>
+<span class="n">by</span> <span class="n">that</span> <span class="n">device</span><span class="s1">&#39;s setpoint. Therefore, the attenuator may be moving without</span>
+<span class="n">generating</span> <span class="n">a</span> <span class="n">fault</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">FUNCTION</span> <span class="n">F_AttenuatorOK</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">xStatus</span> <span class="p">:</span> <span class="n">WORD</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">IF</span> <span class="n">xStatus</span><span class="mf">.2</span> <span class="n">THEN</span> <span class="o">//</span> <span class="n">Local</span> <span class="n">mode</span>
+    <span class="n">F_AttenuatorOK</span> <span class="o">:=</span> <span class="n">xStatus</span><span class="mf">.0</span> <span class="ow">and</span> <span class="n">NOT</span> <span class="n">xStatus</span><span class="mf">.1</span><span class="p">;</span>
+<span class="n">ELSIF</span> <span class="n">xStatus</span><span class="mf">.3</span> <span class="n">AND</span> <span class="n">NOT</span> <span class="n">xStatus</span><span class="mf">.2</span> <span class="n">THEN</span> <span class="o">//</span> <span class="n">PMPS</span> <span class="n">mode</span>
+    <span class="n">F_AttenuatorOK</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+
+<span class="n">F_AttenuatorOK</span> <span class="o">:=</span> <span class="n">xStatus</span><span class="mf">.4</span> <span class="n">AND</span> <span class="n">F_AttenuatorOK</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION</span>
 </pre></div>
@@ -1476,7 +1790,6 @@ END_TYPE
 
 <span class="n">END_VAR</span>
 <span class="n">xAttOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">nTran</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">nTran</span><span class="p">;</span>
-<span class="n">xPPmjOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">fPP_mJ</span><span class="p">;</span>
 <span class="n">xEvOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">neVRange</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">neVRange</span><span class="p">;</span>
 <span class="n">xRateOK</span>     <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">nRate</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">nRate</span><span class="p">;</span>
 
@@ -1486,8 +1799,8 @@ END_TYPE
 <span class="n">END_FOR</span>
 
 <span class="o">//</span> <span class="n">Stoppers</span>
-<span class="n">FOR</span> <span class="n">idx</span><span class="o">:=</span><span class="mi">1</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span> <span class="n">DO</span>
-    <span class="n">xaStopper</span> <span class="n">S</span><span class="o">=</span> <span class="p">(</span><span class="n">BeamParam1</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
+<span class="n">FOR</span> <span class="n">idx</span><span class="o">:=</span><span class="mi">1</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span> <span class="n">DO</span>
+    <span class="n">xaStopper</span> <span class="n">S</span><span class="o">=</span> <span class="p">(</span><span class="n">BeamParam1</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
 <span class="n">END_FOR</span>
 
 <span class="o">//</span> <span class="n">ast</span> <span class="n">Apertures</span>
@@ -1498,6 +1811,65 @@ END_TYPE
 
 
 <span class="n">F_DifferentBeamParams</span> <span class="o">:=</span> <span class="n">xAttOK</span> <span class="n">OR</span> <span class="n">xPPmjOK</span> <span class="n">OR</span> <span class="n">xEvOK</span> <span class="n">OR</span> <span class="n">xRateOK</span> <span class="n">OR</span> <span class="n">xaStopper</span> <span class="n">OR</span> <span class="n">xaAtt</span> <span class="n">OR</span> <span class="n">xaApt</span><span class="p">;</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-evexcluderange">
+<h2>F_eVExcludeRange<a class="headerlink" href="#f-evexcluderange" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">F_eVExcludeRange</span> <span class="p">:</span> <span class="n">DWORD</span>
+<span class="p">(</span><span class="o">*</span>
+    <span class="n">Given</span> <span class="n">an</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">end</span> <span class="n">of</span> <span class="n">an</span> <span class="n">exclusion</span> <span class="nb">range</span><span class="p">,</span> <span class="k">return</span> <span class="n">the</span> <span class="n">corresponding</span> <span class="n">eV</span> <span class="n">bitmask</span><span class="o">.</span>
+
+    <span class="n">eVs</span> <span class="n">between</span> <span class="n">fLower</span> <span class="ow">and</span> <span class="n">fUpper</span> <span class="n">will</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">unsafe</span><span class="p">,</span> <span class="ow">and</span> <span class="n">eVs</span> <span class="n">outside</span> <span class="n">of</span> <span class="n">this</span> <span class="nb">range</span> <span class="n">will</span> <span class="n">be</span>
+    <span class="n">considered</span> <span class="n">safe</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">of</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="ow">and</span> <span class="n">values</span> <span class="n">near</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="k">if</span> <span class="n">they</span> <span class="n">land</span>
+    <span class="n">far</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
+
+    <span class="n">Call</span> <span class="n">this</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">init</span> <span class="n">cycle</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">your</span> <span class="n">eV</span> <span class="n">bitmasks</span> <span class="k">for</span> <span class="n">more</span> <span class="n">readable</span> <span class="n">code</span>
+    <span class="n">that</span> <span class="ow">is</span> <span class="n">also</span> <span class="n">more</span> <span class="n">resiliant</span> <span class="n">to</span> <span class="n">eV</span> <span class="nb">range</span> <span class="n">definition</span> <span class="n">adjustments</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">fLower</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
+    <span class="n">fUpper</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">F_eVExcludeRange</span> <span class="o">:=</span> <span class="n">F_eVIncludeRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fLower</span><span class="p">)</span> <span class="n">OR</span> <span class="n">F_eVIncludeRange</span><span class="p">(</span><span class="n">fUpper</span><span class="p">,</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_areVBoundaries</span><span class="p">[</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">]);</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-evincluderange">
+<h2>F_eVIncludeRange<a class="headerlink" href="#f-evincluderange" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">F_eVIncludeRange</span> <span class="p">:</span> <span class="n">DWORD</span>
+<span class="p">(</span><span class="o">*</span>
+    <span class="n">Given</span> <span class="n">an</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">end</span> <span class="n">of</span> <span class="n">an</span> <span class="n">inclusion</span> <span class="nb">range</span><span class="p">,</span> <span class="k">return</span> <span class="n">the</span> <span class="n">corresponding</span> <span class="n">eV</span> <span class="n">bitmask</span><span class="o">.</span>
+
+    <span class="n">eVs</span> <span class="n">between</span> <span class="n">fLower</span> <span class="ow">and</span> <span class="n">fUpper</span> <span class="n">will</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">safe</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">of</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="ow">and</span> <span class="n">values</span>
+    <span class="n">near</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="k">if</span> <span class="n">they</span> <span class="n">land</span> <span class="n">far</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
+
+    <span class="n">Call</span> <span class="n">this</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">init</span> <span class="n">cycle</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">your</span> <span class="n">eV</span> <span class="n">bitmasks</span> <span class="k">for</span> <span class="n">more</span> <span class="n">readable</span> <span class="n">code</span>
+    <span class="n">that</span> <span class="ow">is</span> <span class="n">also</span> <span class="n">more</span> <span class="n">resiliant</span> <span class="n">to</span> <span class="n">eV</span> <span class="nb">range</span> <span class="n">definition</span> <span class="n">adjustments</span><span class="o">.</span>
+<span class="o">*</span><span class="p">)</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">fLower</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
+    <span class="n">fUpper</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="n">nBitmask</span><span class="p">:</span> <span class="n">DWORD</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nIndex</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
+    <span class="n">nBit</span><span class="p">:</span> <span class="n">USINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">fPrev</span><span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span> <span class="n">DO</span>
+    <span class="n">IF</span> <span class="n">fLower</span> <span class="o">&lt;=</span> <span class="n">fPrev</span> <span class="n">AND</span> <span class="n">fUpper</span> <span class="o">&gt;=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_areVBoundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="n">THEN</span>
+        <span class="n">nBitmask</span> <span class="o">:=</span> <span class="n">nBitmask</span> <span class="o">+</span> <span class="n">SHL</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nBit</span><span class="p">);</span>
+    <span class="n">END_IF</span>
+    <span class="n">fPrev</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_areVBoundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
+    <span class="n">nBit</span> <span class="o">:=</span> <span class="n">nBit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">END_FOR</span>
+
+<span class="n">F_eVIncludeRange</span> <span class="o">:=</span> <span class="n">nBitmask</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION</span>
 </pre></div>
@@ -1521,14 +1893,14 @@ END_TYPE
 <span class="n">reV</span> <span class="o">=</span> <span class="mi">300</span> <span class="o">+</span> <span class="o">&gt;</span><span class="n">rHyst</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0000_0000_0000_0100</span><span class="p">)</span>
 
 <span class="o">*</span><span class="p">)</span>
-<span class="n">FUNCTION</span> <span class="n">F_eVRangeCalculator</span> <span class="p">:</span> <span class="n">WORD</span> <span class="o">//</span> <span class="n">Bit</span><span class="o">-</span><span class="nb">range</span> <span class="n">of</span> <span class="n">current</span> <span class="n">photon</span> <span class="n">energy</span>
+<span class="n">FUNCTION</span> <span class="n">F_eVRangeCalculator</span> <span class="p">:</span> <span class="n">DWORD</span> <span class="o">//</span> <span class="n">Bit</span><span class="o">-</span><span class="nb">range</span> <span class="n">of</span> <span class="n">current</span> <span class="n">photon</span> <span class="n">energy</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">reV</span>    <span class="p">:</span>    <span class="n">REAL</span><span class="p">;</span> <span class="o">//</span> <span class="n">Photon</span> <span class="n">energy</span> <span class="p">(</span><span class="n">keV</span><span class="p">)</span>
-    <span class="n">LastWord</span>    <span class="p">:</span>    <span class="n">WORD</span><span class="p">;</span> <span class="o">//</span> <span class="n">Range</span> <span class="n">word</span> <span class="n">of</span> <span class="n">previous</span> <span class="n">cycle</span>
+    <span class="n">LastWord</span>    <span class="p">:</span>    <span class="n">DWORD</span><span class="p">;</span> <span class="o">//</span> <span class="n">Range</span> <span class="n">word</span> <span class="n">of</span> <span class="n">previous</span> <span class="n">cycle</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
     <span class="n">nIndex</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
-    <span class="n">RangeWord</span><span class="p">:</span> <span class="n">WORD</span><span class="p">;</span>
+    <span class="n">RangeWord</span><span class="p">:</span> <span class="n">DWORD</span><span class="p">;</span>
     <span class="n">rPreviousBoundary</span><span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="n">MaxEv</span>    <span class="p">:</span>    <span class="n">REAL</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_areVBoundaries</span><span class="p">[</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">];</span>
@@ -1543,30 +1915,30 @@ END_TYPE
 
 <span class="n">MaxEv</span> <span class="o">:=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span><span class="p">];</span>
 
-<span class="n">IF</span> <span class="n">reV</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="n">OR</span> <span class="n">reV</span> <span class="o">&gt;</span> <span class="n">MaxEv</span> <span class="n">THEN</span> <span class="n">F_eVRangeCalculator</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFF; RETURN; END_IF // Failsafe</span>
+<span class="n">IF</span> <span class="n">reV</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="n">OR</span> <span class="n">reV</span> <span class="o">&gt;</span> <span class="n">MaxEv</span> <span class="n">THEN</span> <span class="n">F_eVRangeCalculator</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#FFFF_FFFF; RETURN; END_IF // Failsafe</span>
 
 <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span> <span class="n">DO</span>
 
     <span class="o">//</span> <span class="n">If</span> <span class="n">previously</span> <span class="n">active</span> <span class="n">then</span> <span class="n">check</span> <span class="k">if</span> <span class="n">it</span> <span class="n">should</span> <span class="n">be</span> <span class="n">cleared</span>
-    <span class="n">IF</span> <span class="n">LastWord</span><span class="o">.</span><span class="mi">0</span> <span class="n">THEN</span>
+    <span class="n">IF</span> <span class="n">LastWord</span><span class="mf">.0</span> <span class="n">THEN</span>
         <span class="o">//</span> <span class="n">Hysteresis</span> <span class="n">condition</span>
         <span class="n">IF</span> <span class="p">(</span><span class="n">reV</span> <span class="o">&gt;</span> <span class="n">MIN</span><span class="p">(</span><span class="n">Boundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="o">+</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">reVHyst</span><span class="p">,</span> <span class="n">MaxEv</span><span class="p">)</span> <span class="p">)</span> <span class="n">OR</span>
         <span class="p">(</span><span class="n">reV</span> <span class="o">&lt;</span> <span class="n">MAX</span><span class="p">(</span><span class="n">rPreviousBoundary</span> <span class="o">-</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">reVHyst</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">RangeWord</span><span class="o">.</span><span class="mi">0</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">If</span> <span class="n">out</span> <span class="n">of</span> <span class="nb">range</span> <span class="n">of</span> <span class="n">hys</span><span class="o">.</span> <span class="n">mark</span> <span class="n">inactive</span>
+            <span class="n">RangeWord</span><span class="mf">.0</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">If</span> <span class="n">out</span> <span class="n">of</span> <span class="nb">range</span> <span class="n">of</span> <span class="n">hys</span><span class="o">.</span> <span class="n">mark</span> <span class="n">inactive</span>
         <span class="n">ELSE</span>
-            <span class="n">RangeWord</span><span class="o">.</span><span class="mi">0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">RangeWord</span><span class="mf">.0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
         <span class="n">END_IF</span>
     <span class="n">ELSE</span> <span class="o">//</span> <span class="n">Check</span> <span class="k">if</span> <span class="n">we</span> <span class="n">should</span> <span class="n">mark</span> <span class="k">as</span> <span class="n">active</span>
         <span class="n">IF</span> <span class="p">(</span><span class="n">reV</span> <span class="o">&lt;=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">])</span> <span class="n">AND</span>
         <span class="p">(</span><span class="n">reV</span> <span class="o">&gt;</span> <span class="n">rPreviousBoundary</span><span class="p">)</span> <span class="n">OR</span>
          <span class="p">(</span><span class="n">nIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">reV</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">)</span> <span class="n">THEN</span>
-            <span class="n">RangeWord</span><span class="o">.</span><span class="mi">0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">RangeWord</span><span class="mf">.0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
         <span class="n">END_IF</span>
     <span class="n">END_IF</span>
 
     <span class="o">//</span> <span class="n">Catch</span> <span class="k">if</span> <span class="n">the</span> <span class="n">hysteresis</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">too</span> <span class="n">large</span> <span class="k">for</span> <span class="n">the</span> <span class="nb">range</span>
     <span class="n">IF</span> <span class="n">rPreviousBoundary</span> <span class="o">+</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">reVHyst</span> <span class="o">&gt;=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">]</span> <span class="n">THEN</span>
-        <span class="n">RangeWord</span><span class="o">.</span><span class="mi">0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">//</span> <span class="n">Setting</span> <span class="n">the</span> <span class="n">bit</span> <span class="n">true</span> <span class="n">here</span> <span class="k">as</span> <span class="n">a</span> <span class="n">failsafe</span>
+        <span class="n">RangeWord</span><span class="mf">.0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">//</span> <span class="n">Setting</span> <span class="n">the</span> <span class="n">bit</span> <span class="n">true</span> <span class="n">here</span> <span class="k">as</span> <span class="n">a</span> <span class="n">failsafe</span>
         <span class="o">//&lt;</span><span class="n">TODO</span><span class="o">&gt;</span> <span class="n">Add</span> <span class="n">major</span> <span class="n">error</span> <span class="ow">or</span> <span class="n">warning</span> <span class="n">here</span>
     <span class="n">END_IF</span>
 
@@ -1589,11 +1961,11 @@ END_TYPE
 <span class="n">FUNCTION</span> <span class="n">F_eVWithinSpec</span> <span class="p">:</span> <span class="n">BOOL</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">reV</span>    <span class="p">:</span>    <span class="n">REAL</span><span class="p">;</span>    <span class="o">//</span><span class="n">Photon</span> <span class="n">energy</span> <span class="n">to</span> <span class="n">check</span> <span class="k">if</span> <span class="n">within</span> <span class="n">permitted</span> <span class="nb">range</span>
-    <span class="n">nPermittedRange</span>    <span class="p">:</span>    <span class="n">WORD</span><span class="p">;</span> <span class="o">//</span><span class="n">Permitted</span> <span class="nb">range</span>
+    <span class="n">nPermittedRange</span>    <span class="p">:</span>    <span class="n">DWORD</span><span class="p">;</span> <span class="o">//</span><span class="n">Permitted</span> <span class="nb">range</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
     <span class="o">//</span><span class="n">Holding</span> <span class="n">register</span> <span class="k">for</span> <span class="n">permitted</span> <span class="n">ranges</span>
-    <span class="n">nPermittedRangeHolding</span>    <span class="p">:</span>    <span class="n">WORD</span><span class="p">;</span>
+    <span class="n">nPermittedRangeHolding</span>    <span class="p">:</span>    <span class="n">DWORD</span><span class="p">;</span>
     <span class="o">//</span><span class="n">For</span> <span class="n">loop</span> <span class="n">counter</span>
     <span class="n">nIndex</span>    <span class="p">:</span>    <span class="n">INT</span><span class="p">;</span>
     <span class="o">//</span> <span class="n">Lower</span> <span class="n">boundary</span> <span class="k">for</span> <span class="nb">range</span> <span class="n">check</span>
@@ -1620,7 +1992,7 @@ END_TYPE
 
 <span class="n">FOR</span> <span class="n">nIndex</span> <span class="o">:=</span> <span class="mi">0</span> <span class="n">TO</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">g_cBoundaries</span> <span class="n">DO</span>
 
-    <span class="n">F_eVWithinSpec</span> <span class="n">S</span><span class="o">=</span> <span class="n">nPermittedRangeHolding</span><span class="o">.</span><span class="mi">0</span> <span class="n">AND</span><span class="p">(</span>
+    <span class="n">F_eVWithinSpec</span> <span class="n">S</span><span class="o">=</span> <span class="n">nPermittedRangeHolding</span><span class="mf">.0</span> <span class="n">AND</span><span class="p">(</span>
         <span class="p">(</span><span class="n">reV</span> <span class="o">&lt;=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">])</span> <span class="n">AND</span>
         <span class="p">(</span><span class="n">reV</span> <span class="o">&gt;=</span> <span class="n">rPreviousBoundary</span><span class="p">)</span> <span class="p">);</span>
 
@@ -1629,6 +2001,22 @@ END_TYPE
     <span class="n">rPreviousBoundary</span> <span class="o">:=</span> <span class="n">Boundaries</span><span class="p">[</span><span class="n">nIndex</span><span class="p">];</span>
     <span class="n">nPermittedRangeHolding</span> <span class="o">:=</span> <span class="n">SHR</span><span class="p">(</span><span class="n">nPermittedRangeHolding</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 <span class="n">END_FOR</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-inittestbp">
+<h2>F_InitTestBP<a class="headerlink" href="#f-inittestbp" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Establishes</span> <span class="n">a</span> <span class="n">BP</span> <span class="nb">set</span> <span class="k">for</span> <span class="n">testing</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">Specifically</span> <span class="n">this</span> <span class="n">means</span> <span class="n">a</span> <span class="n">BP</span> <span class="n">that</span> <span class="n">has</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">status</span> <span class="n">bits</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">an</span> <span class="n">OK</span> <span class="n">state</span>
+<span class="n">FUNCTION</span> <span class="n">F_InitTestBP</span> <span class="p">:</span> <span class="n">ST_BeamParams</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">BP</span> <span class="p">:</span> <span class="n">ST_BeamParams</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
 
 <span class="n">END_FUNCTION</span>
 </pre></div>
@@ -1664,6 +2052,7 @@ END_TYPE
 <h2>F_SafeBPCompare<a class="headerlink" href="#f-safebpcompare" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span><span class="n">Compares</span> <span class="n">BeamParam1</span> <span class="n">to</span> <span class="n">BeamParam2</span><span class="p">:</span> <span class="k">if</span> <span class="n">the</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">BeamParam1</span> <span class="n">are</span> <span class="n">more</span> <span class="n">conservative</span> <span class="n">than</span> <span class="n">BeamParam2</span>
 <span class="n">the</span> <span class="n">result</span> <span class="n">will</span> <span class="n">be</span> <span class="n">true</span><span class="o">.</span> <span class="o">*</span><span class="p">)</span>
+<span class="o">//</span> <span class="n">Does</span> <span class="ow">not</span> <span class="n">consider</span> <span class="n">status</span><span class="o">.</span> <span class="n">Status</span> <span class="n">must</span> <span class="n">be</span> <span class="n">evaluated</span> <span class="n">elsewhere</span><span class="o">.</span>
 <span class="n">FUNCTION</span> <span class="n">F_SafeBPCompare</span> <span class="p">:</span> <span class="n">BOOL</span>
 <span class="n">VAR_INPUT</span>
     <span class="n">BeamParam1</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span><span class="p">;</span> <span class="o">//</span><span class="n">Must</span> <span class="n">be</span> <span class="n">more</span> <span class="n">conservative</span> <span class="n">than</span> <span class="mi">2</span>
@@ -1682,14 +2071,19 @@ END_TYPE
     <span class="n">idx</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
     <span class="n">xAuxAttOK</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
     <span class="n">xAuxAprtOK</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+
+    <span class="n">Att1</span> <span class="p">:</span> <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">ST_PMPS_Attenuator</span><span class="p">;</span>
+    <span class="n">Att2</span> <span class="p">:</span> <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">ST_PMPS_Attenuator</span><span class="p">;</span>
+
 <span class="n">END_VAR</span>
-<span class="n">xAttOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">nTran</span> <span class="o">&lt;=</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">nTran</span><span class="p">;</span>
-<span class="n">xPPmjOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">&lt;=</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">fPP_mJ</span><span class="p">;</span>
+<span class="n">xAttOK</span> <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">nTran</span> <span class="o">&lt;=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">BeamParam2</span><span class="o">.</span><span class="n">nTran</span> <span class="o">*</span><span class="p">(</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="o">+</span><span class="n">PMPS_PARAM</span><span class="o">.</span><span class="n">TRANS_MARGIN</span><span class="p">))</span><span class="o">/</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span> <span class="p">);</span>
 <span class="n">xEvOK</span> <span class="o">:=</span> <span class="p">(</span><span class="n">BeamParam1</span><span class="o">.</span><span class="n">neVRange</span> <span class="n">AND</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">neVRange</span><span class="p">)</span> <span class="o">=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">neVRange</span><span class="p">;</span>
 <span class="n">xRateOK</span>    <span class="o">:=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">nRate</span> <span class="o">&lt;=</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">nRate</span><span class="p">;</span>
 
 <span class="n">FOR</span> <span class="n">idx</span><span class="o">:=</span><span class="mi">1</span> <span class="n">to</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">AUX_ATTENUATORS</span> <span class="n">DO</span>
-    <span class="n">xAuxAttOK</span> <span class="n">R</span><span class="o">=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">astAttenuators</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">nTran</span> <span class="o">&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">astAttenuators</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">nTran</span><span class="p">;</span>
+    <span class="n">Att1</span> <span class="n">REF</span><span class="o">=</span> <span class="n">BeamParam1</span><span class="o">.</span><span class="n">astAttenuators</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+    <span class="n">Att2</span> <span class="n">REF</span><span class="o">=</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">astAttenuators</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+    <span class="n">xAuxAttOK</span> <span class="n">R</span><span class="o">=</span> <span class="p">(</span> <span class="n">Att1</span><span class="o">.</span><span class="n">nTran</span> <span class="o">&gt;</span> <span class="n">MIN</span><span class="p">(</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">,</span> <span class="p">(</span> <span class="p">(</span><span class="n">Att2</span><span class="o">.</span><span class="n">nTran</span> <span class="o">*</span><span class="p">(</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="o">+</span><span class="n">PMPS_PARAM</span><span class="o">.</span><span class="n">TRANS_MARGIN</span><span class="p">))</span><span class="o">/</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span> <span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
 <span class="n">END_FOR</span>
 
 <span class="n">FOR</span> <span class="n">idx</span><span class="o">:=</span><span class="mi">1</span> <span class="n">to</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_APERTURES</span> <span class="n">DO</span>
@@ -1697,7 +2091,7 @@ END_TYPE
     <span class="n">BeamParam1</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">Width</span> <span class="o">&gt;</span> <span class="n">BeamParam2</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">Width</span><span class="p">;</span>
 <span class="n">END_FOR</span>
 
-<span class="n">F_SafeBPCompare</span> <span class="o">:=</span> <span class="n">xAttOK</span> <span class="n">AND</span> <span class="n">xPPmjOK</span> <span class="n">AND</span> <span class="n">xEvOK</span> <span class="n">AND</span> <span class="n">xRateOK</span> <span class="n">AND</span> <span class="n">xAuxAprtOK</span> <span class="n">AND</span> <span class="n">xAuxAttOK</span><span class="p">;</span>
+<span class="n">F_SafeBPCompare</span> <span class="o">:=</span> <span class="n">xAttOK</span> <span class="n">AND</span> <span class="n">xEvOK</span> <span class="n">AND</span> <span class="n">xRateOK</span> <span class="n">AND</span> <span class="n">xAuxAprtOK</span> <span class="n">AND</span> <span class="n">xAuxAttOK</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION</span>
 </pre></div>
@@ -1731,9 +2125,8 @@ END_TYPE
 <h2>F_SetBeamParams<a class="headerlink" href="#f-setbeamparams" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION</span> <span class="n">F_SetBeamParams</span> <span class="p">:</span> <span class="n">ST_BeamParams</span>
 <span class="n">VAR_INPUT</span>
-    <span class="n">nTran</span>    <span class="p">:</span>    <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">fPP_mJ</span><span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">neVRange</span>    <span class="p">:</span>    <span class="n">WORD</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nTran</span>    <span class="p">:</span>    <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">neVRange</span>    <span class="p">:</span>    <span class="n">DWORD</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="n">nRate</span>    <span class="p">:</span>    <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="n">astAuxAtt</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">AUX_ATTENUATORS</span><span class="p">]</span> <span class="n">OF</span> <span class="n">ST_PMPS_Attenuator</span><span class="p">;</span>
 <span class="n">END_VAR</span>
@@ -1741,13 +2134,29 @@ END_TYPE
     <span class="n">BeamParams</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span><span class="p">;</span>
 
 <span class="n">END_VAR</span>
-<span class="n">BeamParams</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">LIMIT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nTran</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span>
+<span class="n">BeamParams</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">LIMIT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nTran</span><span class="p">,</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">);</span>
 <span class="n">BeamParams</span><span class="o">.</span><span class="n">astAttenuators</span> <span class="o">:=</span> <span class="n">astAuxAtt</span><span class="p">;</span>
-<span class="n">BeamParams</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="n">LIMIT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fPP_mJ</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
 <span class="n">BeamParams</span><span class="o">.</span><span class="n">neVRange</span> <span class="o">:=</span> <span class="n">neVRange</span><span class="p">;</span>
 <span class="n">BeamParams</span><span class="o">.</span><span class="n">nRate</span>    <span class="o">:=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">nRate</span><span class="p">,</span><span class="mi">1000000</span><span class="p">);</span>
 
 <span class="n">F_SetBeamParams</span>    <span class="o">:=</span> <span class="n">BeamParams</span><span class="p">;</span>
+
+<span class="n">END_FUNCTION</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f-setgoodattstatus">
+<h2>F_SetGoodAttStatus<a class="headerlink" href="#f-setgoodattstatus" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="n">Use</span> <span class="k">for</span> <span class="n">testing</span> <span class="n">purposes</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">status</span> <span class="n">to</span> <span class="n">a</span> <span class="n">good</span> <span class="n">state</span>
+<span class="n">FUNCTION</span> <span class="n">F_SetGoodAttStatus</span> <span class="p">:</span> <span class="n">UINT</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">xStatus</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">xStatus</span><span class="mf">.0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">xStatus</span><span class="mf">.3</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">xStatus</span><span class="mf">.4</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION</span>
 </pre></div>
@@ -2036,7 +2445,7 @@ END_IF
 
 IF i_RequestedBP.nCohortInt &gt; nRequestedCohort OR rtToggle.Q THEN
     Arbiter.RemoveRequest(RequestingSystemID);
-    Arbiter.AddRequest(RequestingSystemID, RequestedBP);
+    Arbiter.AddRequest(RequestingSystemID, RequestedBP,sName);
     nRequestedCohort := i_RequestedBP.nCohortInt;
 END_IF
 
@@ -2341,24 +2750,23 @@ END_FUNCTION_BLOCK
         <span class="p">(</span><span class="o">*</span>  <span class="n">Requested</span> <span class="n">pre</span><span class="o">-</span><span class="n">optic</span> <span class="n">attenuation</span> <span class="o">%</span>  <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: ReqBP:Transmission</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
-            <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="o">%</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">HOPR</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">LOPR</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">field</span><span class="p">:</span> <span class="n">PREC</span> <span class="mi">2</span><span class="p">;</span>
         <span class="s1">&#39;}</span>
-        <span class="n">nTran</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="mi">100</span><span class="p">;</span>
+        <span class="n">nTran</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">;</span>
         <span class="p">(</span><span class="o">*</span> <span class="n">Pulse</span><span class="o">-</span><span class="n">rate</span> <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: ReqBP:Rate</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
             <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">Hz</span>
         <span class="s1">&#39;}</span>
         <span class="n">nRate</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span>
-        <span class="p">(</span><span class="o">*</span> <span class="n">Per</span> <span class="n">pulse</span> <span class="nb">max</span> <span class="n">energy</span> <span class="p">(</span><span class="n">mJ</span><span class="p">)</span> <span class="o">*</span><span class="p">)</span>
-            <span class="o">//</span> <span class="n">non</span><span class="o">-</span><span class="n">op</span>
-        <span class="n">fPP_mJ</span> <span class="p">:</span> <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">20</span><span class="p">;</span>
         <span class="p">(</span><span class="o">*</span> <span class="n">Photon</span> <span class="n">energy</span> <span class="n">ranges</span> <span class="o">*</span><span class="p">)</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: ReqBP:PhotonEnergyRanges</span>
             <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
             <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">eV</span><span class="s1">&#39;}</span>
         <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;displaymode&#39;</span> <span class="o">:=</span> <span class="s1">&#39;binary&#39;</span><span class="p">}</span>
-        <span class="n">neVRange</span> <span class="p">:</span> <span class="n">WORD</span> <span class="o">:=</span> <span class="mi">65535</span><span class="p">;</span>
+        <span class="n">neVRange</span> <span class="p">:</span> <span class="n">DWORD</span> <span class="o">:=</span> <span class="mi">4294967295</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
 <span class="n">END_VAR</span>
@@ -2381,7 +2789,6 @@ END_FUNCTION_BLOCK
 <span class="n">EpicsReqBP</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">nTran</span><span class="p">;</span>
 <span class="n">EpicsReqBP</span><span class="o">.</span><span class="n">neVRange</span> <span class="o">:=</span> <span class="n">neVRange</span><span class="p">;</span>
 <span class="n">EpicsReqBP</span><span class="o">.</span><span class="n">nRate</span> <span class="o">:=</span> <span class="n">nRate</span><span class="p">;</span>
-<span class="n">EpicsReqBP</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="n">fPP_mJ</span><span class="p">;</span>
 
 <span class="n">rtApply</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bApply</span><span class="p">);</span>
 <span class="n">IF</span> <span class="n">rtApply</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
@@ -2477,7 +2884,7 @@ END_FUNCTION_BLOCK
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;TcLinkTo&#39;</span> <span class="o">:=</span> <span class="s1">&#39;[1] := TIIB[PMPS_Premp]^Channel 9^Output;</span>
                               <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">:=</span> <span class="n">TIIB</span><span class="p">[</span><span class="n">PMPS_Premp</span><span class="p">]</span><span class="o">^</span><span class="n">Channel</span> <span class="mi">10</span><span class="o">^</span><span class="n">Output</span><span class="p">;</span>
                               <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">:=</span> <span class="n">TIIB</span><span class="p">[</span><span class="n">PMPS_Premp</span><span class="p">]</span><span class="o">^</span><span class="n">Channel</span> <span class="mi">11</span><span class="o">^</span><span class="n">Output</span><span class="p">;</span><span class="s1">&#39;}</span>
-    <span class="n">q_CLTS_ASSERTION_LINES</span>    <span class="n">AT</span>    <span class="o">%</span><span class="n">Q</span><span class="o">*</span>    <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1.</span><span class="o">.</span><span class="mi">3</span><span class="p">]</span> <span class="n">OF</span>    <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">q_CLTS_ASSERTION_LINES</span>    <span class="n">AT</span>    <span class="o">%</span><span class="n">Q</span><span class="o">*</span>    <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">1..3</span><span class="p">]</span> <span class="n">OF</span>    <span class="n">BOOL</span><span class="p">;</span>
 
 
 
@@ -2490,9 +2897,9 @@ END_FUNCTION_BLOCK
 <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">:=</span> <span class="n">BP</span><span class="o">.</span><span class="n">nRate</span> <span class="o">&gt;=</span> <span class="mi">120</span><span class="p">;</span>
 
 
-<span class="n">epicsBitMap</span><span class="o">.</span><span class="mi">0</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-<span class="n">epicsBitMap</span><span class="o">.</span><span class="mi">1</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-<span class="n">epicsBitMap</span><span class="o">.</span><span class="mi">2</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="n">epicsBitMap</span><span class="mf">.0</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">epicsBitMap</span><span class="mf">.1</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">epicsBitMap</span><span class="mf">.2</span> <span class="o">:=</span> <span class="n">q_CLTS_ASSERTION_LINES</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
@@ -3583,7 +3990,7 @@ END_FUNCTION_BLOCK
     <span class="n">iq_stMachineParams</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
-    <span class="n">nTargetTran</span><span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+    <span class="n">nTargetTran</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
     <span class="n">tonTranTimer</span>    <span class="p">:</span>    <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span>
         <span class="n">PT</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#2S</span>
         <span class="p">);</span>
@@ -3605,6 +4012,7 @@ END_FUNCTION_BLOCK
 <span class="n">END_IF</span>
 
 <span class="o">//</span><span class="n">Pulse</span> <span class="n">Energy</span>
+<span class="p">(</span><span class="o">*</span>
 <span class="n">IF</span> <span class="n">xEnablePE</span> <span class="n">THEN</span>
     <span class="n">IF</span> <span class="n">i_stAssertedParams</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">&lt;&gt;</span> <span class="n">fTargetPP_mJ</span> <span class="n">THEN</span>
         <span class="n">tonPPETimer</span><span class="p">(</span><span class="n">IN</span><span class="o">:=</span><span class="n">FALSE</span><span class="p">);</span>
@@ -3615,7 +4023,7 @@ END_FUNCTION_BLOCK
         <span class="n">iq_stMachineParams</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="n">fTargetPP_mJ</span><span class="p">;</span>
     <span class="n">END_IF</span>
 <span class="n">END_IF</span>
-
+<span class="o">*</span><span class="p">)</span>
 <span class="o">//</span><span class="n">Rate</span>
 <span class="n">IF</span> <span class="n">xEnableRate</span> <span class="n">THEN</span>
     <span class="n">IF</span> <span class="n">i_xFault</span> <span class="n">THEN</span>
@@ -3641,8 +4049,8 @@ END_FUNCTION_BLOCK
     <span class="n">BP</span> <span class="p">:</span> <span class="n">ST_BeamParams</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
-    <span class="n">nCurrentPhotonEnergyBitmask</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
-    <span class="n">nTargetPhotonEnergyBitmask</span> <span class="p">:</span> <span class="n">UINT</span><span class="p">;</span>
+    <span class="n">nCurrentPhotonEnergyBitmask</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
+    <span class="n">nTargetPhotonEnergyBitmask</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="o">//</span><span class="n">Update</span> <span class="n">BP</span>
 <span class="n">nCurrentPhotonEnergyBitmask</span> <span class="o">:=</span> <span class="n">F_eVRangeCalculator</span><span class="p">(</span><span class="n">Undulator</span><span class="o">.</span><span class="n">rCurrentPhotonEnergy</span><span class="p">,</span> <span class="n">nCurrentPhotonEnergyBitmask</span><span class="p">);</span>
@@ -3702,7 +4110,7 @@ END_FUNCTION_BLOCK
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Portions</span> <span class="n">of</span> <span class="n">beam</span> <span class="n">eV</span> <span class="ow">not</span> <span class="n">permitted</span>
         <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">eV</span><span class="o">-</span><span class="n">bitmask</span>
     <span class="s1">&#39;}</span>
-    <span class="n">evResidual</span> <span class="p">:</span> <span class="n">WORD</span><span class="p">;</span>
+    <span class="n">evResidual</span> <span class="p">:</span> <span class="n">DWORD</span><span class="p">;</span>
 
     <span class="n">fbLog</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span>
         <span class="n">eSubSystem</span> <span class="o">:=</span> <span class="n">E_Subsystem</span><span class="o">.</span><span class="n">MPS</span><span class="p">,</span>
@@ -3719,7 +4127,7 @@ END_FUNCTION_BLOCK
     <span class="n">sPath</span>    <span class="p">:</span>    <span class="n">T_MaxString</span><span class="p">;</span>
 
     <span class="n">fbStr</span> <span class="p">:</span> <span class="n">FB_FormatString</span> <span class="o">:=</span> <span class="p">(</span>
-        <span class="n">sOut</span> <span class="o">:=</span> <span class="s1">&#39;Non-zero photon energy residual: %16b; Req: %16b; Act: %16b&#39;</span><span class="p">);</span>
+        <span class="n">sOut</span> <span class="o">:=</span> <span class="s1">&#39;Non-zero photon energy residual: %32b; Req: %32b; Act: %32b&#39;</span><span class="p">);</span>
 <span class="n">END_VAR</span>
 <span class="n">IF</span> <span class="n">bInit</span> <span class="n">THEN</span>
     <span class="n">fbGetHN</span><span class="p">(</span><span class="n">bExecute</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">);</span>
@@ -3736,9 +4144,9 @@ END_FUNCTION_BLOCK
         <span class="n">sPath</span><span class="p">,</span>
         <span class="n">PMPS_CODES</span><span class="o">.</span><span class="n">PEW_FAULT</span><span class="p">);</span>
 
-    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg1</span> <span class="o">:=</span> <span class="n">F_WORD</span><span class="p">(</span><span class="n">evResidual</span><span class="p">);</span>
-    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg2</span> <span class="o">:=</span> <span class="n">F_WORD</span><span class="p">(</span><span class="n">i_stCurrentBeamParams</span><span class="o">.</span><span class="n">neVRange</span><span class="p">);</span>
-    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg3</span> <span class="o">:=</span> <span class="n">F_WORD</span><span class="p">(</span><span class="n">i_stRequestedBeamParams</span><span class="o">.</span><span class="n">neVRange</span><span class="p">);</span>
+    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg1</span> <span class="o">:=</span> <span class="n">F_DWORD</span><span class="p">(</span><span class="n">evResidual</span><span class="p">);</span>
+    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg2</span> <span class="o">:=</span> <span class="n">F_DWORD</span><span class="p">(</span><span class="n">i_stCurrentBeamParams</span><span class="o">.</span><span class="n">neVRange</span><span class="p">);</span>
+    <span class="n">fbStr</span><span class="o">.</span><span class="n">arg3</span> <span class="o">:=</span> <span class="n">F_DWORD</span><span class="p">(</span><span class="n">i_stRequestedBeamParams</span><span class="o">.</span><span class="n">neVRange</span><span class="p">);</span>
 
     <span class="n">fbStr</span><span class="p">();</span>
 
@@ -3892,7 +4300,7 @@ END_FUNCTION_BLOCK
     <span class="n">stAttenuator</span>    <span class="p">:</span>    <span class="n">ST_BinarySolidAttenuator</span><span class="p">;</span>
     <span class="n">nSearchStart</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
     <span class="n">nArrayLength</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
-    <span class="n">axNewBladeStates</span>    <span class="p">:</span>    <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0.</span><span class="o">.</span><span class="mi">9</span><span class="p">]</span>    <span class="n">OF</span>    <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">axNewBladeStates</span>    <span class="p">:</span>    <span class="n">ARRAY</span> <span class="p">[</span><span class="mf">0..9</span><span class="p">]</span>    <span class="n">OF</span>    <span class="n">BOOL</span><span class="p">;</span>
     <span class="n">nTryIndex</span><span class="p">:</span> <span class="n">INT</span><span class="p">;</span>
     <span class="n">rCurrentAccumulatedAttenuation</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
     <span class="n">rTryFilter</span><span class="p">:</span> <span class="n">REAL</span><span class="p">;</span>
@@ -3972,7 +4380,7 @@ END_FUNCTION_BLOCK
 <span class="n">q_StopperIN_Relay</span> <span class="o">:=</span> <span class="n">i_StopperInLS</span><span class="p">;</span>
 
 <span class="o">//</span> <span class="n">Update</span> <span class="n">current</span> <span class="n">beam</span> <span class="n">parameters</span>
-<span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">Stopper</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_StopperInLS</span><span class="p">;</span>
+<span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">[</span><span class="n">Stopper</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_StopperInLS</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
@@ -4507,8 +4915,8 @@ END_FUNCTION_BLOCK
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
 
-    <span class="n">VetoDevice_IN</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
-    <span class="n">VetoDevice_OUT</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_STOPPERS</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
+    <span class="n">VetoDevice_IN</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
+    <span class="n">VetoDevice_OUT</span> <span class="p">:</span> <span class="n">UINT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span><span class="p">;</span> <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="n">state</span> <span class="n">array</span> <span class="n">index</span>
 
     <span class="n">VetoDeviceName</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;instance-path&#39;</span><span class="p">}</span>
@@ -4550,8 +4958,8 @@ END_FUNCTION_BLOCK
 
 <span class="o">//</span> <span class="n">Update</span> <span class="n">current</span> <span class="n">beam</span> <span class="n">parameters</span>
 <span class="o">/////////////////////////////////////</span>
-    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">VetoDevice_IN</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bIn</span><span class="p">;</span>
-    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">[</span><span class="n">VetoDevice_OUT</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bOut</span><span class="p">;</span>
+    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">[</span><span class="n">VetoDevice_IN</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bIn</span><span class="p">;</span>
+    <span class="n">stCurrentBP</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">[</span><span class="n">VetoDevice_OUT</span><span class="p">]</span> <span class="o">:=</span> <span class="n">i_bOut</span><span class="p">;</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
@@ -4605,9 +5013,8 @@ END_FUNCTION_BLOCK
     <span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">:=</span> <span class="n">IO_TO_APT</span><span class="p">(</span><span class="n">IO</span><span class="o">.</span><span class="n">astApertures</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
 <span class="n">END_FOR</span>
 
-<span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">aStoppers</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">aStoppers</span><span class="p">;</span>
+<span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">aVetoDevices</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">aVetoDevices</span><span class="p">;</span>
 <span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">nTran</span><span class="p">;</span>
-<span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">fPP_mJ</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">fPP_mJ</span><span class="p">;</span>
 <span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">nCohortInt</span> <span class="o">:=</span> <span class="n">ULINT_TO_UDINT</span><span class="p">(</span><span class="n">IO</span><span class="o">.</span><span class="n">nCohortInt</span><span class="p">);</span>
 <span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">neVRange</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">neVRange</span><span class="p">;</span>
 <span class="n">IO_TO_BP</span><span class="o">.</span><span class="n">nRate</span> <span class="o">:=</span> <span class="n">IO</span><span class="o">.</span><span class="n">nRate</span><span class="p">;</span>
@@ -4627,8 +5034,8 @@ END_FUNCTION_BLOCK
     <span class="n">fbDiffBPTest</span>    <span class="p">:</span>    <span class="n">FB_DiffBP_Test</span><span class="p">;</span>
     <span class="n">fbBPTMTest</span>    <span class="p">:</span>    <span class="n">FB_BPTM_Test</span><span class="p">;</span>
     <span class="n">fbSafeBPCompareTest</span>    <span class="p">:</span>    <span class="n">FB_SafeBPCompare_Test</span><span class="p">;</span>
-    <span class="o">//</span><span class="n">fbevWithinSpecTest</span>    <span class="p">:</span>    <span class="n">FB_evWithinSpec_Test</span><span class="p">;</span>
-    <span class="o">//</span><span class="n">fbPEWTest</span>    <span class="p">:</span>    <span class="n">FB_PhotonEnergyWatcher_Test</span><span class="p">;</span>
+    <span class="o">////</span><span class="n">fbevWithinSpecTest</span>    <span class="p">:</span>    <span class="n">FB_evWithinSpec_Test</span><span class="p">;</span>
+    <span class="o">////</span><span class="n">fbPEWTest</span>    <span class="p">:</span>    <span class="n">FB_PhotonEnergyWatcher_Test</span><span class="p">;</span>
     <span class="n">fbFFTest</span>    <span class="p">:</span>    <span class="n">FB_FastFault_Test</span><span class="p">;</span>
     <span class="n">fbArbiterTest</span>    <span class="p">:</span>    <span class="n">FB_Arbiter_Test</span><span class="p">;</span>
     <span class="n">fbVetoArbiterTest</span> <span class="p">:</span> <span class="n">FB_VetoArbiter_Test</span><span class="p">;</span>
