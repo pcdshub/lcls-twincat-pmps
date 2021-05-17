@@ -7,8 +7,14 @@ STRUCT
         pv: Duration
         io: o
      '}
-    Duration : UDINT; // UDINT to be compatible with ESS module.
+    //Duration : DINT; // DINT to be compatible with EPICS 
     
+	{attribute 'pytmc' := '
+        pv: Expiration
+        io: o
+     '}
+    Expiration : DINT; // DINT to be compatible with EPICS 
+	
     {attribute 'pytmc' := '
         pv: Activate
         io: o
@@ -25,13 +31,13 @@ STRUCT
         pv: ElapsedTime
         io: i
      '}
-    ElapsedTime : UDINT; // UDINT to be compatible with ESS module.
+    ElapsedTime : DINT; // DINT to be compatible with EPICS 
     
     {attribute 'pytmc' := '
         pv: RemainingTime
         io: i
      '}
-    RemainingTime : UDINT; // UDINT to be compatible with ESS module.
+    RemainingTime : DINT; // DINT to be compatible with EPICS 
     
     {attribute 'pytmc' := '
         pv: Active

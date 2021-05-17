@@ -45,7 +45,7 @@ VAR
     bApply : BOOL;
 
     nControlDeviceID : DWORD;
-
+	sControlDeviceName: STRING:= 'BP Cntrl Dev';
     rtApply : R_TRIG;
 
 END_VAR
@@ -59,7 +59,7 @@ EpicsReqBP.nRate := nRate;
 rtApply(CLK:=bApply);
 IF rtApply.Q THEN
     Arbiter.RemoveRequest(nControlDeviceID);
-    Arbiter.AddRequest(nControlDeviceID, EpicsReqBP);
+    Arbiter.AddRequest(nControlDeviceID, EpicsReqBP, sControlDeviceName);
     bApply := FALSE;
 END_IF]]></ST>
     </Implementation>

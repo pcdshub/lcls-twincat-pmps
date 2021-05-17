@@ -437,7 +437,6 @@
   </ItemGroup>
   <ItemGroup>
     <SubObject Include="FB_BPControlDevice.FB_init" />
-    <SubObject Include="FB_BPTM_Test.BPTMBasicFunction" />
     <SubObject Include="FB_BPTM_Test.InterruptedTransition">
       <ExcludeFromBuild>true</ExcludeFromBuild>
     </SubObject>
