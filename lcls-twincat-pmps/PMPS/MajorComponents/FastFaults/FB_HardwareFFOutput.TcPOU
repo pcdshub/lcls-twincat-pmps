@@ -121,7 +121,11 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         IF FF.Ovrd.Deactivate THEN 
             FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
         ELSIF FF.Ovrd.Activate THEN
-            FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration,MaxTime))- SystemTime_TO_DT(fbtime.systemTime);
+			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbtime.systemTime)));
+			IF (FF.Ovrd.StartDT > FF.Ovrd.Expiration) THEN
+           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration,MaxTime))- SystemTime_TO_DT(fbtime.systemTime);
+			END_IF
+			
         END_IF
         
         // UDINT conversions for ESS module compatibility.
