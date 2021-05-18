@@ -8,7 +8,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-
+	fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
 END_VAR
 VAR CONSTANT
     OvrdTime : TIME := T#2s;
@@ -96,22 +96,31 @@ END_VAR
 VAR_INST
     fbFF    :    FB_FastFault :=(
         i_xAutoReset := TRUE);
-    fbFFO    :    FB_HardwareFFOutput := (
+    fbFFO    :    FB_HardwareFFOutput := (i_sNetID:='',
         bAutoReset := TRUE);
     rFF : REFERENCE TO ST_FF;
     
     FirstPass : BOOL := TRUE;
+	fbTimePass : BOOL := TRUE;
     OvrdActvTstDone : BOOL := FALSE;
     
     TestsDone : BOOL := FALSE;
+	Now: DATE_AND_TIME;
+	Expiration : DINT; 
+	OvdTime : TIME ;
+	Expire: TIMESTRUCT;
+//seconds:ULINT;
+	specificLocalTimeToFileTime : FB_TzSpecificLocalTimeToFileTime;
+    fileTime: T_FILETIME;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFVetoAndNextFault');
+fbTime();
 
 // I noticed something weird going on with the PEWatcher on the L line. It was faulted, and the fast fault
 // was not tripping off beam. It had been previously overridden so I was wondering why it wasn't causing a trip.
 
-IF FirstPass THEN
+IF  FirstPass  THEN
 
     fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
         i_xOK := TRUE);
@@ -132,16 +141,26 @@ IF FirstPass THEN
     AssertFalse(fbFFO.q_xFastFaultOut,
         'Fast fault did not trip the beam');
 
-
     rFF REF= fbFFO.astFF[fbFF.RegistrationIdx];
+	
+FirstPass := FALSE; 
+    
+END_IF
 
-    
-    // Overrides set from EPICS
-    WRITE_PROTECTED_TIME(ADR(rFF.Ovrd.Duration), OvrdTime);
+
+IF fbTime.bValid AND fbTimePass  THEN
+	
+	Now := SystemTime_TO_DT(fbTime.systemTime);
+	Expire:= fbTime.systemTime;
+	Expire.wSecond:= Expire.wSecond+5;
+	specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := , out => fileTime);
+	Expiration := TO_DINT((SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600);;
+
+    WRITE_PROTECTED_DINT(ADR(rFF.Ovrd.Expiration), Expiration );
+	WRITE_PROTECTED_TIME(ADR(rFF.Ovrd.Timer.PT), OvrdTime );
     WRITE_PROTECTED_BOOL(ADR(rFF.Ovrd.Activate), TRUE);
-    
-    
-    FirstPass := FALSE;
+	
+	fbTimePass:=FALSE;
     
 END_IF
 
@@ -195,57 +214,5 @@ AssertEquals_STRING(fbFF.sPath, fbFFO.astFF[fbFF.RegistrationIdx].Info.sPath,
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_FastFault_Test">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-      <LineId Id="16" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FastFault_Test.FFCombinedFunctionality">
-      <LineId Id="3" Count="56" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FastFault_Test.FFOvrdAndNextFault">
-      <LineId Id="3" Count="0" />
-      <LineId Id="69" Count="2" />
-      <LineId Id="4" Count="0" />
-      <LineId Id="6" Count="3" />
-      <LineId Id="11" Count="7" />
-      <LineId Id="21" Count="7" />
-      <LineId Id="93" Count="1" />
-      <LineId Id="107" Count="0" />
-      <LineId Id="106" Count="0" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="145" Count="0" />
-      <LineId Id="111" Count="1" />
-      <LineId Id="140" Count="1" />
-      <LineId Id="108" Count="0" />
-      <LineId Id="115" Count="0" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="149" Count="3" />
-      <LineId Id="147" Count="1" />
-      <LineId Id="121" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="88" Count="1" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="127" Count="1" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="124" Count="0" />
-      <LineId Id="123" Count="0" />
-      <LineId Id="129" Count="0" />
-      <LineId Id="143" Count="1" />
-      <LineId Id="132" Count="1" />
-      <LineId Id="131" Count="0" />
-      <LineId Id="130" Count="0" />
-      <LineId Id="135" Count="0" />
-      <LineId Id="83" Count="0" />
-      <LineId Id="75" Count="0" />
-      <LineId Id="116" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FastFault_Test.FFRegistration">
-      <LineId Id="3" Count="6" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

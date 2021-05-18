@@ -19,6 +19,7 @@ VAR_INPUT
      '}
     i_xVeto    :    BOOL;
     bAutoReset : BOOL := FALSE; // Set true for the FFO to automatically permit beam again after all fast faults are cleared
+	i_sNetID : T_AmsNetID:=''; //Set to the Arbiter AmsNetID to be used for the synchronisation. An empty string means the system will sue local time
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -27,6 +28,7 @@ VAR_OUTPUT
         field: DESC Hardware Output Status
      '}
     q_xFastFaultOut    AT %Q*    :    BOOL;
+	q_xValidSyncTime : BOOL;// system time bValid output True when sync is successful
 END_VAR
 VAR_IN_OUT
 
@@ -61,7 +63,9 @@ VAR
 	
 	IdxOK: BOOL;
     
-    
+    fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
+	fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
+	fbGetTimeZone: FB_GetTimeZoneInformation;
     fbJson : FB_JsonSaxWriter;
     pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
@@ -100,9 +104,20 @@ END_VAR
 VAR
     FF : REFERENCE TO ST_FF;
     EvalIdx: DINT := 1;
-END_VAR]]></Declaration>
+END_VAR
+VAR CONSTANT
+	MaxTime : DINT:= 4294080;(*49.7 days*)
+END_VAR
+]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[//Get local System Time
+fbTime(sNetID:=i_sNetID);
+//Get Time Zone
+fbGetTimeZone(sNetID:=i_sNetID,bExecute:=TRUE,tTimeout:=T#10S);
+//change local time to UTC to be compatible with unix time epoch widget
+fbTime_to_UTC(in:= fbTime.systemTime , tzInfo:=fbGetTimeZone.tzInfo);
+q_xValidSyncTime := fbTime.bValid AND NOT fbGetTimeZone.bError;
+
 FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
     
     FF REF= astFF[EvalIdx];
@@ -113,8 +128,12 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         // Veto timer
         IF FF.Ovrd.Deactivate THEN 
             FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
-        ELSE
-            FF.Ovrd.Timer.PT := UDINT_TO_TIME(FF.Ovrd.Duration);
+        ELSIF FF.Ovrd.Activate THEN
+			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
+			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
+				FF.Ovrd.Expiration:= LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ); 
+           		FF.Ovrd.Timer.PT := TO_DT(FF.Ovrd.Expiration)- SystemTime_TO_DT(fbTime_to_UTC.out);
+			END_IF	
         END_IF
         
         // UDINT conversions for ESS module compatibility.
@@ -130,14 +149,15 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
             
         FF.Ovrd.ElapsedTime := TIME_TO_UDINT(FF.Ovrd.Timer.ET);
         
-        FF.Ovrd.RemainingTime := MAX(0, FF.Ovrd.Duration - FF.Ovrd.ElapsedTime);
+        FF.Ovrd.RemainingTime := MAX(0, TO_DINT(FF.Ovrd.Timer.PT) - FF.Ovrd.ElapsedTime);
         
         // Clear pushbuttons
         FF.Ovrd.Activate := FALSE;
         FF.Ovrd.Deactivate := FALSE;
         
     END_IF    
-END_FOR]]></ST>
+END_FOR
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="EvaluateVetos" Id="{a668f2a3-9954-4aeb-ad93-2aac65e64302}">
