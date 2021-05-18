@@ -131,7 +131,8 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         ELSIF FF.Ovrd.Activate THEN
 			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
 			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
-           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ))- SystemTime_TO_DT(fbTime_to_UTC.out);
+				FF.Ovrd.Expiration:= LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ); 
+           		FF.Ovrd.Timer.PT := TO_DT(FF.Ovrd.Expiration)- SystemTime_TO_DT(fbTime_to_UTC.out);
 			END_IF	
         END_IF
         
