@@ -106,7 +106,7 @@ VAR
     EvalIdx: DINT := 1;
 END_VAR
 VAR CONSTANT
-	MaxTime : DINT:= 2147483647;
+	MaxTime : DINT:= 4294080;(*49.7 days*)
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -131,7 +131,7 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         ELSIF FF.Ovrd.Activate THEN
 			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
 			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
-           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+4294080(*49.7 days*) ))- SystemTime_TO_DT(fbTime_to_UTC.out);
+           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ))- SystemTime_TO_DT(fbTime_to_UTC.out);
 			END_IF	
         END_IF
         
