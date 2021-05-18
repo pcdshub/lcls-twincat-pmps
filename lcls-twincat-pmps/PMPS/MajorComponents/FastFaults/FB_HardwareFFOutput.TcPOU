@@ -63,7 +63,8 @@ VAR
 	IdxOK: BOOL;
     
     fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
-	
+	fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
+	fbGetTimeZone: FB_GetTimeZoneInformation;
     fbJson : FB_JsonSaxWriter;
     pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
@@ -108,8 +109,13 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[//Get local System Time
 fbTime(sNetID:=i_sNetID);
+//Get Time Zone
+fbGetTimeZone(sNetID:=i_sNetID,bExecute:=TRUE,tTimeout:=T#10S);
+//change local time to UTC to be compatible with unix time epoch widget
+fbTime_to_UTC(in:= fbTime.systemTime , tzInfo:=fbGetTimeZone.tzInfo);
+
 FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
     
     FF REF= astFF[EvalIdx];
@@ -121,11 +127,10 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         IF FF.Ovrd.Deactivate THEN 
             FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
         ELSIF FF.Ovrd.Activate THEN
-			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbtime.systemTime)));
-			IF (FF.Ovrd.StartDT > FF.Ovrd.Expiration) THEN
-           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration,MaxTime))- SystemTime_TO_DT(fbtime.systemTime);
-			END_IF
-			
+			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
+			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
+           		FF.Ovrd.Timer.PT := TO_DT(LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+4294080(*49.7 days*) ))- SystemTime_TO_DT(fbTime_to_UTC.out);
+			END_IF	
         END_IF
         
         // UDINT conversions for ESS module compatibility.
