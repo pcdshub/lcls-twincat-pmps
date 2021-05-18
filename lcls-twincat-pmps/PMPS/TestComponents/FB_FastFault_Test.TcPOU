@@ -96,7 +96,7 @@ END_VAR
 VAR_INST
     fbFF    :    FB_FastFault :=(
         i_xAutoReset := TRUE);
-    fbFFO    :    FB_HardwareFFOutput := (
+    fbFFO    :    FB_HardwareFFOutput := (i_sNetID:='',
         bAutoReset := TRUE);
     rFF : REFERENCE TO ST_FF;
     
