@@ -42,6 +42,12 @@
     <Compile Include="DUTs\InternalDUT\K_Apertures.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\InternalDUT\K_Attenuators.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\InternalDUT\L_Attenuators.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\K_Stopper.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
