@@ -8,7 +8,7 @@ TYPE K_Attenuators :
 	AT1K0 := 1, // FEE Gas Attenuator
     AT1K4 := 2, // TMO Solid Attenuator in the FEE
 	AT1K2 := 3, // RIX Solid Attenuator
-	AT2k2 := 4, // RIX Solid Attenuator
+	AT2K2 := 4, // RIX Solid Attenuator
 	AT1K3 := 5 // TXI Solid Attenuator
 );
 END_TYPE
@@ -33,7 +33,7 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"AT2k2"</v>
+              <v n="TextID">"AT2K2"</v>
               <v n="TextDefault">"4"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
