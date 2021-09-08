@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="K_Stopper" Id="{7f88e826-563e-4958-8882-316683d3fe67}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE K_Stopper :
+(
+	ST3K4 := 1, // TMO PPS stopper in
+    ST1K2 := 2, // RIX PPS stopper in
+    MR1K1_IN := 3, // Monochromator focus optic vertical state
+    MR1K1_OUT := 4, // Monochromator focus optic vertical state
+    MR1K3_IN := 5, // TXI Offset Mirror horizontal state
+    MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
+    DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

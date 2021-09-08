@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="K_Attenuators" Id="{afadd1ab-122b-4228-a41e-8f784ac8729d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE K_Attenuators :
+(
+	AT1K0 := 1, // FEE Gas Attenuator
+    AT1K4 := 2, // TMO Solid Attenuator in the FEE
+	AT1K2 := 3, // RIX Solid Attenuator
+	AT2K2 := 4, // RIX Solid Attenuator
+	AT1K3 := 5 // TXI Solid Attenuator
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
