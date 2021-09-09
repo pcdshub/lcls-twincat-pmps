@@ -22,6 +22,10 @@ E_ArbDosTestStates
     END_TYPE
 
 
+Related:
+    * `E_ArbDosTestStates`_
+
+
 E_BPTMState
 ^^^^^^^^^^^
 
@@ -43,6 +47,8 @@ E_BPTMState
         Error := 9000
     );
     END_TYPE
+
+
 
 
 E_BPTMTestStates
@@ -70,6 +76,8 @@ E_BPTMTestStates
     END_TYPE
 
 
+
+
 E_MPSBeamRates
 ^^^^^^^^^^^^^^
 
@@ -93,6 +101,123 @@ E_MPSBeamRates
         MPSRateBurstInvalid       := 14
     )UINT;
     END_TYPE
+
+
+
+
+K_Apertures
+^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Apertures :
+    (
+    	SL1K0 := 1,
+        SL2K0 := 2
+    );
+    END_TYPE
+
+
+
+
+K_Attenuators
+^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Attenuators :
+    (
+    	AT1K0 := 1, // FEE Gas Attenuator
+        AT1K4 := 2, // TMO Solid Attenuator in the FEE
+    	AT1K2 := 3, // RIX Solid Attenuator
+    	AT2K2 := 4, // RIX Solid Attenuator
+    	AT1K3 := 5 // TXI Solid Attenuator
+    );
+    END_TYPE
+
+
+
+
+K_Stopper
+^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Stopper :
+    (
+    	ST3K4 := 1, // TMO PPS stopper in
+        ST1K2 := 2, // RIX PPS stopper in
+        MR1K1_IN := 3, // Monochromator focus optic vertical state
+        MR1K1_OUT := 4, // Monochromator focus optic vertical state
+        MR1K3_IN := 5, // TXI Offset Mirror horizontal state
+        MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
+        DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+    );
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+L_Apertures
+^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Apertures :
+    (
+    	SL1L0 := 1,
+        SL2L0 := 2
+    );
+    END_TYPE
+
+
+
+
+L_Attenuators
+^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Attenuators :
+    (
+    	AT1L0 := 1, // FEE Combo Gas/Solid Attenuator
+        AT2L0 := 2 // FEE Solid Attenuator
+    );
+    END_TYPE
+
+
+
+
+L_Stopper
+^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Stopper :
+    (
+    	ST1L0 := 1, // ST1
+        ST1L1 := 2, // ST2
+        DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+    );
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
 
 
 PMPS_CODES
@@ -122,6 +247,8 @@ PMPS_CODES
     END_TYPE
 
 
+
+
 ST_AttenuatorStatus
 ^^^^^^^^^^^^^^^^^^^
 
@@ -138,6 +265,8 @@ ST_AttenuatorStatus
         Include : BIT;      //6  Consider this device status
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_BeamParams
@@ -196,6 +325,12 @@ ST_BeamParams
     END_TYPE
 
 
+Related:
+    * `PMPS_GVL`_
+    * `ST_PMPS_Aperture`_
+    * `ST_PMPS_Attenuator`_
+
+
 ST_BP_ArbInternal
 ^^^^^^^^^^^^^^^^^
 
@@ -217,6 +352,10 @@ ST_BP_ArbInternal
     	sDevName: STRING;
     END_STRUCT
     END_TYPE
+
+
+Related:
+    * `ST_BeamParams`_
 
 
 ST_Device
@@ -267,6 +406,11 @@ ST_Device
     END_TYPE
 
 
+Related:
+    * `FB_LinearDeviceStateTable`_
+    * `ST_DeviceState`_
+
+
 ST_DeviceState
 ^^^^^^^^^^^^^^
 
@@ -293,6 +437,10 @@ ST_DeviceState
     END_TYPE
 
 
+Related:
+    * `ST_BeamParams`_
+
+
 ST_DeviceStateExt
 ^^^^^^^^^^^^^^^^^
 
@@ -306,6 +454,10 @@ ST_DeviceStateExt
     	xValid	:	BOOL := FALSE;
     END_STRUCT
     END_TYPE
+
+
+Related:
+    * `ST_DeviceState`_
 
 
 ST_DeviceStateTable
@@ -328,6 +480,8 @@ ST_DeviceStateTable
     	rPhotonEnergy: REAL;
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_FF
@@ -374,6 +528,11 @@ ST_FF
         
     END_STRUCT
     END_TYPE
+
+
+Related:
+    * `ST_FFInfo`_
+    * `ST_FFOverride`_
 
 
 ST_FFInfo
@@ -430,6 +589,8 @@ ST_FFInfo
     END_TYPE
 
 
+
+
 ST_FFOverride
 ^^^^^^^^^^^^^
 
@@ -441,8 +602,20 @@ ST_FFOverride
             pv: Duration
             io: o
          '}
-        Duration : UDINT; // UDINT to be compatible with ESS module.
+        Duration : DINT; // DINT to be compatible with EPICS 
         
+    	{attribute 'pytmc' := '
+            pv: Expiration
+            io: o
+         '}
+        Expiration : DINT; // DINT to be compatible with EPICS 
+    	
+    	{attribute 'pytmc' := '
+            pv: StartDT
+            io: o
+         '}
+        StartDT : DINT; // DINT to be compatible with EPICS 
+    	
         {attribute 'pytmc' := '
             pv: Activate
             io: o
@@ -459,13 +632,13 @@ ST_FFOverride
             pv: ElapsedTime
             io: i
          '}
-        ElapsedTime : UDINT; // UDINT to be compatible with ESS module.
+        ElapsedTime : DINT; // DINT to be compatible with EPICS 
         
         {attribute 'pytmc' := '
             pv: RemainingTime
             io: i
          '}
-        RemainingTime : UDINT; // UDINT to be compatible with ESS module.
+        RemainingTime : DINT; // DINT to be compatible with EPICS 
         
         {attribute 'pytmc' := '
             pv: Active
@@ -481,6 +654,8 @@ ST_FFOverride
         tOvrdExpiring  : F_TRIG;
     END_STRUCT
     END_TYPE
+
+
 
 
 ST_PMPS_Aperture
@@ -508,6 +683,8 @@ ST_PMPS_Aperture
     END_TYPE
 
 
+
+
 ST_PMPS_Attenuator
 ^^^^^^^^^^^^^^^^^^
 
@@ -530,6 +707,8 @@ ST_PMPS_Attenuator
     END_TYPE
 
 
+
+
 T_HashTableEntry
 ^^^^^^^^^^^^^^^^
 
@@ -545,6 +724,8 @@ T_HashTableEntry
         value : PVOID := 0;
     END_STRUCT
     END_TYPE
+
+
 
 
 GVLs
@@ -760,6 +941,12 @@ PMPS_GVL
     END_VAR
 
 
+Related:
+    * `PE_Ranges`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
 PMPS_PARAM
 ^^^^^^^^^^
 
@@ -773,6 +960,8 @@ PMPS_PARAM
     END_VAR
 
 
+
+
 PMPS_TOOLS
 ^^^^^^^^^^
 
@@ -782,6 +971,8 @@ PMPS_TOOLS
     VAR_GLOBAL
     	fbJson : FB_JsonSaxWriter;
     END_VAR
+
+
 
 
 POUs
@@ -806,6 +997,10 @@ APT_TO_IO
     END_FUNCTION
 
 
+Related:
+    * `ST_PMPS_Aperture`_
+
+
 ATT_TO_IO
 ^^^^^^^^^
 
@@ -821,6 +1016,10 @@ ATT_TO_IO
     ATT_TO_IO.xAttOK := Att.xAttOK;
 
     END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Attenuator`_
 
 
 BeamParameterTransitionManager
@@ -1170,6 +1369,19 @@ BeamParameterTransitionManager
     END_ACTION
 
 
+Related:
+    * `E_BPTMState`_
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `F_SafeBPCompare`_
+    * `F_SafeBPCompare0Rate`_
+    * `F_ValidReqID`_
+    * `PMPS_CODES`_
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
+
+
 BP_TO_IO
 ^^^^^^^^
 
@@ -1201,6 +1413,13 @@ BP_TO_IO
     END_FUNCTION
 
 
+Related:
+    * `APT_TO_IO`_
+    * `ATT_TO_IO`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 CheckBounds
 ^^^^^^^^^^^
 
@@ -1225,6 +1444,8 @@ CheckBounds
     END_FUNCTION
 
 
+
+
 CheckDivDInt
 ^^^^^^^^^^^^
 
@@ -1245,6 +1466,8 @@ CheckDivDInt
     {flow}
 
     END_FUNCTION
+
+
 
 
 CheckDivLInt
@@ -1269,6 +1492,8 @@ CheckDivLInt
     END_FUNCTION
 
 
+
+
 CheckDivLReal
 ^^^^^^^^^^^^^
 
@@ -1291,6 +1516,8 @@ CheckDivLReal
     END_FUNCTION
 
 
+
+
 CheckDivReal
 ^^^^^^^^^^^^
 
@@ -1311,6 +1538,8 @@ CheckDivReal
     {flow}
 
     END_FUNCTION
+
+
 
 
 CheckLRangeSigned
@@ -1338,6 +1567,8 @@ CheckLRangeSigned
     END_FUNCTION
 
 
+
+
 CheckLRangeUnsigned
 ^^^^^^^^^^^^^^^^^^^
 
@@ -1362,6 +1593,8 @@ CheckLRangeUnsigned
     END_FUNCTION
 
 
+
+
 CheckPointer
 ^^^^^^^^^^^^
 
@@ -1380,6 +1613,8 @@ CheckPointer
     {flow}
 
     END_FUNCTION
+
+
 
 
 CheckRangeSigned
@@ -1406,6 +1641,8 @@ CheckRangeSigned
     END_FUNCTION
 
 
+
+
 CheckRangeUnsigned
 ^^^^^^^^^^^^^^^^^^
 
@@ -1428,6 +1665,8 @@ CheckRangeUnsigned
     {flow}
 
     END_FUNCTION
+
+
 
 
 F_AttenuatorOK
@@ -1466,6 +1705,8 @@ F_AttenuatorOK
     END_FUNCTION
 
 
+
+
 F_BPWithID
 ^^^^^^^^^^
 
@@ -1483,6 +1724,11 @@ F_BPWithID
     F_BPWithID.nId := ID;
 
     END_FUNCTION
+
+
+Related:
+    * `ST_BP_ArbInternal`_
+    * `ST_BeamParams`_
 
 
 F_CalculatePhotonEnergy
@@ -1548,6 +1794,8 @@ F_CalculatePhotonEnergy
     END_FUNCTION
 
 
+
+
 F_DeviceState_To_DeviceStateExt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1568,6 +1816,11 @@ F_DeviceState_To_DeviceStateExt
     F_DeviceState_To_DeviceStateExt.xValid := xValid;
 
     END_FUNCTION
+
+
+Related:
+    * `ST_DeviceState`_
+    * `ST_DeviceStateExt`_
 
 
 F_DifferentBeamParams
@@ -1621,6 +1874,11 @@ F_DifferentBeamParams
     END_FUNCTION
 
 
+Related:
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 F_eVExcludeRange
 ^^^^^^^^^^^^^^^^
 
@@ -1644,6 +1902,11 @@ F_eVExcludeRange
     F_eVExcludeRange := F_eVIncludeRange(0, fLower) OR F_eVIncludeRange(fUpper, PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries]);
 
     END_FUNCTION
+
+
+Related:
+    * `F_eVIncludeRange`_
+    * `PMPS_GVL`_
 
 
 F_eVIncludeRange
@@ -1682,6 +1945,10 @@ F_eVIncludeRange
     F_eVIncludeRange := nBitmask;
 
     END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
 
 
 F_eVRangeCalculator
@@ -1766,6 +2033,10 @@ F_eVRangeCalculator
     END_FUNCTION
 
 
+Related:
+    * `PMPS_GVL`_
+
+
 F_eVWithinSpec
 ^^^^^^^^^^^^^^
 
@@ -1819,6 +2090,10 @@ F_eVWithinSpec
     END_FUNCTION
 
 
+Related:
+    * `PMPS_GVL`_
+
+
 F_InitTestBP
 ^^^^^^^^^^^^
 
@@ -1835,6 +2110,10 @@ F_InitTestBP
 
 
     END_FUNCTION
+
+
+Related:
+    * `ST_BeamParams`_
 
 
 F_PMPS_JSON
@@ -1863,6 +2142,10 @@ F_PMPS_JSON
     PMPS_TOOLS.fbJson.ResetDocument();
 
     END_FUNCTION
+
+
+Related:
+    * `PMPS_TOOLS`_
 
 
 F_SafeBPCompare
@@ -1916,6 +2199,13 @@ F_SafeBPCompare
     END_FUNCTION
 
 
+Related:
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
 F_SafeBPCompare0Rate
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -1940,6 +2230,11 @@ F_SafeBPCompare0Rate
     F_SafeBPCompare0Rate := xZeroRate OR F_SafeBPCompare(BeamParam1, BeamParam2);
 
     END_FUNCTION
+
+
+Related:
+    * `F_SafeBPCompare`_
+    * `ST_BeamParams`_
 
 
 F_SetBeamParams
@@ -1968,6 +2263,12 @@ F_SetBeamParams
     END_FUNCTION
 
 
+Related:
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
 F_SetGoodAttStatus
 ^^^^^^^^^^^^^^^^^^
 
@@ -1985,6 +2286,8 @@ F_SetGoodAttStatus
     xStatus.4 := 1;
 
     END_FUNCTION
+
+
 
 
 F_SetStateParams
@@ -2021,6 +2324,12 @@ F_SetStateParams
     END_FUNCTION
 
 
+Related:
+    * `FB_LinearDeviceStateTable`_
+    * `ST_BeamParams`_
+    * `ST_DeviceState`_
+
+
 F_ValidReqID
 ^^^^^^^^^^^^
 
@@ -2035,6 +2344,10 @@ F_ValidReqID
     F_ValidReqID := ReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND ReqID <> 0;
 
     END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
 
 
 FB_AcceleratorLinks
@@ -2072,6 +2385,8 @@ FB_AcceleratorLinks
     fbSxuElectronEnergy();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_Arbiter
@@ -2163,6 +2478,11 @@ FB_Arbiter
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_BeamParamAssertionPool`_
+    * `ST_BeamParams`_
+
+
 FB_Arbiter_Test
 ^^^^^^^^^^^^^^^
 
@@ -2184,6 +2504,8 @@ FB_Arbiter_Test
     DoS();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_ArbiterToSubSys_IO
@@ -2315,6 +2637,17 @@ FB_ArbiterToSubSys_IO
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `BP_TO_IO`_
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `FB_SubSysToArbiter_IO`_
+    * `IO_TO_BP`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 FB_ArbToSubsys_Test
 ^^^^^^^^^^^^^^^^^^^
 
@@ -2331,6 +2664,8 @@ FB_ArbToSubsys_Test
     BasicFunction();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_AttenuatorSimulator
@@ -2363,6 +2698,11 @@ FB_AttenuatorSimulator
     END_IF
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `ST_BeamParams`_
 
 
 FB_BeamClassOutputs
@@ -2458,6 +2798,10 @@ FB_BeamClassOutputs
     epicsBitmap.7 := q_BC_ASSERTION_LINES[8];
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_BeamParams`_
 
 
 FB_BeamParamAssertionPool
@@ -2581,6 +2925,13 @@ FB_BeamParamAssertionPool
     END_ACTION
 
 
+Related:
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BP_ArbInternal`_
+    * `T_HashTableEntry`_
+
+
 FB_BPControlDevice
 ^^^^^^^^^^^^^^^^^^
 
@@ -2630,7 +2981,7 @@ FB_BPControlDevice
         bApply : BOOL;
 
         nControlDeviceID : DWORD;
-
+    	sControlDeviceName: STRING:= 'BP Cntrl Dev';
         rtApply : R_TRIG;
 
     END_VAR
@@ -2641,11 +2992,17 @@ FB_BPControlDevice
     rtApply(CLK:=bApply);
     IF rtApply.Q THEN
         Arbiter.RemoveRequest(nControlDeviceID);
-        Arbiter.AddRequest(nControlDeviceID, EpicsReqBP);
+        Arbiter.AddRequest(nControlDeviceID, EpicsReqBP, sControlDeviceName);
         bApply := FALSE;
     END_IF
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
 
 
 FB_BPRequestor
@@ -2686,6 +3043,13 @@ FB_BPRequestor
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_Arbiter`_
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 FB_BPTM_Test
 ^^^^^^^^^^^^
 
@@ -2708,6 +3072,10 @@ FB_BPTM_Test
     FullArbError();
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `PMPS_PARAM`_
 
 
 FB_CTLS_Outputs
@@ -2758,6 +3126,10 @@ FB_CTLS_Outputs
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `ST_BeamParams`_
+
+
 FB_DiffBP_Test
 ^^^^^^^^^^^^^^
 
@@ -2775,6 +3147,8 @@ FB_DiffBP_Test
     BPDiff();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_DummyArbIO
@@ -2826,6 +3200,12 @@ FB_DummyArbIO
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 FB_DummyHA
 ^^^^^^^^^^
 
@@ -2842,6 +3222,8 @@ FB_DummyHA
 
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_evRangeCalculator_Test
@@ -2863,6 +3245,8 @@ FB_evRangeCalculator_Test
     BasicFunction();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_eVSimulator
@@ -2907,6 +3291,8 @@ FB_eVSimulator
     END_FUNCTION_BLOCK
 
 
+
+
 FB_eVWithinSpec_Test
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -2923,6 +3309,8 @@ FB_eVWithinSpec_Test
     evWithinRangeChecks();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_FastFault
@@ -3007,6 +3395,11 @@ FB_FastFault
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_HardwareFFOutput`_
+    * `ST_FFInfo`_
+
+
 FB_FastFault_Test
 ^^^^^^^^^^^^^^^^^
 
@@ -3019,7 +3412,7 @@ FB_FastFault_Test
     VAR_OUTPUT
     END_VAR
     VAR
-
+    	fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
     END_VAR
     VAR CONSTANT
         OvrdTime : TIME := T#2s;
@@ -3029,6 +3422,8 @@ FB_FastFault_Test
     FFOvrdAndNextFault();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_HardwareFFOutput
@@ -3054,6 +3449,7 @@ FB_HardwareFFOutput
          '}
         i_xVeto    :    BOOL;
         bAutoReset : BOOL := FALSE; // Set true for the FFO to automatically permit beam again after all fast faults are cleared
+    	i_sNetID : T_AmsNetID:=''; //Set to the Arbiter AmsNetID to be used for the synchronisation. An empty string means the system will sue local time
     END_VAR
     VAR_OUTPUT
         {attribute 'pytmc' := '
@@ -3062,6 +3458,7 @@ FB_HardwareFFOutput
             field: DESC Hardware Output Status
          '}
         q_xFastFaultOut    AT %Q*    :    BOOL;
+    	q_xValidSyncTime : BOOL;// system time bValid output True when sync is successful
     END_VAR
     VAR_IN_OUT
 
@@ -3096,7 +3493,9 @@ FB_HardwareFFOutput
     	
     	IdxOK: BOOL;
         
-        
+        fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
+    	fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
+    	fbGetTimeZone: FB_GetTimeZoneInformation;
         fbJson : FB_JsonSaxWriter;
         pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
         fbLogger : FB_LogMessage := (
@@ -3135,6 +3534,11 @@ FB_HardwareFFOutput
     EvaluateOutput();
     //ExecuteLogging();
     END_ACTION
+
+
+Related:
+    * `PMPS_PARAM`_
+    * `ST_FF`_
 
 
 FB_Hgvpu
@@ -3367,6 +3771,10 @@ FB_Hgvpu
     END_ACTION
 
 
+Related:
+    * `FB_UndulatorSegment`_
+
+
 FB_KPhotonEnergy
 ^^^^^^^^^^^^^^^^
 
@@ -3420,6 +3828,11 @@ FB_KPhotonEnergy
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_PhotonEnergy`_
+    * `FB_SXU`_
+
+
 FB_KStopper
 ^^^^^^^^^^^
 
@@ -3439,6 +3852,10 @@ FB_KStopper
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_StopperWatcher`_
+
+
 FB_KVetoDevice
 ^^^^^^^^^^^^^^
 
@@ -3454,6 +3871,10 @@ FB_KVetoDevice
     SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_VetoDevice`_
 
 
 FB_LinearDeviceStateTable
@@ -3563,6 +3984,12 @@ FB_LinearDeviceStateTable
     fbTable.A_Reset( hTable := hTable, bOk=>bOk );
     nCount := 0;
     END_ACTION
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_DeviceState`_
+    * `T_HashTableEntry`_
 
 
 FB_LinearGovernor
@@ -3788,6 +4215,17 @@ FB_LinearGovernor
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `F_DeviceState_To_DeviceStateExt`_
+    * `F_SafeBPCompare`_
+    * `ST_BeamParams`_
+    * `ST_Device`_
+    * `ST_DeviceStateExt`_
+
+
 FB_LPhotonEnergy
 ^^^^^^^^^^^^^^^^
 
@@ -3841,6 +4279,11 @@ FB_LPhotonEnergy
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_Hgvpu`_
+    * `FB_PhotonEnergy`_
+
+
 FB_LStopper
 ^^^^^^^^^^^
 
@@ -3858,6 +4301,10 @@ FB_LStopper
     SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_StopperWatcher`_
 
 
 FB_MachineSimulator
@@ -3926,6 +4373,10 @@ FB_MachineSimulator
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `ST_BeamParams`_
+
+
 FB_PhotonEnergy
 ^^^^^^^^^^^^^^^
 
@@ -3951,6 +4402,11 @@ FB_PhotonEnergy
     BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `F_eVRangeCalculator`_
+    * `ST_BeamParams`_
 
 
 FB_PhotonEnergyWatcher
@@ -4056,6 +4512,14 @@ FB_PhotonEnergyWatcher
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `F_PMPS_JSON`_
+    * `PMPS_CODES`_
+    * `ST_BeamParams`_
+
+
 FB_PhotonEnergyWatcher_Test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -4073,6 +4537,8 @@ FB_PhotonEnergyWatcher_Test
     PEWatcherBasicFunction();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_RateFromEPICS
@@ -4162,6 +4628,13 @@ FB_RateFromEPICS
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `E_MPSBeamRates`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `ST_BeamParams`_
+
+
 FB_SafeBPCompare_Test
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -4180,6 +4653,8 @@ FB_SafeBPCompare_Test
     BPComparisonCheck();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_SolidAttenuator
@@ -4225,6 +4700,10 @@ FB_SolidAttenuator
     END_REPEAT
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
 
 
 FB_StopperWatcher
@@ -4289,6 +4768,11 @@ FB_StopperWatcher
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `F_PMPS_JSON`_
+    * `ST_BeamParams`_
+
+
 FB_SubsysToArb_Test
 ^^^^^^^^^^^^^^^^^^^
 
@@ -4306,6 +4790,8 @@ FB_SubsysToArb_Test
     VetoFunction();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_SubSysToArbiter_IO
@@ -4381,6 +4867,15 @@ FB_SubSysToArbiter_IO
         );
 
     END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `FB_VetoArbiter`_
+    * `IO_TO_BP`_
+    * `PMPS_GVL`_
 
 
 FB_SXU
@@ -4606,6 +5101,10 @@ FB_SXU
     END_ACTION
 
 
+Related:
+    * `FB_UndulatorSegment`_
+
+
 FB_UndulatorSegment
 ^^^^^^^^^^^^^^^^^^^
 
@@ -4740,6 +5239,10 @@ FB_UndulatorSegment
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `F_CalculatePhotonEnergy`_
+
+
 FB_VetoArbiter
 ^^^^^^^^^^^^^^
 
@@ -4791,6 +5294,13 @@ FB_VetoArbiter
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 FB_VetoArbiter_Test
 ^^^^^^^^^^^^^^^^^^^
 
@@ -4811,6 +5321,8 @@ FB_VetoArbiter_Test
     VetoArbiter();
 
     END_FUNCTION_BLOCK
+
+
 
 
 FB_VetoDevice
@@ -4882,6 +5394,12 @@ FB_VetoDevice
     END_FUNCTION_BLOCK
 
 
+Related:
+    * `F_PMPS_JSON`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 IO_TO_APT
 ^^^^^^^^^
 
@@ -4900,6 +5418,10 @@ IO_TO_APT
     END_FUNCTION
 
 
+Related:
+    * `ST_PMPS_Aperture`_
+
+
 IO_TO_ATT
 ^^^^^^^^^
 
@@ -4915,6 +5437,10 @@ IO_TO_ATT
     IO_TO_ATT.xAttOK := IO.xAttOK;
 
     END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Attenuator`_
 
 
 IO_TO_BP
@@ -4948,6 +5474,13 @@ IO_TO_BP
     END_FUNCTION
 
 
+Related:
+    * `IO_TO_APT`_
+    * `IO_TO_ATT`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
 MAIN
 ^^^^
 
@@ -4974,6 +5507,20 @@ MAIN
     END_PROGRAM
 
 
+Related:
+    * `FB_ArbToSubsys_Test`_
+    * `FB_Arbiter_Test`_
+    * `FB_BPTM_Test`_
+    * `FB_DiffBP_Test`_
+    * `FB_FastFault_Test`_
+    * `FB_PhotonEnergyWatcher_Test`_
+    * `FB_SafeBPCompare_Test`_
+    * `FB_SubsysToArb_Test`_
+    * `FB_VetoArbiter_Test`_
+    * `FB_evRangeCalculator_Test`_
+    * `PE_Ranges`_
+
+
 PE_Ranges
 ^^^^^^^^^
 
@@ -4992,4 +5539,6 @@ PE_Ranges
 
 
     END_FUNCTION_BLOCK
+
+
 

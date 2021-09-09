@@ -2655,10 +2655,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:001:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[1].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:001:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[1].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:001:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[1].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:001:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[1].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:001:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[1].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:001:Reset
@@ -2769,10 +2793,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:002:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[2].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:002:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[2].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:002:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[2].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:002:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[2].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:002:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[2].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:002:Reset
@@ -2883,10 +2931,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:003:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[3].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:003:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[3].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:003:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[3].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:003:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[3].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:003:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[3].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:003:Reset
@@ -2997,10 +3069,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:004:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[4].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:004:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[4].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:004:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[4].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:004:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[4].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:004:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[4].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:004:Reset
@@ -3111,10 +3207,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:005:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[5].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:005:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[5].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:005:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[5].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:005:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[5].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:005:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[5].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:005:Reset
@@ -3225,10 +3345,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:006:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[6].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:006:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[6].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:006:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[6].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:006:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[6].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:006:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[6].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:006:Reset
@@ -3339,10 +3483,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:007:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[7].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:007:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[7].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:007:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[7].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:007:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[7].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:007:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[7].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:007:Reset
@@ -3453,10 +3621,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:008:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[8].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:008:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[8].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:008:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[8].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:008:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[8].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:008:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[8].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:008:Reset
@@ -3567,10 +3759,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:009:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[9].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:009:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[9].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:009:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[9].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:009:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[9].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:009:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[9].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:009:Reset
@@ -3681,10 +3897,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:010:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[10].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:010:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[10].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:010:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[10].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:010:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[10].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:010:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[10].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:010:Reset
@@ -3795,10 +4035,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:011:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[11].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:011:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[11].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:011:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[11].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:011:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[11].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:011:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[11].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:011:Reset
@@ -3909,10 +4173,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:012:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[12].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:012:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[12].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:012:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[12].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:012:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[12].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:012:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[12].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:012:Reset
@@ -4023,10 +4311,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:013:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[13].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:013:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[13].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:013:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[13].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:013:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[13].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:013:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[13].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:013:Reset
@@ -4137,10 +4449,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:014:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[14].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:014:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[14].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:014:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[14].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:014:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[14].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:014:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[14].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:014:Reset
@@ -4251,10 +4587,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:015:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[15].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:015:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[15].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:015:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[15].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:015:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[15].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:015:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[15].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:015:Reset
@@ -4365,10 +4725,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:016:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[16].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:016:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[16].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:016:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[16].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:016:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[16].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:016:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[16].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:016:Reset
@@ -4479,10 +4863,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:017:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[17].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:017:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[17].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:017:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[17].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:017:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[17].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:017:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[17].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:017:Reset
@@ -4593,10 +5001,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:018:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[18].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:018:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[18].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:018:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[18].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:018:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[18].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:018:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[18].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:018:Reset
@@ -4707,10 +5139,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:019:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[19].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:019:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[19].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:019:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[19].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:019:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[19].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:019:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[19].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:019:Reset
@@ -4821,10 +5277,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:020:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[20].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:020:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[20].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:020:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[20].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:020:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[20].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:020:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[20].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:020:Reset
@@ -4935,10 +5415,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:021:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[21].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:021:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[21].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:021:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[21].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:021:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[21].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:021:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[21].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:021:Reset
@@ -5049,10 +5553,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:022:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[22].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:022:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[22].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:022:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[22].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:022:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[22].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:022:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[22].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:022:Reset
@@ -5163,10 +5691,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:023:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[23].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:023:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[23].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:023:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[23].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:023:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[23].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:023:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[23].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:023:Reset
@@ -5277,10 +5829,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:024:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[24].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:024:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[24].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:024:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[24].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:024:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[24].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:024:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[24].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:024:Reset
@@ -5391,10 +5967,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:025:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[25].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:025:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[25].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:025:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[25].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:025:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[25].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:025:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[25].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:025:Reset
@@ -5505,10 +6105,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:026:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[26].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:026:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[26].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:026:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[26].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:026:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[26].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:026:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[26].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:026:Reset
@@ -5619,10 +6243,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:027:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[27].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:027:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[27].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:027:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[27].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:027:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[27].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:027:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[27].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:027:Reset
@@ -5733,10 +6381,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:028:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[28].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:028:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[28].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:028:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[28].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:028:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[28].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:028:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[28].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:028:Reset
@@ -5847,10 +6519,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:029:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[29].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:029:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[29].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:029:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[29].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:029:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[29].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:029:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[29].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:029:Reset
@@ -5961,10 +6657,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:030:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[30].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:030:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[30].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:030:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[30].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:030:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[30].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:030:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[30].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:030:Reset
@@ -6075,10 +6795,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:031:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[31].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:031:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[31].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:031:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[31].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:031:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[31].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:031:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[31].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:031:Reset
@@ -6189,10 +6933,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:032:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[32].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:032:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[32].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:032:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[32].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:032:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[32].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:032:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[32].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:032:Reset
@@ -6303,10 +7071,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:033:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[33].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:033:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[33].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:033:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[33].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:033:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[33].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:033:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[33].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:033:Reset
@@ -6417,10 +7209,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:034:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[34].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:034:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[34].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:034:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[34].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:034:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[34].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:034:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[34].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:034:Reset
@@ -6531,10 +7347,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:035:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[35].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:035:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[35].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:035:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[35].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:035:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[35].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:035:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[35].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:035:Reset
@@ -6645,10 +7485,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:036:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[36].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:036:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[36].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:036:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[36].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:036:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[36].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:036:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[36].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:036:Reset
@@ -6759,10 +7623,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:037:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[37].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:037:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[37].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:037:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[37].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:037:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[37].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:037:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[37].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:037:Reset
@@ -6873,10 +7761,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:038:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[38].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:038:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[38].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:038:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[38].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:038:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[38].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:038:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[38].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:038:Reset
@@ -6987,10 +7899,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:039:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[39].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:039:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[39].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:039:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[39].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:039:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[39].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:039:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[39].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:039:Reset
@@ -7101,10 +8037,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:040:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[40].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:040:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[40].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:040:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[40].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:040:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[40].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:040:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[40].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:040:Reset
@@ -7215,10 +8175,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:041:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[41].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:041:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[41].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:041:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[41].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:041:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[41].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:041:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[41].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:041:Reset
@@ -7329,10 +8313,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:042:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[42].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:042:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[42].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:042:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[42].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:042:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[42].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:042:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[42].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:042:Reset
@@ -7443,10 +8451,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:043:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[43].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:043:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[43].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:043:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[43].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:043:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[43].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:043:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[43].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:043:Reset
@@ -7557,10 +8589,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:044:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[44].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:044:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[44].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:044:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[44].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:044:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[44].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:044:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[44].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:044:Reset
@@ -7671,10 +8727,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:045:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[45].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:045:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[45].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:045:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[45].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:045:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[45].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:045:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[45].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:045:Reset
@@ -7785,10 +8865,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:046:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[46].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:046:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[46].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:046:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[46].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:046:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[46].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:046:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[46].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:046:Reset
@@ -7899,10 +9003,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:047:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[47].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:047:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[47].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:047:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[47].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:047:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[47].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:047:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[47].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:047:Reset
@@ -8013,10 +9141,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:048:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[48].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:048:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[48].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:048:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[48].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:048:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[48].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:048:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[48].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:048:Reset
@@ -8127,10 +9279,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:049:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[49].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:049:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[49].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:049:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[49].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:049:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[49].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:049:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[49].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:049:Reset
@@ -8241,10 +9417,34 @@ FB_HardwareFFOutput
       - | io: input
 
 
+    * - $(PREFIX):FF:050:Ovrd:Expiration
+      - longout
+      - $(SYMBOL).astFF[50].Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):FF:050:Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).astFF[50].Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):FF:050:Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).astFF[50].Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):FF:050:Ovrd:StartDT
+      - longout
+      - $(SYMBOL).astFF[50].Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):FF:050:Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).astFF[50].Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):FF:050:Reset
@@ -8611,10 +9811,34 @@ ST_FF
       - | io: input
 
 
+    * - $(PREFIX):Ovrd:Expiration
+      - longout
+      - $(SYMBOL).Ovrd.Expiration
+      - | io: output
+
+
+    * - $(PREFIX):Ovrd:Expiration_RBV
+      - longin
+      - $(SYMBOL).Ovrd.Expiration
+      - | io: output
+
+
     * - $(PREFIX):Ovrd:RemainingTime_RBV
       - longin
       - $(SYMBOL).Ovrd.RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):Ovrd:StartDT
+      - longout
+      - $(SYMBOL).Ovrd.StartDT
+      - | io: output
+
+
+    * - $(PREFIX):Ovrd:StartDT_RBV
+      - longin
+      - $(SYMBOL).Ovrd.StartDT
+      - | io: output
 
 
     * - $(PREFIX):Reset
@@ -8737,10 +9961,34 @@ ST_FFOverride
       - | io: input
 
 
+    * - $(PREFIX):Expiration
+      - longout
+      - $(SYMBOL).Expiration
+      - | io: output
+
+
+    * - $(PREFIX):Expiration_RBV
+      - longin
+      - $(SYMBOL).Expiration
+      - | io: output
+
+
     * - $(PREFIX):RemainingTime_RBV
       - longin
       - $(SYMBOL).RemainingTime
       - | io: input
+
+
+    * - $(PREFIX):StartDT
+      - longout
+      - $(SYMBOL).StartDT
+      - | io: output
+
+
+    * - $(PREFIX):StartDT_RBV
+      - longin
+      - $(SYMBOL).StartDT
+      - | io: output
 
 
   
@@ -8881,7 +10129,7 @@ T_HashTableEntry
       - | io: input
 
 
-                                                                  
+                                                                                   
 Database Records
 ----------------
 

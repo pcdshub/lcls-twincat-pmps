@@ -87,14 +87,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">lcls-twincat-pmps</span></p>
+              <p class="caption" role="heading"><span class="caption-text">lcls-twincat-pmps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_pragmas.html">Pragmas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_nc.html">NC Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_boxes.html">Boxes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_links.html">Links</a></li>
 </ul>
-<p class="caption"><span class="caption-text">PMPS</span></p>
+<p class="caption" role="heading"><span class="caption-text">PMPS</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_PMPS_summary.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lcls-twincat-pmps_PMPS_summary.html#pragmas">Pragmas</a></li>
@@ -107,6 +107,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#e-bptmstate">E_BPTMState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-bptmteststates">E_BPTMTestStates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#e-mpsbeamrates">E_MPSBeamRates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-apertures">K_Apertures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-attenuators">K_Attenuators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-stopper">K_Stopper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#l-apertures">L_Apertures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#l-attenuators">L_Attenuators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#l-stopper">L_Stopper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pmps-codes">PMPS_CODES</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-attenuatorstatus">ST_AttenuatorStatus</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></li>
@@ -296,6 +302,12 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#e-arbdosteststates">E_ArbDosTestStates</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="e-bptmstate">
 <h2>E_BPTMState<a class="headerlink" href="#e-bptmstate" title="Permalink to this headline">¶</a></h2>
@@ -363,6 +375,105 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="k-apertures">
+<h2>K_Apertures<a class="headerlink" href="#k-apertures" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">K_Apertures</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">SL1K0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">SL2K0</span> <span class="o">:=</span> <span class="mi">2</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="k-attenuators">
+<h2>K_Attenuators<a class="headerlink" href="#k-attenuators" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">K_Attenuators</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">AT1K0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span> <span class="n">FEE</span> <span class="n">Gas</span> <span class="n">Attenuator</span>
+    <span class="n">AT1K4</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span> <span class="n">TMO</span> <span class="n">Solid</span> <span class="n">Attenuator</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">FEE</span>
+    <span class="n">AT1K2</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">,</span> <span class="o">//</span> <span class="n">RIX</span> <span class="n">Solid</span> <span class="n">Attenuator</span>
+    <span class="n">AT2K2</span> <span class="o">:=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">//</span> <span class="n">RIX</span> <span class="n">Solid</span> <span class="n">Attenuator</span>
+    <span class="n">AT1K3</span> <span class="o">:=</span> <span class="mi">5</span> <span class="o">//</span> <span class="n">TXI</span> <span class="n">Solid</span> <span class="n">Attenuator</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="k-stopper">
+<h2>K_Stopper<a class="headerlink" href="#k-stopper" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">K_Stopper</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">ST3K4</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span> <span class="n">TMO</span> <span class="n">PPS</span> <span class="n">stopper</span> <span class="ow">in</span>
+    <span class="n">ST1K2</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span> <span class="n">RIX</span> <span class="n">PPS</span> <span class="n">stopper</span> <span class="ow">in</span>
+    <span class="n">MR1K1_IN</span> <span class="o">:=</span> <span class="mi">3</span><span class="p">,</span> <span class="o">//</span> <span class="n">Monochromator</span> <span class="n">focus</span> <span class="n">optic</span> <span class="n">vertical</span> <span class="n">state</span>
+    <span class="n">MR1K1_OUT</span> <span class="o">:=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">//</span> <span class="n">Monochromator</span> <span class="n">focus</span> <span class="n">optic</span> <span class="n">vertical</span> <span class="n">state</span>
+    <span class="n">MR1K3_IN</span> <span class="o">:=</span> <span class="mi">5</span><span class="p">,</span> <span class="o">//</span> <span class="n">TXI</span> <span class="n">Offset</span> <span class="n">Mirror</span> <span class="n">horizontal</span> <span class="n">state</span>
+    <span class="n">MR1K3_OUT</span> <span class="o">:=</span> <span class="mi">6</span><span class="p">,</span> <span class="o">//</span> <span class="n">TXI</span> <span class="n">Offset</span> <span class="n">Mirror</span> <span class="n">horizontal</span> <span class="n">state</span>
+    <span class="n">DEFAULT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span> <span class="o">//</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">USE</span> <span class="n">FOR</span> <span class="n">ANYTHING</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="l-apertures">
+<h2>L_Apertures<a class="headerlink" href="#l-apertures" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">L_Apertures</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">SL1L0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">SL2L0</span> <span class="o">:=</span> <span class="mi">2</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="l-attenuators">
+<h2>L_Attenuators<a class="headerlink" href="#l-attenuators" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">L_Attenuators</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">AT1L0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span> <span class="n">FEE</span> <span class="n">Combo</span> <span class="n">Gas</span><span class="o">/</span><span class="n">Solid</span> <span class="n">Attenuator</span>
+    <span class="n">AT2L0</span> <span class="o">:=</span> <span class="mi">2</span> <span class="o">//</span> <span class="n">FEE</span> <span class="n">Solid</span> <span class="n">Attenuator</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="l-stopper">
+<h2>L_Stopper<a class="headerlink" href="#l-stopper" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;qualified_only&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;strict&#39;</span><span class="p">}</span>
+<span class="n">TYPE</span> <span class="n">L_Stopper</span> <span class="p">:</span>
+<span class="p">(</span>
+    <span class="n">ST1L0</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">//</span> <span class="n">ST1</span>
+    <span class="n">ST1L1</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">,</span> <span class="o">//</span> <span class="n">ST2</span>
+    <span class="n">DEFAULT</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">MAX_VETO_DEVICES</span> <span class="o">//</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">USE</span> <span class="n">FOR</span> <span class="n">ANYTHING</span>
+<span class="p">);</span>
+<span class="n">END_TYPE</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="pmps-codes">
 <h2>PMPS_CODES<a class="headerlink" href="#pmps-codes" title="Permalink to this headline">¶</a></h2>
@@ -458,6 +569,14 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-pmps-aperture">ST_PMPS_Aperture</a></p></li>
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-bp-arbinternal">
 <h2>ST_BP_ArbInternal<a class="headerlink" href="#st-bp-arbinternal" title="Permalink to this headline">¶</a></h2>
@@ -479,6 +598,12 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-device">
 <h2>ST_Device<a class="headerlink" href="#st-device" title="Permalink to this headline">¶</a></h2>
@@ -525,6 +650,13 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-lineardevicestatetable">FB_LinearDeviceStateTable</a></p></li>
+<li><p><a class="reference internal" href="#st-devicestate">ST_DeviceState</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-devicestate">
 <h2>ST_DeviceState<a class="headerlink" href="#st-devicestate" title="Permalink to this headline">¶</a></h2>
@@ -549,6 +681,12 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-devicestateext">
 <h2>ST_DeviceStateExt<a class="headerlink" href="#st-devicestateext" title="Permalink to this headline">¶</a></h2>
@@ -562,6 +700,12 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-devicestate">ST_DeviceState</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-devicestatetable">
 <h2>ST_DeviceStateTable<a class="headerlink" href="#st-devicestatetable" title="Permalink to this headline">¶</a></h2>
@@ -626,6 +770,13 @@
 <span class="n">END_TYPE</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-ffinfo">ST_FFInfo</a></p></li>
+<li><p><a class="reference internal" href="#st-ffoverride">ST_FFOverride</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="st-ffinfo">
 <h2>ST_FFInfo<a class="headerlink" href="#st-ffinfo" title="Permalink to this headline">¶</a></h2>
@@ -687,7 +838,19 @@ END_TYPE
         <span class="n">pv</span><span class="p">:</span> <span class="n">Duration</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
      <span class="s1">&#39;}</span>
-    <span class="n">Duration</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">UDINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">ESS</span> <span class="n">module</span><span class="o">.</span>
+    <span class="n">Duration</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">DINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">EPICS</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Expiration</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
+     <span class="s1">&#39;}</span>
+    <span class="n">Expiration</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">DINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">EPICS</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">StartDT</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">o</span>
+     <span class="s1">&#39;}</span>
+    <span class="n">StartDT</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">DINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">EPICS</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">Activate</span>
@@ -705,13 +868,13 @@ END_TYPE
         <span class="n">pv</span><span class="p">:</span> <span class="n">ElapsedTime</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
      <span class="s1">&#39;}</span>
-    <span class="n">ElapsedTime</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">UDINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">ESS</span> <span class="n">module</span><span class="o">.</span>
+    <span class="n">ElapsedTime</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">DINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">EPICS</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">RemainingTime</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
      <span class="s1">&#39;}</span>
-    <span class="n">RemainingTime</span> <span class="p">:</span> <span class="n">UDINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">UDINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">ESS</span> <span class="n">module</span><span class="o">.</span>
+    <span class="n">RemainingTime</span> <span class="p">:</span> <span class="n">DINT</span><span class="p">;</span> <span class="o">//</span> <span class="n">DINT</span> <span class="n">to</span> <span class="n">be</span> <span class="n">compatible</span> <span class="k">with</span> <span class="n">EPICS</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">Active</span>
@@ -997,6 +1160,14 @@ END_TYPE
 <span class="n">END_VAR</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pe-ranges">PE_Ranges</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="pmps-param">
 <h2>PMPS_PARAM<a class="headerlink" href="#pmps-param" title="Permalink to this headline">¶</a></h2>
@@ -1036,6 +1207,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-pmps-aperture">ST_PMPS_Aperture</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="att-to-io">
 <h2>ATT_TO_IO<a class="headerlink" href="#att-to-io" title="Permalink to this headline">¶</a></h2>
@@ -1051,6 +1228,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="beamparametertransitionmanager">
 <h2>BeamParameterTransitionManager<a class="headerlink" href="#beamparametertransitionmanager" title="Permalink to this headline">¶</a></h2>
@@ -1396,6 +1579,21 @@ END_TYPE
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#e-bptmstate">E_BPTMState</a></p></li>
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#f-safebpcompare">F_SafeBPCompare</a></p></li>
+<li><p><a class="reference internal" href="#f-safebpcompare0rate">F_SafeBPCompare0Rate</a></p></li>
+<li><p><a class="reference internal" href="#f-validreqid">F_ValidReqID</a></p></li>
+<li><p><a class="reference internal" href="#pmps-codes">PMPS_CODES</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#pmps-param">PMPS_PARAM</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="bp-to-io">
 <h2>BP_TO_IO<a class="headerlink" href="#bp-to-io" title="Permalink to this headline">¶</a></h2>
@@ -1425,6 +1623,15 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#apt-to-io">APT_TO_IO</a></p></li>
+<li><p><a class="reference internal" href="#att-to-io">ATT_TO_IO</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="checkbounds">
 <h2>CheckBounds<a class="headerlink" href="#checkbounds" title="Permalink to this headline">¶</a></h2>
@@ -1685,6 +1892,13 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-bp-arbinternal">ST_BP_ArbInternal</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-calculatephotonenergy">
 <h2>F_CalculatePhotonEnergy<a class="headerlink" href="#f-calculatephotonenergy" title="Permalink to this headline">¶</a></h2>
@@ -1766,6 +1980,13 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-devicestate">ST_DeviceState</a></p></li>
+<li><p><a class="reference internal" href="#st-devicestateext">ST_DeviceStateExt</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-differentbeamparams">
 <h2>F_DifferentBeamParams<a class="headerlink" href="#f-differentbeamparams" title="Permalink to this headline">¶</a></h2>
@@ -1815,6 +2036,13 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-evexcluderange">
 <h2>F_eVExcludeRange<a class="headerlink" href="#f-evexcluderange" title="Permalink to this headline">¶</a></h2>
@@ -1838,6 +2066,13 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-evincluderange">F_eVIncludeRange</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-evincluderange">
 <h2>F_eVIncludeRange<a class="headerlink" href="#f-evincluderange" title="Permalink to this headline">¶</a></h2>
@@ -1874,6 +2109,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-evrangecalculator">
 <h2>F_eVRangeCalculator<a class="headerlink" href="#f-evrangecalculator" title="Permalink to this headline">¶</a></h2>
@@ -1954,6 +2195,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-evwithinspec">
 <h2>F_eVWithinSpec<a class="headerlink" href="#f-evwithinspec" title="Permalink to this headline">¶</a></h2>
@@ -2005,6 +2252,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-inittestbp">
 <h2>F_InitTestBP<a class="headerlink" href="#f-inittestbp" title="Permalink to this headline">¶</a></h2>
@@ -2021,6 +2274,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-pmps-json">
 <h2>F_PMPS_JSON<a class="headerlink" href="#f-pmps-json" title="Permalink to this headline">¶</a></h2>
@@ -2047,6 +2306,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-tools">PMPS_TOOLS</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-safebpcompare">
 <h2>F_SafeBPCompare<a class="headerlink" href="#f-safebpcompare" title="Permalink to this headline">¶</a></h2>
@@ -2096,6 +2361,15 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#pmps-param">PMPS_PARAM</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-safebpcompare0rate">
 <h2>F_SafeBPCompare0Rate<a class="headerlink" href="#f-safebpcompare0rate" title="Permalink to this headline">¶</a></h2>
@@ -2120,6 +2394,13 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-safebpcompare">F_SafeBPCompare</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-setbeamparams">
 <h2>F_SetBeamParams<a class="headerlink" href="#f-setbeamparams" title="Permalink to this headline">¶</a></h2>
@@ -2144,6 +2425,14 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-setgoodattstatus">
 <h2>F_SetGoodAttStatus<a class="headerlink" href="#f-setgoodattstatus" title="Permalink to this headline">¶</a></h2>
@@ -2193,6 +2482,14 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-lineardevicestatetable">FB_LinearDeviceStateTable</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+<li><p><a class="reference internal" href="#st-devicestate">ST_DeviceState</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="f-validreqid">
 <h2>F_ValidReqID<a class="headerlink" href="#f-validreqid" title="Permalink to this headline">¶</a></h2>
@@ -2207,6 +2504,12 @@ END_TYPE
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-acceleratorlinks">
 <h2>FB_AcceleratorLinks<a class="headerlink" href="#fb-acceleratorlinks" title="Permalink to this headline">¶</a></h2>
@@ -2329,6 +2632,13 @@ END_TYPE
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-beamparamassertionpool">FB_BeamParamAssertionPool</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-arbiter-test">
 <h2>FB_Arbiter_Test<a class="headerlink" href="#fb-arbiter-test" title="Permalink to this headline">¶</a></h2>
@@ -2477,6 +2787,19 @@ ffPMPSIO_Disconnect(
 END_FUNCTION_BLOCK
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#bp-to-io">BP_TO_IO</a></p></li>
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#fb-subsystoarbiter-io">FB_SubSysToArbiter_IO</a></p></li>
+<li><p><a class="reference internal" href="#io-to-bp">IO_TO_BP</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-arbtosubsys-test">
 <h2>FB_ArbToSubsys_Test<a class="headerlink" href="#fb-arbtosubsys-test" title="Permalink to this headline">¶</a></h2>
@@ -2523,6 +2846,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-beamclassoutputs">
 <h2>FB_BeamClassOutputs<a class="headerlink" href="#fb-beamclassoutputs" title="Permalink to this headline">¶</a></h2>
@@ -2616,6 +2946,12 @@ epicsBitmap.7 := q_BC_ASSERTION_LINES[8];
 END_FUNCTION_BLOCK
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-beamparamassertionpool">
 <h2>FB_BeamParamAssertionPool<a class="headerlink" href="#fb-beamparamassertionpool" title="Permalink to this headline">¶</a></h2>
@@ -2735,6 +3071,15 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#pmps-param">PMPS_PARAM</a></p></li>
+<li><p><a class="reference internal" href="#st-bp-arbinternal">ST_BP_ArbInternal</a></p></li>
+<li><p><a class="reference internal" href="#t-hashtableentry">T_HashTableEntry</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-bpcontroldevice">
 <h2>FB_BPControlDevice<a class="headerlink" href="#fb-bpcontroldevice" title="Permalink to this headline">¶</a></h2>
@@ -2782,7 +3127,7 @@ END_FUNCTION_BLOCK
     <span class="n">bApply</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
     <span class="n">nControlDeviceID</span> <span class="p">:</span> <span class="n">DWORD</span><span class="p">;</span>
-
+    <span class="n">sControlDeviceName</span><span class="p">:</span> <span class="n">STRING</span><span class="o">:=</span> <span class="s1">&#39;BP Cntrl Dev&#39;</span><span class="p">;</span>
     <span class="n">rtApply</span> <span class="p">:</span> <span class="n">R_TRIG</span><span class="p">;</span>
 
 <span class="n">END_VAR</span>
@@ -2793,13 +3138,21 @@ END_FUNCTION_BLOCK
 <span class="n">rtApply</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bApply</span><span class="p">);</span>
 <span class="n">IF</span> <span class="n">rtApply</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
     <span class="n">Arbiter</span><span class="o">.</span><span class="n">RemoveRequest</span><span class="p">(</span><span class="n">nControlDeviceID</span><span class="p">);</span>
-    <span class="n">Arbiter</span><span class="o">.</span><span class="n">AddRequest</span><span class="p">(</span><span class="n">nControlDeviceID</span><span class="p">,</span> <span class="n">EpicsReqBP</span><span class="p">);</span>
+    <span class="n">Arbiter</span><span class="o">.</span><span class="n">AddRequest</span><span class="p">(</span><span class="n">nControlDeviceID</span><span class="p">,</span> <span class="n">EpicsReqBP</span><span class="p">,</span> <span class="n">sControlDeviceName</span><span class="p">);</span>
     <span class="n">bApply</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
 <span class="n">END_IF</span>
 
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-bprequestor">
 <h2>FB_BPRequestor<a class="headerlink" href="#fb-bprequestor" title="Permalink to this headline">¶</a></h2>
@@ -2836,6 +3189,15 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-bptm-test">
 <h2>FB_BPTM_Test<a class="headerlink" href="#fb-bptm-test" title="Permalink to this headline">¶</a></h2>
@@ -2858,6 +3220,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-param">PMPS_PARAM</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-ctls-outputs">
 <h2>FB_CTLS_Outputs<a class="headerlink" href="#fb-ctls-outputs" title="Permalink to this headline">¶</a></h2>
@@ -2904,6 +3272,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-diffbp-test">
 <h2>FB_DiffBP_Test<a class="headerlink" href="#fb-diffbp-test" title="Permalink to this headline">¶</a></h2>
@@ -2968,6 +3342,14 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-dummyha">
 <h2>FB_DummyHA<a class="headerlink" href="#fb-dummyha" title="Permalink to this headline">¶</a></h2>
@@ -3139,6 +3521,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#st-ffinfo">ST_FFInfo</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-fastfault-test">
 <h2>FB_FastFault_Test<a class="headerlink" href="#fb-fastfault-test" title="Permalink to this headline">¶</a></h2>
@@ -3149,7 +3538,7 @@ END_FUNCTION_BLOCK
 <span class="n">VAR_OUTPUT</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
-
+    <span class="n">fbTime</span> <span class="p">:</span> <span class="n">FB_LocalSystemTime</span> <span class="o">:=</span> <span class="p">(</span> <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">dwCycle</span> <span class="o">:=</span> <span class="mi">1</span> <span class="p">);</span> <span class="o">//</span><span class="n">Get</span> <span class="n">current</span> <span class="n">system</span> <span class="n">time</span><span class="p">,</span> <span class="n">used</span> <span class="k">for</span> <span class="n">override</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span> <span class="n">CONSTANT</span>
     <span class="n">OvrdTime</span> <span class="p">:</span> <span class="n">TIME</span> <span class="o">:=</span> <span class="n">T</span><span class="c1">#2s;</span>
@@ -3182,6 +3571,7 @@ END_FUNCTION_BLOCK
      <span class="s1">&#39;}</span>
     <span class="n">i_xVeto</span>    <span class="p">:</span>    <span class="n">BOOL</span><span class="p">;</span>
     <span class="n">bAutoReset</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span> <span class="o">//</span> <span class="n">Set</span> <span class="n">true</span> <span class="k">for</span> <span class="n">the</span> <span class="n">FFO</span> <span class="n">to</span> <span class="n">automatically</span> <span class="n">permit</span> <span class="n">beam</span> <span class="n">again</span> <span class="n">after</span> <span class="nb">all</span> <span class="n">fast</span> <span class="n">faults</span> <span class="n">are</span> <span class="n">cleared</span>
+    <span class="n">i_sNetID</span> <span class="p">:</span> <span class="n">T_AmsNetID</span><span class="o">:=</span><span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="o">//</span><span class="n">Set</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Arbiter</span> <span class="n">AmsNetID</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">the</span> <span class="n">synchronisation</span><span class="o">.</span> <span class="n">An</span> <span class="n">empty</span> <span class="n">string</span> <span class="n">means</span> <span class="n">the</span> <span class="n">system</span> <span class="n">will</span> <span class="n">sue</span> <span class="n">local</span> <span class="n">time</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_OUTPUT</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
@@ -3190,6 +3580,7 @@ END_FUNCTION_BLOCK
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Hardware</span> <span class="n">Output</span> <span class="n">Status</span>
      <span class="s1">&#39;}</span>
     <span class="n">q_xFastFaultOut</span>    <span class="n">AT</span> <span class="o">%</span><span class="n">Q</span><span class="o">*</span>    <span class="p">:</span>    <span class="n">BOOL</span><span class="p">;</span>
+    <span class="n">q_xValidSyncTime</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span><span class="o">//</span> <span class="n">system</span> <span class="n">time</span> <span class="n">bValid</span> <span class="n">output</span> <span class="kc">True</span> <span class="n">when</span> <span class="n">sync</span> <span class="ow">is</span> <span class="n">successful</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_IN_OUT</span>
 
@@ -3224,7 +3615,9 @@ END_FUNCTION_BLOCK
 
     <span class="n">IdxOK</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
-
+    <span class="n">fbTime</span> <span class="p">:</span> <span class="n">FB_LocalSystemTime</span> <span class="o">:=</span> <span class="p">(</span> <span class="n">bEnable</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">dwCycle</span> <span class="o">:=</span> <span class="mi">1</span> <span class="p">);</span> <span class="o">//</span><span class="n">Get</span> <span class="n">current</span> <span class="n">system</span> <span class="n">time</span><span class="p">,</span> <span class="n">used</span> <span class="k">for</span> <span class="n">override</span>
+    <span class="n">fbTime_to_UTC</span><span class="p">:</span> <span class="n">FB_TzSpecificLocalTimeToSystemTime</span><span class="p">;</span>
+    <span class="n">fbGetTimeZone</span><span class="p">:</span> <span class="n">FB_GetTimeZoneInformation</span><span class="p">;</span>
     <span class="n">fbJson</span> <span class="p">:</span> <span class="n">FB_JsonSaxWriter</span><span class="p">;</span>
     <span class="n">pmpsTypeCode</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">shows</span> <span class="n">up</span> <span class="ow">in</span> <span class="n">json</span> <span class="k">as</span> <span class="n">pmps_typecode</span>
     <span class="n">fbLogger</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span>
@@ -3265,6 +3658,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-param">PMPS_PARAM</a></p></li>
+<li><p><a class="reference internal" href="#st-ff">ST_FF</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-hgvpu">
 <h2>FB_Hgvpu<a class="headerlink" href="#fb-hgvpu" title="Permalink to this headline">¶</a></h2>
@@ -3493,6 +3893,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-undulatorsegment">FB_UndulatorSegment</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-kphotonenergy">
 <h2>FB_KPhotonEnergy<a class="headerlink" href="#fb-kphotonenergy" title="Permalink to this headline">¶</a></h2>
@@ -3544,6 +3950,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-photonenergy">FB_PhotonEnergy</a></p></li>
+<li><p><a class="reference internal" href="#fb-sxu">FB_SXU</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-kstopper">
 <h2>FB_KStopper<a class="headerlink" href="#fb-kstopper" title="Permalink to this headline">¶</a></h2>
@@ -3561,6 +3974,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-stopperwatcher">FB_StopperWatcher</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-kvetodevice">
 <h2>FB_KVetoDevice<a class="headerlink" href="#fb-kvetodevice" title="Permalink to this headline">¶</a></h2>
@@ -3576,6 +3995,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-vetodevice">FB_VetoDevice</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-lineardevicestatetable">
 <h2>FB_LinearDeviceStateTable<a class="headerlink" href="#fb-lineardevicestatetable" title="Permalink to this headline">¶</a></h2>
@@ -3683,6 +4108,14 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-devicestate">ST_DeviceState</a></p></li>
+<li><p><a class="reference internal" href="#t-hashtableentry">T_HashTableEntry</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-lineargovernor">
 <h2>FB_LinearGovernor<a class="headerlink" href="#fb-lineargovernor" title="Permalink to this headline">¶</a></h2>
@@ -3904,6 +4337,19 @@ q_xFault := NOT ffBeamParamsOK.o_xFFLine OR
 END_FUNCTION_BLOCK
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#f-devicestate-to-devicestateext">F_DeviceState_To_DeviceStateExt</a></p></li>
+<li><p><a class="reference internal" href="#f-safebpcompare">F_SafeBPCompare</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+<li><p><a class="reference internal" href="#st-device">ST_Device</a></p></li>
+<li><p><a class="reference internal" href="#st-devicestateext">ST_DeviceStateExt</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-lphotonenergy">
 <h2>FB_LPhotonEnergy<a class="headerlink" href="#fb-lphotonenergy" title="Permalink to this headline">¶</a></h2>
@@ -3955,6 +4401,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-hgvpu">FB_Hgvpu</a></p></li>
+<li><p><a class="reference internal" href="#fb-photonenergy">FB_PhotonEnergy</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-lstopper">
 <h2>FB_LStopper<a class="headerlink" href="#fb-lstopper" title="Permalink to this headline">¶</a></h2>
@@ -3972,6 +4425,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-stopperwatcher">FB_StopperWatcher</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-machinesimulator">
 <h2>FB_MachineSimulator<a class="headerlink" href="#fb-machinesimulator" title="Permalink to this headline">¶</a></h2>
@@ -4036,6 +4495,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-photonenergy">
 <h2>FB_PhotonEnergy<a class="headerlink" href="#fb-photonenergy" title="Permalink to this headline">¶</a></h2>
@@ -4061,6 +4526,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-evrangecalculator">F_eVRangeCalculator</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-photonenergywatcher">
 <h2>FB_PhotonEnergyWatcher<a class="headerlink" href="#fb-photonenergywatcher" title="Permalink to this headline">¶</a></h2>
@@ -4162,6 +4634,16 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#f-pmps-json">F_PMPS_JSON</a></p></li>
+<li><p><a class="reference internal" href="#pmps-codes">PMPS_CODES</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-photonenergywatcher-test">
 <h2>FB_PhotonEnergyWatcher_Test<a class="headerlink" href="#fb-photonenergywatcher-test" title="Permalink to this headline">¶</a></h2>
@@ -4264,6 +4746,15 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#e-mpsbeamrates">E_MPSBeamRates</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-safebpcompare-test">
 <h2>FB_SafeBPCompare_Test<a class="headerlink" href="#fb-safebpcompare-test" title="Permalink to this headline">¶</a></h2>
@@ -4325,6 +4816,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-stopperwatcher">
 <h2>FB_StopperWatcher<a class="headerlink" href="#fb-stopperwatcher" title="Permalink to this headline">¶</a></h2>
@@ -4385,6 +4882,13 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-pmps-json">F_PMPS_JSON</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-subsystoarb-test">
 <h2>FB_SubsysToArb_Test<a class="headerlink" href="#fb-subsystoarb-test" title="Permalink to this headline">¶</a></h2>
@@ -4475,6 +4979,17 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbiter">FB_Arbiter</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#fb-vetoarbiter">FB_VetoArbiter</a></p></li>
+<li><p><a class="reference internal" href="#io-to-bp">IO_TO_BP</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-sxu">
 <h2>FB_SXU<a class="headerlink" href="#fb-sxu" title="Permalink to this headline">¶</a></h2>
@@ -4696,6 +5211,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-undulatorsegment">FB_UndulatorSegment</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-undulatorsegment">
 <h2>FB_UndulatorSegment<a class="headerlink" href="#fb-undulatorsegment" title="Permalink to this headline">¶</a></h2>
@@ -4828,6 +5349,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-calculatephotonenergy">F_CalculatePhotonEnergy</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-vetoarbiter">
 <h2>FB_VetoArbiter<a class="headerlink" href="#fb-vetoarbiter" title="Permalink to this headline">¶</a></h2>
@@ -4877,6 +5404,15 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="fb-vetoarbiter-test">
 <h2>FB_VetoArbiter_Test<a class="headerlink" href="#fb-vetoarbiter-test" title="Permalink to this headline">¶</a></h2>
@@ -4964,6 +5500,14 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION_BLOCK</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#f-pmps-json">F_PMPS_JSON</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="io-to-apt">
 <h2>IO_TO_APT<a class="headerlink" href="#io-to-apt" title="Permalink to this headline">¶</a></h2>
@@ -4980,6 +5524,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-pmps-aperture">ST_PMPS_Aperture</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="io-to-att">
 <h2>IO_TO_ATT<a class="headerlink" href="#io-to-att" title="Permalink to this headline">¶</a></h2>
@@ -4995,6 +5545,12 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#st-pmps-attenuator">ST_PMPS_Attenuator</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="io-to-bp">
 <h2>IO_TO_BP<a class="headerlink" href="#io-to-bp" title="Permalink to this headline">¶</a></h2>
@@ -5024,6 +5580,15 @@ END_FUNCTION_BLOCK
 <span class="n">END_FUNCTION</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#io-to-apt">IO_TO_APT</a></p></li>
+<li><p><a class="reference internal" href="#io-to-att">IO_TO_ATT</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
+<li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="main">
 <h2>MAIN<a class="headerlink" href="#main" title="Permalink to this headline">¶</a></h2>
@@ -5048,6 +5613,22 @@ END_FUNCTION_BLOCK
 <span class="n">END_PROGRAM</span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-arbtosubsys-test">FB_ArbToSubsys_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-arbiter-test">FB_Arbiter_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-bptm-test">FB_BPTM_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-diffbp-test">FB_DiffBP_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-fastfault-test">FB_FastFault_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-photonenergywatcher-test">FB_PhotonEnergyWatcher_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-safebpcompare-test">FB_SafeBPCompare_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-subsystoarb-test">FB_SubsysToArb_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-vetoarbiter-test">FB_VetoArbiter_Test</a></p></li>
+<li><p><a class="reference internal" href="#fb-evrangecalculator-test">FB_evRangeCalculator_Test</a></p></li>
+<li><p><a class="reference internal" href="#pe-ranges">PE_Ranges</a></p></li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="pe-ranges">
 <h2>PE_Ranges<a class="headerlink" href="#pe-ranges" title="Permalink to this headline">¶</a></h2>
