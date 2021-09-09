@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="L_Stopper" Id="{4f388ccc-0324-4da3-97c4-cae9c87c18e4}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE L_Stopper :
+(
+	ST1L0 := 1, // ST1
+    ST1L1 := 2, // ST2
+    DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
