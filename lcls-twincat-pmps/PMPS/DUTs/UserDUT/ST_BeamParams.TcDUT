@@ -10,19 +10,19 @@
 			field: LOPR 0;
 			field: PREC 2;
         '}
-		nTran : REAL := 1;
+		nTran : REAL;// := 1;
         (* Pulse-rate *)
         {attribute 'pytmc' := 'pv: Rate
             io: i
             field: EGU Hz
         '}
-        nRate : UDINT := 120;
+        nRate : UDINT;// := 120;
         (* Photon energy ranges *)
         {attribute 'pytmc' := 'pv: PhotonEnergyRanges
             io: i
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
-        neVRange : DWORD := 2#1111_1111_1111_1111_1111_1111_1111_1111;
+        neVRange : DWORD;// := 2#1111_1111_1111_1111_1111_1111_1111_1111;
         (* Beamline attenuators *)
         {attribute 'pytmc' := 'pv: AuxAtt
         io: i'}

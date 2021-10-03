@@ -164,10 +164,10 @@ END_VAR
 VAR    
     //Final and transition assertions
     nTransitionID    :    UDINT := 1000;
-    stTransitionAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam;
+    stTransitionAssertion    :    ST_BeamParams :=  ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
     
     nReqID    :    UDINT    := 2000;
-    stReqAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam;
+    stReqAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
     
     idx : UDINT;
     

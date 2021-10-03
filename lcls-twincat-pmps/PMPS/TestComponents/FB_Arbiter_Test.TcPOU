@@ -75,7 +75,7 @@ VAR
     stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
     
     stArbitratedBP    :    ST_BeamParams;
-    stExpectedBP    :    ST_BeamParams;
+    stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;;
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);

@@ -49,9 +49,10 @@ VAR_GLOBAL CONSTANT
 	
 	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
 
-	
+	AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
     MAX_VETO_DEVICES   :   UINT := 16;
-    {attribute 'pytmc' := '
+	stAttenuators : ST_PMPS_Attenuator :=(nTran:=1,xAttOK:=1);
+	{attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
 		io: i
         archive: 1Hz monitor
@@ -61,7 +62,9 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
-        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
+        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)0RateBeamCnst
@@ -73,7 +76,8 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
-        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
+        astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
@@ -81,15 +85,15 @@ VAR_GLOBAL CONSTANT
         archive: 1Hz monitor
         field: DESC Safe beam constant
     '} 
-    cstSafeBeam    :    ST_BeamParams := (
+ (*   cstSafeBeam    :    ST_BeamParams := (
         nTran := 0,
         neVRange := 0,
         nRate    := 0
-    );
+    );*)
     
     cnMaxStateArrayLen : INT := 20;
     
-    AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
+   
     MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
     {warning disable C0228}
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
