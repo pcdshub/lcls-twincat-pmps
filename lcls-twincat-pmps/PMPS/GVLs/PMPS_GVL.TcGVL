@@ -79,13 +79,13 @@ VAR_GLOBAL CONSTANT
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
 		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
     );
-    {attribute 'pytmc' := '
+   (*  {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
 		io: i
         archive: 1Hz monitor
         field: DESC Safe beam constant
     '} 
- (*   cstSafeBeam    :    ST_BeamParams := (
+   cstSafeBeam    :    ST_BeamParams := (
         nTran := 0,
         neVRange := 0,
         nRate    := 0

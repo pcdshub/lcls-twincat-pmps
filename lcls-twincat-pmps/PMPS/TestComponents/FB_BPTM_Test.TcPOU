@@ -280,7 +280,7 @@ VAR
     stTranReq    :    ST_BeamParams := PMPS_GVL.cst0RateBeam;
     
     nFirstReqID    :    UDINT    := 16#FEED;
-    stFirstReq    :    ST_BeamParams := (nRate := 16#FEED);
+    stFirstReq    :    ST_BeamParams := (nTran :=1, nRate := 16#FEED, neVRange :=2#1111_1111_1111_1111_1111_1111_1111_1111);
     
 END_VAR
 VAR_INST
