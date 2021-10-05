@@ -283,19 +283,19 @@ ST_BeamParams
     			field: LOPR 0;
     			field: PREC 2;
             '}
-    		nTran : REAL := 1;
+    		nTran : REAL := 0;
             (* Pulse-rate *)
             {attribute 'pytmc' := 'pv: Rate
                 io: i
                 field: EGU Hz
             '}
-            nRate : UDINT := 120;
+            nRate : UDINT := 0;
             (* Photon energy ranges *)
             {attribute 'pytmc' := 'pv: PhotonEnergyRanges
                 io: i
                 field: EGU eV'}
             {attribute 'displaymode' := 'binary'}
-            neVRange : DWORD := 2#1111_1111_1111_1111_1111_1111_1111_1111;
+            neVRange : DWORD := 0;
             (* Beamline attenuators *)
             {attribute 'pytmc' := 'pv: AuxAtt
             io: i'}
@@ -785,9 +785,10 @@ PMPS_GVL
     	
     	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
 
-    	
+    	AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
         MAX_VETO_DEVICES   :   UINT := 16;
-        {attribute 'pytmc' := '
+    	stAttenuators : ST_PMPS_Attenuator :=(nTran:=1,xAttOK:=1);
+    	{attribute 'pytmc' := '
             pv: @(PREFIX)FullBeamCnst
     		io: i
             archive: 1Hz monitor
@@ -797,7 +798,9 @@ PMPS_GVL
             nTran := 1,
             neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
             nRate    := UDINT#1000000,
-            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
+            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+    		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+
         );
         {attribute 'pytmc' := '
             pv: @(PREFIX)0RateBeamCnst
@@ -809,23 +812,24 @@ PMPS_GVL
             nTran := 1,
             neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
             nRate    := 0,
-            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)]
+            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+    		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
         );
-        {attribute 'pytmc' := '
+       (*  {attribute 'pytmc' := '
             pv: @(PREFIX)SafeBeamCnst
     		io: i
             archive: 1Hz monitor
             field: DESC Safe beam constant
         '} 
-        cstSafeBeam    :    ST_BeamParams := (
+       cstSafeBeam    :    ST_BeamParams := (
             nTran := 0,
             neVRange := 0,
             nRate    := 0
-        );
+        );*)
         
         cnMaxStateArrayLen : INT := 20;
         
-        AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
+       
         MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
         {warning disable C0228}
         DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
@@ -1047,7 +1051,7 @@ BeamParameterTransitionManager
         i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
         
         i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
-        i_stRequestedAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+        i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
         
         i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
         i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
@@ -2834,6 +2838,7 @@ FB_BeamParamAssertionPool
         hTable         : T_HHASHTABLE;(* hash table handle *)
         pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
         indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
+    	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// MG 
     END_VAR
     ;
 
@@ -2843,7 +2848,7 @@ FB_BeamParamAssertionPool
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
     getPosPtr := 0;
 
-    fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(PMPS_GVL.cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
+    fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
     IF fbTable.bOk THEN(* Success *)
         fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
         IF fbTable.bOk THEN(* Success *)
@@ -2926,9 +2931,9 @@ FB_BeamParamAssertionPool
 
 
 Related:
-    * `PMPS_GVL`_
     * `PMPS_PARAM`_
     * `ST_BP_ArbInternal`_
+    * `ST_BeamParams`_
     * `T_HashTableEntry`_
 
 
@@ -3168,6 +3173,7 @@ FB_DummyArbIO
         tTransDelay : TIME; // Delay until transmission is looped back into q_stSimulatedBPReadback
         tPEDelay : TIME; // Delay until PE is looped back into q_stSimulatedBPReadback
         tAptDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+    	tSattDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
         
     END_VAR
     VAR_OUTPUT
@@ -3181,7 +3187,7 @@ FB_DummyArbIO
        // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
        stNewReqBP : ST_BeamParams;
        
-       stReqOutBP : ST_BeamParams; // To be written on next ApplyBPReq call
+       stReqOutBP : ST_BeamParams;// To be written on next ApplyBPReq call
        
        stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
        
@@ -3191,6 +3197,7 @@ FB_DummyArbIO
        tonTrans : TON;
        tonPE : TON;
        tonApt : TON;
+       tonSatt : TON;
           
     END_VAR
     LA.ElevateRequest(THIS^);
@@ -5493,8 +5500,8 @@ MAIN
         fbDiffBPTest    :    FB_DiffBP_Test;
         fbBPTMTest    :    FB_BPTM_Test;
         fbSafeBPCompareTest    :    FB_SafeBPCompare_Test;
-        ////fbevWithinSpecTest    :    FB_evWithinSpec_Test;
-        ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;
+        ////fbevWithinSpecTest    :    FB_evWithinSpec_Test;---
+        ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;---
         fbFFTest    :    FB_FastFault_Test;
         fbArbiterTest    :    FB_Arbiter_Test;
     	fbVetoArbiterTest : FB_VetoArbiter_Test;
