@@ -8,8 +8,8 @@ VAR
     fbDiffBPTest    :    FB_DiffBP_Test;
     fbBPTMTest    :    FB_BPTM_Test;
     fbSafeBPCompareTest    :    FB_SafeBPCompare_Test;
-    ////fbevWithinSpecTest    :    FB_evWithinSpec_Test;
-    ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;
+    ////fbevWithinSpecTest    :    FB_evWithinSpec_Test;---
+    ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;---
     fbFFTest    :    FB_FastFault_Test;
     fbArbiterTest    :    FB_Arbiter_Test;
 	fbVetoArbiterTest : FB_VetoArbiter_Test;

@@ -24,7 +24,7 @@ END_VAR
 VAR   
     nId    :    DWORD := 1;
 	nId2 : DWORD := 10;
-    stReq    :    ST_BeamParams := (nTran:=0.12);
+    stReq    :  ST_BeamParams := (nTran:=0.12);
 	stReq2	:	ST_BeamParams := (nTran:=0.10);
 END_VAR
 VAR_INST
@@ -32,7 +32,7 @@ VAR_INST
     
     fbHigherArb : FB_Arbiter(2);
 	
-	ArbBP : ST_BeamParams;
+	ArbBP : ST_BeamParams:=(nTran:=1);
 	
 	VetoArb : FB_VetoArbiter;
 	

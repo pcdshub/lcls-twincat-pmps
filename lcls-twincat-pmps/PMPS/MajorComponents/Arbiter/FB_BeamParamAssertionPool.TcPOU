@@ -26,6 +26,7 @@ VAR
     hTable         : T_HHASHTABLE;(* hash table handle *)
     pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
     indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
+	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// MG 
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -37,7 +38,7 @@ END_VAR
 MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
 getPosPtr := 0;
 
-fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(PMPS_GVL.cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
+fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
 IF fbTable.bOk THEN(* Success *)
     fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
     IF fbTable.bOk THEN(* Success *)

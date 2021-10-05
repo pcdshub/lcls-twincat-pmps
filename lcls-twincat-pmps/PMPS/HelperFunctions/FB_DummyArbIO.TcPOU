@@ -13,6 +13,7 @@ VAR_INPUT
     tTransDelay : TIME; // Delay until transmission is looped back into q_stSimulatedBPReadback
     tPEDelay : TIME; // Delay until PE is looped back into q_stSimulatedBPReadback
     tAptDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+	tSattDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
     
 END_VAR
 VAR_OUTPUT
@@ -26,7 +27,7 @@ VAR
    // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
    stNewReqBP : ST_BeamParams;
    
-   stReqOutBP : ST_BeamParams; // To be written on next ApplyBPReq call
+   stReqOutBP : ST_BeamParams;// To be written on next ApplyBPReq call
    
    stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
    
@@ -36,6 +37,7 @@ VAR
    tonTrans : TON;
    tonPE : TON;
    tonApt : TON;
+   tonSatt : TON;
       
 END_VAR
 ]]></Declaration>
@@ -82,6 +84,10 @@ ELSIF bAutoUpdateBP THEN
             q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
 		END_IF
 	END_IF
+	
+	tonSatt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astAttenuators), ADR(q_stSimulatedBPReadback.astAttenuators), SIZEOF(q_stSimulatedBPReadback.astAttenuators));
+    tonSatt(PT:=tSattDelay);
+    IF tonSatt.Q THEN q_stSimulatedBPReadback.astAttenuators := stReqOutBP.astAttenuators; END_IF
 END_IF
 
 ffo.ExecuteNoLog();

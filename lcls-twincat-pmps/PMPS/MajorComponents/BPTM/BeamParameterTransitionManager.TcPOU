@@ -21,7 +21,7 @@ VAR_INPUT
     i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
     
     i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
-    i_stRequestedAssertion    :    ST_BeamParams := PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+    i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
     
     i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
     i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
