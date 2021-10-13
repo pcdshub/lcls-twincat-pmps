@@ -346,6 +346,17 @@ stFF.BeamPermitted := BeamPermitted;
 THIS^.astFF[Idx] := stFF;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IdxLookup" Id="{e571e0d3-bc95-49b4-9def-e21fb7afa358}">
+      <Declaration><![CDATA[METHOD IdxLookup : ST_FF
+VAR_INPUT
+    Idx : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Idx := LIMIT(1,Idx,FF_ARRAY_UPPER_BOUND);
+IdxLookup := THIS^.astFF[Idx];]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
       <Declaration><![CDATA[METHOD INTERNAL Register : BOOL
 VAR_INPUT

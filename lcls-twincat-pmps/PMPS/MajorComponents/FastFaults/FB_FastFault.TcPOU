@@ -37,6 +37,7 @@ VAR_OUTPUT
         pv: BeamPermitted
         io: i
     '}
+    o_BeamPermitted : BOOL; // TRUE if we are allowing beam, FALSE if we are not
     o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like (Optional)
 END_VAR
 VAR_IN_OUT
@@ -61,6 +62,7 @@ VAR
     InUse : T_MaxString;
     AutoReset : T_MaxString;
 
+    FFLookup : ST_FF;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -91,6 +93,8 @@ END_VAR
 END_IF
 
 io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := i_xOK, Reset:= i_xReset);
+FFLookup := io_fbFFHWO.IdxLookup(Idx:=RegistrationIdx);
+o_BeamPermitted := FFLookup.BeamPermitted;
 
 ]]></ST>
     </Implementation>
