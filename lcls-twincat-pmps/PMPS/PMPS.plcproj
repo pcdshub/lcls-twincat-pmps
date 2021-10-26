@@ -416,6 +416,10 @@
     <Folder Include="VISUs" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="LCLS General">
+      <DefaultResolution>LCLS General, * (SLAC)</DefaultResolution>
+      <Namespace>LCLS_General</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_MC2">
       <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_MC2</Namespace>
@@ -464,9 +468,6 @@
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="LCLS General,newest,SLAC">
-      <Namespace>LCLS_General</Namespace>
-    </LibraryReference>
     <LibraryReference Include="TcUnit,newest,www.tcunit.org">
       <Namespace>TcUnit</Namespace>
       <Parameters>
@@ -478,6 +479,9 @@
     </LibraryReference>
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderResolution Include="LCLS General">
+      <Resolution>LCLS General, 2.4.1 (SLAC)</Resolution>
+    </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_JsonXml">
       <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
