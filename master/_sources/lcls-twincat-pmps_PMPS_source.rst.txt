@@ -2473,7 +2473,7 @@ FB_Arbiter
             io: i
             field: DESC Arbitrated BP
          '}
-        q_stBeamParams    :    ST_BeamParams; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+        q_stBeamParams    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
         
         q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
     END_VAR
@@ -2484,6 +2484,7 @@ FB_Arbiter
 
 Related:
     * `FB_BeamParamAssertionPool`_
+    * `PMPS_GVL`_
     * `ST_BeamParams`_
 
 

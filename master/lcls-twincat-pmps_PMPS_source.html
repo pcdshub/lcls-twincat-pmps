@@ -2536,7 +2536,7 @@ END_TYPE
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
         <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">Arbitrated</span> <span class="n">BP</span>
      <span class="s1">&#39;}</span>
-    <span class="n">q_stBeamParams</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span><span class="p">;</span> <span class="o">//</span><span class="n">Updated</span> <span class="n">on</span> <span class="n">each</span> <span class="n">cycle</span> <span class="n">of</span> <span class="n">the</span> <span class="n">arbiter</span> <span class="n">FB</span> <span class="k">with</span> <span class="n">the</span> <span class="n">current</span> <span class="n">arbitrated</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="nb">set</span>
+    <span class="n">q_stBeamParams</span>    <span class="p">:</span>    <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">cstFullBeam</span><span class="p">;</span> <span class="o">//</span><span class="n">Updated</span> <span class="n">on</span> <span class="n">each</span> <span class="n">cycle</span> <span class="n">of</span> <span class="n">the</span> <span class="n">arbiter</span> <span class="n">FB</span> <span class="k">with</span> <span class="n">the</span> <span class="n">current</span> <span class="n">arbitrated</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="nb">set</span>
 
     <span class="n">q_xStateIDFound</span>    <span class="p">:</span>    <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span><span class="n">Set</span> <span class="n">true</span> <span class="k">if</span> <span class="n">a</span> <span class="n">state</span><span class="o">-</span><span class="nb">id</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">assertion</span> <span class="n">pool</span> <span class="n">after</span> <span class="n">calling</span> <span class="n">A_VerifyAssertion</span>
 <span class="n">END_VAR</span>
@@ -2548,6 +2548,7 @@ END_TYPE
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#fb-beamparamassertionpool">FB_BeamParamAssertionPool</a></p></li>
+<li><p><a class="reference internal" href="#pmps-gvl">PMPS_GVL</a></p></li>
 <li><p><a class="reference internal" href="#st-beamparams">ST_BeamParams</a></p></li>
 </ul>
 </dd>
