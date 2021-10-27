@@ -21,3 +21,4 @@
 - [ ] Code contains descriptive comments
 - [ ] Test suite passes locally
 - [ ] Committed with ``pre-commit`` or ran ``pre-commit run --all-files``
+- [ ] Check that ``BP_IO`` parameters weren't modified unintentionally
