@@ -1,0 +1,5568 @@
+
+
+DUTs
+----
+
+
+E_ArbDosTestStates
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE E_ArbDosTestStates :
+    (
+    	Init := 0,
+        SecondReq := 100,
+        WaitForAck := 200,
+        WaitFor2ndAck := 300,
+        RunAsserts := 8000
+    );
+    END_TYPE
+
+
+Related:
+    * `E_ArbDosTestStates`_
+
+
+E_BPTMState
+^^^^^^^^^^^
+
+::
+
+    TYPE E_BPTMState :
+    (
+        Init := 0,
+    	NewTarget := 1000,
+        RequestBP := 1500,
+        WaitForBP := 2500,
+        WaitingForTransitionAssertion := 2000,
+        WaitingForFinalAssertion := 3000,
+        Transitioning := 4000,
+        WaitForFinalBP := 5000,
+        CleaningUp := 6000,
+    	Idle := 10000,
+        Done := 8000,
+        Error := 9000
+    );
+    END_TYPE
+
+
+
+
+E_BPTMTestStates
+^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE E_BPTMTestStates :
+    (
+        Init := 0,
+        WaitingForValidID := 50,
+        WaitingForTransitionAssertion := 100,
+        StalledAtTransition := 150,
+        WaitingForFinalAssertion    := 200,
+        WaitingForBeam := 250,
+        Transitioning    := 300,
+        CleaningUp    := 400,
+        AnotherState := 500,
+        Retry := 1000,
+        Done := 8000,
+        Error := 9000
+    );
+    END_TYPE
+
+
+
+
+E_MPSBeamRates
+^^^^^^^^^^^^^^
+
+::
+
+    TYPE E_MPSBeamRates :
+    (
+    	MPSRateInvalid            :=  0,
+        MPSRate0Hz                :=  1,
+        (* Previously used 2 and 3 for single shot and burst *)
+        MPSRate1Hz                :=  4,
+        MPSRate10Hz               :=  5,
+        MPSRate30Hz               :=  6,
+        MPSRate60Hz               :=  7,
+        MPSRate120Hz              :=  8,
+        MPSRateUnknown            :=  9,
+        MPSRateSingleShot         := 10,
+        MPSRateBurstMode          := 11,
+        MPSRateBurstModeNotActive := 12,
+        MPSNumberOfBeamRates      := 13,
+        MPSRateBurstInvalid       := 14
+    )UINT;
+    END_TYPE
+
+
+
+
+K_Apertures
+^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Apertures :
+    (
+    	SL1K0 := 1,
+        SL2K0 := 2
+    );
+    END_TYPE
+
+
+
+
+K_Attenuators
+^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Attenuators :
+    (
+    	AT1K0 := 1, // FEE Gas Attenuator
+        AT1K4 := 2, // TMO Solid Attenuator in the FEE
+    	AT1K2 := 3, // RIX Solid Attenuator
+    	AT2K2 := 4, // RIX Solid Attenuator
+    	AT1K3 := 5 // TXI Solid Attenuator
+    );
+    END_TYPE
+
+
+
+
+K_Stopper
+^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE K_Stopper :
+    (
+    	ST3K4 := 1, // TMO PPS stopper in
+        ST1K2 := 2, // RIX PPS stopper in
+        MR1K1_IN := 3, // Monochromator focus optic vertical state
+        MR1K1_OUT := 4, // Monochromator focus optic vertical state
+        MR1K3_IN := 5, // TXI Offset Mirror horizontal state
+        MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
+        DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+    );
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+L_Apertures
+^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Apertures :
+    (
+    	SL1L0 := 1,
+        SL2L0 := 2
+    );
+    END_TYPE
+
+
+
+
+L_Attenuators
+^^^^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Attenuators :
+    (
+    	AT1L0 := 1, // FEE Combo Gas/Solid Attenuator
+        AT2L0 := 2 // FEE Solid Attenuator
+    );
+    END_TYPE
+
+
+
+
+L_Stopper
+^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE L_Stopper :
+    (
+    	ST1L0 := 1, // ST1
+        ST1L1 := 2, // ST2
+        DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
+    );
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+PMPS_CODES
+^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    {attribute 'strict'}
+    TYPE PMPS_CODES :
+    (
+    	FAST_FAULT := 16#1, // Generic fast fault
+        PEW_FAULT := 16#7, // Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.    
+        
+        // Arbiter codes
+        //////////////////////////////////
+            ARB_FULL := 16#201, // Arbiter pool is full.
+        
+        //BPTM Codes
+        //////////////////////////////////
+            BadTargetID := 16#300,
+            BadTransID := 16#301,
+            TransAssrtFail := 16#302,
+            FinalAssrtFail := 16#303,
+            NoRoomInArb := 16#304
+    ) UINT;
+    END_TYPE
+
+
+
+
+ST_AttenuatorStatus
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_AttenuatorStatus :
+    STRUCT
+        AtTarget : BIT;     //0 
+        Moving : BIT;       //1
+        LocalMode : BIT;    //2  (* means the attenuator ignores PMPS preemptive requests and operates from a local setpoint *)
+        PMPSMode : BIT;     //3  (* means the attenuator is only taking setpoints from the pmps *)
+        OK : BIT;           //4  
+        Toggle : BIT;       //5  just here for fun
+        Include : BIT;      //6  Consider this device status
+    END_STRUCT
+    END_TYPE
+
+
+
+
+ST_BeamParams
+^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_BeamParams : 
+        STRUCT
+            (*  Requested pre-optic attenuation %  *)
+    		{attribute 'pytmc' := 'pv: Transmission
+                io: i
+    			field: HOPR 1;
+    			field: LOPR 0;
+    			field: PREC 2;
+            '}
+    		nTran : REAL := 0;
+            (* Pulse-rate *)
+            {attribute 'pytmc' := 'pv: Rate
+                io: i
+                field: EGU Hz
+            '}
+            nRate : UDINT := 0;
+            (* Photon energy ranges *)
+            {attribute 'pytmc' := 'pv: PhotonEnergyRanges
+                io: i
+                field: EGU eV'}
+            {attribute 'displaymode' := 'binary'}
+            neVRange : DWORD := 0;
+            (* Beamline attenuators *)
+            {attribute 'pytmc' := 'pv: AuxAtt
+            io: i'}
+            astAttenuators : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
+            
+            (* Stoppers *)
+            {attribute 'pytmc' := 'pv: Veto
+            io: i'}
+            aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
+            
+            (* Apertures *)
+            astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
+            
+            // Toggle for watchdog
+            xValidToggle : BOOL;
+            // Beam parameter set is valid (if readback), or acknowledged (if request)
+            {attribute 'pytmc' := 'pv: Valid
+            io: i'}
+            xValid : BOOL;
+            // Cohort index. Identifies which cohort this BP set was included in arbitration
+            {attribute 'pytmc' := 'pv: Cohort
+            io: i
+                field: DESC Cohort inc on each arb cycle
+            '}
+            nCohortInt : UDINT;
+        END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_PMPS_Aperture`_
+    * `ST_PMPS_Attenuator`_
+
+
+ST_BP_ArbInternal
+^^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_BP_ArbInternal EXTENDS ST_BeamParams :
+    STRUCT
+    	{attribute 'pytmc' := 'pv: ID
+    		io: i
+    	'}
+    	nId : DWORD;
+    	{attribute 'pytmc' := 'pv: Live
+    		io: i
+    	'}
+    	LiveInTable : BOOL;
+    	{attribute 'pytmc' := 'pv: Device
+    		io: i
+    	'}
+    	sDevName: STRING;
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+ST_Device
+^^^^^^^^^
+
+::
+
+    TYPE ST_Device :
+    STRUCT
+    	//IO
+    	stAxis	:	AXIS_REF;
+    	//The following limit switches must be TRUE or high (ie. NC) to enable that direction of motion
+    	//The EPICS display should show an inverted indicator to communicate end of travel reached
+    	i_xLoLim	AT %I*	:	BOOL; //Wire normally-closed
+    	i_xHiLim	AT %I*	:	BOOL; //Wire normally-closed
+    	
+    	//Acuator Parameters
+    	lrUpperPositionLimit	:	LREAL := 10000000000; //Use in conjuntion with limit switches or set to a huge number to ignore
+    	lrLowerPositionLimit	:	LREAL := -10000000000; //Use in conjuntion with limit switches or set to a huge number to ignore
+    	
+    	xEnable	:	BOOL := TRUE;
+    	
+    	//Supervisory System
+    	
+    	//MPS Override
+    	xOverrideMPSLimits	: BOOL := FALSE; //Set true to move beyond MPS limits. Note this will trip beam off.
+    	
+    	//Status and Faults
+    	xClearFaults	:	BOOL;	//Rising edge tries to clear faults of all kinds
+    	
+    	xGovernorFault	:	BOOL;	//Indicates governor is faulted
+    	xGovernorOverridden	:	BOOL; //Indicates governor is in override mode
+    	xSMFault		:	BOOL;	//Indicates component state machine is faulted
+    	
+    	//Device States
+    	StateTable		:	FB_LinearDeviceStateTable;
+    	
+    	stTransitionState	:	ST_DeviceState; //The transition state might have non-zero beam parameters
+    	nSafeState			:	UDINT; //State where the device is considered safe
+    	nTransitionState	:	UDINT;
+    	
+    	nRequestedState	:	UDINT; //EPICS control, cleaned (checked against array limits) and deposited in nTargetState
+    	nTargetState	:	UDINT; //The requested state should be deposited here after cleaning
+    	nActiveState	:	UDINT; //The last successfully reached state
+    	
+    	
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `FB_LinearDeviceStateTable`_
+    * `ST_DeviceState`_
+
+
+ST_DeviceState
+^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_DeviceState :
+    STRUCT
+    	
+    	//State name
+    	sStateName	:	STRING;
+    	nStateRef	:	UDINT; //Primary key of device state database
+    	
+    	//////////////////
+    	// This stuff may belong in a sub-class or something
+    	//Position
+    	rPosition	:	REAL := 0; //Center of the state
+    	//Tolerance
+    	rTolerance :	REAL := 0; //+/- amount
+    	//////////////////
+    	//Required beam parameters
+    	stReqBeamParam	:	ST_BeamParams;
+
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+ST_DeviceStateExt
+^^^^^^^^^^^^^^^^^
+
+::
+
+    //Use when working with states in code
+    //Extended with a valid boolean to indicate the structure was loaded
+    //properly
+    TYPE ST_DeviceStateExt EXTENDS ST_DeviceState :
+    STRUCT
+    	xValid	:	BOOL := FALSE;
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `ST_DeviceState`_
+
+
+ST_DeviceStateTable
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_DeviceStateTable :
+    STRUCT
+    	iDeviceID:DINT;
+    	iStateID:DINT;
+    	rTargetPosition: REAL;
+    	rTolerance: REAL;
+    	rTransmission: REAL;
+    	iBeamClass : DINT;
+    	iPulseRate: DINT;
+    	rPerPulseEnergy:REAL;
+    	rUpper_eV: REAL;
+    	rLower_eV: REAL;
+    	rPhotonEnergy: REAL;
+    END_STRUCT
+    END_TYPE
+
+
+
+
+ST_FF
+^^^^^
+
+::
+
+    TYPE ST_FF :
+    STRUCT
+        {attribute 'pytmc' := '
+            pv: Info
+         '}
+        Info : ST_FFInfo;
+        
+        {attribute 'pytmc' := '
+            pv: Ovrd
+         '}
+        Ovrd : ST_FFOverride;
+        
+        {attribute 'pytmc' := '
+            pv: OK
+            io: i
+         '}
+        OK   :   BOOL; // Fault logic state
+        
+        FaultAck : BOOL; // Set when faulted, reset by logger.
+        ClearAck : BOOL;
+        
+        {attribute 'pytmc' := '
+            pv: BeamPermitted
+            io: i
+         '}
+        BeamPermitted   :   BOOL; // Result of reset, veto, and fault logic, true beam off boolean
+        
+        {attribute 'pytmc' := '
+            pv: Reset
+            io: o
+         '}
+        Reset   :   BOOL;
+        
+        bsFF    :    RS;
+        rtReset    :    R_TRIG;
+        ftCountFault : F_TRIG;
+        
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `ST_FFInfo`_
+    * `ST_FFOverride`_
+
+
+ST_FFInfo
+^^^^^^^^^
+
+::
+
+    // These elements should be set at init and never changed.
+
+    TYPE ST_FFInfo :
+    STRUCT
+        {attribute 'pytmc' := '
+            pv: Path
+            io: i
+         '}
+        sPath   :    T_MaxString; // Full PLC path to FF object
+        {attribute 'pytmc' := '
+            pv: Desc
+            io: i
+         '}
+        Desc    :   T_MaxString; // Set at instantiation to a helpful description of the fast fault purpose
+        {attribute 'pytmc' := '
+            pv: DevName
+            io: i
+         '}
+        DevName :   T_MaxString; // Component name, used in diagnostic to help narrow down where beam faults are coming from
+        {attribute 'pytmc' := '
+            pv: TypeCode
+            io: i
+         '}
+        TypeCode    :   UINT; // Set at instantiation to fault class code
+
+    ///////////////////////////////////////////
+    // Warning, this variable is effectively a VETO of the fast fault if set FALSE
+    // Do not alter the state of this variable unless you really know what you're doing.
+    ///////////////////////////////////////////
+        {attribute 'pytmc' := '
+            pv: InUse
+            io: i
+         '}
+        InUse   :   BOOL := FALSE; // If this FF is currently in-use
+    ///////////////////////////////////////////
+
+     
+        AutoReset   :   BOOL; // Automatically clear fast fault (latching vs non-latching)
+        Vetoable  : BOOL := TRUE; // Can this fast fault be masked by the veto device input?
+
+          {attribute 'pytmc' := '
+            pv: InfoString
+            io: i
+         '}
+        InfoString : STRING;
+    END_STRUCT
+    END_TYPE
+
+
+
+
+ST_FFOverride
+^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_FFOverride :
+    STRUCT
+        {attribute 'pytmc' := '
+            pv: Duration
+            io: o
+         '}
+        Duration : DINT; // DINT to be compatible with EPICS 
+        
+    	{attribute 'pytmc' := '
+            pv: Expiration
+            io: o
+         '}
+        Expiration : DINT; // DINT to be compatible with EPICS 
+    	
+    	{attribute 'pytmc' := '
+            pv: StartDT
+            io: o
+         '}
+        StartDT : DINT; // DINT to be compatible with EPICS 
+    	
+        {attribute 'pytmc' := '
+            pv: Activate
+            io: o
+         '}
+        Activate : BOOL;
+        
+        {attribute 'pytmc' := '
+            pv: Deactivate
+            io: o
+         '}
+        Deactivate : BOOL;
+        
+        {attribute 'pytmc' := '
+            pv: ElapsedTime
+            io: i
+         '}
+        ElapsedTime : DINT; // DINT to be compatible with EPICS 
+        
+        {attribute 'pytmc' := '
+            pv: RemainingTime
+            io: i
+         '}
+        RemainingTime : DINT; // DINT to be compatible with EPICS 
+        
+        {attribute 'pytmc' := '
+            pv: Active
+            io: i
+         '} 
+    	Active: BOOL;
+        
+        Timer    :   TP;
+        OvrdActLogAck : BOOL;
+        OvrdExpLogAck : BOOL;
+        
+        tOvrdActivate : R_TRIG;
+        tOvrdExpiring  : F_TRIG;
+    END_STRUCT
+    END_TYPE
+
+
+
+
+ST_PMPS_Aperture
+^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_PMPS_Aperture EXTENDS ST_PMPS_Aperture_IO :
+    STRUCT
+        (*
+        {attribute 'pytmc' := 'pv: Width
+                io: i
+                field: EGU mm'}
+        Width : REAL; // distance between horizontal slits (x)
+        {attribute 'pytmc' := 'pv: Height
+                io: i
+                field: EGU mm'}
+        Height : REAL; // distance between vertical slits (y)
+        
+        {attribute 'pytmc' := 'pv: OK
+            io: i'}
+        xOK : BOOL; // status of aperture, false if error or in motion
+        *)
+    END_STRUCT
+    END_TYPE
+
+
+
+
+ST_PMPS_Attenuator
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_PMPS_Attenuator EXTENDS ST_PMPS_Attenuator_IO :
+    STRUCT
+        (*
+            {attribute 'pytmc' := 'pv: Att
+                io: i
+                field: EGU %
+            '}
+    		nTran : UINT;
+            {attribute 'pytmc' := 'pv: OK
+                io: i
+            '}
+    		xAttOK : UINT; // true = no errors and attenuator is stable
+            *)
+    END_STRUCT
+    END_TYPE
+
+
+
+
+T_HashTableEntry
+^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE T_HashTableEntry :
+    STRUCT
+        {attribute 'pytmc' := '
+            pv: Key
+            io: i
+         '}
+        key : DWORD := 0;
+        value : PVOID := 0;
+    END_STRUCT
+    END_TYPE
+
+
+
+
+GVLs
+----
+
+
+Global_Version
+^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'TcGenerated'}
+    // This function has been automatically generated from the project information.
+    VAR_GLOBAL CONSTANT
+        {attribute 'const_non_replaced'}
+        {attribute 'linkalways'}
+        stLibVersion_PMPS : ST_LibVersion := (iMajor := 2, iMinor := 2, iBuild := 1, iRevision := 0, sVersion := '2.2.1');
+    END_VAR
+
+
+
+
+PMPS_GVL
+^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    VAR_GLOBAL
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)RequestedBP
+    		io: i
+            archive: 1Hz monitor
+        '}
+        stRequestedBeamParameters    :    ST_BeamParams; //Summarized request for the line, as recognized by the line arbiter PLC
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)CurrentBP
+    		io: i
+            archive: 1Hz monitor
+        '}
+        stCurrentBeamParameters    :    ST_BeamParams; //Currently active BP set, broadcast by the line arbiter PLC
+    	
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)eVRangeCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC Active eV Range constants
+            field: EGU eV
+        '}
+    	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+       
+        PERange : PE_Ranges; //Included to place the ev ranges properly
+    END_VAR
+    VAR_GLOBAL RETAIN    
+        // Statistics
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)SuccessfulPreemptions
+            io: i
+        '}
+        SuccessfulPreemption : UDINT; // Any time BPTM applies a new BP request which is confirmed
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)AccumulatedFastFaults
+            io: i
+        '}
+        AccumulatedFF : UDINT; // Any time a FF occurs
+    END_VAR
+    VAR_GLOBAL CONSTANT
+    	
+        EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
+        VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
+        FAST_TEST_VELOCITY        :    LREAL    := 100;
+        MAX_DEVICE_STATES        :    UDINT    := 300;
+    	
+    	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
+
+    	AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
+        MAX_VETO_DEVICES   :   UINT := 16;
+    	stAttenuators : ST_PMPS_Attenuator :=(nTran:=1,xAttOK:=1);
+    	{attribute 'pytmc' := '
+            pv: @(PREFIX)FullBeamCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC Full beam constant
+        '}    
+        cstFullBeam    :    ST_BeamParams := (
+            nTran := 1,
+            neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
+            nRate    := UDINT#1000000,
+            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+    		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+
+        );
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)0RateBeamCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC 0-rate beam constant
+        '}    
+        cst0RateBeam    :    ST_BeamParams := ( // Use for transition requests
+            nTran := 1,
+            neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
+            nRate    := 0,
+            astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
+    		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+        );
+       (*  {attribute 'pytmc' := '
+            pv: @(PREFIX)SafeBeamCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC Safe beam constant
+        '} 
+       cstSafeBeam    :    ST_BeamParams := (
+            nTran := 0,
+            neVRange := 0,
+            nRate    := 0
+        );*)
+        
+        cnMaxStateArrayLen : INT := 20;
+        
+       
+        MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
+        {warning disable C0228}
+        DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
+        {warning restore C0228}
+        
+        
+        
+        g_cBoundaries    :    INT    := 31;
+    	
+    	
+    //////////////////////////
+    // L Undulator constants
+    //////////////////////////
+
+    ///////////////////////////////////////		
+    	
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)eVRangeHyst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC eV Range hystersis
+            field: EGU eV
+        '}
+        reVHyst: REAL := 5; //
+        
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)L:eVRangeCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC eV Range constants
+            field: EGU eV
+        '}
+        g_areVBoundariesL    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
+        1.0E3,
+    	1.7E3,
+    	2.1E3,
+        2.5E3,
+    	3.8E3,
+    	4.0E3,
+        5.0E3,
+        7.0E3,
+    	7.5E3,
+        7.7E3,
+        8.9E3,
+        10.0E3,
+        11.1E3,
+        12.0E3,
+    	13.0E3,
+    	13.5E3,
+        14.0E3,
+        16.9E3,
+        18.0E3,
+        20.0E3,
+        22.0E3,
+        24.0E3,
+    	25.0E3,
+    	25.5E3,
+    	26.0E3,
+    	27.0E3,
+    	28.0E3,
+    	28.5E3,
+    	29.0E3,
+    	30.0E3,
+    	60.0E3,
+    	90.0E3
+    	];
+
+
+        {attribute 'pytmc' := '
+            pv: @(PREFIX)K:eVRangeCnst
+    		io: i
+            archive: 1Hz monitor
+            field: DESC eV Range constants
+            field: EGU eV
+        '}
+        g_areVBoundariesK    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
+        100,
+    	250,
+        270,
+        350,
+        400,
+        450,
+    	480,
+    	530,
+        680,
+    	730,
+        850,
+    	1.10E3,
+        1.15E3,
+        1.25E3,
+        1.45E3,
+    	1.50E3,
+        1.55E3,
+        1.65E3,
+    	1.70E3,
+        1.75E3,
+        1.82E3,
+    	1.85E3,
+    	2.00E3,
+    	2.20E3,
+    	2.50E3,
+    	2.80E3,
+    	3.00E3,
+    	3.15E3,
+    	3.50E3,
+    	4.00E3,
+    	5.30E3,
+        7.00E3
+    	];
+
+
+    END_VAR
+
+
+Related:
+    * `PE_Ranges`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
+PMPS_PARAM
+^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    VAR_GLOBAL CONSTANT
+        MAX_FAST_FAULTS	:	UINT := 50; // Max fast faults for an FFO
+        MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of BP requests in the arbiter
+        TRANS_MARGIN : REAL := REAL#0.05; // Allowed % margin above requested transmission level in SafeBPCompare (0.0500 = 5deci% default). Note: change this value if scaling factor changes.
+    END_VAR
+
+
+
+
+PMPS_TOOLS
+^^^^^^^^^^
+
+::
+
+    {attribute 'qualified_only'}
+    VAR_GLOBAL
+    	fbJson : FB_JsonSaxWriter;
+    END_VAR
+
+
+
+
+POUs
+----
+
+
+APT_TO_IO
+^^^^^^^^^
+
+::
+
+    FUNCTION APT_TO_IO : ST_PMPS_Aperture_IO
+    VAR_INPUT
+        Apt : ST_PMPS_Aperture;
+    END_VAR
+    VAR
+    END_VAR
+    APT_TO_IO.Height := Apt.Height;
+    APT_TO_IO.Width := Apt.Width;
+    APT_TO_IO.xOK := Apt.xOK;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Aperture`_
+
+
+ATT_TO_IO
+^^^^^^^^^
+
+::
+
+    FUNCTION ATT_TO_IO : ST_PMPS_Attenuator_IO
+    VAR_INPUT
+        Att : ST_PMPS_Attenuator;
+    END_VAR
+    VAR
+    END_VAR
+    ATT_TO_IO.nTran := Att.nTran;
+    ATT_TO_IO.xAttOK := Att.xAttOK;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Attenuator`_
+
+
+BeamParameterTransitionManager
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Implements the procedure for safely transitioning between device states.
+
+    NOTE:
+    The BPTM will throw an error if the arbiter does not have enough space for the transition and new final assertion. 
+
+     *)
+    FUNCTION_BLOCK BeamParameterTransitionManager
+    VAR_IN_OUT
+        
+        fbArbiter    :    FB_Arbiter; //Connect to local arbiter
+        
+    END_VAR
+    VAR_INPUT
+    	i_sDeviceName	: 	STRING:='Device'; // Name of the device requesting the transition	
+
+        i_TransitionAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
+        i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
+        
+        i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
+        i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+        
+        i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
+        i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
+        
+        stCurrentBeamParameters    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Connect to current beam parameters
+        
+        // Rising edge to cycle back through the BPTM process. Use if something in the process timed out or failed. This will interrupt a current process
+        bRetry : BOOL := FALSE; 
+    END_VAR
+    VAR_OUTPUT
+
+        q_xTransitionAuthorized    :    BOOL := FALSE; //Rising edge indicating the device is safe to move, use as input to move execute (which requires a rising edge)
+
+        bError : BOOL; // Set if some issue occurs within the bptm
+        nErrId : UINT; // Set to non-zero to help understand the error.
+        
+        bDone : BOOL;
+        bBusy : BOOL;
+        
+    END_VAR
+
+    VAR
+        nTargetAssertionID    :    UDINT := 0;
+        stTargetAssertion    :    ST_BeamParams; // Target assertion
+        nCurrentAssertionID    :    UDINT := 0;  // ID of last set state (zero until a state is reached)
+        
+        xNewBP    :    BOOL;
+        xTranBP    :    BOOL;
+        xFinalBPInArb : BOOL;
+        xFinalBP    :    BOOL;
+        
+        eBPTMState : E_BPTMState := Init;
+        ePrevState : E_BPTMState := Init;
+        
+        xEntry : BOOL;
+        rTransition : R_TRIG;
+        xNewTarget : BOOL;
+    	
+    	bTransAssertionFailed : BOOL;
+        bFinalAssertionFailed : BOOL;
+    	
+    	LogStrBuffer : ARRAY [0..LogBuffSize] OF STRING;
+    	LogBuffIdx : FB_Index := (LowerLimit:=0, UpperLimit:=LogBuffSize);
+        
+        nAssrtAttempt : INT; // Number of times we have tried asserting a BP set
+        
+        rtRetry : R_TRIG;
+        
+        rtError : R_TRIG;
+        
+        ffTimeout : FB_FastFault := (
+            i_Desc := 'Preemptive requests timed out in BPTM',
+            i_TypeCode := 16#A,
+            i_xAutoReset := FALSE);
+            
+    	rtDoneMoving : R_TRIG;
+        bLatchDoneMoving : BOOL;
+        
+        bFirstMove : BOOL := TRUE;    
+            
+    END_VAR
+    VAR CONSTANT
+    	LogBuffSize : INT := 40;
+        cMaxAttempts : INT := 3;
+        (* The thought here is, a BPTM needs at most 2 arbiter slots to complete a transition.
+        If we're at capacity, it means some BPTM before this one has begun a transition,
+        and will require at least one more arbiter spot to complete. 
+        *)
+        cReqArbCapacity : UDINT := 2;
+    END_VAR
+    // Logic for retry button
+    rtRetry(CLK:=bRetry);
+    bRetry := FALSE;
+
+    // Logic for catching Move Done rising edge
+    rtDoneMoving(CLK:=i_xDoneMoving);
+    bLatchDoneMoving S= rtDoneMoving.Q;
+
+    // Logic for interrupting BPTM and changing requests
+    IF nTargetAssertionID <> i_nRequestedAssertionID OR rtRetry.Q THEN
+        
+        bError := FALSE;
+        nErrID := 0;
+        
+        bDone := FALSE;
+        bBusy := TRUE;
+
+        // Execute exit actions before transition back to NewTarget
+        CASE eBPTMState OF
+            Transitioning:
+                DeauthorizeTransition();
+            //CleaningUp: 
+    	END_CASE
+            
+        eBPTMState := E_BPTMState.NewTarget;
+        xEntry := eBPTMState <> ePrevState;
+        
+    END_IF
+
+    IF xEntry THEN nAssrtAttempt := 0; END_IF
+
+    rtError(CLK:=bError);
+
+    IF rtError.Q THEN
+        eBPTMState := E_BPTMState.Error;
+    END_IF
+
+    // States
+    CASE eBPTMState OF
+        NewTarget:
+            IF xEntry THEN
+                NewTarget_ENTRY();
+            ELSIF xNewBP THEN
+                eBPTMState := E_BPTMState.RequestBP;
+            ELSE
+                SetNewTarget();
+            END_IF
+            
+        RequestBP:
+            IF PMPS_PARAM.MAX_ASSERTIONS - fbArbiter.nEntryCount >= cReqArbCapacity THEN
+                AssertTransitionBP();
+                AssertFinalBP();
+                eBPTMState := E_BPTMState.WaitForBP;
+    		ELSE
+                LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
+                nErrId := PMPS_CODES.NoRoomInArb;
+                bError := TRUE;
+            END_IF
+        
+        WaitForBP:
+            WaitingForTransitionAssertion_DO();
+            WaitingForFinalAssertion_DO();
+            IF xTranBP AND xFinalBPInArb THEN eBPTMState := E_BPTMState.Transitioning; END_IF
+            
+        Transitioning:
+            IF xEntry THEN
+                AuthorizeTransition();
+            ELSIF bLatchDoneMoving OR (bFirstMove AND i_xDoneMoving) THEN
+                DeauthorizeTransition();
+                eBPTMState := E_BPTMState.WaitForFinalBP;
+    		END_IF
+            
+        WaitForFinalBP:
+            xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion);
+            IF xFinalBP THEN
+                eBPTMState := E_BPTMState.CleaningUp;
+            END_IF
+        
+        CleaningUp:
+            IF xEntry THEN
+                RemoveTransitionAssertion();
+    		ELSE
+    			eBPTMState := E_BPTMState.Done;
+    		END_IF
+
+        Done:
+            bDone := TRUE;
+            bFirstMove := FALSE;
+            LogActions('Returning to idle');
+            eBPTMState := E_BPTMState.Idle;
+        
+        Error:
+            bError := TRUE;    
+            eBPTMState := E_BPTMState.Idle;
+    END_CASE
+
+    xEntry := ePrevState <> eBPTMState;
+    ePrevState := eBPTMState;
+
+    bDone R= bError;
+    bBusy R= bError OR bDone;
+
+    END_FUNCTION_BLOCK
+    ACTION AssertFinalBP:
+    //q_stFinalAssertion := stTargetAssertion;
+
+    //Clearing previous target parameters
+    (* This is considered safe at this step as the transition
+    state beam parameters should always be safer than the
+    current or target state beam parameters
+    *)
+    IF nCurrentAssertionID <> 0 THEN
+        LogActions(CONCAT('Removing previous request: ', DWORD_TO_HEXSTR(nCurrentAssertionID, 4, false)) );
+        fbArbiter.RemoveRequest( nCurrentAssertionID );
+    END_IF
+
+    LogActions(CONCAT('Asserting target req.: ', DWORD_TO_HEXSTR(nTargetAssertionID, 4, false)) );
+
+    //Asserting target parameters
+    bFinalAssertionFailed := NOT fbArbiter.AddRequest(
+        nTargetAssertionID,
+        stTargetAssertion,
+    	i_sDeviceName
+    );
+
+    IF bFinalAssertionFailed THEN
+        LogActions('Assert final failed. ');
+        nAssrtAttempt := nAssrtAttempt + 1;
+        IF nAssrtAttempt > cMaxAttempts THEN
+            bError := TRUE;
+            nErrID := PMPS_CODES.FinalAssrtFail;
+        END_IF
+    ELSE
+        // Remembering final assertionID for removal later
+        nCurrentAssertionID := nTargetAssertionID;    
+    END_IF
+    END_ACTION
+    ACTION AssertTransitionBP:
+    LogActions( CONCAT('Removing transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
+    fbArbiter.RemoveRequest(i_TransitionAssertionID);
+
+    LogActions( CONCAT('Requesting transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
+    bTransAssertionFailed := NOT fbArbiter.AddRequest(
+        i_TransitionAssertionID,
+        i_stTransitionAssertion,
+    	i_sDeviceName
+    );
+
+    IF bTransAssertionFailed THEN
+        LogActions('Assert trans. failed. ');
+        nAssrtAttempt := nAssrtAttempt + 1;
+        IF nAssrtAttempt > cMaxAttempts THEN
+            bError := TRUE;
+            nErrID := PMPS_CODES.TransAssrtFail;
+        END_IF    
+    END_IF
+    END_ACTION
+    ACTION AuthorizeTransition:
+    q_xTransitionAuthorized := TRUE;
+
+    bLatchDoneMoving R= q_xTransitionAuthorized;
+
+    LogActions('Authorizing transition');
+    END_ACTION
+    ACTION DeauthorizeTransition:
+    q_xTransitionAuthorized := FALSE;
+    LogActions('Deauthorizing transition');
+    END_ACTION
+    ACTION NewTarget_ENTRY:
+    xNewBP := False;
+    END_ACTION
+    ACTION RemoveTransitionAssertion:
+    //q_stTransitionAssertion := PMPS_GVL.cstFullBeam;
+
+    //Removing transition assertion
+    fbArbiter.RemoveRequest( i_TransitionAssertionID );
+
+    LogActions('Removing transition req');
+
+    //TODO add something to verify removal
+    END_ACTION
+    ACTION RequestBP_DO:
+    // Request BP atomically so we know we'll finish the BPTM cycle
+    IF fbArbiter.nEntryCount < cReqArbCapacity THEN
+
+        LogActions( CONCAT('Removing transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
+        fbArbiter.RemoveRequest(i_TransitionAssertionID);
+        
+        LogActions( CONCAT('Requesting transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
+        bTransAssertionFailed := NOT fbArbiter.AddRequest(
+            i_TransitionAssertionID,
+            i_stTransitionAssertion,
+    		i_sDeviceName
+        );
+        
+        IF bTransAssertionFailed THEN
+            LogActions('Assert trans. failed. ');
+            nAssrtAttempt := nAssrtAttempt + 1;
+            IF nAssrtAttempt > cMaxAttempts THEN
+                bError := TRUE;
+                nErrID := PMPS_CODES.TransAssrtFail;
+            END_IF    
+        END_IF
+        
+        
+
+    ELSE
+        LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
+    END_IF
+    END_ACTION
+    ACTION SetNewTarget:
+    IF F_ValidReqID(i_nRequestedAssertionID) AND
+        F_ValidReqID(i_TransitionAssertionID) THEN
+        
+        stTargetAssertion := i_stRequestedAssertion;
+        nTargetAssertionID := i_nRequestedAssertionID;
+    	
+    	LogActions('New target set');
+    	
+        xNewBP := TRUE;
+        
+    ELSE
+        IF NOT F_ValidReqID(i_nRequestedAssertionID) THEN
+            
+            nErrID := PMPS_CODES.BadTargetID;
+        ELSIF NOT F_ValidReqID(i_TransitionAssertionID) THEN
+            nErrID := PMPS_CODES.BadTransID;
+    	END_IF
+        LogActions('Error in set new target');
+        bError := TRUE;
+    END_IF
+    END_ACTION
+    ACTION WaitingForFinalAssertion_DO:
+    //Final Assertion Verification
+
+    xFinalBPInArb := fbArbiter.CheckRequest( i_nRequestedAssertionID);;
+    END_ACTION
+    ACTION WaitingForFinalAssertion_EXIT:
+    //Set this bool false so we can get a rising edge on the next try
+    xFinalBP := FALSE;
+    END_ACTION
+    ACTION WaitingForTransitionAssertion_DO:
+    //Transition Assertion Verification
+    xTranBP    := F_SafeBPCompare0Rate(stCurrentBeamParameters, i_stTransitionAssertion) AND
+        fbArbiter.CheckRequest(i_TransitionAssertionID);
+    END_ACTION
+    ACTION WaitingForTransitionAssertion_EXIT:
+    xTranBP := FALSE;
+    END_ACTION
+
+
+Related:
+    * `E_BPTMState`_
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `F_SafeBPCompare`_
+    * `F_SafeBPCompare0Rate`_
+    * `F_ValidReqID`_
+    * `PMPS_CODES`_
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
+
+
+BP_TO_IO
+^^^^^^^^
+
+::
+
+    FUNCTION BP_TO_IO : ST_BeamParams_IO
+    VAR_INPUT
+        BP : ST_BeamParams;
+    END_VAR
+    VAR
+        idx : UINT := 0;
+    END_VAR
+    FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+        BP_TO_IO.astAttenuators[idx] := ATT_TO_IO(BP.astAttenuators[idx]);
+    END_FOR
+
+    FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+        BP_TO_IO.astApertures[idx] := APT_TO_IO(BP.astApertures[idx]);
+    END_FOR
+
+    BP_TO_IO.aVetoDevices := BP.aVetoDevices;
+    BP_TO_IO.nTran := BP.nTran;
+    BP_TO_IO.nCohortInt := ULINT_TO_UDINT(BP.nCohortInt);
+    BP_TO_IO.neVRange := BP.neVRange;
+    BP_TO_IO.nRate := BP.nRate;
+    BP_TO_IO.xValid := BP.xValid;
+    BP_TO_IO.xValidToggle := BP.xValidToggle;
+
+    END_FUNCTION
+
+
+Related:
+    * `APT_TO_IO`_
+    * `ATT_TO_IO`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+CheckBounds
+^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckBounds : DINT
+    VAR_INPUT
+    	index, lower, upper: DINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF  index < lower THEN
+    	CheckBounds := lower;
+    ELSIF  index > upper THEN
+    	CheckBounds := upper;
+    ELSE  
+    	CheckBounds := index;
+    END_IF
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckDivDInt
+^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckDivDInt : DINT
+    VAR_INPUT
+    	divisor:DINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF divisor = 0 THEN
+    	CheckDivDInt:=1;
+    ELSE
+    	CheckDivDInt:=divisor;
+    END_IF;
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckDivLInt
+^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckDivLInt : LINT
+    VAR_INPUT
+    	divisor:LINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF divisor = 0 THEN
+    	CheckDivLInt:=1;
+    ELSE
+    	CheckDivLInt:=divisor;
+    END_IF;
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckDivLReal
+^^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckDivLReal : LREAL
+    VAR_INPUT
+    	divisor:LREAL;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF divisor = 0 THEN
+    	CheckDivLReal:=1;
+    ELSE
+    	CheckDivLReal:=divisor;
+    END_IF;
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckDivReal
+^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckDivReal : REAL
+    VAR_INPUT
+    	divisor:REAL;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF divisor = 0 THEN
+    	CheckDivReal:=1;
+    ELSE
+    	CheckDivReal:=divisor;
+    END_IF;
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckLRangeSigned
+^^^^^^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckLRangeSigned : LINT
+    VAR_INPUT
+    	value, lower, upper: LINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF (value < lower) THEN
+    	CheckLRangeSigned := lower;
+    ELSIF(value > upper) THEN
+    	CheckLRangeSigned := upper;
+    ELSE
+    	CheckLRangeSigned := value;
+    END_IF
+
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckLRangeUnsigned
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckLRangeUnsigned : ULINT
+    VAR_INPUT
+    	value, lower, upper: ULINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF (value < lower) THEN
+    	CheckLRangeUnsigned := lower;
+    ELSIF(value > upper) THEN
+    	CheckLRangeUnsigned := upper;
+    ELSE
+    	CheckLRangeUnsigned := value;
+    END_IF
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckPointer
+^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckPointer : POINTER TO BYTE
+    VAR_INPUT 
+    	ptToTest : POINTER TO BYTE; // Destination address of the pointer
+    	iSize : DINT;		        // Size of the type the pointer points to. (e.g: 20 for POINTER TO ARRAY [0..9] OF INT) 
+    	iGran : DINT;		        // Granularity of the pointer access. This is the size of the biggest non-structured data type in the type the pointer points to. (e.g: 2 for POINTER TO ARRAY [0..9] OF INT)
+    	bWrite: BOOL;		        // Indicates read or write Access. TRUE = write access.
+    END_VAR
+    // No standard way of implementation. Fill your own code here
+    CheckPointer := ptToTest;
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckRangeSigned
+^^^^^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckRangeSigned : DINT
+    VAR_INPUT
+    	value, lower, upper: DINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF (value < lower) THEN
+    	CheckRangeSigned := lower;
+    ELSIF(value > upper) THEN
+    	CheckRangeSigned := upper;
+    ELSE
+    	CheckRangeSigned := value;
+    END_IF
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+CheckRangeUnsigned
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    // Implicitly generated code : DO NOT EDIT
+    FUNCTION CheckRangeUnsigned : UDINT
+    VAR_INPUT
+    	value, lower, upper: UDINT;
+    END_VAR
+    // Implicitly generated code : Only an Implementation suggestion
+    {noflow}
+    IF (value < lower) THEN
+    	CheckRangeUnsigned := lower;
+    ELSIF(value > upper) THEN
+    	CheckRangeUnsigned := upper;
+    ELSE
+    	CheckRangeUnsigned := value;
+    END_IF
+    {flow}
+
+    END_FUNCTION
+
+
+
+
+F_AttenuatorOK
+^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Indicates if the attenuator can be considered safe for a device,
+    given its status word.
+
+    In local mode, the atteunator ignores PMPS requests, following a local
+    setpoint. In this mode, a device cannot trust that the attenuator will not
+    increase transmission beyond its own setpoint. Therefore any
+    indication of a changing transmission should cause a fault.
+
+    In PMPS mode, if a device has submitted a preemptive request and received
+    acknowledgement, then the transmission setpoint will be governed at least
+    by that device's setpoint. Therefore, the attenuator may be moving without
+    generating a fault.
+    *)
+    FUNCTION F_AttenuatorOK : BOOL
+    VAR_INPUT
+        xStatus : WORD;
+    END_VAR
+    VAR
+    END_VAR
+    IF xStatus.2 THEN // Local mode
+        F_AttenuatorOK := xStatus.0 and NOT xStatus.1;
+    ELSIF xStatus.3 AND NOT xStatus.2 THEN // PMPS mode
+        F_AttenuatorOK := TRUE;
+    END_IF
+
+    F_AttenuatorOK := xStatus.4 AND F_AttenuatorOK;
+
+    END_FUNCTION
+
+
+
+
+F_BPWithID
+^^^^^^^^^^
+
+::
+
+    FUNCTION F_BPWithID : ST_BP_ArbInternal
+    VAR_INPUT
+    	BP : REFERENCE TO ST_BeamParams;
+    	ID : DWORD;
+    END_VAR
+    VAR
+    	BpInt : ST_BP_ArbInternal;
+    END_VAR
+    MEMCPY(ADR(F_BPWithID), ADR(BP), SIZEOF(BP));
+    F_BPWithID.nId := ID;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_BP_ArbInternal`_
+    * `ST_BeamParams`_
+
+
+F_CalculatePhotonEnergy
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_CalculatePhotonEnergy : LREAL
+    VAR_INPUT
+        (* Electron energy in GeV *)
+        fElectronEnergy_GeV : LREAL;
+        (* Undulator period in mm *)
+        fUndulatorPeriod_mm : LREAL;
+        (* Unitless undulator K parameter / strength *)
+        fUndulatorStrength : LREAL;
+    END_VAR
+
+    VAR
+        fDenominator: LREAL;
+    END_VAR
+
+    VAR CONSTANT
+        (* GeV [electron rest mass/energy] *)
+        m_e : LREAL := 0.0005109989461;
+        (* Js [Planck's constant] *)
+        h 	: LREAL := 6.62607004E-34;
+        (* C [electron charge] *)
+        e 	: LREAL := 1.6021766208E-19;
+        (* m/s, speed of light *)
+        c 	: LREAL := 299792458;
+
+    END_VAR
+    (*
+
+    Reference Python implementation
+
+    def calculate_photon_energy(electron_energy, period, k):
+        '''
+        Calculate photon energy, in eV.
+
+        Parameters
+        ----------
+        electron_energy : float
+            Electron energy in GeV
+
+        period : float
+            Undulator period, in mm
+
+        k : float
+            Undulator K parameter (strength), unitless
+        '''
+        m_e = 0.0005109989461  # GeV [electron rest mass/energy]
+        h = 6.62607004e-34  # Js [Planck's constant]
+        e = 1.6021766208e-19  # C [electron charge]
+        c = 299792458  # m/s, speed of light
+        return ((2. * (electron_energy / m_e) ** 2 * h * c) /
+                (e * period * 1e-3 * (1 + k ** 2 / 2.)))
+
+    *)
+    fDenominator := (e * fUndulatorPeriod_mm * 1E-3 * (1.0 + EXPT(fUndulatorStrength, 2.0) / 2.0));
+    F_CalculatePhotonEnergy := (2.0 * EXPT(fElectronEnergy_GeV / m_e, 2.0) * h * c) / MAX(fDenominator, 4.94065645841247E-324);
+
+    END_FUNCTION
+
+
+
+
+F_DeviceState_To_DeviceStateExt
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_DeviceState_To_DeviceStateExt : ST_DeviceStateExt
+    VAR_INPUT
+        stDeviceState    :    ST_DeviceState;
+        xValid    :    BOOL;
+    END_VAR
+    VAR
+    END_VAR
+    F_DeviceState_To_DeviceStateExt.nStateRef := stDeviceState.nStateRef;
+    F_DeviceState_To_DeviceStateExt.rPosition    :=    stDeviceState.rPosition;
+    F_DeviceState_To_DeviceStateExt.rTolerance    :=    stDeviceState.rTolerance;
+    F_DeviceState_To_DeviceStateExt.sStateName    := stDeviceState.sStateName;
+    F_DeviceState_To_DeviceStateExt.stReqBeamParam    := stDeviceState.stReqBeamParam;
+    F_DeviceState_To_DeviceStateExt.xValid := xValid;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_DeviceState`_
+    * `ST_DeviceStateExt`_
+
+
+F_DifferentBeamParams
+^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
+    the result will be true. *)
+    FUNCTION F_DifferentBeamParams : BOOL
+    VAR_INPUT
+        BeamParam1    :    ST_BeamParams;
+        BeamParam2    :    ST_BeamParams;
+    END_VAR
+    VAR
+        xAttOK: BOOL := FALSE;
+        xPPmjOK: BOOL := FALSE;
+        xEvOK: BOOL := FALSE;
+        xRateOK: BOOL := FALSE;
+        xaStopper : BOOL := FALSE;
+        xaAtt : BOOL := FALSE;
+        xaApt : BOOL := FALSE;
+        
+        idx : UINT;
+        
+        
+    END_VAR
+    xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
+    xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
+    xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
+
+    //ast Attenuators
+    FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
+        xaAtt S= (BeamParam1.astAttenuators[idx].nTran <> BeamParam2.astAttenuators[idx].nTran);   
+    END_FOR
+
+    // Stoppers
+    FOR idx:=1 TO PMPS_GVL.MAX_VETO_DEVICES DO
+        xaStopper S= (BeamParam1.aVetoDevices[idx] <> BeamParam2.aVetoDevices[idx]);
+    END_FOR
+
+    // ast Apertures
+    FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
+        xaApt S= (BeamParam1.astApertures[idx].Height <> BeamParam2.astApertures[idx].Height) OR
+                (BeamParam1.astApertures[idx].Width <> BeamParam2.astApertures[idx].Width);
+    END_FOR
+
+
+    F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+F_eVExcludeRange
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_eVExcludeRange : DWORD
+    (*
+        Given an lower and upper end of an exclusion range, return the corresponding eV bitmask.
+        
+        eVs between fLower and fUpper will be considered unsafe, and eVs outside of this range will be
+        considered safe, with the exception of the endpoints and values near the endpoints if they land
+        far from an eV boundary.
+        
+        Call this in your init cycle to set up your eV bitmasks for more readable code
+        that is also more resiliant to eV range definition adjustments.
+    *)
+    VAR_INPUT
+        fLower: REAL;
+        fUpper: REAL;
+    END_VAR
+    F_eVExcludeRange := F_eVIncludeRange(0, fLower) OR F_eVIncludeRange(fUpper, PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries]);
+
+    END_FUNCTION
+
+
+Related:
+    * `F_eVIncludeRange`_
+    * `PMPS_GVL`_
+
+
+F_eVIncludeRange
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_eVIncludeRange : DWORD
+    (*
+        Given an lower and upper end of an inclusion range, return the corresponding eV bitmask.
+        
+        eVs between fLower and fUpper will be considered safe, with the exception of the endpoints and values
+        near the endpoints if they land far from an eV boundary.
+        
+        Call this in your init cycle to set up your eV bitmasks for more readable code
+        that is also more resiliant to eV range definition adjustments.
+    *)
+    VAR_INPUT
+        fLower: REAL;
+        fUpper: REAL;
+    END_VAR
+    VAR
+        nBitmask: DWORD := 0;
+        nIndex: INT;
+        nBit: USINT := 0;
+        fPrev: REAL := 0;
+    END_VAR
+    FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+        IF fLower <= fPrev AND fUpper >= PMPS_GVL.g_areVBoundaries[nIndex] THEN
+            nBitmask := nBitmask + SHL(1, nBit);
+        END_IF
+        fPrev := PMPS_GVL.g_areVBoundaries[nIndex];
+        nBit := nBit + 1;
+    END_FOR
+
+    F_eVIncludeRange := nBitmask;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+F_eVRangeCalculator
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    A. Wallace 2019-8-8
+
+    Provides bit range of eV.
+
+    LastWord = 0 (Result)
+    ----------------------------------
+    reV = 300 = (0000_0000_0000_0010)
+    reV = 301 = (0000_0000_0000_0100)
+
+    LastWord = 0000_0000_0000_0010 (Result)
+    ----------------------------------
+    reV = 300 + <rHyst = (0000_0000_0000_0110)
+    reV = 300 + >rHyst = (0000_0000_0000_0100)
+
+    *)
+    FUNCTION F_eVRangeCalculator : DWORD // Bit-range of current photon energy
+    VAR_INPUT
+        reV    :    REAL; // Photon energy (keV)
+        LastWord    :    DWORD; // Range word of previous cycle
+    END_VAR
+    VAR
+        nIndex: INT;
+        RangeWord: DWORD;
+        rPreviousBoundary: REAL := 0;
+        
+        MaxEv    :    REAL := PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries];
+    	
+    	Boundaries : ARRAY [0..PMPS_GVL.g_cBoundaries] OF REAL;
+    END_VAR
+    {IF defined (L)}
+    	Boundaries := PMPS_GVL.g_areVBoundariesL;
+    {ELSIF defined (K)}
+    	Boundaries := PMPS_GVL.g_areVBoundariesK;
+    {END_IF}
+
+    MaxEv := Boundaries[PMPS_GVL.g_cBoundaries];
+
+    IF reV <= 0 OR reV > MaxEv THEN F_eVRangeCalculator := 16#FFFF_FFFF; RETURN; END_IF // Failsafe
+
+    FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+        
+        // If previously active then check if it should be cleared
+        IF LastWord.0 THEN 
+            // Hysteresis condition
+            IF (reV > MIN(Boundaries[nIndex] + PMPS_GVL.reVHyst, MaxEv) ) OR
+            (reV < MAX(rPreviousBoundary - PMPS_GVL.reVHyst, 0) ) THEN
+                RangeWord.0 := 0; // If out of range of hys. mark inactive
+            ELSE
+                RangeWord.0 := 1;
+            END_IF
+        ELSE // Check if we should mark as active
+            IF (reV <= Boundaries[nIndex]) AND
+            (reV > rPreviousBoundary) OR
+             (nIndex = 0 AND reV = 0 ) THEN
+                RangeWord.0 := 1;
+            END_IF
+        END_IF
+        
+        // Catch if the hysteresis is set too large for the range
+        IF rPreviousBoundary + PMPS_GVL.reVHyst >= Boundaries[nIndex] THEN
+            RangeWord.0 := 1; // Setting the bit true here as a failsafe
+            //<TODO> Add major error or warning here
+        END_IF
+        
+        rPreviousBoundary := Boundaries[nIndex];
+        // Shift to next bit
+        RangeWord := ROR(RangeWord, 1);
+        LastWord := SHR(LastWord, 1);
+        
+    END_FOR
+
+    F_eVRangeCalculator := RangeWord;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+F_eVWithinSpec
+^^^^^^^^^^^^^^
+
+::
+
+    //reV must be within permitted range.
+    FUNCTION F_eVWithinSpec : BOOL
+    VAR_INPUT
+        reV    :    REAL;    //Photon energy to check if within permitted range
+        nPermittedRange    :    DWORD; //Permitted range
+    END_VAR
+    VAR
+        //Holding register for permitted ranges
+        nPermittedRangeHolding    :    DWORD; 
+        //For loop counter
+        nIndex    :    INT;
+        // Lower boundary for range check 
+        rPreviousBoundary: REAL := 0;
+    	Boundaries: ARRAY [0..PMPS_GVL.g_cBoundaries] OF REAL;
+    END_VAR
+    (* How this works:
+    The within range bool is initialized to false.
+    Load the word representation of ranges into a holding register.
+    If the bit at position zero of the holding register is true, and the input eV is
+    below the boundary at the index position of the boundary array, and the previous boundary
+    (which initializes at 0), then the within range bool is set. 
+    Then, we stash the upper boundary as the lower boundary for the next comparison,
+    and shift the holding register right, which moves the next bit to the zero position.
+    *)
+
+    {IF defined (L)}
+    	Boundaries := PMPS_GVL.g_areVBoundariesL;
+    {ELSIF defined (K)}
+    	Boundaries := PMPS_GVL.g_areVBoundariesK;
+    {END_IF}
+
+    nPermittedRangeHolding := nPermittedRange;
+
+    FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
+            
+        F_eVWithinSpec S= nPermittedRangeHolding.0 AND( 
+            (reV <= Boundaries[nIndex]) AND
+            (reV >= rPreviousBoundary) );
+            
+        IF F_eVWithinSpec THEN RETURN; END_IF
+        
+        rPreviousBoundary := Boundaries[nIndex];
+        nPermittedRangeHolding := SHR(nPermittedRangeHolding, 1);
+    END_FOR
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+F_InitTestBP
+^^^^^^^^^^^^
+
+::
+
+    // Establishes a BP set for testing.
+    // Specifically this means a BP that has all the status bits set to an OK state
+    FUNCTION F_InitTestBP : ST_BeamParams
+    VAR_INPUT
+        BP : ST_BeamParams;
+    END_VAR
+    VAR
+    END_VAR
+
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+F_PMPS_JSON
+^^^^^^^^^^^
+
+::
+
+    FUNCTION F_PMPS_JSON : STRING
+    VAR_INPUT
+    	sDevName : STRING := '';
+    	sPath : STRING := '';
+    	nTypeCode : UINT := 0;
+    END_VAR
+    VAR
+    	
+    END_VAR
+    PMPS_TOOLS.fbJson.StartObject();
+    PMPS_TOOLS.fbJson.AddKey('pmps_typecode');
+    PMPS_TOOLS.fbJson.AddUdint(nTypeCode);
+    PMPS_TOOLS.fbJson.AddKey('pmps_path');
+    PMPS_TOOLS.fbJson.AddString(sPath);
+    PMPS_TOOLS.fbJson.AddKey('pmps_device_name');
+    PMPS_TOOLS.fbJson.AddString(sDevName);
+    PMPS_TOOLS.fbJson.EndObject();
+    F_PMPS_JSON := PMPS_TOOLS.fbJson.GetDocument();
+    PMPS_TOOLS.fbJson.ResetDocument();
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_TOOLS`_
+
+
+F_SafeBPCompare
+^^^^^^^^^^^^^^^
+
+::
+
+    (*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
+    the result will be true. *)
+    // Does not consider status. Status must be evaluated elsewhere.
+    FUNCTION F_SafeBPCompare : BOOL
+    VAR_INPUT
+        BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
+        BeamParam2    :    ST_BeamParams;
+    END_VAR
+    VAR
+        // Internal Attenuation OK boolean
+        xAttOK: BOOL := FALSE;
+        // Internal Per-pulse energy OK boolean
+        xPPmjOK: BOOL := FALSE;
+        // Internal photon energy OK boolean
+        xEvOK: BOOL := FALSE;
+        // Internal Beam Rate OK boolean
+        xRateOK: BOOL;
+        
+        idx : UINT;
+        xAuxAttOK : BOOL := TRUE;
+        xAuxAprtOK : BOOL := TRUE;
+        
+        Att1 : REFERENCE TO ST_PMPS_Attenuator;
+        Att2 : REFERENCE TO ST_PMPS_Attenuator;
+        
+    END_VAR
+    xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
+    xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
+    xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
+
+    FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
+        Att1 REF= BeamParam1.astAttenuators[idx];
+        Att2 REF= BeamParam2.astAttenuators[idx];
+        xAuxAttOK R= ( Att1.nTran > MIN( PMPS_GVL.TRANS_SCALING_FACTOR, ( (Att2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR ) ) );    
+    END_FOR
+
+    FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
+        xAuxAprtOK R= BeamParam1.astApertures[idx].Height > BeamParam2.astApertures[idx].Height OR
+        BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
+    END_FOR
+
+    F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
+F_SafeBPCompare0Rate
+^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
+    the result will be true. *)
+    (* 0-rate means this function will return true regardless of other conditions if the beam rate
+    is zero *)
+    FUNCTION F_SafeBPCompare0Rate : BOOL
+    VAR_INPUT
+        BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
+        BeamParam2    :    ST_BeamParams;
+    END_VAR
+    VAR
+        // Beam-rate is zero, masks all others considerations.
+        xZeroRate: BOOL;
+        
+    END_VAR
+    xZeroRate    := BeamParam1.nRate = 0;
+
+    F_SafeBPCompare0Rate := xZeroRate OR F_SafeBPCompare(BeamParam1, BeamParam2);
+
+    END_FUNCTION
+
+
+Related:
+    * `F_SafeBPCompare`_
+    * `ST_BeamParams`_
+
+
+F_SetBeamParams
+^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_SetBeamParams : ST_BeamParams
+    VAR_INPUT
+        nTran    :    REAL := 0;
+        neVRange    :    DWORD := 0;
+        nRate    :    UDINT := 0;
+        astAuxAtt : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
+    END_VAR
+    VAR
+        BeamParams    :    ST_BeamParams;
+        
+    END_VAR
+    BeamParams.nTran := LIMIT(0,nTran,PMPS_GVL.TRANS_SCALING_FACTOR);
+    BeamParams.astAttenuators := astAuxAtt;
+    BeamParams.neVRange := neVRange;
+    BeamParams.nRate    := MIN(nRate,1000000);
+
+    F_SetBeamParams    := BeamParams;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+    * `ST_PMPS_Attenuator`_
+
+
+F_SetGoodAttStatus
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    //Use for testing purposes to set the attenuator status to a good state
+    FUNCTION F_SetGoodAttStatus : UINT
+    VAR_INPUT
+        xStatus : UINT;
+    END_VAR
+    VAR
+    END_VAR
+    xStatus.0 := 1;
+    xStatus.3 := 1;
+    xStatus.4 := 1;
+
+    END_FUNCTION
+
+
+
+
+F_SetStateParams
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_SetStateParams : BOOL;
+    VAR_INPUT
+        nStateRef    :    UDINT;
+        rPosition    :    REAL;
+        rTolerance: REAL;
+        stBeamParams    :    ST_BeamParams;
+    END_VAR
+    VAR_IN_OUT
+        Table    :    FB_LinearDeviceStateTable;
+    END_VAR
+    VAR
+        stDeviceState    :    ST_DeviceState;
+        
+    END_VAR
+    stDeviceState.nStateRef := nStateRef;
+    stDeviceState.rPosition := rPosition;
+    stDeviceState.rTolerance := rTolerance;
+    stDeviceState.stReqBeamParam := stBeamParams;
+
+    Table.A_Add(
+        key := nStateRef,
+        putValue := stDeviceState
+    );
+
+    F_SetStateParams := Table.bOk;
+
+    END_FUNCTION
+
+
+Related:
+    * `FB_LinearDeviceStateTable`_
+    * `ST_BeamParams`_
+    * `ST_DeviceState`_
+
+
+F_ValidReqID
+^^^^^^^^^^^^
+
+::
+
+    FUNCTION F_ValidReqID : BOOL
+    VAR_INPUT
+        ReqID : DWORD;
+    END_VAR
+    VAR
+    END_VAR
+    F_ValidReqID := ReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND ReqID <> 0;
+
+    END_FUNCTION
+
+
+Related:
+    * `PMPS_GVL`_
+
+
+FB_AcceleratorLinks
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_AcceleratorLinks
+    VAR_INPUT
+
+    END_VAR
+
+    VAR_OUTPUT
+    END_VAR
+
+
+    VAR
+
+        {attribute 'pytmc' := '
+            pv: eEnrg:Hgvpu
+            link: BEND:DMPH:400:BACT
+            field: EGU GeV
+        '}
+        fbHgvpuElectronEnergy : FB_LREALFromEPICS;
+
+        {attribute 'pytmc' := '
+            pv: eEnrg:SXU
+            link: BEND:DMPS:400:BACT
+            field: EGU GeV
+        '}
+        fbSxuElectronEnergy : FB_LREALFromEPICS;
+
+    END_VAR
+    fbHgvpuElectronEnergy();
+    fbSxuElectronEnergy();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_Arbiter
+^^^^^^^^^^
+
+::
+
+    (* FB Arbiter
+    A. Wallace 2020-6-26
+
+    The arbiter primary objectives are:
+    - Provide a simple interface for devices to request beam parameter sets
+    - Provide a way for devices to verify their BPS is active in the arbiter
+    - Provide a way for devices remove their requests from evaluation
+    - Evaluate all active beam parameter requests registered with the aribiter,
+    to determine the safest combination of all sets, provide this set as an output.
+    - Do all of this with minimal overhead
+
+    To these ends, the arbiter uses a hash-table, the rows being a state-id as the key, and a corresponding
+     beam parameter set to be evaluated against all the other sets (or rows), in the table.
+     
+    The hash table can be thought of as an array on steriods, they are worth reading about, suffice to say
+    the hash table will tell you when you reach the end of all the entries, and enables us to find entries quickly.
+
+    These features efficiently address the addition, removal, and verification of beam parameter sets listed in the above requirements.
+    *)
+    {attribute 'reflection'}
+    FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
+    VAR
+        nRequestsCount : UDINT; // How many requests are currently in the arbiter
+        
+        {attribute 'pytmc' := '
+            pv: AP
+            io: i
+            field: DESC Assertion Pool
+         '}
+        fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
+
+        xRequestMade : BOOL; // Arbiter has confirmed its request has made it into the beam parameter request    
+        
+        {attribute 'pytmc' := '
+            pv: ArbiterID
+            io: i
+            field: DESC Arbiter ID for elev. req.
+         '}
+        nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
+        
+        nNextCohort : UDINT := 1; // The cohort ID any new requests will adopt, will become ReqInProgCohort at the start of the next acknowledgement cycle
+        nAckInProgCohort : UDINT := 0; // The cohort ID currently being acknowledged, will become nActiveCohort after acknowledgement from HA
+        {attribute 'pytmc' := '
+            pv: CohortCounter
+            io: i
+            field: DESC Intrnl cohort counter
+         '}
+        nActiveCohort : UDINT := 0; // Requests with cohorts <= to this value will be considered active in CheckRequest
+        
+        bStartNewAckRequest : BOOL; // Set by an add or remove method call, triggers an ack cycle
+        bAckInProgress : BOOL; // Set by ElevateReq when there is a new ack request and reset when the ack cycle is complete
+        		
+    	// The following IDs are set by the last BP request that was most conservative
+    	// ie. other requests may limit the parameter, but this one is the most recent to limit it
+    	idTransmission : DWORD; // ID of BP limiting transmission
+    	idRate : DWORD; // ID of BP limiting rate
+        
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+        
+        sArbName : T_MaxString;
+        
+        InfoStringFmtr : FB_FormatString;
+        
+        bVerbose : BOOL := FALSE;
+    END_VAR
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+        {attribute 'pytmc' := '
+            pv: ArbitratedBP
+            io: i
+            field: DESC Arbitrated BP
+         '}
+        q_stBeamParams    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
+        
+        q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
+    END_VAR
+
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_BeamParamAssertionPool`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_Arbiter_Test
+^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_Arbiter_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    Arbitration();
+    RequestCheckRemoveBP();
+    FullArbitrationStack();
+    StackArbiters();
+    RemoveReq();
+    DoS();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_ArbiterToSubSys_IO
+^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (* Exchanges preemption requests and current beam state with subsystems in arbiter
+    network.
+
+    2019-12-2, A. Wallace
+
+    Use in conjunction with FB_SubSysToArbiter_IO.
+
+    This FB runs in the beamline arbiter PLC (BAP). There should be one of these for every
+    subsystem interfaced to the BAP. Each subsystem PLC should run a sibling FB_SubSysToArbiter_IO FB.
+
+    This FB and its subordinate communicate through the ethercat connection between the subsystem PLC and the BAP.
+
+    A beam parameter set request is sent from the subsystem to this PLC, and includes a cohort number.
+
+    This cohort number (i_RequestedBP.nCohortInt) is compared to a local cohort number (nRequestedCohort). 
+    A request from the subsystem to update or modify its current request is indicated by an increase in the
+    i_RequestedBP.nCohortInt value. Then this function block updates the local arbiter request for the subsystem
+    and awaits confirmation. Once the new request is confirmed in the preemptive system this function block increments
+    the ActiveCohort value to match the nRequestedCohort. ActiveCohort is also relayed back to the subsystem
+    as the active cohort value in the o_CurrentBP set. The subsystem then knows its request has been heard,
+    and can carry out its own acknowledgement to its various requestors.
+
+    Things to note:
+    If a subsystem has any new or changed preemptive requests you should see the cohort value increment a bit.
+    If the cohort number is incrementing out of control, it usually means the subsysetm has some preemptive
+    request loop (two arbiters elevating to each other), or there is a RequestAdd, RequestRemove loop.
+
+    *)
+    FUNCTION_BLOCK FB_ArbiterToSubSys_IO
+    VAR_INPUT
+    	RequestingSystemID	:	DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // System ID for making requests to the supreme arbiter
+        sName : STRING := 'ArbiterToSubSys';
+        Reset : BOOL;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    	Arbiter	: FB_Arbiter;
+        fbFFHWO : FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        
+    	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
+        {attribute 'pytmc' := '
+            pv: RequestedBP:FromSubSys
+        '}
+        RequestedBP: ST_BeamParams;
+        
+    	o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
+        
+        // EL6692 Diagnostics
+        i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
+        {attribute 'pytmc' := 'pv: WcState
+            io: i
+            field: DESC Working counter state.
+            field: ZNAM OK
+            field: ONAM Error'}
+        i_WcState AT %I* : BOOL := TRUE; // WcState^WcState
+        {attribute 'pytmc' := 'pv: TxPDO_state
+            io: i
+            field: DESC PDO Transmission is OK
+            field: ZNAM OK
+            field: ONAM Error'}
+        i_TxPDOState AT %I* : BOOL := TRUE; // SYNC Inputs^TxPDO state
+        {attribute 'pytmc' := 'pv: TxPDO_toggle
+            io: i
+            field: DESC PDO Transmission is OK
+            field: ZNAM OK
+            field: ONAM Error'}
+        i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
+        
+        // Fast faults
+        ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Issue w/ arbiter interface to subsystem, verify subsystem is OK, or ethercat connection.'); // Fast fault for ethercat issues
+        nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
+        nRequestedCohort : UDINT := 0;
+        rtToggle : R_TRIG;
+
+    	
+    END_VAR
+    // Incoming request from subsystem PLC
+    RequestedBP := IO_TO_BP(i_RequestedBP);
+
+    // Update Arbiter with our request
+    rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
+    // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
+    // If subsystem cohort has incremented, update beam parameter request with our arbiter
+    IF rtToggle.Q THEN
+        nActiveCohort := 0;    
+    END_IF
+
+    IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
+        Arbiter.RemoveRequest(RequestingSystemID);
+        Arbiter.AddRequest(RequestingSystemID, RequestedBP,sName);
+        nRequestedCohort := i_RequestedBP.nCohortInt;    
+    END_IF
+
+
+    // Check if latest request is acknowledged by this arbiter
+    // Acknowledgement happens after an arbitration cycle, which means if RequestedCohort just incremented
+    // due to a new request, CheckRequest will be false.
+    IF Arbiter.CheckRequest(RequestingSystemID) THEN
+        nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
+    END_IF
+
+    // Sending current beam parameter set to subsystems 
+    o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
+    o_CurrentBP.nCohortInt := nActiveCohort;
+
+
+    //////////////////////////////////////
+    // Verifying the ethercat interface health
+    /////////////////////////////////////
+    // Both of these values should be 0 for a fully valid exchange
+    ffPMPSIO_Disconnect.i_xOK := NOT i_WcState AND NOT i_TxPDOState;
+
+    ffPMPSIO_Disconnect(
+        io_fbFFHWO := fbFFHWO,
+        i_xReset := Reset,
+        i_DevName := sName,
+        i_TypeCode:=5);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `BP_TO_IO`_
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `FB_SubSysToArbiter_IO`_
+    * `IO_TO_BP`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_ArbToSubsys_Test
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_ArbToSubsys_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    BasicFunction();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_AttenuatorSimulator
+^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_AttenuatorSimulator
+    VAR_INPUT
+        i_rRequestedAttenuation    :    REAL;
+        i_stBPReadback    :    ST_BeamParams;
+    END_VAR
+    VAR_OUTPUT
+        q_xFault    :    BOOL;
+        q_rCurrentAttenuation    :    REAL;
+    END_VAR
+    VAR_IN_OUT
+        Arbiter    :    FB_Arbiter; //Higher level arbiter from which upstream attenuation can be requested
+    END_VAR
+    VAR
+        tonDelay    :    TON := (
+            PT := T#3S
+            );
+    END_VAR
+    // Really basic delay
+    tonDelay(IN := i_rRequestedAttenuation <> q_rCurrentAttenuation);
+
+    IF tonDelay.Q THEN
+        q_rCurrentAttenuation := i_rRequestedAttenuation;
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `ST_BeamParams`_
+
+
+FB_BeamClassOutputs
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Sets the beam class assertion lines for a given beam class.
+    *)
+    FUNCTION_BLOCK FB_BeamClassOutputs
+    VAR_INPUT
+        BP : ST_BeamParams;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+        nBeamClass   :    BYTE;
+        wBeamClass    :    BYTE;
+
+        InitCounter: BYTE;
+        counter    :    INT;
+        
+        // Beam class lines are restricted to 8 channels in the current design, since
+        // there are no plans to use all 16. Channels 1-7 may be allocated to any other
+        // beam classes so long as they are ordered least to greatest.
+        // Channel 8 is reserved for full beam.
+        {attribute 'pytmc' := 'pv: BeamClassChannel
+            io: i
+            field: DESC Hardwire channel state'}
+            epicsBitmap : WORD;
+            
+        {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
+                                  [2] := TIIB[PMPS_Premp]^Channel 2^Output;
+                                  [3] := TIIB[PMPS_Premp]^Channel 3^Output;
+                                  [4] := TIIB[PMPS_Premp]^Channel 4^Output;
+                                  
+                                  [5] := TIIB[PMPS_Premp]^Channel 5^Output;
+                                  [6] := TIIB[PMPS_Premp]^Channel 6^Output;
+                                  [7] := TIIB[PMPS_Premp]^Channel 7^Output;
+                                  [8] := TIIB[PMPS_Premp]^Channel 8^Output;'} // 8 - Full beam
+        q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
+    END_VAR
+    VAR CONSTANT
+        MAX_BEAM_CLASS_LINES : BYTE := 8;
+        BC_1HZ : BYTE := 1;
+        BC_10HZ : BYTE := 2;
+        BC_FULL : BYTE := 16;
+    END_VAR
+    // Determine BC
+    IF BP.nRate >= 120 THEN
+        nBeamClass := BC_FULL;
+    ELSIF BP.nRate >= 10 THEN
+        nBeamClass := BC_10HZ;
+    ELSIF BP.nRate >= 1 THEN
+        nBeamClass := BC_1HZ;
+    ELSE
+    	nBeamClass := 0;
+    END_IF
+
+
+    //Assert Beam Class
+    ////////////////////////////////////
+    //0x0 = 0000 0000 0000 0000
+    //0x1 = 0000 0000 0000 0001
+    //0xF = 1111 1111 1111 1111
+
+    //Initialize BC lines to zero on every pass
+    FOR InitCounter := 1 TO MAX_BEAM_CLASS_LINES DO
+        q_BC_ASSERTION_LINES[InitCounter] := FALSE;
+    END_FOR
+
+    //Set BC lines according to beam class
+    //A BC of 0x0 would pass over this loop, setting none of the lines high
+    // , as FOR loops check the initialized variable at the top to see if it's >
+    // than the "TO" variable.
+    FOR wBeamClass:=1 TO MIN(MAX_BEAM_CLASS_LINES-1, nBeamClass) DO
+        q_BC_ASSERTION_LINES[wBeamClass] := TRUE;
+    END_FOR
+
+    q_BC_ASSERTION_LINES[8] := nBeamClass = 16; //Set channel 8 true if BC is 16
+
+
+    // Readbacks for EPICS
+    epicsBitmap.0 := q_BC_ASSERTION_LINES[1];
+    epicsBitmap.1 := q_BC_ASSERTION_LINES[2];
+    epicsBitmap.2 := q_BC_ASSERTION_LINES[3];
+    epicsBitmap.3 := q_BC_ASSERTION_LINES[4];
+
+    epicsBitmap.4 := q_BC_ASSERTION_LINES[5];
+    epicsBitmap.5 := q_BC_ASSERTION_LINES[6];
+    epicsBitmap.6 := q_BC_ASSERTION_LINES[7];
+    epicsBitmap.7 := q_BC_ASSERTION_LINES[8];
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+FB_BeamParamAssertionPool
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (* This function block implements simple database. Data element values are stored in the hash table.  *)
+    FUNCTION_BLOCK FB_BeamParamAssertionPool
+    VAR_INPUT
+        key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
+        putPosPtr    : POINTER TO T_HashTableEntry := 0;(* Hash table entry position pointer (used by A_Find, A_GetNext, A_GetPrev) *)
+        putValue     : ST_BP_ArbInternal;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
+    END_VAR
+    VAR_OUTPUT
+        bOk            : BOOL := FALSE;(* TRUE = Success, FALSE = Failed *)
+        getPosPtr    : POINTER TO T_HashTableEntry := 0;(* Returned hash table entry position pointer *)
+        getValue     : ST_BP_ArbInternal;(* Returned hash table entry value *)
+        nCount        : UDINT := 0;(* Hash table size (number of used entries, used by A_Count) *)
+    END_VAR
+    VAR
+        {attribute 'pytmc' := '
+            pv: Entry
+            io: i
+         '}
+        epicsDataPool    : ARRAY[1..PMPS_PARAM.MAX_ASSERTIONS] OF ST_BP_ArbInternal;(* Structured data element pool for display in EPICS*)
+        dataPool    : ARRAY[0..PMPS_PARAM.MAX_ASSERTIONS*3] OF ST_BP_ArbInternal;(* Structured data element pool *)
+        entries        : ARRAY[0..PMPS_PARAM.MAX_ASSERTIONS*3] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
+        fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
+        hTable         : T_HHASHTABLE;(* hash table handle *)
+        pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
+        indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
+    	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// MG 
+    END_VAR
+    ;
+
+    END_FUNCTION_BLOCK
+    ACTION A_Add:
+    (* Adds entry to the table *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Add( hTable := hTable, key := key, putValue := ADR(cstSafeBeam)(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
+    IF fbTable.bOk THEN(* Success *)
+        fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
+        IF fbTable.bOk THEN(* Success *)
+            pRefPtr     := ADR( dataPool[indexOfElem] );(* Get pointer to the data element *)
+
+            pRefPtr^ := putValue;(* copy application value *)
+
+            fbTable.A_Add( hTable := hTable, key := key, putValue := pRefPtr, bOk=>bOk );(* Assign the entry value = pointer to the data element *)
+            IF fbTable.bOk THEN(* Success *)
+                getValue := putValue;
+            END_IF
+        END_IF
+    END_IF
+
+    DataPoolToEpics();
+    END_ACTION
+    ACTION A_Count:
+    (* Count number of used entries *)
+    nCount := hTable.nCount;
+    bOk := TRUE;
+    END_ACTION
+    ACTION A_GetFirst:
+    (* Get first entry position pointer and value *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_GetFirst( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_GetNext:
+    (* Get next entry position pointer and value *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+    bOk := FALSE;
+
+    IF putPosPtr = 0 THEN
+        RETURN;
+    END_IF
+
+    fbTable.A_GetNext( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_Lookup:
+    (* Lookup for entry by key  *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Lookup( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_Remove:
+    (* Search for entry and remove it *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Remove( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+
+    DataPoolToEpics();
+    END_ACTION
+    ACTION A_Reset:
+    (* Reset/initialize linked list *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+    bOk := F_CreateHashTableHnd( ADR( entries ), SIZEOF( entries ), hTable );(* Intialize table handle *)
+    fbTable.A_Reset( hTable := hTable, bOk=>bOk );
+    nCount := 0;
+    END_ACTION
+    ACTION DataPoolToEpics:
+    MEMCPY(ADR(epicsDataPool), ADR(dataPool), (PMPS_PARAM.MAX_ASSERTIONS) * SIZEOF(ST_BP_ArbInternal));
+    END_ACTION
+
+
+Related:
+    * `PMPS_PARAM`_
+    * `ST_BP_ArbInternal`_
+    * `ST_BeamParams`_
+    * `T_HashTableEntry`_
+
+
+FB_BPControlDevice
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Used to request a beam parameter set from EPICS.
+
+    Technically just one of these is needed in the entire
+    PMPS for a line.
+
+    *)
+    FUNCTION_BLOCK FB_BPControlDevice
+    VAR_INPUT
+            (*  Requested pre-optic attenuation %  *)
+            {attribute 'pytmc' := 'pv: ReqBP:Transmission
+                io: o
+    			field: HOPR 1;
+    			field: LOPR 0;
+    			field: PREC 2;
+            '}
+            nTran : REAL := PMPS_GVL.TRANS_SCALING_FACTOR;
+            (* Pulse-rate *)
+            {attribute 'pytmc' := 'pv: ReqBP:Rate
+                io: o
+                field: EGU Hz
+            '}
+            nRate : UDINT := 10;
+            (* Photon energy ranges *)
+            {attribute 'pytmc' := 'pv: ReqBP:PhotonEnergyRanges
+                io: o
+                field: EGU eV'}
+            {attribute 'displaymode' := 'binary'}
+            neVRange : DWORD := 4294967295;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+        Arbiter : FB_Arbiter;
+    END_VAR
+    VAR
+        EpicsReqBP : ST_BeamParams;
+        {attribute 'pytmc' := '
+            pv: ReqBP:Apply
+            io: o
+        '}
+        bApply : BOOL;
+
+        nControlDeviceID : DWORD;
+    	sControlDeviceName: STRING:= 'BP Cntrl Dev';
+        rtApply : R_TRIG;
+
+    END_VAR
+    EpicsReqBP.nTran := nTran;
+    EpicsReqBP.neVRange := neVRange;
+    EpicsReqBP.nRate := nRate;
+
+    rtApply(CLK:=bApply);
+    IF rtApply.Q THEN
+        Arbiter.RemoveRequest(nControlDeviceID);
+        Arbiter.AddRequest(nControlDeviceID, EpicsReqBP, sControlDeviceName);
+        bApply := FALSE;
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_BPRequestor
+^^^^^^^^^^^^^^
+
+::
+
+    (* BP Requestor
+    Elevates the BP request from an arbiter to PMPS_GVL.stRequestedBP
+    *)
+    FUNCTION_BLOCK FB_BPRequestor IMPLEMENTS I_HigherAuthority
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+        q_ReqBP : ST_BeamParams; // Arbitrated BP
+    END_VAR
+    VAR_IN_OUT
+        Arbiter : FB_Arbiter;
+        //FFO : FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        ReqBP : ST_BeamParams;
+        nCohort : ULINT; // Current cohort, inc. 1 cycle after IO is updated
+        nRequestCohort : ULINT; // Cohort number recorded at the time of the request.
+    END_VAR
+    Arbiter.ElevateRequest(THIS^); // Executes arbitration and retrieves ReqBP
+
+    IF nRequestCohort >= nCohort THEN
+        // Update requested BP set
+        q_ReqBP := ReqBP;
+        // Note: we may do more here someday... perhaps all of the output control
+        // will reside in here, and be solely controlled by this block. For now
+        // I am going to adopt a flat management structure.
+        // Start a new cohort
+        nCohort := nCohort + 1;
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_BPTM_Test
+^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_BPTM_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    VAR CONSTANT
+        BPTM_ARR : UDINT := PMPS_PARAM.MAX_ASSERTIONS;
+        cCycle : UINT := 20; // How many cycles does it take to complete a BPTM
+    END_VAR
+    BPTMBasicFunction();
+    InterruptAtAllSteps();
+    FullArbError();
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `PMPS_PARAM`_
+
+
+FB_CTLS_Outputs
+^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Controls auxiliary beam class outputs.
+
+    1-3 are mapped to control the Cu beamline rate via the LCLS II MPS.
+
+    Maps beam rate requests to 1, 10, or full rate beam for Cu linac.
+
+    *)
+    FUNCTION_BLOCK FB_CTLS_Outputs
+    VAR_INPUT
+        BP    :    ST_BeamParams;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+        {attribute 'pytmc' := 'pv: CTLSChannel
+            io: i
+            field: DESC CTLS Rate Control hardwire channel state'}
+        epicsBitmap : WORD;
+            
+        {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 9^Output;
+                                  [2] := TIIB[PMPS_Premp]^Channel 10^Output;
+                                  [3] := TIIB[PMPS_Premp]^Channel 11^Output;'}
+        q_CLTS_ASSERTION_LINES    AT    %Q*    : ARRAY [1..3] OF    BOOL;  
+        
+        
+        
+    END_VAR
+    // CLTS 1Hz
+    q_CLTS_ASSERTION_LINES[1] := BP.nRate >= 1;
+    // CLTS 10Hz
+    q_CLTS_ASSERTION_LINES[2] := BP.nRate >= 10;
+    // CLTS Full rate
+    q_CLTS_ASSERTION_LINES[3] := BP.nRate >= 120;
+
+
+    epicsBitMap.0 := q_CLTS_ASSERTION_LINES[1];
+    epicsBitMap.1 := q_CLTS_ASSERTION_LINES[2];
+    epicsBitMap.2 := q_CLTS_ASSERTION_LINES[3];
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+FB_DiffBP_Test
+^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_DiffBP_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+
+    END_VAR
+    BPDiff();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_DummyArbIO
+^^^^^^^^^^^^^
+
+::
+
+    (* Use to test other library integrations of PMPS preemptive functionality *)
+    (* This block stands in for the FB_SubSysToArb_IO block. *)
+
+    FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
+    VAR_INPUT
+        //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
+        LA : I_LowerAuthority;
+        
+        tRateDelay : TIME; // Delay until rate is looped back into q_stSimulatedBPReadback
+        tTransDelay : TIME; // Delay until transmission is looped back into q_stSimulatedBPReadback
+        tPEDelay : TIME; // Delay until PE is looped back into q_stSimulatedBPReadback
+        tAptDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+    	tSattDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+        
+    END_VAR
+    VAR_OUTPUT
+        q_stSimulatedBPReadback : ST_BeamParams; // Updated to 
+    END_VAR
+    VAR_IN_OUT
+        FFO : FB_HardwareFFOutput;
+    END_VAR
+    VAR
+       bAutoUpdateBP : BOOL := FALSE; // Set by AutoUpdateBP property, if true causes this FB to update PMPS_GVL.stCurrentBP to the
+       // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
+       stNewReqBP : ST_BeamParams;
+       
+       stReqOutBP : ST_BeamParams;// To be written on next ApplyBPReq call
+       
+       stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
+       
+       nSavedID : DWORD; // Used to simulate CheckRequest method
+       
+       tonRate : TON;
+       tonTrans : TON;
+       tonPE : TON;
+       tonApt : TON;
+       tonSatt : TON;
+          
+    END_VAR
+    LA.ElevateRequest(THIS^);
+
+    ApplyBPReq(FALSE); //If autoupdate is set, this will propagate the request to PMPS_GVL.stCurrentBP;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_DummyHA
+^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_DummyHA IMPLEMENTS I_HigherAuthority, I_LowerAuthority
+    VAR_INPUT
+        ReqAcknowledged : BOOL := TRUE; // Use to control when the HA CHeckRequest Returns TRUE
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_evRangeCalculator_Test
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_evRangeCalculator_Test EXTENDS FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    VAR CONSTANT
+        RandomBoundary : INT := 2;
+    END_VAR
+    BasicFunction();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_eVSimulator
+^^^^^^^^^^^^^^
+
+::
+
+    (* eV Simulator
+    A. Wallace 2019-8-30
+
+    Adds noise to the eV and changes eV position occasionally.
+    *)
+    FUNCTION_BLOCK FB_eVSimulator
+    VAR_INPUT
+        NoiseLevel	:	REAL	:= 0; // eV Noise
+        ChangeTime : TIME := T#10S;
+    END_VAR
+    VAR_OUTPUT
+        eV	:	REAL := 300;
+    END_VAR
+    VAR
+        eVRange : REAL := 1600;
+        timer: TON;
+        eVRand	:	DRAND :=(Seed:=0);
+        NoiseRand : DRAND := (Seed:=0);
+    END_VAR
+    timer(in:=TRUE, PT:=ChangeTime);
+
+    //Occasionally change eV
+    IF timer.Q THEN
+        timer(in:=FALSE);
+        eVRand();
+        eV := LIMIT(0, eVRange*LREAL_TO_REAL(eVRand.Num), eVRange);
+    END_IF
+
+    // Noise generation
+    NoiseRand();
+    eV := eV + NoiseLevel*LREAL_TO_REAL(NoiseRand.Num);
+    NoiseRand();
+    eV := LIMIT(0, ev - NoiseLevel*LREAL_TO_REAL(NoiseRand.Num), eVRange);
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_eVWithinSpec_Test
+^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_eVWithinSpec_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    evWithinRangeChecks();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_FastFault
+^^^^^^^^^^^^
+
+::
+
+    (* Fast Fault
+    2019-9-13 A. Wallace
+
+    Use this block to generate a beam-off fault. Connects to a fast fault hardware output 
+    function block to contribute to the state of the fast fault output (FFO).
+
+    If the i_xOK goes false, the associated FFO will go false, despite the state of any other
+    contributing fast faults, unless the FFO is currently vetoed.
+
+    *)
+    {attribute 'reflection'}
+    FUNCTION_BLOCK FB_FastFault
+    VAR_INPUT
+
+        i_xOK        :    BOOL; // Connect to fast-fault condition (false produces fault)
+        i_xReset    :    BOOL; // Resets when i_xOK is true and this is true
+        i_xAutoReset : BOOL := FALSE; // Automatically clear fast fault (latching vs non-latching)
+        i_xVetoable : BOOL := TRUE; // Mask this fast fault if the FFO veto device is true
+        
+        i_DevName : T_MaxString := ''; // Device name for diagnostic
+        i_Desc : T_MaxString := ''; // Description of fast fault (you should set at init)
+        i_TypeCode : UINT; // Error code for classifying fast faults
+    END_VAR
+    VAR_OUTPUT
+        o_xFFLine    :    BOOL; //Connect to HW output or another FF input if you like (Optional)
+    END_VAR
+    VAR_IN_OUT
+        io_fbFFHWO        :    FB_HardwareFFOutput; //Point to FB_HardwareFFOutput of your choice
+    END_VAR
+    VAR
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+        
+        FFInfo : ST_FFInfo;
+        
+        RegistrationIdx : UINT := 1; // The index this FF was registered in the FFO
+        
+        xInit    :    BOOL :=TRUE;
+        
+        InfoStringFmtr : FB_FormatString;
+        
+        InUse : T_MaxString;
+        AutoReset : T_MaxString;
+
+    END_VAR
+    IF xInit    THEN
+        FFInfo.sPath := sPath;
+        FFInfo.InUse := True;
+        FFInfo.TypeCode := i_TypeCode;
+        FFInfo.DevName := i_DevName;
+        FFInfo.Desc := i_Desc;
+        FFInfo.AutoReset := i_xAutoReset;
+        FFInfo.Vetoable := i_xVetoable;
+        
+        InUse := BOOL_TO_STRING(FFInfo.InUse);
+        AutoReset := BOOL_TO_STRING(FFInfo.AutoReset);
+        InfoStringFmtr(sFormat:='%s;%s;%X;%s;%s;%s;',
+            arg1 := F_STRING(FFinfo.sPath),
+            arg2 := F_STRING(InUse),
+            arg3 := F_WORD(FFInfo.TypeCode),
+            arg4 := F_STRING(FFInfo.DevName),
+            arg5 := F_STRING(FFInfo.Desc),
+            arg6 := F_STRING(AutoReset),
+            sOut=>FFInfo.InfoString);
+        io_fbFFHWO.Register(
+            stFFInfo:=FFInfo, 
+            Idx=>RegistrationIdx);
+        //<TODO> if registration doesn't succeed, send warning to diagnostic
+        xInit := FALSE;
+    END_IF
+
+    io_fbFFHWO.IdxCheckIn(Idx:=RegistrationIdx, OK := i_xOK, Reset:= i_xReset);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_HardwareFFOutput`_
+    * `ST_FFInfo`_
+
+
+FB_FastFault_Test
+^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_FastFault_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    	fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
+    END_VAR
+    VAR CONSTANT
+        OvrdTime : TIME := T#2s;
+    END_VAR
+    FFCombinedFunctionality();
+    FFRegistration();
+    FFOvrdAndNextFault();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_HardwareFFOutput
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'reflection'}
+    FUNCTION_BLOCK FB_HardwareFFOutput
+    VAR CONSTANT
+        FF_ARRAY_UPPER_BOUND : UINT := PMPS_PARAM.MAX_FAST_FAULTS;
+    END_VAR
+    VAR_INPUT
+        {attribute 'pytmc' := '
+            pv: ClearFault
+            io: o
+            field: DESC Might be overidden by PLC writes
+         '}
+        i_xReset    :    BOOL;
+        {attribute 'pytmc' := '
+            pv: EnableVeto
+            io: o
+         '}
+        i_xVeto    :    BOOL;
+        bAutoReset : BOOL := FALSE; // Set true for the FFO to automatically permit beam again after all fast faults are cleared
+    	i_sNetID : T_AmsNetID:=''; //Set to the Arbiter AmsNetID to be used for the synchronisation. An empty string means the system will sue local time
+    END_VAR
+    VAR_OUTPUT
+        {attribute 'pytmc' := '
+            pv: FaultHWO
+            io: i
+            field: DESC Hardware Output Status
+         '}
+        q_xFastFaultOut    AT %Q*    :    BOOL;
+    	q_xValidSyncTime : BOOL;// system time bValid output True when sync is successful
+    END_VAR
+    VAR_IN_OUT
+
+    END_VAR
+    VAR
+        {attribute 'pytmc' := '
+            pv: FF
+         '}
+        astFF : ARRAY[1..FF_ARRAY_UPPER_BOUND] OF ST_FF;
+        
+        {attribute 'pytmc' := '
+            pv: RegistrationFailure
+            io: io
+         '}
+        xFastFaultRegFail  :   BOOL := FALSE; // Set true if a fast fault fails to register. Holds beam off.
+        tFFRegFail : F_TRIG;
+        
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+
+    	{attribute 'pytmc' := '
+            pv: OK
+            io: i
+         '}
+        xOK    :    BOOL:= TRUE; // Current internal state of FFO, indicates if FFO will accept a reset
+        
+        rtReset    :    R_TRIG;
+        rtResetandOK : R_TRIG;
+        
+        nIndex    :    UINT := 1;
+    	
+    	IdxOK: BOOL;
+        
+        fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
+    	fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
+    	fbGetTimeZone: FB_GetTimeZoneInformation;
+        fbJson : FB_JsonSaxWriter;
+        pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
+        fbLogger : FB_LogMessage := (
+            eSevr := TcEventSeverity.Critical,
+            eSubsystem := E_Subsystem.MPS,
+            nMinTimeViolationAcceptable := PMPS_PARAM.MAX_FAST_FAULTS);
+
+    END_VAR
+    // <TODO> latch off beam if DI card status goes bad
+
+    END_FUNCTION_BLOCK
+    ACTION EvaluateOutput:
+    ////////////////////////////////////////////////////////////////
+    // Critical code. Do not touch unless you know what you're doing
+    ////////////////////////////////////////////////////////////////
+
+    //<TODO> add diagnostic for success or failure of reset
+    rtReset(CLK:=i_xReset);
+    rtResetandOK(CLK:=(rtReset.Q OR bAutoReset) AND xOK);
+
+    q_xFastFaultOut S= rtResetandOK.Q;
+    q_xFastFaultOut R= (NOT xOK OR xFastFaultRegFail);
+
+    //Reset OK for next cycle
+    xOK := True;
+
+    ////////////////////////////////////////////////////////////////
+    END_ACTION
+    ACTION Execute:
+    EvaluateOverrides();
+    EvaluateOutput();
+    ExecuteLogging();
+    END_ACTION
+    ACTION ExecuteNoLog:
+    EvaluateOverrides();
+    EvaluateOutput();
+    //ExecuteLogging();
+    END_ACTION
+
+
+Related:
+    * `PMPS_PARAM`_
+    * `ST_FF`_
+
+
+FB_Hgvpu
+^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_Hgvpu IMPLEMENTS I_UndulatorComplex
+    VAR_INPUT
+        fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+    END_VAR
+
+    VAR_OUTPUT
+    	{attribute 'pytmc' := '
+            pv: CurrentPhotonEnergy
+    		io: i
+            field: DESC Calculated current photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+    	fCurrentPhotonEnergy : LREAL;
+    	{attribute 'pytmc' := '
+            pv: TargetPhotonEnergy
+    		io: i
+            field: DESC Calculated desired photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+    	fTargetPhotonEnergy : LREAL;
+        {attribute 'pytmc' := '
+            pv: SeedUndulatorNumber
+    		io: i
+            field: DESC Seed undulator number
+        '}
+    	nSeedUndulator : UDINT; // Set to zero when no undulators are active
+        {attribute 'pytmc' := '
+            pv: TargetSeedUndulatorNumber
+    		io: i
+            field: DESC Seed undulator number for target K
+        '}
+    	nTargetSeedUndulator : UDINT; // Set to zero when no undulators are active
+    END_VAR
+
+
+    VAR
+        // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/ioc-undh-uc*/iocInfo/IOC.pvlist |sort
+
+        {attribute 'pytmc' := 'pv: 24; link: 2450:'}
+        fbSegment_24 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 25; link: 2550:'}
+        fbSegment_25 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 26; link: 2650:'}
+        fbSegment_26 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 27; link: 2750:'}
+        fbSegment_27 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 29; link: 2950:'}
+        fbSegment_29 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 30; link: 3050:'}
+        fbSegment_30 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 31; link: 3150:'}
+        fbSegment_31 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 32; link: 3250:'}
+        fbSegment_32 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 33; link: 3350:'}
+        fbSegment_33 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 34; link: 3450:'}
+        fbSegment_34 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 35; link: 3550:'}
+        fbSegment_35 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 36; link: 3650:'}
+        fbSegment_36 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 37; link: 3750:'}
+        fbSegment_37 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 38; link: 3850:'}
+        fbSegment_38 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 39; link: 3950:'}
+        fbSegment_39 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 40; link: 4050:'}
+        fbSegment_40 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 41; link: 4150:'}
+        fbSegment_41 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 42; link: 4250:'}
+        fbSegment_42 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 43; link: 4350:'}
+        fbSegment_43 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 44; link: 4450:'}
+        fbSegment_44 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 45; link: 4550:'}
+        fbSegment_45 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 46; link: 4650:'}
+        fbSegment_46 : FB_UndulatorSegment;
+
+        fbSegment : ARRAY [iLowBound_LUnd..iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
+        fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
+
+        iIndex : UDINT;
+
+        bInitialized : BOOL := FALSE;
+
+    END_VAR
+
+    VAR CONSTANT
+        {attribute 'pytmc' := '
+    		pv: FirstSegment
+    		io: i
+    	'}
+        iLowBound_LUnd  : UDINT := 24;
+    	
+        {attribute 'pytmc' := '
+    		pv: LastSegment
+    		io: i
+    	'}
+        iHighBound_LUnd : UDINT := 46;
+    	
+        {attribute 'pytmc' := '
+            pv: Period
+            io: i
+            field: EGU mm
+        '}
+        fPeriod_mm_LUnd : LREAL := 26.0;
+    	
+    	{attribute 'pytmc' := '
+            pv: LowK
+            io: i
+        '}
+    	fLowK_LUnd : LREAL := 0.54;
+    	
+    	{attribute 'pytmc' := '
+            pv: HiK
+            io: i
+        '}
+    	fHiK_LUnd : LREAL := 2.6;
+    END_VAR
+    IF NOT bInitialized THEN
+    	Init();
+    END_IF
+
+    UndAdrUpdate();
+
+    nSeedUndulator := 0;
+    nTargetSeedUndulator := 0;
+
+    FOR iIndex := iLowBound_LUnd TO iHighBound_LUnd DO
+        IF fbSegment[iIndex] <> 0 THEN
+            fbCurrentSegment REF= fbSegment[iIndex]^;
+            fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+    		
+    		//Mark the seed undulator, first undulator operating within K bounds
+    		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
+    			nSeedUndulator := iIndex;
+    			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+    		END_IF
+            
+            IF fbCurrentSegment.xTargetActive AND nTargetSeedUndulator = 0 THEN
+    			nTargetSeedUndulator := iIndex;
+    			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
+    		END_IF
+        END_IF
+    END_FOR
+
+    IF nSeedUndulator = 0 THEN
+    	fCurrentPhotonEnergy := 0;
+    END_IF
+
+    IF nTargetSeedUndulator = 0 THEN
+        fTargetPhotonEnergy := 0;
+    END_IF
+
+    END_FUNCTION_BLOCK
+    ACTION Init:
+    UndAdrUpdate();
+
+
+        FOR iIndex := iLowBound_LUnd TO iHighBound_LUnd DO
+                IF fbSegment[iIndex] <> 0 THEN
+                fbCurrentSegment REF= fbSegment[iIndex]^;
+                fbCurrentSegment.fPeriod_mm := fPeriod_mm_LUnd;
+    			fbCurrentSegment.fLowK := fLowK_LUnd;
+    			fbCurrentSegment.fHiK := fHiK_LUnd;
+            END_IF
+        END_FOR
+
+        bInitialized := TRUE;
+    END_ACTION
+    ACTION UndAdrUpdate:
+    fbSegment[24] := ADR(fbSegment_24);
+    fbSegment[25] := ADR(fbSegment_25);
+    fbSegment[26] := ADR(fbSegment_26);
+    fbSegment[27] := ADR(fbSegment_27);
+    fbSegment[28] := 0;
+    fbSegment[29] := ADR(fbSegment_29);
+    fbSegment[30] := ADR(fbSegment_30);
+    fbSegment[31] := ADR(fbSegment_31);
+    fbSegment[32] := ADR(fbSegment_32);
+    fbSegment[33] := ADR(fbSegment_33);
+    fbSegment[34] := ADR(fbSegment_34);
+    fbSegment[35] := ADR(fbSegment_35);
+    fbSegment[36] := ADR(fbSegment_36);
+    fbSegment[37] := ADR(fbSegment_37);
+    fbSegment[38] := ADR(fbSegment_38);
+    fbSegment[39] := ADR(fbSegment_39);
+    fbSegment[40] := ADR(fbSegment_40);
+    fbSegment[41] := ADR(fbSegment_41);
+    fbSegment[42] := ADR(fbSegment_42);
+    fbSegment[43] := ADR(fbSegment_43);
+    fbSegment[44] := ADR(fbSegment_44);
+    fbSegment[45] := ADR(fbSegment_45);
+    fbSegment[46] := ADR(fbSegment_46);
+    END_ACTION
+
+
+Related:
+    * `FB_UndulatorSegment`_
+
+
+FB_KPhotonEnergy
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_KPhotonEnergy EXTENDS FB_PhotonEnergy
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+        {attribute 'pytmc' := '
+            pv: eEnrg
+            link: BEND:DMPS:400:BACT
+            field: EGU GeV
+        '}
+        fbSxuElectronEnergy : FB_LREALFromEPICS;
+        
+        {attribute 'pytmc' := '
+            pv: EEnergy
+    		io: i
+            field: DESC Electron Energy
+            field: EGU GeV
+        '}
+        fElectronEnergyVal : LREAL;
+        
+        {attribute 'pytmc' := '
+            pv: EEnergyValid
+    		io: i
+            field: DESC Electron Energy Valid
+        '}
+        bElectronEnergyValid : BOOL;
+    	
+        {attribute 'pytmc' := '
+            pv: UND
+            link: USEG:UNDS:
+        '}
+        fbSxu : FB_SXU;
+
+    END_VAR
+    // Update PVs
+    fbSxuElectronEnergy();
+
+    fElectronEnergyVal := fbSxuElectronEnergy.fValue;
+    bElectronEnergyValid := fbSxuElectronEnergy.bValid;
+
+    fbSxu(fbElectronEnergy:=fbSxuElectronEnergy);
+
+    SUPER^(BP:=SUPER^.BP, Undulator:=fbSxu );
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_PhotonEnergy`_
+    * `FB_SXU`_
+
+
+FB_KStopper
+^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_KStopper EXTENDS FB_StopperWatcher
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    END_VAR
+    VAR
+    END_VAR
+    SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_StopperWatcher`_
+
+
+FB_KVetoDevice
+^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_KVetoDevice EXTENDS FB_VetoDevice
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_VetoDevice`_
+
+
+FB_LinearDeviceStateTable
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (* This function block implements simple database. Data element values are stored in the hash table.  *)
+    FUNCTION_BLOCK FB_LinearDeviceStateTable
+    VAR_INPUT
+        key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
+        putPosPtr    : POINTER TO T_HashTableEntry := 0;(* Hash table entry position pointer (used by A_Find, A_GetNext, A_GetPrev) *)
+        putValue     : ST_DeviceState;(* Hash table entry value (used by A_AddHead, A_AddTail, A_Find )*)
+    END_VAR
+    VAR_OUTPUT
+        bOk            : BOOL := FALSE;(* TRUE = Success, FALSE = Failed *)
+        getPosPtr    : POINTER TO T_HashTableEntry := 0;(* Returned hash table entry position pointer *)
+        getValue     : ST_DeviceState;(* Returned hash table entry value *)
+        nCount        : UDINT := 0;(* Hash table size (number of used entries, used by A_Count) *)
+    END_VAR
+    VAR
+        dataPool    : ARRAY[0..PMPS_GVL.MAX_DEVICE_STATES] OF ST_DeviceState;(* Structured data element pool *)
+        entries        : ARRAY[0..PMPS_GVL.MAX_DEVICE_STATES] OF T_HashTableEntry;(* Max. number of hash table entries. The value of table entry = 32 bit integer (pointer to dataPool-array-entry) *)
+        fbTable     : FB_HashTableCtrl;(* basic hash table control function block *)
+        hTable         : T_HHASHTABLE;(* hash table handle *)
+        pRefPtr        : POINTER TO ST_DeviceState := 0;
+        indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
+    END_VAR
+    ;
+
+    END_FUNCTION_BLOCK
+    ACTION A_Add:
+    (* Adds entry to the table *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Add( hTable := hTable, key := key, putValue := 16#0000_0000(* we will set this value later *), getPosPtr=>getPosPtr, bOk=>bOk );(* Add new element to the table, getPosPtr points to the new entry *)
+    IF fbTable.bOk THEN(* Success *)
+        fbTable.A_GetIndexAtPosPtr( hTable := hTable, putPosPtr := getPosPtr, getValue =>indexOfElem, bOk=>bOk );(* Get array index of getPosPtr entry *)
+        IF fbTable.bOk THEN(* Success *)
+            pRefPtr     := ADR( dataPool[indexOfElem] );(* Get pointer to the data element *)
+
+            pRefPtr^ := putValue;(* copy application value *)
+
+            fbTable.A_Add( hTable := hTable, key := key, putValue := pRefPtr, bOk=>bOk );(* Assign the entry value = pointer to the data element *)
+            IF fbTable.bOk THEN(* Success *)
+                getValue := putValue;
+            END_IF
+        END_IF
+    END_IF
+    END_ACTION
+    ACTION A_Count:
+    (* Count number of used entries *)
+    nCount := hTable.nCount;
+    bOk := TRUE;
+    END_ACTION
+    ACTION A_GetFirst:
+    (* Get first entry position pointer and value *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_GetFirst( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_GetNext:
+    (* Get next entry position pointer and value *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+    bOk := FALSE;
+
+    IF putPosPtr = 0 THEN
+        RETURN;
+    END_IF
+
+    fbTable.A_GetNext( hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_Lookup:
+    (* Lookup for entry by key  *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Lookup( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_Remove:
+    (* Search for entry and remove it *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+
+    fbTable.A_Remove( key := key, hTable := hTable, putPosPtr := putPosPtr, getValue=>pRefPtr, getPosPtr=>getPosPtr, bOk=>bOk );
+    IF fbTable.bOk THEN
+        getValue := pRefPtr^;
+    END_IF
+    END_ACTION
+    ACTION A_Reset:
+    (* Reset/initialize linked list *)
+    MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
+    getPosPtr := 0;
+    bOk := F_CreateHashTableHnd( ADR( entries ), SIZEOF( entries ), hTable );(* Intialize table handle *)
+    fbTable.A_Reset( hTable := hTable, bOk=>bOk );
+    nCount := 0;
+    END_ACTION
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_DeviceState`_
+    * `T_HashTableEntry`_
+
+
+FB_LinearGovernor
+^^^^^^^^^^^^^^^^^
+
+::
+
+    (* The governor is meant to check your work and keep you from making mistakes.
+
+    Checks:
+    Does your state match the device position and visa versa?
+    Are the beam parameters safe for the device state?
+    Did you properly assert the transition and final beam parameters?
+
+    *)
+    FUNCTION_BLOCK FB_LinearGovernor
+    VAR_INPUT
+        i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
+        i_xMPSOverride            :    BOOL; //True releases MPS limits after a delay
+        i_xTransitionRequested    :    BOOL; //Set true to request a transition
+        i_xResetMPSFault    :    BOOL; //Set true to clear MPS fault 
+    END_VAR
+    VAR_OUTPUT
+         //True when governor has released restrictions
+        q_xTransitionPermitted    :    BOOL;
+        //Set if MC_Power has an error, or override mode is requested
+        q_xFault    :    BOOL; 
+        // Indicates override mode is active
+        q_xMPSLimitsOverridden: BOOL;
+    END_VAR
+    VAR_IN_OUT
+        stDevice    :    ST_Device; //The governed
+        Arbiter    :    FB_Arbiter;
+        FastFaultOutput    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        mcPower    :    MC_Power;
+        
+        xActuatorPositiveEnable: BOOL;
+        xActuatorNegativeEnable: BOOL;
+        
+        xMPSPositiveEnable    :    BOOL;
+        xMPSNegativeEnable    :    BOOL;
+        lrPosition: LREAL;
+        
+        lrLatchedTargetPosition    :    LREAL;
+        lrLatchedTargetTolerance    :    LREAL;
+        stLatchedTargetState    :    ST_DeviceStateExt;
+        
+        lrMPSUpperLimit: LREAL;
+        lrMPSLowerLimit: LREAL;
+        rtNewState: R_TRIG;
+        xTransitionOK: BOOL;
+        
+        tonMPSOverrideMode    :    TON := (
+            PT := T#5S
+        );
+        
+        srMPSFault    :    SR;
+        // Actuator out of bounds fault
+        xActuatorOOB: BOOL;
+        //Beam parameters out of spec
+        xBeamParamsOOS: BOOL;
+        //Beam parameters of currently latched state
+        
+        stLatchedBeamParams: ST_BeamParams;
+        stTargetState: ST_DeviceStateExt;
+        
+        rtLatchNewState    :    R_TRIG;
+        xInit: BOOL := TRUE;
+        
+        stInitDeviceState: ST_DeviceStateExt;
+        // Indicates an error with initialization
+        xInitFault: BOOL;
+        // Indicates the state could not be found in the state table. There may be something wrong in the device state machine implementation or state table instantiation.
+        xStateLookupError: BOOL;
+        // A transition needs to be requested at least once before we start latching any state.
+        xTransitionHasBeenRequested: BOOL := FALSE;
+        ffBeamParamsOK : FB_FastFault;
+        ffActuatorBoundsOK    :    FB_FastFault;
+    END_VAR
+    lrPosition := stDevice.stAxis.NcToPlc.ActPos; //Actuator position
+
+    stDevice.stAxis.ReadStatus();
+    //Init
+    (* The init strategy is:
+    If the device is restored and it's residing at the safe position,
+    no PMPS faults. *)
+    ////////////////////////////////
+        IF xInit THEN
+            xInit := FALSE;
+            //Use nSafeSate for initialization. 
+            stDevice.StateTable.A_Lookup(key := stDevice.nSafeState);
+            IF stDevice.StateTable.bOk THEN
+                stInitDeviceState := F_DeviceState_To_DeviceStateExt(stDevice.StateTable.getValue, TRUE);
+                xInitFault := FALSE;
+            ELSE
+                xInitFault := TRUE;
+                stInitDeviceState.xValid := FALSE;
+            END_IF
+            lrLatchedTargetPosition := stInitDeviceState.rPosition;
+            lrLatchedTargetTolerance := stInitDeviceState.rTolerance;
+            stLatchedBeamParams := stInitDeviceState.stReqBeamParam;
+        END_IF
+
+    // The governor will permit transitions once it verifies the transition assertion is active
+    // Note the governor does not verify the target state beam params are asserted, perhaps it should <TODO>
+    ////////////////////////////////
+        IF i_xTransitionRequested THEN
+            xTransitionHasBeenRequested    := TRUE;
+            
+            xTransitionOK := Arbiter.CheckRequest( stDevice.stTransitionState.nStateRef) AND F_SafeBPCompare(i_stCurrentBeamParams, stDevice.stTransitionState.stReqBeamParam);
+            
+            //Set the target state for evaluation in further logic
+            stdevice.StateTable.A_Lookup(key := stDevice.nTargetState);
+            IF stDevice.StateTable.bOk THEN
+                stTargetState := F_DeviceState_To_DeviceStateExt(stDevice.StateTable.getValue, TRUE);
+                xStateLookupError := FALSE;
+            ELSE
+                xStateLookupError := TRUE;
+                stTargetState.xValid := FALSE;
+            END_IF
+        ELSE
+            xTransitionOK := FALSE;
+        END_IF
+
+    (* Note about TransitionRequested
+
+    If TransitionRequested goes false during a transition, an MPS fault may be induced. This occurs
+    because the Actuator Out of Bounds fault will go back to using the original state limits, which
+    the axis may have already moved beyond.
+
+    To avoid this transient fault, make sure your device state machine is implemented such that the 
+    transition request to the governor block remains high until the target position is reached.
+    *)
+
+    //Determine if a transition is complete and latch the new state
+    (* A transition is complete when:
+
+    Axis at standstill.
+    Axis within tolerance.
+    No transition req.
+
+    Once these conditions are met, the MPS limits shall re-engage to restrict the
+    axis motion to the tolerance around the state position and the MPS fault monitors
+    shall evaluate based on the newly latched target state.
+    *)
+
+    rtLatchNewState(CLK := stDevice.stAxis.Status.StandStill AND
+        lrPosition <= stTargetState.rPosition + stTargetState.rTolerance AND
+        lrPosition >= stTargetState.rPosition - stTargetState.rTolerance AND
+        NOT i_xTransitionRequested AND xTransitionHasBeenRequested);
+        
+    IF rtLatchNewState.Q THEN
+        lrLatchedTargetPosition := stTargetState.rPosition;
+        lrLatchedTargetTolerance := stTargetState.rTolerance;
+        stLatchedBeamParams := stTargetState.stReqBeamParam;
+        stLatchedTargetState := stTargetState;
+    END_IF
+
+    //Let other blocks know the governor won't interfer with transitions
+    q_xTransitionPermitted := xTransitionOK;
+
+    //Adjust limit ranges based on active state and current target
+    IF xTransitionOK THEN
+        //Extend range to include target state
+        lrMPSUpperLimit := MAX(lrMPSUpperLimit, stTargetState.rPosition + stTargetState.rTolerance);
+        lrMPSLowerLimit := MIN(lrMPSLowerLimit, stTargetState.rPosition - stTargetState.rTolerance);
+    ELSE
+        //Calculate the limit positions for MPS based on current state
+        lrMPSUpperLimit := lrLatchedTargetPosition + lrLatchedTargetTolerance;
+        lrMPSLowerLimit := lrLatchedTargetPosition - lrLatchedTargetTolerance;
+    END_IF
+
+
+    //MPS override
+    (* In override mode, the device will be free to move anywhere within it's travel range *)
+    //Permit motion after a small delay
+    tonMPSOverrideMode(IN:=i_xMPSOverride OR stDevice.xOverrideMPSLimits, Q=>q_xMPSLimitsOverridden);
+
+    //Virtual limit switch evaluation
+    xActuatorPositiveEnable    := stDevice.i_xHiLim AND lrPosition <= stDevice.lrUpperPositionLimit;
+    xActuatorNegativeEnable    := stDevice.i_xLoLim AND lrPosition >= stDevice.lrLowerPositionLimit;
+
+    //Evaluate MPS limit states
+    xMPSPositiveEnable := lrPosition <= lrMPSUpperLimit;
+    xMPSNegativeEnable := lrPosition >= lrMPSLowerLimit;
+
+    //Final Limit switch evaluation
+    mcPower.Enable_Positive := xActuatorPositiveEnable AND (tonMPSOverrideMode.Q OR xMPSPositiveEnable);
+    mcPower.Enable_Negative := xActuatorNegativeEnable AND (tonMPSOverrideMode.Q OR xMPSNegativeEnable);
+
+    mcPower(
+        Axis := stDevice.stAxis,
+        Enable := stDevice.xEnable //link to device enable <TODO>
+    );
+
+
+
+    //MPS Faults
+    //Fault if the beam is unsafe for current state
+    ffBeamParamsOK(i_xOK:=F_SafeBPCompare(i_stCurrentBeamParams, stLatchedBeamParams), 
+                    i_xReset:=i_xResetMPSFault,
+                    io_fbFFHWO := FastFaultOutput);
+
+    //Fault if the position is outside of the permitted range
+    ffActuatorBoundsOK(i_xOK := (lrPosition <= lrMPSUpperLimit AND lrPosition >= lrMPSLowerLimit), 
+                        i_xReset:=i_xResetMPSFault,
+                    io_fbFFHWO := FastFaultOutput);
+
+
+        
+    //Collect all other faults
+    q_xFault := NOT ffBeamParamsOK.o_xFFLine OR
+        NOT ffActuatorBoundsOK.o_xFFLine OR
+        mcPower.Error    OR
+        i_xMPSOverride    OR
+        xInitFault;
+
+    //Any faults trip the fast fault line for this FB    
+    //FastFaultOutput.CheckIn(NOT q_xFault);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `F_DeviceState_To_DeviceStateExt`_
+    * `F_SafeBPCompare`_
+    * `ST_BeamParams`_
+    * `ST_Device`_
+    * `ST_DeviceStateExt`_
+
+
+FB_LPhotonEnergy
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_LPhotonEnergy EXTENDS FB_PhotonEnergy
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    	{attribute 'pytmc' := '
+            pv: eEnrg
+            link: BEND:DMPH:400:BACT
+            field: EGU GeV
+        '}
+        fbHgvpuElectronEnergy : FB_LREALFromEPICS;
+    	
+        {attribute 'pytmc' := '
+            pv: EEnergy
+    		io: i
+            field: DESC Electron Energy
+            field: EGU GeV
+        '}
+        fElectronEnergyVal : LREAL;
+        
+        {attribute 'pytmc' := '
+            pv: EEnergyValid
+    		io: i
+            field: DESC Electron Energy Valid
+        '}
+        bElectronEnergyValid : BOOL;
+        
+    	{attribute 'pytmc' := '
+            pv: UND
+            link: USEG:UNDH:
+        '}
+        fbHgvpu : FB_Hgvpu;
+    	
+    END_VAR
+    // Update PVs
+    fbHgvpuElectronEnergy();
+
+    fElectronEnergyVal := fbHgvpuElectronEnergy.fValue;
+    bElectronEnergyValid := fbHgvpuElectronEnergy.bValid;
+
+    fbHgvpu(fbElectronEnergy:=fbHgvpuElectronEnergy);
+
+    SUPER^(BP:=SUPER^.BP, Undulator:=fbHgvpu );
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Hgvpu`_
+    * `FB_PhotonEnergy`_
+
+
+FB_LStopper
+^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_LStopper EXTENDS FB_StopperWatcher
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    END_VAR
+    VAR
+    END_VAR
+    SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_StopperWatcher`_
+
+
+FB_MachineSimulator
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (* Simulates the machine responding to requests by adding a bit of delay/ ramps
+    *)
+    FUNCTION_BLOCK FB_MachineSimulator
+    VAR_INPUT
+        i_stAssertedParams    :    ST_BeamParams;
+        i_xFault    :    BOOL;
+        
+        xEnableAtt : BOOL;
+        xEnablePE : BOOL;
+        xEnableRate : BOOL;
+    END_VAR
+    VAR_IN_OUT
+        iq_stMachineParams    :    ST_BeamParams;
+    END_VAR
+    VAR
+        nTargetTran: REAL;
+        tonTranTimer    :    TON := (
+            PT := T#2S
+            );
+        fTargetPP_mJ: REAL;
+        tonPPETimer: TON := (
+            PT := T#2S
+        );
+    END_VAR
+    //Attenuation
+    IF xEnableAtt THEN
+        IF i_stAssertedParams.nTran <> nTargetTran THEN
+            tonTranTimer(IN:=FALSE);
+            nTargetTran := i_stAssertedParams.nTran;
+        ELSIF NOT tonTranTimer.Q THEN
+            tonTranTimer(IN:=TRUE);
+        ELSE
+            iq_stMachineParams.nTran := nTargetTran;
+        END_IF
+    END_IF
+        
+    //Pulse Energy
+    (*
+    IF xEnablePE THEN
+        IF i_stAssertedParams.fPP_mJ <> fTargetPP_mJ THEN
+            tonPPETimer(IN:=FALSE);
+            fTargetPP_mJ := i_stAssertedParams.fPP_mJ;
+        ELSIF NOT tonTranTimer.Q THEN
+            tonPPETimer(IN:=TRUE);
+        ELSE
+            iq_stMachineParams.fPP_mJ := fTargetPP_mJ;
+        END_IF
+    END_IF
+    *)
+    //Rate
+    IF xEnableRate THEN
+        IF i_xFault THEN
+            iq_stMachineParams.nRate := 0;
+        ELSE
+            iq_stMachineParams.nRate := i_stAssertedParams.nRate;
+        END_IF
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+FB_PhotonEnergy
+^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_PhotonEnergy
+    VAR_INPUT
+        Undulator : I_UndulatorComplex;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    	BP : ST_BeamParams;
+    END_VAR
+    VAR
+        nCurrentPhotonEnergyBitmask : UDINT;
+    	nTargetPhotonEnergyBitmask : UDINT;
+    END_VAR
+    //Update BP
+    nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(Undulator.rCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
+    nTargetPhotonEnergyBitmask := F_eVRangeCalculator(Undulator.rTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
+
+    BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `F_eVRangeCalculator`_
+    * `ST_BeamParams`_
+
+
+FB_PhotonEnergyWatcher
+^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    A. Wallace 2019-4-22
+    The photon energy watcher ensures the current and target photon energy is within
+    the arbirated bounds. Target in this case means, the calculated target photon energy
+    from the PVs that control the mechatronics of the undulators/ the electron energy.
+
+    If there are control PVs that match the monitor PVs, the control PVs are used to 
+    calculate a "target" photon energy. This is supposed to cover when the undulators/
+    electron energy is transitioning.
+
+    The abritrated bounds come from a simple AND of all the permitted ranges. See
+    the arbitrate action of the arbiter FB.
+
+    Note, this protection logic does not account for beam-off when determining fast-fault
+    status. If a device is requesting a limited range of eV, this request must be honored,
+    regardless of current beam-rate.
+    *)
+    {attribute 'reflection'}
+    FUNCTION_BLOCK FB_PhotonEnergyWatcher
+    VAR_INPUT
+        i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
+        i_stMachineTargetBeamParams    :    ST_BeamParams; //Link to global machine target beam params
+        i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
+        // Reset fault
+        i_xReset: BOOL;
+        sName : STRING := 'PhotonEnergyWatcher';
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+        io_fbFFHWO    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        xPhotonEnergyWithinBounds    :    BOOL;
+        fbFF    :    FB_FastFault :=(
+            i_DevName := sName,
+            i_Desc := 'Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.',
+            i_TypeCode := 7 );
+            
+       {attribute 'pytmc' := '
+            pv: ResidualPhotonEnergies
+    		io: i
+            archive: 1Hz monitor
+            field: DESC Portions of beam eV not permitted
+            field: EGU eV-bitmask
+        '}
+        evResidual : DWORD;
+        
+        fbLog : FB_LogMessage := (
+            eSubSystem := E_Subsystem.MPS,
+            eSevr := TcEventSeverity.Critical
+            );
+        bLogOneShot : BOOL;
+        sDevName : T_MaxString := 'Photon Energy Watcher';
+        
+        fbGetHN : FB_GetHostName;
+        bInit : BOOL := TRUE;
+        
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+        
+        fbStr : FB_FormatString := (
+            sOut := 'Non-zero photon energy residual: %32b; Req: %32b; Act: %32b');
+    END_VAR
+    IF bInit THEN
+        fbGetHN(bExecute:=TRUE);
+        bInit R= NOT fbGetHN.bBusy;
+    END_IF
+        
+    xPhotonEnergyWithinBounds := (i_stCurrentBeamParams.neVRange AND i_stRequestedBeamParams.neVRange) = i_stCurrentBeamParams.neVRange;
+
+    evResidual := (i_stCurrentBeamParams.neVRange XOR i_stRequestedBeamParams.neVRange) AND i_stCurrentBeamParams.neVRange;
+
+    IF evResidual <> 0 AND bLogOneShot THEN
+        fbLog.sJson := F_PMPS_JSON(
+            CONCAT(fbGetHN.sHostName, sDevName),
+            sPath,
+            PMPS_CODES.PEW_FAULT);
+        
+        fbStr.arg1 := F_DWORD(evResidual);
+        fbStr.arg2 := F_DWORD(i_stCurrentBeamParams.neVRange);
+        fbStr.arg3 := F_DWORD(i_stRequestedBeamParams.neVRange);
+        
+        fbStr();
+            
+        fbLog(sMsg:=fbStr.sOut);
+        bLogOneShot := FALSE;
+    ELSIF evResidual = 0 THEN
+        bLogOneShot := TRUE;
+    END_IF
+
+    fbFF(i_xOK := xPhotonEnergyWithinBounds,
+        io_fbFFHWO := io_fbFFHWO,);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `F_PMPS_JSON`_
+    * `PMPS_CODES`_
+    * `ST_BeamParams`_
+
+
+FB_PhotonEnergyWatcher_Test
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_PhotonEnergyWatcher_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+
+    END_VAR
+    PEWatcherBasicFunction();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_RateFromEPICS
+^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_RateFromEPICS
+
+    (*
+    enum MPSBeamRates {
+        MPSRateInvalid            =  0,
+        MPSRate0Hz                =  1,
+        /* Previously used 2 and 3 for single shot and burst */
+        MPSRate1Hz                =  4,
+        MPSRate10Hz               =  5,
+        MPSRate30Hz               =  6,
+        MPSRate60Hz               =  7,
+        MPSRate120Hz              =  8,
+        MPSRateUnknown            =  9,
+        MPSRateSingleShot         = 10,
+        MPSRateBurstMode          = 11,
+        MPSRateBurstModeNotActive = 12,
+        MPSNumberOfBeamRates      = 13,
+        MPSRateBurstInvalid       = 14
+    }
+    *)
+
+    VAR_IN_OUT
+    	BP : ST_BeamParams;
+        fbBYKIK_Rate : FB_LREALFromEPICS;
+    	FFO : FB_HardwareFFOutput;
+    END_VAR
+    VAR_OUTPUT
+    	xError : BOOL;
+    END_VAR
+    VAR
+
+    	
+    	eMPSRate : E_MPSBeamRates;
+    	
+    	ffRateReadBack : FB_FastFault := (
+    		i_DevName := 'Arbiter',
+    		i_Desc := 'Issue with rate readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
+    		i_TypeCode := 16#203,
+    		i_xAutoReset:=True);
+    END_VAR
+    VAR CONSTANT
+    	cFailSafeRate : UDINT := 1000001;
+    END_VAR
+    fbBYKIK_Rate();
+
+    IF fbBYKIK_Rate.bValid THEN
+    	eMPSRate := LREAL_TO_UINT(fbBYKIK_Rate.fValue);
+    ELSE
+    	eMPSRate := E_MPSBeamRates.MPSRateInvalid;
+    END_IF
+
+    CASE eMPSRate OF
+    	MPSRateInvalid:
+    		BP.nRate := cFailSafeRate;
+    	MPSRate0Hz:
+    		BP.nRate := 0;
+    	MPSRate1Hz:
+    		BP.nRate := 1;
+    	MPSRate10Hz:
+    		BP.nRate := 10;
+    	MPSRate30Hz:
+    		BP.nRate := 30;
+    	MPSRate60Hz:
+    		BP.nRate := 60;
+    	MPSRate120Hz:
+    		BP.nRate := 120;
+    	MPSRateUnknown:
+    		BP.nRate := cFailSafeRate;
+    	
+    ELSE
+    	BP.nRate := cFailSafeRate;
+    END_CASE
+
+    ffRateReadback(i_xOK:=fbBYKIK_Rate.bValid, io_fbFFHWO:=FFO);
+
+    BP.xValid R= NOT fbBYKIK_Rate.bValid OR
+    			eMPSRate = MPSRateUnknown OR
+    			eMPSRate = MPSRateInvalid;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `E_MPSBeamRates`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `ST_BeamParams`_
+
+
+FB_SafeBPCompare_Test
+^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_SafeBPCompare_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+
+    END_VAR
+    BeamOffIsSafe();
+    BPComparisonCheck();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_SolidAttenuator
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_SolidAttenuator
+    VAR_INPUT
+        i_rRequestedAttenuation    :    REAL;
+    END_VAR
+    VAR_OUTPUT
+        q_xFault    :    BOOL;
+        q_rCurrentAttenuation    :    REAL;
+    END_VAR
+    VAR_IN_OUT
+        Arbiter    :    FB_Arbiter; //Higher level arbiter from which upstream attenuation can be requested
+    END_VAR
+    VAR
+        stAttenuator    :    ST_BinarySolidAttenuator;
+        nSearchStart: INT;
+        nArrayLength: INT;
+        axNewBladeStates    :    ARRAY [0..9]    OF    BOOL;
+        nTryIndex: INT;
+        rCurrentAccumulatedAttenuation: REAL;
+        rTryFilter: REAL;
+        rTryAttenuation: REAL;
+        rRequestedAttenuation: REAL;
+    END_VAR
+    //
+
+    //Assuming the blades are ordered thickest to thinnest 
+    REPEAT
+        rTryAttenuation := rCurrentAccumulatedAttenuation + stAttenuator.axBlades[nTryIndex].rThickness;
+        IF rRequestedAttenuation >= rTryAttenuation THEN
+            rCurrentAccumulatedAttenuation := rTryAttenuation;
+            axNewBladeStates[nTryIndex] := TRUE;
+        ELSE
+            axNewBladeStates[nTryIndex] := FALSE;
+        END_IF
+    UNTIL
+        nTryIndex >= nArrayLength
+    END_REPEAT
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+
+
+FB_StopperWatcher
+^^^^^^^^^^^^^^^^^
+
+::
+
+    // Relays stopper state and sends a message when stopper state changes.
+    FUNCTION_BLOCK FB_StopperWatcher
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    	stCurrentBP : ST_BeamParams;
+    END_VAR
+    VAR
+        i_StopperOutLS AT %I* : BOOL;
+        i_StopperInLS AT %I* : BOOL;
+
+        q_StopperOUT_Relay AT %Q* : BOOL;
+        q_StopperIN_Relay AT %Q* : BOOL;
+
+        Stopper : UINT;
+        StopperName : STRING;
+    	{attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+
+        // Logging
+        fbLogMsg : FB_LogMessage := (
+            eSubSystem := E_Subsystem.MPS);
+
+        rtIn : R_TRIG;
+        rtOut : R_TRIG;
+
+    	bInit: BOOL := TRUE;
+    END_VAR
+    IF bInit THEN
+    	fbLogMsg.sJson := F_PMPS_JSON(StopperName, sPath, 1000);
+    	bInit := FALSE;
+    END_IF
+
+
+    rtIn(CLK := i_StopperInLS);
+    rtOut(CLK := i_StopperOutLS);
+
+    IF rtIn.Q THEN
+        fbLogMsg.sMsg := CONCAT(StopperName, ' moved IN');
+        fbLogMsg();
+    ELSIF rtOut.Q THEN
+        fbLogMsg.sMsg := CONCAT(StopperName, ' moved OUT');
+        fbLogMsg();
+    END_IF
+
+    q_StopperOUT_Relay := i_StopperOutLS;
+    q_StopperIN_Relay := i_StopperInLS;
+
+    // Update current beam parameters
+    stCurrentBP.aVetoDevices[Stopper] := i_StopperInLS;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `F_PMPS_JSON`_
+    * `ST_BeamParams`_
+
+
+FB_SubsysToArb_Test
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_SubsysToArb_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    BasicFunction();
+    VetoFunction();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_SubSysToArbiter_IO
+^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    // Use on a subsystem PLC to request from the arbiter
+    // Run at the top of your cycle to receive the latest BP
+    FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS I_HigherAuthority
+    VAR_INPUT
+        Reset : BOOL; // Fast fault reset
+        sName : STRING := 'SubSysToArbiter';
+        i_bVeto : BOOL;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    	Arbiter	: FB_Arbiter;
+        fbFFHWO : FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Inputs^CurrentBP'}
+        i_stCurrentBP    AT %I* :    ST_BeamParams_IO;
+        {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
+        q_stRequestedBP AT %Q* :    ST_BeamParams_IO;
+        {attribute 'pytmc' := 'pv: TxPDO_toggle
+            io: i'}
+        {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
+        xTxPDO_toggle    AT     %I* :    BIT;
+        {attribute 'pytmc' := 'pv: TxPDO_state
+            io: i'}
+        {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
+        xTxPDO_state    AT    %I*    :    BIT;
+        
+        
+        // Fast faults
+        ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP',i_DevName := sName);
+        
+        // A request is not considered included until the active cohort number is >= the request cohort number.
+        {attribute 'pytmc' := 'pv: RequestCohort
+            io: i'}
+        nRequestCohort : UDINT := 0; // Request cohort
+        {attribute 'pytmc' := 'pv: ActiveCohort
+            io: i'}
+        nActiveCohort : UDINT := 0; // Active cohort, updated by incoming BP from arbiter PLC, in the ElevateRequest arbiter call
+        
+        fbVetoArb : FB_VetoArbiter;
+
+    	fbLog : FB_LogMessage;
+    END_VAR
+    //Receiving current BP state
+    PMPS_GVL.stCurrentBeamParameters := IO_TO_BP(i_stCurrentBP);
+    PMPS_GVL.stCurrentBeamParameters.xValidToggle := xTxPDO_toggle; // This line must follow the one above. Sequence is important.
+
+    // Forwarding BP request for the subsystem
+    fbVetoArb.bVeto := i_bVeto;
+    fbVetoArb(HigherAuthority:=THIS^, LowerAuthority:=Arbiter, FFO:=fbFFHWO);
+
+    //Broadcasting current request
+    PMPS_GVL.stRequestedBeamParameters := IO_TO_BP(q_stRequestedBP);
+
+
+    q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
+
+    ffPMPSIO_Disconnect(
+        i_xOK := xTxPDO_state = 0,
+        io_fbFFHWO := fbFFHWO,
+        i_xReset := Reset,
+        i_DevName := sName,
+        i_TypeCode := 6,
+        i_xVetoable := FALSE
+        );
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `FB_VetoArbiter`_
+    * `IO_TO_BP`_
+    * `PMPS_GVL`_
+
+
+FB_SXU
+^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_SXU IMPLEMENTS I_UndulatorComplex
+    VAR_INPUT
+        fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+    END_VAR
+
+    VAR_OUTPUT
+        {attribute 'pytmc' := '
+            pv: CurrentPhotonEnergy
+    		io: i
+            field: DESC Calculated current photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+    	fCurrentPhotonEnergy : LREAL;
+    	{attribute 'pytmc' := '
+            pv: TargetPhotonEnergy
+    		io: i
+            field: DESC Calculated desired photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+    	fTargetPhotonEnergy : LREAL;
+    	    {attribute 'pytmc' := '
+            pv: SeedUndulatorNumber
+    		io: i
+            field: DESC Seed undulator number
+        '}
+    	nSeedUndulator : UDINT; // Set to zero when no undulators are active
+        {attribute 'pytmc' := '
+            pv: TargetSeedUndulatorNumber
+    		io: i
+            field: DESC Seed undulator number for target K
+        '}
+    	nTargetSeedUndulator : UDINT; // Set to zero when no undulators are active
+    END_VAR
+
+
+
+    VAR
+        // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
+
+
+        {attribute 'pytmc' := 'pv: 26; link: 2650:'}
+        fbSegment_26 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 27; link: 2750:'}
+        fbSegment_27 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 28; link: 2850:'}
+        fbSegment_28 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 29; link: 2950:'}
+        fbSegment_29 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 30; link: 3050:'}
+        fbSegment_30 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 31; link: 3150:'}
+        fbSegment_31 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 32; link: 3250:'}
+        fbSegment_32 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 33; link: 3350:'}
+        fbSegment_33 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 34; link: 3450:'}
+        fbSegment_34 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 36; link: 3650:'}
+        fbSegment_36 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 37; link: 3750:'}
+        fbSegment_37 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 38; link: 3850:'}
+        fbSegment_38 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 39; link: 3950:'}
+        fbSegment_39 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 40; link: 4050:'}
+        fbSegment_40 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 41; link: 4150:'}
+        fbSegment_41 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 42; link: 4250:'}
+        fbSegment_42 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 43; link: 4350:'}
+        fbSegment_43 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 44; link: 4450:'}
+        fbSegment_44 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 45; link: 4550:'}
+        fbSegment_45 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 46; link: 4650:'}
+        fbSegment_46 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 47; link: 4750:'}
+        fbSegment_47 : FB_UndulatorSegment;
+
+
+
+        fbSegment : ARRAY [iLowBound..iHighBound] OF POINTER TO FB_UndulatorSegment;
+        fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
+
+        iIndex : UDINT;
+
+        bInitialized : BOOL := FALSE;
+
+    END_VAR
+
+    VAR CONSTANT
+        {attribute 'pytmc' := '
+    		pv: FirstSegment
+    		io: i'}
+        iLowBound  : UDINT := 26;
+        {attribute 'pytmc' := '
+    		pv: LastSegment
+    	 	io: i'}
+        iHighBound : UDINT := 47;
+        {attribute 'pytmc' := '
+            pv: Period
+            io: i
+            field: EGU mm
+        '}
+        fPeriod_mm : LREAL := 39.0;
+        {attribute 'pytmc' := '
+            pv: LowK
+            io: i
+        '}
+    	fLowK : LREAL := 1.5;
+    	
+    	{attribute 'pytmc' := '
+            pv: HiK
+            io: i
+        '}
+    	fHiK : LREAL := 5.5; 
+    END_VAR
+    IF NOT bInitialized THEN
+        Init();
+    END_IF
+
+    UndAdrUpdate();
+
+    nSeedUndulator := 0;
+    nTargetSeedUndulator := 0;
+
+    FOR iIndex := iLowBound TO iHighBound DO
+        IF fbSegment[iIndex] <> 0 THEN
+            fbCurrentSegment REF= fbSegment[iIndex]^;
+            fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+    		
+    		//Mark the seed undulator, first undulator operating within K bounds
+    		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
+    			nSeedUndulator := iIndex;
+    			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+    		END_IF
+            
+            IF fbCurrentSegment.xTargetActive AND nTargetSeedUndulator = 0 THEN
+    			nTargetSeedUndulator := iIndex;
+    			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
+    		END_IF
+        END_IF
+    END_FOR
+
+    IF nSeedUndulator = 0 THEN
+    	fCurrentPhotonEnergy := 0;
+    END_IF
+
+    IF nTargetSeedUndulator = 0 THEN
+        fTargetPhotonEnergy := 0;
+    END_IF
+
+    END_FUNCTION_BLOCK
+    ACTION Init:
+    UndAdrUpdate();
+
+    FOR iIndex := iLowBound TO iHighBound DO
+            IF fbSegment[iIndex] <> 0 THEN
+            fbCurrentSegment REF= fbSegment[iIndex]^;
+    		fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+    		fbCurrentSegment.fLowK := fLowK;
+    		fbCurrentSegment.fHiK := fHiK;
+        END_IF
+    END_FOR
+    bInitialized := TRUE;
+    END_ACTION
+    ACTION UndAdrUpdate:
+    fbSegment[26] := ADR(fbSegment_26);
+    fbSegment[27] := ADR(fbSegment_27);
+    fbSegment[28] := ADR(fbSegment_28);
+    fbSegment[29] := ADR(fbSegment_29);
+    fbSegment[30] := ADR(fbSegment_30);
+    fbSegment[31] := ADR(fbSegment_31);
+    fbSegment[32] := ADR(fbSegment_32);
+    fbSegment[33] := ADR(fbSegment_33);
+    fbSegment[34] := ADR(fbSegment_34);
+    fbSegment[35] := 0;
+    fbSegment[36] := ADR(fbSegment_36);
+    fbSegment[37] := ADR(fbSegment_37);
+    fbSegment[38] := ADR(fbSegment_38);
+    fbSegment[39] := ADR(fbSegment_39);
+    fbSegment[40] := ADR(fbSegment_40);
+    fbSegment[41] := ADR(fbSegment_41);
+    fbSegment[42] := ADR(fbSegment_42);
+    fbSegment[43] := ADR(fbSegment_43);
+    fbSegment[44] := ADR(fbSegment_44);
+    fbSegment[45] := ADR(fbSegment_45);
+    fbSegment[46] := ADR(fbSegment_46);
+    fbSegment[47] := ADR(fbSegment_47);
+    END_ACTION
+
+
+Related:
+    * `FB_UndulatorSegment`_
+
+
+FB_UndulatorSegment
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_UndulatorSegment
+    VAR_INPUT
+        (* Undulator period in millimeters, to be set by subclasses *)
+        fPeriod_mm : LREAL := 1.0;
+        fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
+    	
+    	fLowK : LREAL := 0;
+    	fHiK : LREAL := 6;
+    	fKRangeHyst : LREAL := 0.01;
+    END_VAR
+
+    VAR_OUTPUT
+        {attribute 'pytmc' := '
+            pv: eVAct
+            field: DESC Calculated photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+        fPhotonEnergyAct : LREAL;
+
+        {attribute 'pytmc' := '
+            pv: eVDes
+            field: DESC Calculated desired photon energy
+            field: PREC 3
+            field: EGU eV
+        '}
+        fPhotonEnergyDes : LREAL;
+    	
+    	{attribute 'pytmc' := '
+            pv: Active
+    		io: i
+            field: DESC Undulator is considered active
+        '}
+    	xActive : BOOL; // Undulator is considered active
+        
+        {attribute 'pytmc' := '
+            pv: TargetActive
+    		io: i
+            field: DESC Target K would make und active
+        '}
+    	xTargetActive : BOOL; // Undulator is considered active at this target
+        
+        {attribute 'pytmc' := '
+            pv: KAct
+    		io: i
+            field: DESC Current K
+        '}
+        fKAct : LREAL;
+        
+        {attribute 'pytmc' := '
+            pv: KDes
+    		io: i
+            field: DESC Target K
+        '}
+        fKDes : LREAL;
+        
+            {attribute 'pytmc' := '
+            pv: KActValid
+    		io: i
+            field: DESC Current K Readback Valid
+        '}
+        bKActValid : BOOL;
+        
+        {attribute 'pytmc' := '
+            pv: KDesValid
+    		io: i
+            field: DESC Target K Readback Valid
+        '}
+        bKDesValid : BOOL;
+        
+    END_VAR
+
+    VAR
+        {attribute 'pytmc' := '
+            pv: KDes
+            link: KDes
+        '}
+        fbKDesired : FB_LREALFromEPICS;
+
+        {attribute 'pytmc' := '
+            pv: KAct
+            link: KAct
+        '}
+        fbKActual : FB_LREALFromEPICS;
+
+    END_VAR
+    fbKDesired();
+    fbKActual();
+
+    fKAct := fbKActual.fValue;
+    bKActValid := fbKActual.bValid;
+    fKDes := fbKDesired.fValue;
+    bKDesValid := fbKDesired.bvalid;
+
+    IF __ISVALIDREF(fbElectronEnergy) THEN
+
+        IF fbKActual.bValid AND fbElectronEnergy.bValid THEN
+            fPhotonEnergyAct := F_CalculatePhotonEnergy(
+                fElectronEnergy_GeV:=fbElectronEnergy.fValue,
+                fUndulatorPeriod_mm:=fPeriod_mm,
+                fUndulatorStrength:=fbKActual.fValue
+            );
+    		
+    		//Set this undulator active if actual K is within operational range
+    		xActive S= fLowK <= fbKActual.fValue AND fbKActual.fValue <= fHiK AND
+    		(fbKActual.bValid AND fbKActual.bValid);
+    		xActive R= (fLowK - fKRangeHyst) > fbKActual.fValue OR fbKActual.fValue > (fHiK + fKRangeHyst) OR
+    					(NOT fbKActual.bValid OR NOT fbKActual.bValid);
+                        
+            //Set this undulator active if target K is within operational range
+    		xTargetActive S= fLowK <= fbKDesired.fValue AND fbKDesired.fValue <= fHiK AND
+    		(fbKDesired.bValid AND fbKDesired.bValid);
+    		xTargetActive R= (fLowK - fKRangeHyst) > fbKDesired.fValue OR fbKDesired.fValue > (fHiK + fKRangeHyst) OR
+    					(NOT fbKDesired.bValid OR NOT fbKDesired.bValid);
+        END_IF
+
+        IF fbKDesired.bValid AND fbElectronEnergy.bValid THEN
+            fPhotonEnergyDes := F_CalculatePhotonEnergy(
+                fElectronEnergy_GeV:=fbElectronEnergy.fValue,
+                fUndulatorPeriod_mm:=fPeriod_mm,
+                fUndulatorStrength:=fbKDesired.fValue
+            );
+        END_IF
+
+    END_IF
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `F_CalculatePhotonEnergy`_
+
+
+FB_VetoArbiter
+^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_VetoArbiter IMPLEMENTS I_HigherAuthority
+    VAR_INPUT
+    	bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
+    	HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
+    	LowerAuthority : I_LowerAuthority; // Lower authority to be vetoed
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+    	FFO : FB_HardwareFFOutput; // This should be the FFO upstream of the veto device
+    END_VAR
+    VAR
+    	ffKeepItSecretKeepItSafe : FB_FastFault := (
+    		i_xAutoReset := TRUE,
+    		i_Desc := 'Holds beam off until request is back in arbitration',
+    		i_TypeCode := 200,
+    		i_xVetoable := TRUE
+    	);
+    	
+        stStandbyBP : ST_BeamParams;
+        
+            
+        rtVeto : R_TRIG;
+        ftVeto : F_TRIG;
+    END_VAR
+    rtVeto(CLK:=bVeto);
+    ftVeto(CLK:=bVeto);
+
+    IF rtVeto.Q THEN
+        HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+        HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, PMPS_GVL.cstFullBeam);
+    ELSIF ftVeto.Q THEN
+        HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
+        HigherAuthority.RequestBP(LowerAuthority.nLowerAuthorityID, stStandbyBP);
+    END_IF
+
+    LowerAuthority.ElevateRequest(THIS^);
+
+    //Fast fault that holds beam off until the request is added back into the system
+    // when bVeto goes false.
+    ffKeepItSecretKeepItSafe.i_xOK := HigherAuthority.CheckRequest(LowerAuthority.nLowerAuthorityID) OR bVeto;
+    ffKeepItSecretKeepItSafe(io_fbFFHWO:=FFO);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+FB_VetoArbiter_Test
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    {attribute 'call_after_init'}
+    FUNCTION_BLOCK FB_VetoArbiter_Test EXTENDS TcUnit.FB_TestSuite
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    VAR CONSTANT
+        ArbID : DWORD := 1;
+    	HigherArbID : DWORD := 2;
+    END_VAR
+    VetoArbiter();
+
+    END_FUNCTION_BLOCK
+
+
+
+
+FB_VetoDevice
+^^^^^^^^^^^^^
+
+::
+
+    // Relays veto device state, updates current BP and sends a message when veto state changes.
+    FUNCTION_BLOCK FB_VetoDevice
+    VAR_INPUT
+    	i_bIn : BOOL;
+    	i_bOut : BOOL;
+    END_VAR
+    VAR_OUTPUT
+        q_bIn : BOOL;
+        q_bOut : BOOL;
+    END_VAR
+    VAR_IN_OUT
+    	stCurrentBP : ST_BeamParams;
+    END_VAR
+    VAR
+
+        VetoDevice_IN : UINT := PMPS_GVL.MAX_VETO_DEVICES; // Veto device state array index
+    	VetoDevice_OUT : UINT := PMPS_GVL.MAX_VETO_DEVICES; // Veto device state array index
+        
+        VetoDeviceName : STRING;
+    	{attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+
+        // Logging
+            fbLogMsg : FB_LogMessage := (
+                eSubSystem := E_Subsystem.MPS);
+        
+            rtIn : R_TRIG;
+            rtOut : R_TRIG;
+        ////////////////////////////////
+        
+    	bInit: BOOL := TRUE;
+    END_VAR
+    IF bInit THEN
+    	fbLogMsg.sJson := F_PMPS_JSON(VetoDeviceName, sPath, 1000);
+    	bInit := FALSE;
+    END_IF
+
+    // Log
+    /////////////////////////////
+        rtIn(CLK := i_bIn);
+        rtOut(CLK := i_bOut);
+        
+        IF rtIn.Q THEN
+            fbLogMsg.sMsg := CONCAT(VetoDeviceName, ' moved IN');
+            fbLogMsg();
+        ELSIF rtOut.Q THEN
+            fbLogMsg.sMsg := CONCAT(VetoDeviceName, ' moved OUT');
+            fbLogMsg();
+        END_IF
+
+    // Relay
+    ///////////////////////
+        q_bIn := i_bIn;
+        q_bOut := i_bOut;
+
+    // Update current beam parameters
+    /////////////////////////////////////
+        stCurrentBP.aVetoDevices[VetoDevice_IN] := i_bIn;
+        stCurrentBP.aVetoDevices[VetoDevice_OUT] := i_bOut;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `F_PMPS_JSON`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+IO_TO_APT
+^^^^^^^^^
+
+::
+
+    FUNCTION IO_TO_APT : ST_PMPS_Aperture
+    VAR_INPUT
+        IO : ST_PMPS_Aperture_IO;
+    END_VAR
+    VAR
+    END_VAR
+    IO_TO_APT.Height := IO.Height;
+    IO_TO_APT.Width := IO.Width;
+    IO_TO_APT.xOK := IO.xOK;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Aperture`_
+
+
+IO_TO_ATT
+^^^^^^^^^
+
+::
+
+    FUNCTION IO_TO_ATT : ST_PMPS_Attenuator
+    VAR_INPUT
+        IO : ST_PMPS_Attenuator_IO;
+    END_VAR
+    VAR
+    END_VAR
+    IO_TO_ATT.nTran := IO.nTran;
+    IO_TO_ATT.xAttOK := IO.xAttOK;
+
+    END_FUNCTION
+
+
+Related:
+    * `ST_PMPS_Attenuator`_
+
+
+IO_TO_BP
+^^^^^^^^
+
+::
+
+    FUNCTION IO_TO_BP : ST_BeamParams
+    VAR_INPUT
+        IO : ST_BeamParams_IO;
+    END_VAR
+    VAR
+        idx : UINT;
+    END_VAR
+    FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+        IO_TO_BP.astAttenuators[idx] := IO_TO_ATT(IO.astAttenuators[idx]);
+    END_FOR
+
+    FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+        IO_TO_BP.astApertures[idx] := IO_TO_APT(IO.astApertures[idx]);
+    END_FOR
+
+    IO_TO_BP.aVetoDevices := IO.aVetoDevices;
+    IO_TO_BP.nTran := IO.nTran;
+    IO_TO_BP.nCohortInt := ULINT_TO_UDINT(IO.nCohortInt);
+    IO_TO_BP.neVRange := IO.neVRange;
+    IO_TO_BP.nRate := IO.nRate;
+    IO_TO_BP.xValid := IO.xValid;
+    IO_TO_BP.xValidToggle := IO.xValidToggle;
+
+    END_FUNCTION
+
+
+Related:
+    * `IO_TO_APT`_
+    * `IO_TO_ATT`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
+
+
+MAIN
+^^^^
+
+::
+
+    PROGRAM MAIN
+    VAR
+        fbSetPERanges : PE_Ranges;    
+
+        fbDiffBPTest    :    FB_DiffBP_Test;
+        fbBPTMTest    :    FB_BPTM_Test;
+        fbSafeBPCompareTest    :    FB_SafeBPCompare_Test;
+        ////fbevWithinSpecTest    :    FB_evWithinSpec_Test;---
+        ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;---
+        fbFFTest    :    FB_FastFault_Test;
+        fbArbiterTest    :    FB_Arbiter_Test;
+    	fbVetoArbiterTest : FB_VetoArbiter_Test;
+        fbevRangeCalcTest : FB_evRangeCalculator_Test;
+        fbSubSysToArbTest : FB_SubsysToArb_Test;
+        fbArbToSubSysTest : FB_ArbToSubsys_Test;
+    END_VAR
+    TcUnit.RUN();
+
+    END_PROGRAM
+
+
+Related:
+    * `FB_ArbToSubsys_Test`_
+    * `FB_Arbiter_Test`_
+    * `FB_BPTM_Test`_
+    * `FB_DiffBP_Test`_
+    * `FB_FastFault_Test`_
+    * `FB_PhotonEnergyWatcher_Test`_
+    * `FB_SafeBPCompare_Test`_
+    * `FB_SubsysToArb_Test`_
+    * `FB_VetoArbiter_Test`_
+    * `FB_evRangeCalculator_Test`_
+    * `PE_Ranges`_
+
+
+PE_Ranges
+^^^^^^^^^
+
+::
+
+    // Does nothing other than set the gvl for photon energy bitmask to one of two constants, K or L.
+    // Workaround for compile defines not fully working for libraries at the time of writing this.
+    // Otherwise I would have just used the compile define in the GVL declaration.
+    FUNCTION_BLOCK PE_Ranges
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+
+
+    END_FUNCTION_BLOCK
+
+
+
