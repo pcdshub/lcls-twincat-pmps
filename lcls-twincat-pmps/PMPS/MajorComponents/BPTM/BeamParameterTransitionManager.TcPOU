@@ -15,12 +15,32 @@ VAR_IN_OUT
     
 END_VAR
 VAR_INPUT
+    {attribute 'pytmc' := '
+        pv: DevName
+        io: i
+    '}
 	i_sDeviceName	: 	STRING:='Device'; // Name of the device requesting the transition	
 
+    {attribute 'pytmc' := '
+        pv: TransId
+        io: i
+    '}
     i_TransitionAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
+    {attribute 'pytmc' := '
+        pv: TransBp
+        io: i
+    '}
     i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
     
+    {attribute 'pytmc' := '
+        pv: ReqId
+        io: i
+    '}
     i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
+    {attribute 'pytmc' := '
+        pv: ReqBp
+        io: i
+    '}
     i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
     
     i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
@@ -48,11 +68,31 @@ VAR
     stTargetAssertion    :    ST_BeamParams; // Target assertion
     nCurrentAssertionID    :    UDINT := 0;  // ID of last set state (zero until a state is reached)
     
+    {attribute 'pytmc' := '
+        pv: NewBP
+        io: i
+    '}
     xNewBP    :    BOOL;
+    {attribute 'pytmc' := '
+        pv: TranBP
+        io: i
+    '}
     xTranBP    :    BOOL;
+    {attribute 'pytmc' := '
+        pv: FinalBPInArb
+        io: i
+    '}
     xFinalBPInArb : BOOL;
+    {attribute 'pytmc' := '
+        pv: FinalBP
+        io: i
+    '}
     xFinalBP    :    BOOL;
     
+    {attribute 'pytmc' := '
+        pv: State
+        io: i
+    '}
     eBPTMState : E_BPTMState := Init;
     ePrevState : E_BPTMState := Init;
     
