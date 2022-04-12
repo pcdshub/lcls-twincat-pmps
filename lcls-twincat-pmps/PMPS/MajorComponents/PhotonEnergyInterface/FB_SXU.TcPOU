@@ -142,7 +142,7 @@ VAR CONSTANT
         pv: HiK
         io: i
     '}
-	fHiK : LREAL := 5.5; 
+	fHiK : LREAL := 5.7; 
 END_VAR
 ]]></Declaration>
     <Implementation>
