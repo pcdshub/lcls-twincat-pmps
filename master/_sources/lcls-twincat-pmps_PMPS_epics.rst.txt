@@ -10055,63 +10055,7 @@ ST_PMPS_Aperture_IO
         | io: input
 
 
- 
-ST_PMPS_Aperture_IO
-^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-    :header-rows: 1
-    :align: center
-
-    * - Record
-      - Type
-      - Description
-      - Pragma
-    * - $(PREFIX):Height_RBV
-      - ai
-      - $(SYMBOL).Height
-      - | field: EGU mm
-        | io: input
-
-
-    * - $(PREFIX):OK_RBV
-      - bi
-      - $(SYMBOL).xOK
-      - | io: input
-
-
-    * - $(PREFIX):Width_RBV
-      - ai
-      - $(SYMBOL).Width
-      - | field: EGU mm
-        | io: input
-
-
-     
-ST_PMPS_Stopper
-^^^^^^^^^^^^^^^
-
-.. list-table::
-    :header-rows: 1
-    :align: center
-
-    * - Record
-      - Type
-      - Description
-      - Pragma
-    * - $(PREFIX):DeviceID_RBV
-      - waveform
-      - $(SYMBOL).DeviceID
-      - | io: input
-
-
-    * - $(PREFIX):In_RBV
-      - bi
-      - $(SYMBOL).In
-      - | io: input
-
-
- 
+   
 T_HashTableEntry
 ^^^^^^^^^^^^^^^^
 

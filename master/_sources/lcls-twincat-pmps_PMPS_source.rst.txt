@@ -1225,6 +1225,7 @@ BeamParameterTransitionManager
     bBusy R= bError OR bDone;
 
     END_FUNCTION_BLOCK
+
     ACTION AssertFinalBP:
     //q_stFinalAssertion := stTargetAssertion;
 
@@ -1259,6 +1260,7 @@ BeamParameterTransitionManager
         nCurrentAssertionID := nTargetAssertionID;    
     END_IF
     END_ACTION
+
     ACTION AssertTransitionBP:
     LogActions( CONCAT('Removing transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
     fbArbiter.RemoveRequest(i_TransitionAssertionID);
@@ -1279,6 +1281,7 @@ BeamParameterTransitionManager
         END_IF    
     END_IF
     END_ACTION
+
     ACTION AuthorizeTransition:
     q_xTransitionAuthorized := TRUE;
 
@@ -1286,13 +1289,16 @@ BeamParameterTransitionManager
 
     LogActions('Authorizing transition');
     END_ACTION
+
     ACTION DeauthorizeTransition:
     q_xTransitionAuthorized := FALSE;
     LogActions('Deauthorizing transition');
     END_ACTION
+
     ACTION NewTarget_ENTRY:
     xNewBP := False;
     END_ACTION
+
     ACTION RemoveTransitionAssertion:
     //q_stTransitionAssertion := PMPS_GVL.cstFullBeam;
 
@@ -1303,6 +1309,7 @@ BeamParameterTransitionManager
 
     //TODO add something to verify removal
     END_ACTION
+
     ACTION RequestBP_DO:
     // Request BP atomically so we know we'll finish the BPTM cycle
     IF fbArbiter.nEntryCount < cReqArbCapacity THEN
@@ -1332,6 +1339,7 @@ BeamParameterTransitionManager
         LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
     END_IF
     END_ACTION
+
     ACTION SetNewTarget:
     IF F_ValidReqID(i_nRequestedAssertionID) AND
         F_ValidReqID(i_TransitionAssertionID) THEN
@@ -1354,23 +1362,34 @@ BeamParameterTransitionManager
         bError := TRUE;
     END_IF
     END_ACTION
+
     ACTION WaitingForFinalAssertion_DO:
     //Final Assertion Verification
 
     xFinalBPInArb := fbArbiter.CheckRequest( i_nRequestedAssertionID);;
     END_ACTION
+
     ACTION WaitingForFinalAssertion_EXIT:
     //Set this bool false so we can get a rising edge on the next try
     xFinalBP := FALSE;
     END_ACTION
+
     ACTION WaitingForTransitionAssertion_DO:
     //Transition Assertion Verification
     xTranBP    := F_SafeBPCompare0Rate(stCurrentBeamParameters, i_stTransitionAssertion) AND
         fbArbiter.CheckRequest(i_TransitionAssertionID);
     END_ACTION
+
     ACTION WaitingForTransitionAssertion_EXIT:
     xTranBP := FALSE;
     END_ACTION
+
+    METHOD LogActions : BOOL
+    VAR_INPUT
+    	LogStr : STRING;
+    END_VAR
+    LogStrBuffer[LogBuffIdx.IncVal()] := LogStr;
+    END_METHOD
 
 
 Related:
@@ -2481,11 +2500,322 @@ FB_Arbiter
 
     END_FUNCTION_BLOCK
 
+    // Adds a request to the arbiter pool.
+    // Returns true if the request was successfully added, false if not enough space or a request with the same ID is already present.
+    METHOD AddRequest : BOOL
+    VAR_INPUT
+        nReqID    :    DWORD; // Unique ID within aribter for the request. Make sure this is unique for every device + state combination
+        stReqBP        :    ST_BeamParams; //Requested beam params
+    	sDevName: STRING; // Name of the device making the request
+    END_VAR
+    VAR
+    	BP_Int : ST_BP_ArbInternal;
+    END_VAR
+    VAR_INST
+        fbLog : FB_LogMessage;
+    END_VAR
+    // If the request is already in the pool, then skip the rest.
+    // This is flawed, needs to update the request if it's already in the pool, despite having the same ID
+    IF THIS^.CheckRequestInPool(nReqID) 
+    	OR nReqID = PMPS_GVL.EXCLUDED_ASSERTION_ID 
+    	OR nReqID = 0 THEN
+        AddRequest := FALSE;
+        RETURN;
+    END_IF
+
+
+    stReqBP.nCohortInt := nNextCohort; // Set the cohort number for this BP request.
+
+    // Pack the ID with the request
+    MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
+    BP_Int.nId := nReqID;
+    BP_Int.LiveInTable := TRUE;
+    BP_Int.sDevName := sDevName; 
+
+    THIS^.fbBPAssertionPool.A_Add(
+    	key := nReqID,
+    	putValue := BP_Int
+    );
+
+        
+    IF NOT THIS^.fbBPAssertionPool.bOk THEN
+        fbLog(sMsg:=CONCAT('Addition to arbiter assertion pool failed ', DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
+                eSevr:=TcEventSeverity.Warning,
+                eSubsystem:=E_Subsystem.MPS,
+                sJson := F_PMPS_JSON(
+                            sArbName,
+                            sPath,
+                            PMPS_CODES.ARB_FULL));
+    ELSIF THIS^.fbBPAssertionPool.bOk AND bVerbose THEN
+    	fbLog(sMsg:=CONCAT('Added to pool ',DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
+                eSevr:=TcEventSeverity.Verbose,
+                eSubsystem:=E_Subsystem.MPS);
+    END_IF
+    // New request, make sure the ack cycle request flag is set
+    bStartNewAckRequest S= THIS^.fbBPAssertionPool.bOk;
+
+    AddRequest := THIS^.fbBPAssertionPool.bOk;
+
+    nRequestsCount := nEntryCount;
+    END_METHOD
+
+    // Kernel of the arbiter
+    // Logic for determining which beam parameter is the most conservative across all request sets.
+    METHOD INTERNAL ArbitrateBP : ST_BP_ArbInternal
+    VAR_INPUT
+        stBP1    :    ST_BP_ArbInternal;
+        stBP2    :    ST_BP_ArbInternal;
+    END_VAR
+    VAR
+        idx : UINT := 1;
+    END_VAR
+    //<TODO>Add something here to register the key that won for each param
+
+    //Attenuation
+    ArbitrateBP.nTran := MIN(stBP1.nTran, stBP2.nTran);
+
+    FOR idx := 1 TO PMPS_GVL.AUX_ATTENUATORS DO
+        ArbitrateBP.astAttenuators[idx].nTran := MIN(stBP1.astAttenuators[idx].nTran, stBP2.astAttenuators[idx].nTran);
+    END_FOR
+
+    //Apertures
+    FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
+        IF stBP1.astApertures[idx].Height = 0 OR stBP2.astApertures[idx].Height =0 THEN
+            ArbitrateBP.astApertures[idx].Height := MAX(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
+        ELSE
+            ArbitrateBP.astApertures[idx].Height := MIN(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
+    	END_IF
+        
+        IF stBP1.astApertures[idx].Width = 0 OR stBP2.astApertures[idx].Width =0 THEN
+            ArbitrateBP.astApertures[idx].Width := MAX(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+        ELSE
+            ArbitrateBP.astApertures[idx].Width := MIN(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
+    	END_IF
+    END_FOR
+
+    //Photon energy ranges
+    ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
+
+    //Rate
+    ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);
+    END_METHOD
+
+    (* Checks request ID is included in arbitration all the way to the accelerator interface
+    Use like so:
+    IF fbArbiter.CheckRequest(nStateIDAssertionToCheck) AND (other logic) THEN:
+        Request is found and active in arbitration,. Do something.
+    ELSE:
+        Request was not found, or is not yet included in arbitration. Don't do something/ wait.
+
+    *)
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+        nReqID    :    DWORD;
+    END_VAR
+    VAR
+        BP : ST_BeamParams;
+    END_VAR
+    fbBPAssertionPool.A_Lookup(key := nReqID);
+
+    // Verify BP is acknowledged
+    BP := fbBPAssertionPool.getValue;
+
+    // This logic:
+    // Did we find the assertion in the pool?
+    // Is the assertion cohort number less than the current cohort and greater than zero?
+    // Is the Aribter itself active in arbitration?
+    CheckRequest := fbBPAssertionPool.bOk AND 
+                    BP.nCohortInt <= nActiveCohort AND
+                    BP.nCohortInt > 0;
+    END_METHOD
+
+    // Verify request is at least in the local arbiter
+    // Does not verify request has been included in arbitration.
+    // Use CheckRequest instead.
+    METHOD CheckRequestInPool : BOOL
+    VAR_INPUT
+        nReqID    :    DWORD;
+    END_VAR
+    THIS^.fbBPAssertionPool.A_Lookup(key := nReqID);
+
+    CheckRequestInPool := THIS^.fbBPAssertionPool.bOk;
+    END_METHOD
+
+    // <Arbiter Internal>
+    // Elevates the arbitrated BP set to something above.
+    // Could be another arbiter, or a BP requester/ IO, 
+    // or an FB that locks in a specific portion of the BP set.
+    METHOD ElevateRequest : BOOL 
+    VAR_INPUT
+        HigherAuthority : I_HigherAuthority;
+    END_VAR
+    (*
+    This method should only be used with one higher level component.
+    *)
+
+    // Complete previous ack cycle
+    IF bAckInProgress THEN
+        IF HigherAuthority.CheckRequest(nReqID := nArbiterID) THEN
+            nActiveCohort := nAckInProgCohort;
+            bAckInProgress := FALSE;
+    	END_IF
+    END_IF
+
+    // Kick off another ack cycle
+    IF bStartNewAckRequest AND NOT bAckInProgress THEN
+        nAckInProgCohort := nNextCohort;
+        HigherAuthority.RemoveRequest(nReqID:= nArbiterID);
+        bAckInProgress := HigherAuthority.RequestBP(nReqID := nArbiterID, stReqBP := GetArbitratedBP());
+        IF bAckInProgress THEN
+            bStartNewAckRequest := FALSE;
+            nNextCohort := nNextCohort + 1;
+        END_IF
+    END_IF
+    END_METHOD
+
+    METHOD FB_init : BOOL
+    VAR_INPUT
+    	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // Arbiter ID, must be globally unique cannot be zero or 16#FFFF
+    END_VAR
+    nArbiterID := nId;
+    fbBPAssertionPool.A_Reset();
+
+    sArbName := CONCAT('Arbiter ID: 0x', DWORD_TO_HEXSTR(nID, 4, FALSE));
+    END_METHOD
+
+    // Executes Arbitration between all requested beam parameter sets
+    METHOD INTERNAL GetArbitratedBP : ST_BeamParams
+    VAR_INPUT
+    END_VAR
+    VAR
+        getPosPtr    : POINTER TO T_HashTableEntry := 0;
+        getBPStructInt    :    ST_BP_ArbInternal;
+    	stOutputBP    :    ST_BP_ArbInternal; //Holding struct for arbitration process
+    END_VAR
+    VAR_INST
+        xFirstPass : BOOL := TRUE;
+        fbGetCurTaskIdx : GETCURTASKINDEX;
+        LastCycleCount : UDINT;
+        fbLogMessage : FB_LogMessage;
+    END_VAR
+    //Arbitrate
+    (*
+    This step cycles through every hash table entry, comparing
+    the beam parameters from each assertion to what we're planning
+    to assert.
+
+    The safer of the two parameters is kept so at the end we may
+    have a mix of beam parameters, the composition being safe for
+    all asserters.
+
+    *)
+
+    THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
+    IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
+        
+        //The first entry in the hash table is taken as the setting to arbitrate against
+        stOutputBP := getBPStructInt;
+
+        REPEAT
+            THIS^.fbBPAssertionPool.A_GetNext( putPosPtr := THIS^.fbBPAssertionPool.getPosPtr, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
+            IF THIS^.fbBPAssertionPool.bOk THEN
+                stOutputBP := ArbitrateBP(stOutputBP, getBPStructInt);
+            END_IF
+        UNTIL NOT fbBPAssertionPool.bOk
+        END_REPEAT
+    ELSE
+        //Full beam if there are no arbitration requests
+        MEMCPY(ADR(stOutputBP), ADR(PMPS_GVL.cstFullBeam), SIZEOF(PMPS_GVL.cstFullBeam));
+    END_IF
+
+    MEMCPY(ADR(q_stBeamParams),ADR(stOutputBP), SIZEOF(q_stBeamParams)); 
+
+    GetArbitratedBP := stOutputBP;
+
+    GetArbitratedBP.xValidToggle := NOT GetArbitratedBP.xValidToggle;
+
+    xFirstPass := FALSE;
+    END_METHOD
+
+    (* Removes request from abritration. *)
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+        nReqId    :    DWORD;
+    END_VAR
+    VAR_INST
+        fbLog : FB_LogMessage;
+    END_VAR
+    VAR CONSTANT
+    	BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
+    END_VAR
+    IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND CheckRequestInPool(nReqId) THEN
+    	// Include an A_Add action here to
+    	// update this entry with a dummy filler (ID = 0, LiveInTable= False)
+    	// before removing it since this hash
+    	// table needs to be viewed with a diagnostic
+    	// and so the entries need to appear clean.
+    	THIS^.fbBPAssertionPool.A_Add(key := nReqID, putValue := BP_Int);
+        THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
+        
+        IF bVerbose THEN
+            IF THIS^.fbBPAssertionPool.bOk THEN
+                    fbLog(sMsg:=CONCAT('Removed from pool: ', DWORD_TO_HEXSTR(nReqID,4,FALSE)),
+                    eSevr:=TcEventSeverity.Verbose,
+                    eSubsystem:=E_Subsystem.MPS);
+            ELSE
+                fbLog(sMsg:=CONCAT('Failed to remove from pool: ', DWORD_TO_HEXSTR(nReqID,4,FALSE)),
+                    eSevr:=TcEventSeverity.Warning,
+                    eSubsystem:=E_Subsystem.MPS);
+            END_IF
+        END_IF
+        
+        // With any new request reset the internal arbiter "done" flag
+        bStartNewAckRequest S= THIS^.fbBPAssertionPool.bOk;
+        
+        RemoveRequest := THIS^.fbBPAssertionPool.bOk;
+        
+        nRequestsCount := nEntryCount;
+        
+    END_IF
+    END_METHOD
+
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP, sDevName:=sArbName);
+    END_METHOD
+
+    // How many entries are in the arbiter now
+    PROPERTY nEntryCount : UDINT
+    VAR
+    END_VAR
+    fbBPAssertionPool.A_Count();
+    IF fbBPAssertionPool.bOk THEN
+    	nEntryCount := fbBPAssertionPool.nCount ;
+    END_IF
+    END_PROPERTY
+
+    PROPERTY nLowerAuthorityID : DWORD
+    VAR
+    END_VAR
+    nLowerAuthorityID := nArbiterID;
+    END_PROPERTY
+
 
 Related:
     * `FB_BeamParamAssertionPool`_
+    * `F_PMPS_JSON`_
+    * `PMPS_CODES`_
     * `PMPS_GVL`_
+    * `ST_BP_ArbInternal`_
     * `ST_BeamParams`_
+    * `T_HashTableEntry`_
 
 
 FB_Arbiter_Test
@@ -2510,7 +2840,413 @@ FB_Arbiter_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD ArbiterCapacity
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+        
+        nRandID : DWORD;
+        testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
+        
+        idx : DWORD;
 
+    END_VAR
+    VAR_INST
+        fbArbCapacityTest    :    FB_Arbiter(1);
+
+        Cycle : INT := 0;
+        
+        CycleLimit : INT := 20;
+        
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    TEST('Arbiter Capcity');
+        // Fill the arbiter
+        FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS DO
+            fbArbCapacityTest.AddRequest(nReqID := idx, stReqBP := testReq, sDevName:= CONCAT('Device #', TO_STRING(idx)));
+        END_FOR
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD Arbitration
+    VAR_INPUT
+    END_VAR
+    VAR
+        
+         nTranReqID    :    UDINT    := 1;
+        stAttReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+        
+        nPPEReqID    :    UDINT    := 2;
+        stPPEReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+        
+        nEVReqID    :    UDINT    := 3;
+        stEVReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+        
+        nRateReqID    :    UDINT    := 4;
+        stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+        
+        stArbitratedBP    :    ST_BeamParams;
+        stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;;
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+    END_VAR
+    TEST('Arbitration');
+
+    stAttReqBP.nTran := 0.50;
+    stEVReqBP.neVRange := 2#1111_1111_1111_1111_1111_1100_1111_1111;
+    stRateReqBP.nRate := 10;
+
+    stExpectedBP.nTran     :=     stAttReqBP.nTran;
+    stExpectedBP.neVRange := stEVReqBP.neVRange;
+    stExpectedBP.nRate := stRateReqBP.nRate;
+
+    //Load arbiter with beam parameter sets
+    AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP, sDevName:= 'Device' ),
+                        'Safest attenuation request failed to load');
+                        
+    //Load arbiter with beam parameter sets
+    AssertTrue(fbArbiter.AddRequest(nPPEReqID, stPPEReqBP, sDevName:= 'Device'),
+                        'Safest PPE request failed to load');
+                        
+    //Load arbiter with beam parameter sets
+    AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP, sDevName:= 'Device'),
+                        'Safest stEVReqBP request failed to load');
+                        
+    //Load arbiter with beam parameter sets
+    AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP, sDevName:= 'Device'),
+                        'Safest stRateReqBP request failed to load');
+
+    stArbitratedBP := fbArbiter.GetArbitratedBP();
+
+    AssertFalse(F_DifferentBeamParams(stExpectedBP, stArbitratedBP),
+                    'Arbitrated BP does not match expected.');
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD DoS
+    VAR
+        
+
+        
+        nOrigReqID : UDINT := 30;
+        nSecondReqID : UDINT := 35;
+        
+        nPeskyReqID : UDINT := 40;
+        
+        
+    END_VAR
+    VAR_INST
+        DosArb : FB_Arbiter(20);
+        
+        DummyHA : FB_DummyHA := (ReqAcknowledged:=FALSE); // Set req ack false to start so we can control when it is verified
+        nTimeoutCounter : UINT;
+        bInit : BOOL;
+        bSecond : BOOL;
+        eDosTestCases : E_ArbDosTestStates;
+    END_VAR
+    VAR CONSTANT
+            nTimeoutCounterMAX : UINT := 50;
+            nWaitCount : UINT := 10;
+            nWait2ndCount : UINT := nWaitCount + 5;
+    END_VAR
+    TEST('DoS');
+
+    CASE eDosTestCases OF
+        E_ArbDosTestStates.Init: // Init, first request
+            DosArb.AddRequest(nOrigReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
+            eDosTestCases := E_ArbDosTestStates.SecondReq;
+            
+        E_ArbDosTestStates.SecondReq: // Add second request
+            DosArb.AddRequest(nSecondReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
+            eDosTestCases := E_ArbDosTestStates.WaitForAck;
+            
+        E_ArbDosTestStates.WaitForAck:
+            IF nTimeoutCounter > nWaitCount THEN
+                DummyHA.ReqAcknowledged := TRUE;
+                eDosTestCases := E_ArbDosTestStates.WaitFor2ndAck;
+    		END_IF
+        
+        E_ArbDosTestStates.WaitFor2ndAck:
+            DummyHA.ReqAcknowledged := False;
+            IF nTimeoutCounter > nWait2ndCount THEN
+                DummyHA.ReqAcknowledged := TRUE;
+                eDosTestCases := E_ArbDosTestStates.RunAsserts;
+    		END_IF
+        
+    END_CASE
+
+    DosArb.ElevateRequest(DummyHA);
+
+    // Pesky request always adding and removing
+    DosArb.RemoveRequest(nPeskyReqID);
+    DosArb.AddRequest(nPeskyReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
+
+
+    nTimeoutCounter := nTimeoutCounter + 1;
+
+    IF nTimeoutCounter > nTimeoutCounterMAX or eDosTestCases = E_ArbDosTestStates.RunAsserts THEN 
+        AssertTrue(DosArb.CheckRequest(nOrigReqID), 'Original request still not accepted');
+        AssertTrue(DosArb.CheckRequest(nSecondReqID), 'Second request still not accepted'); 
+       
+        TEST_FINISHED_NAMED('DoS');
+    END_IF
+    END_METHOD
+
+    METHOD FullArbitrationStack
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+    	
+    	nIdDoS : DWORD := 13;
+    	stDoSReq : ST_BeamParams := PMPS_GVL.cstFullBeam;
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        fbHigherArb : FB_Arbiter(2);
+        
+        fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+        pBPR : POINTER TO ST_BeamParams_IO;
+        
+        fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
+        pBPC : POINTER TO ST_BeamParams_IO;
+        
+        fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
+        
+        FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+
+        Cycle : INT := 0;
+        
+        CycleLimit : INT := 20;
+        
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    // This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+    // trusted with a grain of salt.
+
+    TEST('FullStack');
+
+
+
+    CASE Cycle OF
+
+    0: 
+        IF NOT fbArbiter.CheckRequestInPool(nID) THEN
+            AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+        END_IF  
+        
+        TEST('JustEnteredRequest');
+        AssertFalse(fbArbiter.CheckRequest(nId),
+            'Check should fail. Request not arbitrated yet.');
+        TEST_FINISHED();
+       
+    8000:
+        TEST_FINISHED_NAMED('FullStack');   
+        
+    END_CASE 
+
+
+    TEST('VerifyBPRHasBP');
+    IF fbHigherArb.CheckRequest(SysID) THEN
+        AssertFalse(F_DifferentBeamParams(stReq, fbBPR.q_ReqBP),
+            'Beam parameters not fully propagated to BPR at highest level');
+            TEST_FINISHED_NAMED('VerifyBPRHasBP');
+    END_IF
+
+    TEST('ArbToSubsysPropagation');
+    IF fbArbToSubSys.nActiveCohort = fbArbToSubSys.nRequestedCohort 
+        AND fbArbToSubSys.nActiveCohort <> 0 THEN
+        AssertTrue(fbHigherArb.CheckRequest(SysID),
+            'Active cohort = Requested cohort before higher arbiter confirmed request was active');
+        TEST_FINISHED_NAMED('ArbToSubsysPropagation');
+    END_IF
+
+    TEST('SubsysToArbPropagation');
+    IF fbArbiter.CheckRequest(nId) THEN
+        AssertTrue(fbSubSysToArb.nActiveCohort >= fbSubSysToArb.nRequestCohort,
+            'Request validated before higher level confirmation');
+        TEST_FINISHED_NAMED('SubsysToArbPropagation');
+    END_IF
+
+
+    TEST('VerifyIncludedAtAllLevels');
+    IF fbArbiter.CheckRequest(nId) THEN
+        AssertTrue(fbHigherArb.CheckRequest(fbArbToSubSys.RequestingSystemID), 'HigherArb is not yet included in arbitration');
+        AssertTrue(fbSubSysToArb.CheckRequest(fbArbiter.nLowerAuthorityID), 'Local Arb is not yet included in arbitration');
+        TEST_FINISHED_NAMED('VerifyIncludedAtAllLevels');
+    END_IF
+          
+        
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    //Ethercat transfer simulation
+    // Transfer of requested BP to arbiter PLC
+    pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+    pBPR^ := fbSubSysToArb.q_stRequestedBP;
+
+    // Transfer of current BP to sub system PLC
+    pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
+    pBPC^ := fbArbToSubSys.o_CurrentBP;
+
+    //////////////////////////////////////
+    //Start of arbiter plc cycle
+    //Arb io collects sub system status
+    fbArbToSubSys(Arbiter := fbHigherArb, fbFFHWO := FFO); // This is making a request in the higher arb
+    //BPR collects arbiter summation
+    fbBPR(Arbiter := fbHigherArb); // This is getting the arbitrated BP
+
+
+
+
+    IF CycleLimit > Cycle THEN
+        Cycle := Cycle + 1;
+    ELSE 
+        Cycle := 8000;
+    END_IF
+    END_METHOD
+
+    METHOD RemoveReq
+    VAR
+        
+        Arb : FB_Arbiter(20);
+        
+        DummyHA : FB_DummyHA;
+        
+        Result : BOOL;
+        
+    END_VAR
+    Arb.AddRequest(30, PMPS_GVL.cst0RateBeam, 'Device');
+
+    Arb.ElevateRequest(DummyHA);
+
+    TEST('Remove Req');
+        Result := Arb.RemoveRequest(77);
+        
+        AssertFalse( Result, 'RemoveReq returned true, with nothing to remove');
+        AssertFalse( Arb.bStartNewAckRequest , 'StartNewAckRequest is set. Something is wrong');
+        
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD RequestCheckRemoveBP
+    VAR_INPUT
+    END_VAR
+    VAR
+        
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams;
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+    END_VAR
+    TEST('RequestBP');
+    AssertTrue(fbArbiter.AddRequest(nId, stReq, 'Device'),
+        'Request failed');
+
+    TEST_FINISHED();
+        
+    TEST('DuplicateID');
+    AssertFalse(fbArbiter.AddRequest(nId, stReq, 'Device'),
+        'Duplicate request accepted, not good.');
+
+    TEST_FINISHED();
+        
+    TEST('CheckBP');
+    AssertFalse(fbArbiter.CheckRequest(nId),
+        'Check should fail. Request not arbitrated yet.');
+    TEST_FINISHED();
+
+    TEST('CheckBPArbitrated');
+    WRITE_PROTECTED_ULINT(ADR(fbArbiter.nActiveCohort), fbArbiter.nNextCohort);
+    AssertTrue(fbArbiter.CheckRequest(nId),
+        'Check should pass.');
+
+    TEST_FINISHED();      
+        
+    TEST('IDDoesNotExist');
+     
+    AssertFalse(fbArbiter.CheckRequest(nId+1),
+        'Check returned true when ID does not exist');
+
+    TEST_FINISHED();
+        
+    TEST('RemoveBP');
+    AssertTrue(fbArbiter.RemoveRequest(nId),
+        'Remove failed');
+    AssertFalse(fbArbiter.CheckRequest(nId),
+        'Remove did not remove request');
+        
+    TEST_FINISHED();
+
+    TEST('NoRequestsFullBeam');
+
+    AssertFalse(F_DifferentBeamParams(fbArbiter.GetArbitratedBP(), PMPS_GVL.cstFullBeam), 'Arbitrated beam should be full with all requests removed');
+
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD StackArbiters
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        fbHigherArb : FB_Arbiter(2);
+    	
+    	ArbBP : ST_BeamParams;
+
+        Cycle : INT := 0;
+        
+        CycleLimit : INT := 20;
+        
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    TEST('StackingArbiters');
+    fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq, sDevName :='Device');
+
+    fbArbiter.ElevateRequest(fbHigherArb);
+
+    ArbBP := fbHigherArb.GetArbitratedBP();
+
+    AssertTrue(ArbBP.nTran = 12, 'We should see the transmission number here');
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `E_ArbDosTestStates`_
+    * `FB_Arbiter`_
+    * `FB_ArbiterToSubSys_IO`_
+    * `FB_BPRequestor`_
+    * `FB_DummyHA`_
+    * `FB_HardwareFFOutput`_
+    * `FB_SubSysToArbiter_IO`_
+    * `F_DifferentBeamParams`_
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
 
 
 FB_ArbiterToSubSys_IO
@@ -2670,7 +3406,101 @@ FB_ArbToSubsys_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD BasicFunction
+    VAR_INPUT
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        pBPR : POINTER TO ST_BeamParams_IO;
+        
+        stBPRIO : ST_BeamParams_IO := (
+            nCohortInt := 1,
+            nTran := 35); // Simulates subsystem BP request
+        
+        fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
+        pBPC : POINTER TO ST_BeamParams_IO;
+        
+        fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
+        
+        FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
 
+        Cycle : INT := 0;
+        
+        CycleLimit : INT := 20;
+        
+    END_VAR
+    // Simulate an initial cycle with no new requests coming in
+    fbBPR(Arbiter:=fbArbiter);
+    fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+
+    TEST('Init');
+    TEST_FINISHED();
+
+    //Ethercat transfer simulation
+    // Transfer of requested BP to arbiter PLC
+    pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+    pBPR^ := stBPRIO;
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbBPR(Arbiter:=fbArbiter);
+    fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+
+    TEST('New request');
+        AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.i_RequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match, and they should');
+        AssertTrue(fbArbiter.CheckRequestInPool(SysID), 'ArbToSubSys request should be in arbiter pool now');
+        AssertTrue(fbArbToSubSys.nActiveCohort = 0, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+        AssertTrue(fbArbToSubSys.o_CurrentBP.nCohortInt = fbArbToSubSys.nActiveCohort, 'Cohort being sent to sub system remains unincremented');
+    TEST_FINISHED_NAMED('New request');
+        
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbBPR(Arbiter:=fbArbiter);
+    fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbBPR(Arbiter:=fbArbiter);
+    fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbBPR(Arbiter:=fbArbiter);
+    fbArbToSubSys(Arbiter:=fbArbiter, fbFFHWO:=FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Request has become active');
+        AssertTrue(fbArbToSubSys.nRequestedCohort = fbArbToSubSys.nActiveCohort, 'ReqCohort and qBP Cohort do not match, and they should');
+        AssertTrue(fbArbiter.CheckRequest(SysID), 'ArbToSubSys request should be in arbiter pool now');
+        AssertTrue(fbArbToSubSys.nActiveCohort = stBPRIO.nCohortInt, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
+        AssertTrue(fbBPR.q_ReqBP.nTran = stBPRIO.nTran, 'BPR and requested BP should match');
+    TEST_FINISHED_NAMED('Request has become active');
+    END_METHOD
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_ArbiterToSubSys_IO`_
+    * `FB_BPRequestor`_
+    * `FB_HardwareFFOutput`_
+    * `ST_BeamParams`_
 
 
 FB_AttenuatorSimulator
@@ -2844,6 +3674,7 @@ FB_BeamParamAssertionPool
     ;
 
     END_FUNCTION_BLOCK
+
     ACTION A_Add:
     (* Adds entry to the table *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2866,11 +3697,13 @@ FB_BeamParamAssertionPool
 
     DataPoolToEpics();
     END_ACTION
+
     ACTION A_Count:
     (* Count number of used entries *)
     nCount := hTable.nCount;
     bOk := TRUE;
     END_ACTION
+
     ACTION A_GetFirst:
     (* Get first entry position pointer and value *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2881,6 +3714,7 @@ FB_BeamParamAssertionPool
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_GetNext:
     (* Get next entry position pointer and value *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2896,6 +3730,7 @@ FB_BeamParamAssertionPool
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_Lookup:
     (* Lookup for entry by key  *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2906,6 +3741,7 @@ FB_BeamParamAssertionPool
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_Remove:
     (* Search for entry and remove it *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2918,6 +3754,7 @@ FB_BeamParamAssertionPool
 
     DataPoolToEpics();
     END_ACTION
+
     ACTION A_Reset:
     (* Reset/initialize linked list *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -2926,6 +3763,7 @@ FB_BeamParamAssertionPool
     fbTable.A_Reset( hTable := hTable, bOk=>bOk );
     nCount := 0;
     END_ACTION
+
     ACTION DataPoolToEpics:
     MEMCPY(ADR(epicsDataPool), ADR(dataPool), (PMPS_PARAM.MAX_ASSERTIONS) * SIZEOF(ST_BP_ArbInternal));
     END_ACTION
@@ -3004,6 +3842,15 @@ FB_BPControlDevice
 
     END_FUNCTION_BLOCK
 
+    METHOD FB_init : BOOL
+    VAR_INPUT
+        bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+        bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID;
+    END_VAR
+    nControlDeviceID:= nID;
+    END_METHOD
+
 
 Related:
     * `FB_Arbiter`_
@@ -3048,6 +3895,55 @@ FB_BPRequestor
 
     END_FUNCTION_BLOCK
 
+    // Returns true when outputs to MPS are updated
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+    	nReqID	: DWORD;
+    END_VAR
+    VAR_INST
+        xFirstTime : BOOL;
+        nId : DWORD;
+    END_VAR
+    (* nRequestCohort will be < nCohort after output control
+    function blocks have been updated to reflect the new request
+    *)
+    CheckRequest := nRequestCohort < nCohort;
+    END_METHOD
+
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+    	nReqID    :    DWORD; //StateID to remove
+    END_VAR
+
+    END_METHOD
+
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    VAR_INST
+        ReqID : DWORD;
+        Registered : BOOL := FALSE;
+    END_VAR
+    // Check the request is coming from the same source we're used to
+    IF NOT Registered THEN
+        ReqID := nReqID;
+        Registered := TRUE;
+    END_IF
+    // log a complaint if false
+    RequestBP := ReqId = nReqId;
+
+    // Update internal BP request struct
+    ReqBP := stReqBP;
+
+    // Record current cohort
+
+        nRequestCohort := nCohort;
+    END_METHOD
+
 
 Related:
     * `FB_Arbiter`_
@@ -3079,9 +3975,533 @@ FB_BPTM_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD BPTMBasicFunction
+    VAR_INPUT
+    END_VAR
+    VAR    
+        //Final and transition assertions
+        nTransitionID    :    UDINT := 1;
+        stTransitionAssertion    :    ST_BeamParams := (nRate := 10);
+        
+        nReqID    :    UDINT    := 2;
+        stReqAssertion    :    ST_BeamParams := (nTran := 0.2);
+        
+    END_VAR
+    VAR_INST
+        fbBPTM_TestBasicFunction    :    BeamParameterTransitionManager;
+        fbArbiter    :    FB_Arbiter(1);
+        ffo : FB_HardwareFFOutput;
+        fbSubSysIO : FB_DummyArbIO;
+        xFirstPass    :    BOOL := TRUE;
+        eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
+    END_VAR
+    // Completes arbiter request elevation process
+    // Necessary for CheckRequest to return true, ever
+        fbBPTM_TestBasicFunction(
+            fbArbiter := fbArbiter,
+            );
+
+    fbSubSysIO(LA := fbArbiter, FFO := ffo);
+
+    // Note: this struct may also be (over)written to in the tests below, specifically rate.
+    fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
+
+    CASE eTestStep OF
+
+    E_BPTMTestStates.Init:
+        
+        TEST('BPTMTest');
+        eTestStep := E_BPTMTestStates.WaitingForBeam;
+
+    E_BPTMTestStates.WaitingForBeam:
+        TEST('BPTM Waits for Beam');
+        
+        fbBPTM_TestBasicFunction.i_TransitionAssertionID := nTransitionID;
+        fbBPTM_TestBasicFunction.i_stTransitionAssertion := stTransitionAssertion;
+        
+        fbBPTM_TestBasicFunction.i_nRequestedAssertionID := nReqID;
+        fbBPTM_TestBasicFunction.i_stRequestedAssertion := stReqAssertion;
+        
+        IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitForBP AND 
+            NOT fbBPTM_TestBasicFunction.xEntry THEN
+        
+            AssertTrue(fbArbiter.CheckRequestInPool(nTransitionID), 'Arbiter did not accept BPTM transition assertion');
+            
+            AssertTrue(fbArbiter.CheckRequestInPool(nReqID), 'Arbiter did not accept BPTM transition assertion');
+                    
+            AssertFalse(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
+                'Transition should not be authorized until requests are in and beam is ready');
+                
+            AssertTrue(fbBPTM_TestBasicFunction.bBusy, 'Busy should be true here');
+            AssertFalse(fbBPTM_TestBasicFunction.bDone, 'Done should be false');
+            AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be false here');
+                
+            TEST_FINISHED_NAMED('BPTM Waits for Beam');
+            
+            eTestStep := E_BPTMTestStates.Transitioning;
+        END_IF    
+        
+        
+    E_BPTMTestStates.Transitioning:
+        TEST('BPTM Authorizes Transition');
+
+        fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
+        
+        IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
+            NOT fbBPTM_TestBasicFunction.xEntry THEN
+        
+            AssertTrue(fbArbiter.CheckRequest(nTransitionID),
+                'Transition assertion should be in arbiter');
+            
+            AssertTrue(fbArbiter.CheckRequest(nReqID),
+                'Final assertion should be in arbiter');
+                
+            AssertTrue(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
+                'Transition should be authorized at this point.');
+                
+            AssertEquals(nReqID, fbBPTM_TestBasicFunction.nCurrentAssertionID,
+                'nCurrentAssertionID not set.');
+        
+            TEST_FINISHED_NAMED('BPTM Authorizes Transition');
+            
+            eTestStep := E_BPTMTestStates.WaitingForFinalAssertion;
+        END_IF
+
+    E_BPTMTestStates.WaitingForFinalAssertion:
+        TEST('BPTM Waits for final BP');
+        
+        fbBPTM_TestBasicFunction.i_xDoneMoving := TRUE;
+        
+        IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitForFinalBP THEN
+            
+            AssertTrue(fbArbiter.CheckRequest(nTransitionID),
+            'Transition assertion should be in arbiter');  
+            
+            TEST_FINISHED_NAMED('BPTM Waits for final BP');
+            
+            eTestStep := E_BPTMTestStates.CleaningUp;
+        END_IF    
+        
+    E_BPTMTestStates.CleaningUp:
+
+        fbSubSysIO.AutoUpdateBP := TRUE;
+
+        TEST('Cleaning up');
+        
+        IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Done THEN
+            
+            AssertFalse(fbArbiter.CheckRequestInPool(nTransitionID), 'Transition req should be removed from arb now');
+            
+            eTestStep := E_BPTMTestStates.Done; 
+            
+            TEST_FINISHED_NAMED('Cleaning up');
+    	END_IF
+
+    E_BPTMTestStates.Done:
+
+        
+        AssertTrue(fbBPTM_TestBasicFunction.bDone, 'Done should be set');
+        AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be cleared');
+        AssertFalse(fbBPTM_TestBasicFunction.bBusy, 'Busy should be false');
+        
+        TEST_FINISHED_NAMED('BPTMTest');    
+        
+    END_CASE
+    END_METHOD
+
+    // Simulate error due to full arbiter
+    METHOD FullArbError
+    VAR_INPUT
+    END_VAR
+    VAR    
+        //Final and transition assertions
+        nTransitionID    :    UDINT := 1000;
+        stTransitionAssertion    :    ST_BeamParams :=  ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
+        
+        nReqID    :    UDINT    := 2000;
+        stReqAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
+        
+        idx : UDINT;
+        
+        nRandID : DWORD;
+        testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
+        
+    END_VAR
+    VAR_INST
+        fbBPTM_TestFullArb    :    BeamParameterTransitionManager;
+        fbArbFullErr    :    FB_Arbiter(1);
+        ffo : FB_HardwareFFOutput;
+        fbSubSysIO : FB_DummyArbIO;
+        fbBPR :  FB_BPRequestor;
+        xFirstPass    :    BOOL := TRUE;
+        eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
+        tonRetryTimeout : TON := (PT:=T#5s);
+        entryToRetry : bool := true;
+        fbRand : DRAND := (Seed :=1);
+    END_VAR
+    CASE eTestStep OF
+
+    E_BPTMTestStates.Init:
+        
+        TEST('BPTMErrorFullArb');
+        
+        // Fill the arbiter
+        FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS // this fills the arbiter
+                        - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
+            fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq, sDevName :='Device');
+        END_FOR
+        
+        fbSubSysIO.AutoUpdateBP := TRUE;
+        
+        AssertTrue(PMPS_PARAM.MAX_ASSERTIONS - fbArbFullErr.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
+            'Arbiter is not full enough, rest of tests will be invalid'); 
+        
+        eTestStep := E_BPTMTestStates.Error;
+
+    E_BPTMTestStates.Error:
+        
+        TEST('BPTM Full Error');
+
+        IF fbBPTM_TestFullArb.bError THEN
+            
+            AssertTrue(fbBPTM_TestFullArb.bError AND fbBPTM_TestFullArb.nErrId = PMPS_CODES.NoRoomInArb,
+                'Incorrect error response from full arbiter.');
+                
+            TEST_FINISHED_NAMED('BPTM Full Error');
+            
+            eTestStep := E_BPTMTestStates.Retry;
+            
+    	END_IF
+        
+    E_BPTMTestStates.Retry:
+        
+        TEST('Test Retry Post Failed Final');
+        
+        // Clear the arbiter
+        if entryToRetry THEN
+            FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS + 1 DO
+                fbArbFullErr.RemoveRequest(idx);
+            END_FOR
+            entryToRetry := FALSE;
+        END_IF
+        
+        // Push the retry button
+        fbBPTM_TestFullArb.bRetry := TRUE;
+        
+        tonRetryTimeout(IN:=TRUE);
+        
+        IF tonRetryTimeout.Q OR fbBPTM_TestFullArb.q_xTransitionAuthorized THEN
+            AssertTrue(fbBPTM_TestFullArb.q_xTransitionAuthorized, 'Transition should have been authorized by now');
+            AssertTrue(fbArbFullErr.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
+            AssertTrue(fbArbFullErr.CheckRequest(nReqID), 'Final ID is missing from arbiter while transition is authorized');
+            
+            TEST_FINISHED_NAMED('Test Retry Post Failed Final');
+            
+            eTestStep := E_BPTMTestStates.CleaningUp;
+    	END_IF
+
+    E_BPTMTestStates.CleaningUp:
+        TEST_FINISHED_NAMED('BPTMErrorFullArb');    
+        
+    END_CASE
+
+    fbBPTM_TestFullArb(
+        fbArbiter := fbArbFullErr,
+        i_TransitionAssertionID := nTransitionID,
+        i_stTransitionAssertion := stTransitionAssertion,
+        
+        i_nRequestedAssertionID := nReqID,
+        i_stRequestedAssertion := stReqAssertion,
+        
+        stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback,
+    );
+
+    fbSubSysIO(LA := fbArbFullErr, FFO := ffo);
+    END_METHOD
+
+    // Test the BPTM seamlessly handles new requests at any stage
+    // Verify old requests are removed from arbiter
+    METHOD InterruptAtAllSteps
+    VAR_INPUT
+    END_VAR
+    VAR    
+        //Final and transition assertions
+        nTransitionID    :    UDINT := 16#DAAD;
+        stTranReq    :    ST_BeamParams := PMPS_GVL.cst0RateBeam;
+        
+        nFirstReqID    :    UDINT    := 16#FEED;
+        stFirstReq    :    ST_BeamParams := (nTran :=1, nRate := 16#FEED, neVRange :=2#1111_1111_1111_1111_1111_1111_1111_1111);
+        
+    END_VAR
+    VAR_INST
+        fbBPTM_InterruptionTest    :    BeamParameterTransitionManager;
+        
+        ffo : FB_HardwareFFOutput := (bAutoReset:=TRUE);
+        fbSubSysIO : FB_DummyArbIO;
+        fbBPR :  FB_BPRequestor;
+        xFirstPass    :    BOOL := TRUE;
+        eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
+        tonRetryTimeout : TON := (PT:=T#5s);
+        
+        fbBPTMDiscCycles : BeamParameterTransitionManager;
+        fbSubSysIODisc : FB_DummyArbIO;
+        fbArbDisc : FB_Arbiter(1000);
+        
+        iCount : UINT;
+        
+        aBPTM : ARRAY [1..cCycle] OF BeamParameterTransitionManager;
+        BPTMUnderTest : REFERENCE TO BeamParameterTransitionManager;
+        fbArbiter    :    FB_Arbiter(1);
+        aArbIO : ARRAY [1..cCycle] OF FB_DummyArbIO;
+        ArbIO : REFERENCE TO FB_DummyArbIO;
+        nCycleLim : UINT;
+        nCycle : UINT;
+        sCurrentTestName : STRING :='';
+        bCycleLimHit : BOOL; 
+        nAllStepsDone : BYTE;
+        tTimeOut : TON := (PT:=T#20ms);
+            
+        bTestedOnce : BOOl;
+    END_VAR
+    VAR CONSTANT
+        nNewTarget : INT := 0;
+        nRequestBP : INT := 1;
+        nWaitForBP : INT := 2;
+        nTransitioning : INT := 3;
+        nWaitForFinalBP : INT := 4;
+        nCleaningUp : INT := 5;
+        nDone : INT := 6;
+        nIdle : INT := 7;
+    END_VAR
+    (* These tests will confirm the BPTM is interruptable at any step,
+    meaning it will not deadlock or stall, and will always complete with
+    the correct sequencing *)
+
+    (* This functionality is crucial as a deadlocked BPTM will need manual intervention,
+    users of the BPTM should always be able to just set a target BP that is easy to reach
+    at any point in time, and have the BPTM head in that direction and succeed. *)
+
+    // Determine how many cycles it would take normally, to complete a full BPTM cycle
+    // This count will be verified against the current count constant
+
+    IF NOT bTestedOnce THEN
+
+    TEST('CheckBPTM Cycle Count');
+
+    WHILE fbBPTMDiscCycles.eBPTMState <> E_BPTMState.Idle DO
+        
+        fbBPTMDiscCycles.i_TransitionAssertionID := nTransitionID;
+        fbBPTMDiscCycles.i_stTransitionAssertion := stTranReq;
+        
+        fbBPTMDiscCycles.i_nRequestedAssertionID := nFirstReqID;
+        fbBPTMDiscCycles.i_stRequestedAssertion := stFirstReq;
+        
+        fbBPTMDiscCycles(fbArbiter:=fbArbDisc);
+        fbSubSysIODisc(LA:=fbArbDisc, FFO:=ffo);
+        
+        fbBPTMDiscCycles.stCurrentBeamParameters := fbSubSysIODisc.q_stSimulatedBPReadback;
+        
+        fbSubSysIODisc.AutoUpdateBP := TRUE;
+        
+        fbBPTMDiscCycles.i_xDoneMoving S= fbBPTMDiscCycles.q_xTransitionAuthorized;
+        
+        iCount := iCount + 1;
+    END_WHILE
+
+    IF fbBPTMDiscCycles.eBPTMState = E_BPTMState.Idle THEN
+        AssertTrue(cCycle >= iCount, CONCAT('cCycle is too low, increase it to', INT_TO_STRING(iCount)));
+        TEST_FINISHED_NAMED('CheckBPTM Cycle Count');
+    END_IF
+
+    // Run BPTM for nCycleLim cycles, switch to a new target, verify BPTM completes anyways
+
+    FOR nCycleLim := 1 TO cCycle DO
+        
+        nCycle := 0;
+        
+        bCycleLimHit := FALSE;
+        
+        BPTMUnderTest REF= aBPTM[nCycleLim];
+        ArbIO REF= aArbIO[nCycleLim];
+        
+        BPTMUnderTest.i_TransitionAssertionID := nTransitionID;
+        BPTMUnderTest.i_stTransitionAssertion := stTranReq;
+        
+        ArbIO.AutoUpdateBP := TRUE;
+        
+        // Start the test for this Cycle Limit
+        sCurrentTestName := CONCAT('CycleLimTest:',INT_TO_STRING(nCycleLim));
+        TEST(sCurrentTestName);
+        
+        nAllStepsDone := 0;
+        
+        tTimeOut(IN:=FALSE);
+            
+        WHILE nAllStepsDone <> 16#FF DO
+            
+            tTimeOut(IN:= TRUE);
+
+            IF tTimeOut.Q THEN
+                AssertTrue(FALSE, CONCAT('Failed ', BYTE_TO_HEXSTR(nAllStepsDone, 2, FALSE)));
+                EXIT;
+            END_IF  
+        
+            // Verify all steps complete
+            IF bCycleLimHit THEN
+                nAllStepsDone.nNewTarget S= BPTMUnderTest.eBPTMState = E_BPTMState.NewTarget;
+                nAllStepsDone.nRequestBP S= BPTMUnderTest.eBPTMState = E_BPTMState.RequestBP;
+                nAllStepsDone.nWaitForBP S= BPTMUnderTest.eBPTMState = E_BPTMState.WaitForBP;
+                nAllStepsDone.nTransitioning S= BPTMUnderTest.eBPTMState = E_BPTMState.Transitioning;
+                nAllStepsDone.nWaitForFinalBP S= BPTMUnderTest.eBPTMState = E_BPTMState.WaitForFinalBP;
+                nAllStepsDone.nCleaningUp S= BPTMUnderTest.eBPTMState = E_BPTMState.CleaningUp;
+                nAllStepsDone.nDone S= BPTMUnderTest.eBPTMState = E_BPTMState.Done;
+                nAllStepsDone.nIdle S= BPTMUnderTest.eBPTMState = E_BPTMState.Idle;
+            ELSE
+                nAllStepsDone := 0;
+    		END_IF
+        
+            // After nCycleLim cycles (nCycle), change the target
+            IF nCycle >= nCycleLim THEN
+                BPTMUnderTest.i_nRequestedAssertionID := nCycleLim;
+                BPTMUnderTest.i_stRequestedAssertion.nRate := nCycleLim;
+                bCycleLimHit := TRUE;
+            ELSE
+                BPTMUnderTest.i_nRequestedAssertionID := nFirstReqID;
+                BPTMUnderTest.i_stRequestedAssertion := stFirstReq;
+    		END_IF
+            
+            BPTMUnderTest(fbArbiter:=fbArbiter);
+            ArbIO(LA:=fbArbiter, FFO := ffo);
+            
+            BPTMUnderTest.stCurrentBeamParameters := ArbIO.q_stSimulatedBPReadback;
+            
+            BPTMUnderTest.i_xDoneMoving := BPTMUnderTest.q_xTransitionAuthorized;
+            
+            nCycle := nCycle + 1;
+        
+    	END_WHILE
+        
+        AssertTrue(fbArbiter.CheckRequestInPool(BPTMUnderTest.i_nRequestedAssertionID),
+            CONCAT('Final req not in pool: ', UINT_TO_STRING(nCycleLim)));
+        AssertFalse(fbArbiter.CheckRequestInPool(BPTMUnderTest.i_TransitionAssertionID),
+            'TransReq still in pool');
+        AssertFalse(fbArbiter.CheckRequestInPool(nFirstReqID),
+            'First req still in pool');
+        AssertTrue(bCycleLimHit,
+            CONCAT('Cycle lim not hit', UINT_TO_STRING(nCycleLim)));
+        AssertTrue(ArbIO.q_stSimulatedBPReadback.nRate = BPTMUnderTest.i_stRequestedAssertion.nRate,
+            'Rates are not equal...');
+        
+        TEST_FINISHED_NAMED(sCurrentTestName);
+        
+        // Clean up for next test
+        
+        fbArbiter.RemoveRequest(nFirstReqID);
+        fbArbiter.RemoveRequest(nTransitionID);
+        fbArbiter.RemoveRequest(nCycleLim);
+        
+    END_FOR
+
+    END_IF
+    END_METHOD
+
+    // Test the BPTM seamlessly handles new requests at any stage
+    // Verify old requests are removed from arbiter
+    METHOD InterruptedTransition
+    VAR_INPUT
+    END_VAR
+    VAR    
+        //Final and transition assertions
+        nTransitionID    :    UDINT := 3;
+        stTranReq    :    ST_BeamParams := PMPS_GVL.cstSafeBeam;
+        
+        nFirstReqID    :    UDINT    := 1;
+        stFirstReq    :    ST_BeamParams := (nRate := 100);
+        
+        nSecondReqID    :    UDINT    := 2;
+        stSecReq    :    ST_BeamParams := (nRate:= 200);
+        
+    END_VAR
+    VAR_INST
+        fbBPTM_InterruptionTest    :    BeamParameterTransitionManager;
+        fbArbiter    :    FB_Arbiter(1);
+        ffo : FB_HardwareFFOutput;
+        fbSubSysIO : FB_DummyArbIO;
+        fbBPR :  FB_BPRequestor;
+        xFirstPass    :    BOOL := TRUE;
+        eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
+        tonRetryTimeout : TON := (PT:=T#5s);
+    END_VAR
+    CASE eTestStep OF
+
+    E_BPTMTestStates.Init:
+        
+        TEST('BPTM Intr Trans');
+        
+        fbBPTM_InterruptionTest.i_TransitionAssertionID := nTransitionID;
+        fbBPTM_InterruptionTest.i_stTransitionAssertion := stTranReq;
+        
+        fbBPTM_InterruptionTest.i_nRequestedAssertionID := nFirstReqID;
+        fbBPTM_InterruptionTest.i_stRequestedAssertion := stFirstReq;
+        
+        fbSubSysIO.AutoUpdateBP := TRUE; // Enable auto update
+        
+        eTestStep := E_BPTMTestStates.WaitingForTransitionAssertion;
+
+    E_BPTMTestStates.WaitingForBeam:
+
+        IF fbBPTM_InterruptionTest.eBPTMState = E_BPTMState.WaitingForTransitionAssertion AND 
+            NOT fbBPTM_InterruptionTest.xEntry THEN // since we're not in entry anymore 
+        
+            //change the request to interrupt
+            fbBPTM_InterruptionTest.i_nRequestedAssertionID := nSecondReqID;
+            fbBPTM_InterruptionTest.i_stRequestedAssertion := stSecReq;
+            
+            eTestStep := E_BPTMTestStates.Transitioning;
+        END_IF
+        
+    E_BPTMTestStates.Transitioning:
+        
+        TEST('New Target Gets To Trans Auth');
+        
+        tonRetryTimeout(IN:=TRUE);
+        
+        IF tonRetryTimeout.Q OR fbBPTM_InterruptionTest.q_xTransitionAuthorized THEN
+            AssertTrue(fbBPTM_InterruptionTest.q_xTransitionAuthorized, 'Transition should have been authorized by now');
+            AssertTrue(fbArbiter.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
+            AssertTrue(fbArbiter.CheckRequest(nSecondReqID), 'Final ID is missing from arbiter while transition is authorized');
+            
+            TEST_FINISHED_NAMED('New Target Gets To Trans Auth');
+            
+            eTestStep := E_BPTMTestStates.CleaningUp;
+    	END_IF
+
+    E_BPTMTestStates.CleaningUp:
+        TEST_FINISHED_NAMED('BPTM Intr Trans');    
+        
+    END_CASE
+
+    fbBPTM_InterruptionTest(
+        fbArbiter := fbArbiter,
+        stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback
+    );
+
+    fbSubSysIO(LA := fbArbiter, FFO := ffo);
+    END_METHOD
+
 
 Related:
+    * `BeamParameterTransitionManager`_
+    * `E_BPTMState`_
+    * `E_BPTMTestStates`_
+    * `FB_Arbiter`_
+    * `FB_BPRequestor`_
+    * `FB_DummyArbIO`_
+    * `FB_HardwareFFOutput`_
+    * `PMPS_CODES`_
+    * `PMPS_GVL`_
     * `PMPS_PARAM`_
+    * `ST_BeamParams`_
 
 
 FB_CTLS_Outputs
@@ -3154,7 +4574,35 @@ FB_DiffBP_Test
 
     END_FUNCTION_BLOCK
 
+    //Verify BP comparison remains logical.
+    METHOD BPDiff
+    VAR_INPUT
+    END_VAR
+    VAR
+        BP1    :    ST_BeamParams;
+        BP2    :    ST_BeamParams;
+    END_VAR
+    TEST('BPDiffCheck');
 
+    BP2.nTran := 10; 
+        
+    AssertTrue(
+        F_DifferentBeamParams(BP1, BP2),
+        'DifferentBP eval is broken (True)'); 
+
+    BP1.nTran := BP2.nTran;   
+        
+    AssertFalse(
+        F_DifferentBeamParams(BP2, BP1),
+        'DifferentBP eval is broken (False)');
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `F_DifferentBeamParams`_
+    * `ST_BeamParams`_
 
 
 FB_DummyArbIO
@@ -3207,6 +4655,114 @@ FB_DummyArbIO
 
     END_FUNCTION_BLOCK
 
+    // Call this method to update q_stSimulatedBPReadback at will, used if auto-update is set to false
+    METHOD ApplyBPReq
+    VAR_INPUT
+        bUpdateBP : BOOL := FALSE; // Set true and call this method to set q_stSimulatedBPReadback to the request
+    END_VAR
+    VAR
+        BP : REFERENCE TO ST_BeamParams;
+    END_VAR
+    IF bUpdateBP THEN
+        stSaveCurrentBP := q_stSimulatedBPReadback;
+        q_stSimulatedBPReadback := stReqOutBP;
+    ELSIF bAutoUpdateBP THEN
+        tonApt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astApertures), ADR(q_stSimulatedBPReadback.astApertures), SIZEOF(q_stSimulatedBPReadback.astApertures));
+        tonApt(PT:=tAptDelay);
+        IF tonApt.Q THEN q_stSimulatedBPReadback.astApertures := stReqOutBP.astApertures; END_IF
+        
+        tonRate(IN:=stReqOutBP.nRate<>q_stSimulatedBPReadback.nRate, PT:=tRateDelay);
+        IF tonRate.Q THEN q_stSimulatedBPReadback.nRate := stReqOutBP.nRate; END_IF
+        
+        tonTrans(IN:=stReqOutBP.nTran<>q_stSimulatedBPReadback.nTran, PT:=tTransDelay);
+        IF tonTrans.Q THEN q_stSimulatedBPReadback.nTran := stReqOutBP.nTran; END_IF
+        
+        tonPE(IN:=stReqOutBP.neVRange<>q_stSimulatedBPReadback.neVRange, PT:=tPEDelay);
+        IF tonPE.Q THEN
+            IF stReqOutBP.neVRange = 0 THEN
+                q_stSimulatedBPReadback.neVRange := 0;
+                q_stSimulatedBPReadback.neVRange.0 := TRUE;
+            ELSE
+                q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
+    		END_IF
+    	END_IF
+    	
+    	tonSatt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astAttenuators), ADR(q_stSimulatedBPReadback.astAttenuators), SIZEOF(q_stSimulatedBPReadback.astAttenuators));
+        tonSatt(PT:=tSattDelay);
+        IF tonSatt.Q THEN q_stSimulatedBPReadback.astAttenuators := stReqOutBP.astAttenuators; END_IF
+    END_IF
+
+    ffo.ExecuteNoLog();
+
+    IF NOT ffo.q_xFastFaultOut THEN q_stSimulatedBPReadback.nRate := 0; END_IF
+    END_METHOD
+
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+    	nReqID	: DWORD;
+    END_VAR
+    CheckRequest := nReqID = nSavedID AND (nReqID <> 0) AND (nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID);
+    END_METHOD
+
+    // <Arbiter Internal>
+    // Elevates the arbitrated BP set to something above.
+    // Could be another arbiter, or a BP requester/ IO, 
+    // or an FB that locks in a specific portion of the BP set.
+    METHOD ElevateRequest : BOOL 
+    VAR_INPUT
+        HigherAuthority : I_HigherAuthority;
+    END_VAR
+
+    END_METHOD
+
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+    	(*StateID to remove*)
+    	nReqID	: DWORD;
+    END_VAR
+    nSavedID := 0;
+
+    stReqOutBP := stSaveCurrentBP;
+
+    RemoveRequest := TRUE;
+    END_METHOD
+
+    // Request a BP from this higher authority
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    IF nReqID <> 0 AND nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
+        nSavedID := nReqID;
+        stReqOutBP := stReqBP;
+        
+        RequestBP := TRUE;
+    ELSE
+        RequestBP := FALSE;
+    END_IF
+    END_METHOD
+
+    PROPERTY AutoUpdateBP : BOOL
+    VAR
+    END_VAR
+    AutoUpdateBP := bAutoUpdateBP;
+    END_PROPERTY
+
+    PROPERTY AutoUpdateBP : BOOL
+    VAR
+    END_VAR
+    bAutoUpdateBP := AutoUpdateBP;
+    END_PROPERTY
+
+    PROPERTY nLowerAuthorityID : DWORD
+    VAR
+    END_VAR
+    nLowerAuthorityID := PMPS_GVL.EXCLUDED_ASSERTION_ID;
+    END_PROPERTY
+
 
 Related:
     * `FB_HardwareFFOutput`_
@@ -3231,7 +4787,52 @@ FB_DummyHA
 
     END_FUNCTION_BLOCK
 
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+    	nReqID	: DWORD;
+    END_VAR
+    CheckRequest := ReqAcknowledged;
+    END_METHOD
 
+    // <Arbiter Internal>
+    // Elevates the arbitrated BP set to something above.
+    // Could be another arbiter, or a BP requester/ IO, 
+    // or an FB that locks in a specific portion of the BP set.
+    METHOD ElevateRequest : BOOL 
+    VAR_INPUT
+        HigherAuthority : I_HigherAuthority;
+    END_VAR
+
+    END_METHOD
+
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+    	(*StateID to remove*)
+    	nReqID	: DWORD;
+    END_VAR
+    RemoveRequest := TRUE;
+    END_METHOD
+
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    RequestBP := TRUE;
+    END_METHOD
+
+    PROPERTY nLowerAuthorityID : DWORD
+    VAR
+    END_VAR
+    nLowerAuthorityID := PMPS_GVL.EXCLUDED_ASSERTION_ID;
+    END_PROPERTY
+
+
+Related:
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
 
 
 FB_evRangeCalculator_Test
@@ -3254,7 +4855,164 @@ FB_evRangeCalculator_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD BasicFunction
+    VAR_INPUT
+    END_VAR
+    VAR
+        {attribute 'displaymode' := 'binary'}
+        LastWord : DWORD := 2#0000_0000_0000_0000_0000_0000_0000_0010;
+        {attribute 'displaymode' := 'binary'}
+        Result : DWORD;
+        {attribute 'displaymode' := 'binary'}
+        TestEV : DWORD;
+        
+        {attribute 'displaymode' := 'binary'}
+        tEvW : DWORD;
+        tEv : REAL;
+        
+        
+        fbStr : FB_FormatString;
+        
+        MiscNumber : INT;
+    END_VAR
+    VAR CONSTANT
+        nLowerLimitBoundary : INT := 0;
+        
+        RandomBoundary : INT := 2;
+        MNU : INT := 3; //RandomBoundary + 1
+        MND : INT := 1; //RandomBoundary - 1
+    END_VAR
+    Test('CheckRanges');
 
+    //Lower limit equal
+    tEvW.nLowerLimitBoundary := TRUE;
+    tEv := PMPS_GVL.g_areVBoundaries[nLowerLimitBoundary];
+    Result := F_eVRangeCalculator(tEv, 0);
+    AssertTrue(
+        Result = tEvW,
+        'Lower limit not inclusive');
+        
+    // Lower range flags
+    tEvW.nLowerLimitBoundary := TRUE;
+    tEv := PMPS_GVL.g_areVBoundaries[nLowerLimitBoundary] / 2;
+    Result := F_eVRangeCalculator(tEv, 0);
+    AssertTrue(
+        Result = tEvW,
+        'eV below lower range should come back true');
+        
+    //Mid range
+    tEvW := 0;
+    tEvW.RandomBoundary := TRUE;
+    //ev result that is smack dab in the middle of a range
+    tEv := PMPS_GVL.g_areVBoundaries[RandomBoundary] - ((PMPS_GVL.g_areVBoundaries[RandomBoundary] - PMPS_GVL.g_areVBoundaries[MND]) / 2);
+    Result := F_eVRangeCalculator(tEv, 0);
+    AssertTrue(
+        Result = tEvW,
+        'In range failed, whatever you did, it broke this really bad.');
+
+    //Out of range
+    tEvW := 0;
+    tEvW.RandomBoundary := TRUE;
+    //Ev result that is beyond the current range (midway into the next range up)
+    tEv := PMPS_GVL.g_areVBoundaries[MNU] - (PMPS_GVL.g_areVBoundaries[MNU]-PMPS_GVL.g_areVBoundaries[RandomBoundary])/2;
+    Result := F_eVRangeCalculator(tEv, 0);
+    AssertFalse(
+        Result = tEvW,
+        'Out of range failed, whatever you did, it broke this really bad.');
+
+    TEST_FINISHED();
+
+    Test('Negative eV failsafes');
+    //Negative eV
+    AssertTrue(
+        F_eVRangeCalculator(-300, 0) = 16#FFFF_FFFF,
+        'Working with antimatter? Negative eV should failsafe to FFFF.');    
+
+    TEST_FINISHED();
+
+    Test('Out of range eV failsafes');
+    // eV too high
+    AssertTrue(
+        F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries] + 1, 0) = 16#FFFF_FFFF,
+        'eV above the last threshold should failsafe.');    
+
+    TEST_FINISHED();
+
+    Test('Check hyst keeps');
+
+    LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#0000_0000_0000_0000_0000_0000_0000_0000);
+
+    // Last word should be 2#0000_0000_0000_0100
+
+        Result := F_eVRangeCalculator(
+            PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst - PMPS_GVL.reVHyst/2,
+             LastWord);
+        TestEV := 0;
+        TestEV.RandomBoundary := TRUE;
+        TestEV.MNU := True;
+     
+        fbStr.arg1 := F_DWORD(Result);
+        fbStr.arg2 := F_DWORD(TestEV);
+        fbStr.sFormat := 'Moving up does not stick. Result: %b vs. Test: %b';
+        fbStr();
+            
+    AssertTrue(Result = TestEV,
+        fbStr.sOut);
+        
+        Result := F_eVRangeCalculator(
+            PMPS_GVL.g_areVBoundaries[RandomBoundary - 1] - PMPS_GVL.reVHyst + PMPS_GVL.reVHyst/2, 
+            LastWord);
+        TestEV := 0;
+        TestEV.RandomBoundary := TRUE;
+        TestEV.MND := True;
+        
+        fbStr.arg1 := F_DWORD(Result);
+        fbStr.arg2 := F_DWORD(TestEV);
+        fbStr.sFormat := 'Moving down does not stick. Result: %b vs. Test: %b';
+        fbStr();
+        
+    AssertTrue(Result = TestEV,
+        fbStr.sOut);
+
+    TEST_FINISHED();
+
+    Test('Check hyst drops');
+
+        Result := F_eVRangeCalculator(
+            PMPS_GVL.g_areVBoundaries[MND] - PMPS_GVL.reVHyst*1.1, 
+            LastWord);
+        TestEV := 0;
+        TestEV.MND := TRUE;
+        
+        fbStr.arg1 := F_DWORD(Result);
+        fbStr.arg2 := F_DWORD(TestEV);
+        fbStr.sFormat := 'Moving down does not drop. Result: %b vs. Test: %b';
+        fbStr();
+        
+    AssertTrue(Result = TestEV,
+        fbStr.sOut);
+
+        Result := F_eVRangeCalculator(
+            PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst*1.1, 
+            LastWord);
+        TestEV := 0;
+        TestEV.MNU := TRUE;
+        
+        fbStr.arg1 := F_DWORD(Result);
+        fbStr.arg2 := F_DWORD(TestEV);
+        fbStr.sFormat := 'Moving up does not drop. Result: %b vs. Test: %b';
+        fbStr();
+        
+    AssertTrue(Result = TestEV,
+        fbStr.sOut);
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `F_eVRangeCalculator`_
+    * `PMPS_GVL`_
 
 
 FB_eVSimulator
@@ -3318,7 +5076,41 @@ FB_eVWithinSpec_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD evWithinRangeChecks
+    VAR_INPUT
+    END_VAR
+    VAR
 
+    END_VAR
+    TEST('evWithinRangeChecks');
+        
+    //Upper limit equal
+    AssertTrue(
+        F_eVWithinSpec(300, 2#0000_0000_0000_0010),
+        'Upper limit not inclusive');
+    //Lower limit equal
+    AssertTrue(
+        F_eVWithinSpec(300, 2#0000_0000_0000_0100),
+        'Lower limit not inclusive');
+    //Out of range
+    AssertFalse(
+        F_eVWithinSpec(300.1, 2#0000_0000_0000_0010),
+        'Out of range failed, whatever you did, it broke this really bad.');
+    //Negative eV
+    AssertFalse(
+        F_eVWithinSpec(-300, 16#FFFF),
+        'Working with antimatter? Negative eV should not be acceptable.');
+    //Upper unallocated range
+    AssertFalse(
+        F_eVWithinSpec(1701, 2#1000_0000_0000_0000),
+        'eV range should not evaluate past 1.7keV');
+        
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `F_eVWithinSpec`_
 
 
 FB_FastFault
@@ -3431,7 +5223,200 @@ FB_FastFault_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD FFCombinedFunctionality
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbFF    :    FB_FastFault;
+        fbFFO    :    FB_HardwareFFOutput;
+        
+    END_VAR
+    TEST('FFCombinedFunctionality');
 
+    //Clear initial faults
+    fbFFO.i_xReset:=TRUE; //Reset requested at start of cycle
+
+    fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
+        i_xOK := TRUE,
+        i_xReset := TRUE);
+
+    fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
+        
+    AssertTrue(fbFFO.q_xFastFaultOut,
+        'Fast fault did not clear');
+
+
+    //Induce fault with FF
+
+    fbFFO(i_xReset := FALSE); //Reset released at start of cycle
+
+    fbFF(io_fbFFHWO := fbFFO, //FF faulted
+        i_xOK := FALSE); //Reset is still set true from last call.
+        
+    fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
+
+    AssertFalse(fbFFO.q_xFastFaultOut,
+        'Fast fault did not trip the beam');
+        
+        
+    //FFO remains faulted until local (FF) and FFO receieve fresh reset request, and faults
+    //are actually cleared
+
+    //Attempt to clear FFO fails because FF still faulted
+    fbFFO.i_xReset := TRUE; //Reset requested
+
+    fbFF(io_fbFFHWO := fbFFO, //FF faulted
+        i_xOK := FALSE,
+        i_xReset := FALSE);
+        
+    fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
+
+    AssertFalse(fbFFO.q_xFastFaultOut,
+        'Fast fault output cleared while fault remains, very bad');
+        
+    //Attempt to clear FF while fault remains fails
+    fbFFO.EvaluateOutput(i_xReset := FALSE);
+
+    fbFFO.i_xReset := TRUE; //Reset requested
+
+    fbFF(io_fbFFHWO := fbFFO, //FF faulted
+        i_xOK := FALSE,
+        i_xReset := TRUE); //This reset should fail.
+        
+    fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
+
+    AssertFalse(fbFFO.q_xFastFaultOut,
+        'Fast fault cleared while fault remains, very bad');
+        
+    TEST_FINISHED();
+    END_METHOD
+
+    METHOD FFOvrdAndNextFault
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbFF    :    FB_FastFault :=(
+            i_xAutoReset := TRUE);
+        fbFFO    :    FB_HardwareFFOutput := (i_sNetID:='',
+            bAutoReset := TRUE);
+        rFF : REFERENCE TO ST_FF;
+        
+        FirstPass : BOOL := TRUE;
+    	fbTimePass : BOOL := TRUE;
+        OvrdActvTstDone : BOOL := FALSE;
+        
+        TestsDone : BOOL := FALSE;
+    	Now: DATE_AND_TIME;
+    	Expiration : DINT; 
+    	OvdTime : TIME ;
+    	Expire: TIMESTRUCT;
+    //seconds:ULINT;
+    	specificLocalTimeToFileTime : FB_TzSpecificLocalTimeToFileTime;
+        fileTime: T_FILETIME;
+    END_VAR
+    TEST('FFVetoAndNextFault');
+    fbTime();
+
+    // I noticed something weird going on with the PEWatcher on the L line. It was faulted, and the fast fault
+    // was not tripping off beam. It had been previously overridden so I was wondering why it wasn't causing a trip.
+
+    IF  FirstPass  THEN
+
+        fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
+            i_xOK := TRUE);
+        
+        fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+            
+        AssertTrue(fbFFO.q_xFastFaultOut,
+            'Fast fault did not clear');
+        
+        
+        //Induce fault with FF
+        
+        fbFF(io_fbFFHWO := fbFFO, //FF faulted
+            i_xOK := FALSE); 
+            
+        fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+        
+        AssertFalse(fbFFO.q_xFastFaultOut,
+            'Fast fault did not trip the beam');
+
+        rFF REF= fbFFO.astFF[fbFF.RegistrationIdx];
+    	
+    FirstPass := FALSE; 
+        
+    END_IF
+
+
+    IF fbTime.bValid AND fbTimePass  THEN
+    	
+    	Now := SystemTime_TO_DT(fbTime.systemTime);
+    	Expire:= fbTime.systemTime;
+    	Expire.wSecond:= Expire.wSecond+5;
+    	specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := , out => fileTime);
+    	Expiration := TO_DINT((SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600);;
+
+        WRITE_PROTECTED_DINT(ADR(rFF.Ovrd.Expiration), Expiration );
+    	WRITE_PROTECTED_TIME(ADR(rFF.Ovrd.Timer.PT), OvrdTime );
+        WRITE_PROTECTED_BOOL(ADR(rFF.Ovrd.Activate), TRUE);
+    	
+    	fbTimePass:=FALSE;
+        
+    END_IF
+
+    // On every cycle:
+    fbFF(io_fbFFHWO := fbFFO, //FF faulted
+        i_xOK := FALSE); 
+        
+    fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
+
+
+    IF rFF.Ovrd.Active AND rFF.BeamPermitted THEN
+
+        AssertTrue(fbFFO.q_xFastFaultOut,
+            'Fast fault should be overridden so FFO should be true');
+        
+        OvrdActvTstDone := TRUE;
+    END_IF
+
+    IF OvrdActvTstDone and NOT rFF.Ovrd.Active and not rff.BeamPermitted THEN
+        
+        AssertFalse(fbFFO.q_xFastFaultOut,
+            'Fast fault override expired so beam should be off.');
+       // AssertFalse(rFF.BeamPermitted, 'Beam should not be permitted now');
+        
+        TestsDone := TRUE;
+    END_IF
+
+
+    IF TestsDone THEN    
+        TEST_FINISHED_NAMED('FFVetoAndNextFault');
+    END_IF
+    END_METHOD
+
+    METHOD FFRegistration
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbFF    :    FB_FastFault;
+        fbFFO    :    FB_HardwareFFOutput;
+        astFF : ARRAY[0..10] OF ST_FF;
+    END_VAR
+    TEST('FFRegistration');
+
+    fbFF(io_fbFFHWO := fbFFO);
+
+    AssertEquals_STRING(fbFF.sPath, fbFFO.astFF[fbFF.RegistrationIdx].Info.sPath,
+        'FF registration with FFO did not succeed');
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `ST_FF`_
 
 
 FB_HardwareFFOutput
@@ -3515,6 +5500,7 @@ FB_HardwareFFOutput
     // <TODO> latch off beam if DI card status goes bad
 
     END_FUNCTION_BLOCK
+
     ACTION EvaluateOutput:
     ////////////////////////////////////////////////////////////////
     // Critical code. Do not touch unless you know what you're doing
@@ -3532,21 +5518,285 @@ FB_HardwareFFOutput
 
     ////////////////////////////////////////////////////////////////
     END_ACTION
+
     ACTION Execute:
     EvaluateOverrides();
     EvaluateOutput();
     ExecuteLogging();
     END_ACTION
+
     ACTION ExecuteNoLog:
     EvaluateOverrides();
     EvaluateOutput();
     //ExecuteLogging();
     END_ACTION
 
+    METHOD EvaluateOverrides : BOOL
+    VAR_INPUT
+    END_VAR
+    VAR
+        FF : REFERENCE TO ST_FF;
+        EvalIdx: DINT := 1;
+    END_VAR
+    VAR CONSTANT
+    	MaxTime : DINT:= 4294080;(*49.7 days*)
+    END_VAR
+    //Get local System Time
+    fbTime(sNetID:=i_sNetID);
+    //Get Time Zone
+    fbGetTimeZone(sNetID:=i_sNetID,bExecute:=TRUE,tTimeout:=T#10S);
+    //change local time to UTC to be compatible with unix time epoch widget
+    fbTime_to_UTC(in:= fbTime.systemTime , tzInfo:=fbGetTimeZone.tzInfo);
+    q_xValidSyncTime := fbTime.bValid AND NOT fbGetTimeZone.bError;
+
+    FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
+        
+        FF REF= astFF[EvalIdx];
+        
+        IF NOT FF.Info.InUse THEN 
+            CONTINUE;
+        ELSE
+            // Veto timer
+            IF FF.Ovrd.Deactivate THEN 
+                FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
+            ELSIF FF.Ovrd.Activate THEN
+    			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
+    			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
+    				FF.Ovrd.Expiration:= LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ); 
+               		FF.Ovrd.Timer.PT := TO_DT(FF.Ovrd.Expiration)- SystemTime_TO_DT(fbTime_to_UTC.out);
+    			END_IF	
+            END_IF
+            
+            // UDINT conversions for ESS module compatibility.
+            FF.Ovrd.Timer(
+                IN := FF.Ovrd.Activate, // Rising edge activated
+                Q => FF.Ovrd.Active);
+                
+            FF.Ovrd.tOvrdActivate(CLK:=FF.Ovrd.Active);
+            FF.Ovrd.OvrdActLogAck S= FF.Ovrd.tOvrdActivate.Q;
+            
+            FF.Ovrd.tOvrdExpiring(CLK:=FF.Ovrd.Active);
+            FF.Ovrd.OvrdExpLogAck S= FF.Ovrd.tOvrdExpiring.Q;
+                
+            FF.Ovrd.ElapsedTime := TIME_TO_UDINT(FF.Ovrd.Timer.ET);
+            
+            FF.Ovrd.RemainingTime := MAX(0, TO_DINT(FF.Ovrd.Timer.PT) - FF.Ovrd.ElapsedTime);
+            
+            // Clear pushbuttons
+            FF.Ovrd.Activate := FALSE;
+            FF.Ovrd.Deactivate := FALSE;
+            
+        END_IF    
+    END_FOR
+    END_METHOD
+
+    {attribute 'obsolete' := 'Use EvaluateOverrides instead.'} 
+    METHOD EvaluateVetos : BOOL
+    VAR_INPUT
+    END_VAR
+
+    END_METHOD
+
+    METHOD ExecuteLogging : BOOL
+    VAR_INPUT
+    END_VAR
+    VAR
+        FF : REFERENCE TO ST_FF;
+        logIdx : DINT := 1; 
+    END_VAR
+    VAR_INST
+        HelloTimer : TOF := ( PT:=T#24h );
+    END_VAR
+    FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
+        
+        FF REF= astFF[logIdx];
+        
+        IF NOT FF.Info.InUse THEN 
+            CONTINUE;
+        ELSE
+            IF FF.FaultAck THEN
+
+                pmpsTypeCode := 1;
+                FormulateLogJson(FF);
+                fbLogger(sMsg := 'Fault, beam off', eSevr:=TcEventSeverity.Critical);
+                
+                FF.FaultAck := FALSE;
+            END_IF
+            
+            IF FF.Ovrd.OvrdActLogAck THEN
+                
+                pmpsTypeCode := 2;
+                FormulateLogJson(FF);
+                
+                fbLogger(sMsg := 'Override activated', eSevr:=TcEventSeverity.Warning);
+                
+                FF.Ovrd.OvrdActLogAck := FALSE;
+            END_IF
+            
+            IF FF.Ovrd.OvrdExpLogAck THEN
+                
+                pmpsTypeCode := 3;
+                FormulateLogJson(FF);
+                
+                fbLogger(sMsg := 'Override released', eSevr:=TcEventSeverity.Warning);
+                
+                FF.Ovrd.OvrdExpLogAck := FALSE;
+            END_IF
+            
+            IF FF.ClearAck THEN
+                
+                pmpsTypeCode := 8;
+                FormulateLogJson(FF);
+                
+                fbLogger(sMsg := 'Fault cleared', eSevr:=TcEventSeverity.Info);
+                
+                FF.ClearAck := FALSE;
+            END_IF
+            
+            
+        END_IF
+    END_FOR
+
+    // Log registration fault cleared
+    tFFRegFail(CLK:=xFastFaultRegFail);
+    IF tFFRegFail.Q THEN
+        fbJson.StartObject();
+        fbJson.AddKey('pmps_typecode');
+        fbJson.AddUdint(5);
+        fbJson.AddKey('pmps_path');
+        fbJson.AddString(sPath);
+        fbJson.EndObject();
+        fbJson.CopyDocument(pDoc:=fbLogger.sJson, SIZEOF(fbLogger.sJson));
+        fbLogger(sMsg := 'Fast fault registration failure cleared. This may be bad as a fast fault could go unoticed.', 
+            eSevr:=TcEventSeverity.Warning);  
+    END_IF
+
+    // Say hello
+    HelloTimer.IN := NOT HelloTimer.Q;
+    HelloTimer();
+    IF HelloTimer.IN THEN
+        pmpsTypeCode := 10;
+        FormulateLogJson(FF);   
+        fbLogger(eSubsystem:=E_Subsystem.NILVALUE,
+            eSevr := TcEventSeverity.Info,
+            sMsg := 'FFO is alive');
+        fbLogger.eSubsystem := E_Subsystem.MPS;
+    END_IF
+    END_METHOD
+
+    METHOD INTERNAL FormulateLogJson : STRING
+    VAR_INPUT
+        FF : ST_FF;
+    END_VAR
+    fbJson.StartObject();
+    fbJson.AddKey('pmps_typecode');
+    fbJson.AddUdint(pmpsTypeCode);
+    fbJson.AddKey('pmps_path');
+    fbJson.AddString(FF.Info.sPath);
+    fbJson.AddKey('pmps_device_name');
+    fbJson.AddString(FF.Info.DevName);
+    fbJson.EndObject();
+    fbLogger.sJson := fbJson.GetDocument();
+    fbJson.ResetDocument();
+    END_METHOD
+
+    METHOD INTERNAL IdxCheckIn : BOOL
+    VAR_INPUT
+        Idx : DINT;
+        OK : BOOL;
+        Reset : BOOL;
+    END_VAR
+    VAR
+        stFF : ST_FF;
+        BeamPermitted : BOOL;
+    END_VAR
+    Idx := LIMIT(1,Idx,FF_ARRAY_UPPER_BOUND);
+    stFF := THIS^.astFF[Idx];
+
+    // Updating internal fault state
+    stFF.OK := OK;
+
+    // Reset and latching logic
+    stFF.rtReset(CLK:=stFF.Reset (*epics*) OR Reset (*from other PLC logic *) );
+    stFF.Reset R= stFF.rtReset.Q;
+    stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
+
+    BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active OR (i_xVeto AND stFF.Info.Vetoable);
+
+    // Fault generation    
+    IF NOT BeamPermitted THEN
+        THIS^.xOK := FALSE; //Very clever, thanks Zach!
+    END_IF
+
+    // Fast fault accumulation
+    stFF.ftCountFault(CLK:=stFF.bsFF.Q1);
+    IF stFF.ftCountFault.Q THEN PMPS_GVL.AccumulatedFF := PMPS_GVL.AccumulatedFF + 1; END_IF
+
+    //Clear pushbuttons
+    stFF.Reset := FALSE;
+
+    // Log when this fault faults
+    stFF.FaultAck S= stFF.BeamPermitted AND NOT BeamPermitted;
+
+    // Log when this fault has cleared
+    stFF.ClearAck S= BeamPermitted AND NOT stFF.BeamPermitted;
+
+    stFF.BeamPermitted := BeamPermitted;
+
+    // Copy state back to ff struct
+    THIS^.astFF[Idx] := stFF;
+    END_METHOD
+
+    METHOD INTERNAL Register : BOOL
+    VAR_INPUT
+        stFFInfo : ST_FFInfo := (
+            sPath := '',
+            Desc := '',
+            TypeCode := 16#00,
+            DevName := ''); // Fast fault information
+            
+    END_VAR
+    VAR_OUTPUT
+        FFOName : T_MaxString;
+        Idx : UINT;
+    END_VAR
+    VAR
+    END_VAR
+    FFOName := THIS^.sPath;
+    Idx := THIS^.nIndex;
+
+    IF THIS^.nIndex <= FF_ARRAY_UPPER_BOUND THEN
+        
+        THIS^.astFF[MIN(THIS^.nIndex,FF_ARRAY_UPPER_BOUND)].Info:=stFFInfo;
+        
+        THIS^.nIndex := THIS^.nIndex + 1;
+        
+        Register := TRUE; // Add successful    
+    ELSE
+        fbJson.StartObject();
+        fbJson.AddKey('pmps_typecode');
+        fbJson.AddUdint(4);
+        fbJson.AddKey('pmps_path');
+        fbJson.AddString(stFFInfo.sPath);
+        fbJson.AddKey('pmps_device_name');
+        fbJson.AddString(stFFInfo.DevName);
+        fbJson.EndObject();
+        fbLogger.sJson := fbJson.GetDocument();
+        fbJson.ResetDocument();
+        fbLogger(sMsg:='Fast fault registration failed. Too many fast faults on this FFO.',
+            eSevr:=TcEventSeverity.Warning,
+            eSubsystem:=E_Subsystem.MPS);
+        xFastFaultRegFail := TRUE;
+        Register := FALSE; // Failed to add name to list
+    END_IF
+    END_METHOD
+
 
 Related:
+    * `PMPS_GVL`_
     * `PMPS_PARAM`_
     * `ST_FF`_
+    * `ST_FFInfo`_
 
 
 FB_Hgvpu
@@ -3737,6 +5987,7 @@ FB_Hgvpu
     END_IF
 
     END_FUNCTION_BLOCK
+
     ACTION Init:
     UndAdrUpdate();
 
@@ -3752,6 +6003,7 @@ FB_Hgvpu
 
         bInitialized := TRUE;
     END_ACTION
+
     ACTION UndAdrUpdate:
     fbSegment[24] := ADR(fbSegment_24);
     fbSegment[25] := ADR(fbSegment_25);
@@ -3777,6 +6029,18 @@ FB_Hgvpu
     fbSegment[45] := ADR(fbSegment_45);
     fbSegment[46] := ADR(fbSegment_46);
     END_ACTION
+
+    PROPERTY rCurrentPhotonEnergy : REAL
+    VAR
+    END_VAR
+    rCurrentPhotonEnergy := fCurrentPhotonEnergy;
+    END_PROPERTY
+
+    PROPERTY rTargetPhotonEnergy : REAL
+    VAR
+    END_VAR
+    rTargetPhotonEnergy := fTargetPhotonEnergy;
+    END_PROPERTY
 
 
 Related:
@@ -3859,9 +6123,21 @@ FB_KStopper
 
     END_FUNCTION_BLOCK
 
+    METHOD FB_init : BOOL
+    VAR_INPUT
+        bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+        bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        eStopper : K_Stopper;
+        sStopperName : STRING;
+    END_VAR
+    Stopper := eStopper;
+    StopperName := sStopperName;
+    END_METHOD
+
 
 Related:
     * `FB_StopperWatcher`_
+    * `K_Stopper`_
 
 
 FB_KVetoDevice
@@ -3880,9 +6156,23 @@ FB_KVetoDevice
 
     END_FUNCTION_BLOCK
 
+    METHOD FB_init : BOOL
+    VAR_INPUT
+    	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        eVetoDeviceIN : K_Stopper := K_Stopper.DEFAULT;
+        eVetoDeviceOUT : K_Stopper := K_Stopper.DEFAULT;
+        sVetoDeviceName : STRING;
+    END_VAR
+    VetoDevice_IN := eVetoDeviceIN;
+    VetoDevice_OUT := eVetoDeviceOUT;
+    VetoDeviceName := sVetoDeviceName;
+    END_METHOD
+
 
 Related:
     * `FB_VetoDevice`_
+    * `K_Stopper`_
 
 
 FB_LinearDeviceStateTable
@@ -3914,6 +6204,7 @@ FB_LinearDeviceStateTable
     ;
 
     END_FUNCTION_BLOCK
+
     ACTION A_Add:
     (* Adds entry to the table *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -3934,11 +6225,13 @@ FB_LinearDeviceStateTable
         END_IF
     END_IF
     END_ACTION
+
     ACTION A_Count:
     (* Count number of used entries *)
     nCount := hTable.nCount;
     bOk := TRUE;
     END_ACTION
+
     ACTION A_GetFirst:
     (* Get first entry position pointer and value *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -3949,6 +6242,7 @@ FB_LinearDeviceStateTable
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_GetNext:
     (* Get next entry position pointer and value *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -3964,6 +6258,7 @@ FB_LinearDeviceStateTable
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_Lookup:
     (* Lookup for entry by key  *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -3974,6 +6269,7 @@ FB_LinearDeviceStateTable
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_Remove:
     (* Search for entry and remove it *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -3984,6 +6280,7 @@ FB_LinearDeviceStateTable
         getValue := pRefPtr^;
     END_IF
     END_ACTION
+
     ACTION A_Reset:
     (* Reset/initialize linked list *)
     MEMSET( ADR( getValue ), 0, SIZEOF( getValue ) );
@@ -4310,9 +6607,21 @@ FB_LStopper
 
     END_FUNCTION_BLOCK
 
+    METHOD FB_init : BOOL
+    VAR_INPUT
+        bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+        bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        eStopper : L_Stopper;
+        sStopperName : STRING;
+    END_VAR
+    Stopper := eStopper;
+    StopperName := sStopperName;
+    END_METHOD
+
 
 Related:
     * `FB_StopperWatcher`_
+    * `L_Stopper`_
 
 
 FB_MachineSimulator
@@ -4546,7 +6855,133 @@ FB_PhotonEnergyWatcher_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD PEWatcherBasicFunction
+    VAR_INPUT
+    END_VAR
+    VAR_INST
+        fbPEW    :    FB_PhotonEnergyWatcher;
+        fbFFO    :    FB_HardwareFFOutput;
+        q_Output    :    BOOL;
+        
+        stCurBeamParams    :    ST_BeamParams;
+        stMachineTargetBeamParams    :    ST_BeamParams;
+        stReqBeamParams    :    ST_BeamParams;
+    END_VAR
+    TEST('PEWatcherBasicFunction');
 
+    //Clear FFO fault to start
+    fbFFO(i_xReset:=TRUE);
+
+    //All eV OK
+    stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
+        
+    stMachineTargetBeamParams.neVRange := 2#0000_0000_1000_0000;
+
+    stReqBeamParams.neVRange := 2#1111_1111_1111_1111;    
+
+    fbFFO(i_xReset:=FALSE); //Reset request released
+        
+    fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+        i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+        i_stRequestedBeamParams := stReqBeamParams,
+        io_fbFFHWO := fbFFO,
+        i_xReset := TRUE); //Clear local FF within PEW
+        
+    fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output); //This simulates a completed PLC cycle
+    //Evaluate output should be called once at the end of a PLC cycle.
+
+    AssertTrue(q_Output,
+        'Beam within limits, FFO should be true');
+        
+        
+    //Req eV moved out of range
+    stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
+        
+    stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0);
+
+    stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+    fbPEW.i_xReset := FALSE; //release local FF reset req    
+    fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+        i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+        i_stRequestedBeamParams := stReqBeamParams,
+        io_fbFFHWO := fbFFO);
+        
+    fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+    AssertFalse(q_Output,
+        'Limits moved beyond current and target beam, should produce a fault.');
+
+    //Beam and target eV moved back within permitted ranges, reset clears fault
+    stCurBeamParams.neVRange := F_eVRangeCalculator( 300, 0);
+        
+    stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0);
+
+    stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+    fbFFO(i_xReset:=TRUE); //New reset request
+
+    fbPEW.i_xReset := TRUE; //New reset request
+
+    fbPEW(i_stCurrentBeamParams := stCurBeamParams, //Beam params are now within spec
+        i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+        i_stRequestedBeamParams := stReqBeamParams,
+        io_fbFFHWO := fbFFO);
+        
+    fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+    AssertTrue(q_Output,
+        'Beam within limits after reset, FFO should be true');
+        
+    //At this point, the fast fault would be cleared
+
+    //Current beam eV moved out of range
+    stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
+        
+    stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Still within range
+
+    stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+    fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+        i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+        i_stRequestedBeamParams := stReqBeamParams,
+        io_fbFFHWO := fbFFO);
+        
+    fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+    AssertFalse(q_Output,
+        'Current beam moved beyond set limits, should produce a fault');
+
+    //Target beam eV moved out of range
+    fbFFO(i_xReset:=FALSE); //Reset released
+    fbFFO(i_xReset:=TRUE); //New reset request comes in at the top of a cycle, but will be overridden
+
+    stCurBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Now within range
+        
+    stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
+
+    stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
+
+    fbPEW.i_xReset := TRUE; //Attempt to reset local FF will fail
+    fbPEW(i_stCurrentBeamParams := stCurBeamParams,
+        i_stMachineTargetBeamParams := stMachineTargetBeamParams,
+        i_stRequestedBeamParams := stReqBeamParams,
+        io_fbFFHWO := fbFFO);
+        
+    fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
+
+    AssertFalse(q_Output,
+        'Target beam moved beyond set limits, should produce a fault');
+        
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_HardwareFFOutput`_
+    * `FB_PhotonEnergyWatcher`_
+    * `F_eVRangeCalculator`_
+    * `ST_BeamParams`_
 
 
 FB_RateFromEPICS
@@ -4662,7 +7097,282 @@ FB_SafeBPCompare_Test
 
     END_FUNCTION_BLOCK
 
+    //Verify beam off is considered safe.
+    METHOD BeamOffIsSafe
+    VAR_INPUT
+    END_VAR
+    VAR
+        stBeamOn_MoreConservative    :    ST_BeamParams;
+        stBeamOff_LessConservative    :    ST_BeamParams;
+    END_VAR
+    stBeamOn_MoreConservative  := F_SetBeamParams(
+        0, //0% transmission is more conservative than 50
+        16#FFFF_FFFF,
+        120, //rate
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
+    stBeamOff_LessConservative:= F_SetBeamParams(
+        0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
+        16#FFFF_FFFF,
+        0, //rate, hence, more conservative
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
+
+    TEST('BeamOffIsSafe');
+        
+    AssertTrue(
+        F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
+        'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
+    TEST_FINISHED();
+    END_METHOD
+
+    //Verify BP comparison remains logical.
+    METHOD BPComparisonCheck
+    VAR_INPUT
+    END_VAR
+    VAR
+        stSafer    :    ST_BeamParams;
+        stNotSoSafe    :    ST_BeamParams;
+        idx : UINT;
+        
+        xResult : BOOL;
+        xFailedTest : BOOL; // To exit loops early
+    END_VAR
+    TEST('BPComparisonTran');
+    //Attenuation
+    stSafer := F_SetBeamParams(
+        0.51, //
+        16#FFFFFFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+    stNotSoSafe := F_SetBeamParams(
+        0.61, //
+        16#FFFFFFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
+        
+    AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Attenuation eval is broken (True)'); 
+
+    AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Attenuation eval is broken (False)');
+        
+    // Check at margin threshold
+    stSafer.nTran := stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+    AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Attenuation eval is broken: should be safe up to margin.');
+
+    stSafer.nTran := 1 + stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+
+    AssertFalse(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Attenuation eval is broken (False): should not be safe at all past margin');
+
+    TEST_FINISHED();
+
+
+        
+    //Attenuator array    
+    TEST('BPComparisonTranArray');
+
+    stSafer := F_SetBeamParams(
+        0, //
+        16#FFFFFFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
+
+    stNotSoSafe := F_SetBeamParams(
+        0, //
+        16#FFFFFFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
+
+    FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
+        stSafer.astAttenuators[idx].nTran := 0.00500;
+        stNotSoSafe.astAttenuators[idx].nTran := 0.00600;
+        
+        xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
+        
+        AssertTrue(
+        xResult,
+        'Attenuation array eval is broken (True)');
+     
+        xFailedTest S= NOT xResult;
+        
+        xResult := F_SafeBPCompare(stNotSoSafe, stSafer);
+        AssertFalse(
+        xResult,
+        'Attenuation array eval is broken (False)');
+        
+        xFailedTest S= xResult;
+        
+        // Check at margin threshold
+            stSafer.astAttenuators[idx].nTran := stNotSoSafe.astAttenuators[idx].nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+            
+            xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
+        
+            AssertTrue(
+                xResult,
+                'Attenuation eval is broken: should be safe up to margin.');
+            xFailedTest S= NOT xResult;
+                
+            stSafer.astAttenuators[idx].nTran := 1 + stNotSoSafe.astAttenuators[idx].nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+            
+            xResult := F_SafeBPCompare(stSafer, stNotSoSafe);
+            AssertFalse(
+                xResult,
+                'Attenuation eval is broken (False): should not be safe at all past margin');
+            xFailedTest S= xResult;
+        //////////////////////
+        IF xFailedTest THEN
+            stSafer.astAttenuators[idx].nTran := 0;
+            stNotSoSafe.astAttenuators[idx].nTran := 0;
+            xFailedTest := FALSE;
+            EXIT; // Exit this loop on the first failure.
+    	END_IF
+        
+        stSafer.astAttenuators[idx].nTran := 0;
+        stNotSoSafe.astAttenuators[idx].nTran := 0;
+        
+    END_FOR
+
+    TEST_FINISHED();
+
+    stSafer.astAttenuators[idx].nTran := 0;
+    stNotSoSafe.astAttenuators[idx].nTran := 0;
+
+    //Aperture array
+    TEST('BPComparisonApertureArray');
+
+    FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
+        // Height
+        stSafer.astApertures[idx].Height := 30; // narrower is safer
+        stNotSoSafe.astApertures[idx].Height := 50;
+        
+        AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Aperture array eval is broken on height (True)'); 
+
+        AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Aperture array eval is broken on height (False)');
+        
+        IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+            EXIT; // Exit this loop on the first failure.
+    	END_IF
+        
+        stSafer.astApertures[idx].Height := 0;
+        stNotSoSafe.astApertures[idx].Height := 0;
+        
+        // Width
+        stSafer.astApertures[idx].Width := 30; // narrower is safer
+        stNotSoSafe.astApertures[idx].Width := 50;
+        
+        AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Aperture array eval is broken on width (True)'); 
+
+        AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Aperture array eval is broken on width (False)');
+        
+        IF NOT F_SafeBPCompare(stSafer, stNotSoSafe) or F_SafeBPCompare(stNotSoSafe, stSafer) THEN
+            EXIT; // Exit this loop on the first failure.
+    	END_IF
+        
+        stSafer.astApertures[idx].Width := 0;
+        stNotSoSafe.astApertures[idx].Width := 0;
+        
+        
+    END_FOR
+
+    TEST_FINISHED();
+        
+    //Rate
+    TEST('BPComparisonRate');
+    stSafer := F_SetBeamParams(
+        0,
+        16#FFFF_FFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
+
+    stNotSoSafe := F_SetBeamParams(
+        0,
+        16#FFFF_FFFF,
+        10,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
+        
+    AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Rate eval is broken (True)'); 
+
+    AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Rate eval is broken (False)');
+    TEST_FINISHED();
+        
+    //Pulse energy
+    (*
+    TEST('BPComparisonPulseEnergy');
+    stSafer := F_SetBeamParams(
+        0, 
+        1, //
+        16#FFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+    stNotSoSafe := F_SetBeamParams(
+        0, 
+        10, //
+        16#FFFF,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
+        *)
+    AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Pulse energy eval is broken (True)'); 
+
+    AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Pulse energy eval is broken (False)');    
+    TEST_FINISHED();
+        
+    //Photon energy
+    //More extensive tests elsewhere
+    TEST('BPComparisonPhotonEnergy');
+    stSafer := F_SetBeamParams(
+        0, 
+        2#0000_0000_0000_0000_0000_0000_0000_0010,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+    stNotSoSafe := F_SetBeamParams(
+        0, 
+        2#0000_0000_0000_0000_0000_0000_0000_0110,
+        1,
+        PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+        
+    AssertTrue(
+        F_SafeBPCompare(stSafer, stNotSoSafe),
+        'Photon energy eval is broken (True)'); 
+
+    AssertFalse(
+        F_SafeBPCompare(stNotSoSafe, stSafer),
+        'Photon energy eval is broken (False)');    
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `F_SafeBPCompare`_
+    * `F_SafeBPCompare0Rate`_
+    * `F_SetBeamParams`_
+    * `PMPS_GVL`_
+    * `PMPS_PARAM`_
+    * `ST_BeamParams`_
 
 
 FB_SolidAttenuator
@@ -4799,7 +7509,195 @@ FB_SubsysToArb_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD BasicFunction
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+        pBPC : POINTER TO ST_BeamParams_IO;
+        
+        ioCurrentBP : ST_BeamParams_IO; 
+        
+        FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+        
+        nCohortScratch : UDINT;
+        
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    // This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+    // trusted with a grain of salt.
 
+    TEST('Add to arbiter');
+
+    IF NOT fbArbiter.CheckRequestInPool(nID) THEN
+        AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
+    END_IF  
+       
+    TEST_FINISHED();   
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+
+    TEST('Initial Elevation');
+    AssertTrue(fbSubSysToArb.nRequestCohort = fbSubSysToArb.q_stRequestedBP.nCohortInt, 'ReqCohort and qBP Cohort do not match');
+    AssertFalse(fbArbiter.nActiveCohort <> 0, 'Arbiter indicates it is included in arbitration prematurely');
+    AssertTrue(fbSubSysToArb.nRequestCohort <> 0, 'Cohort index should move to 1 with first request');
+    TEST_FINISHED_NAMED('Initial Elevation');
+
+    nCohortScratch := fbSubSysToArb.nRequestCohort;
+        
+    //Ethercat transfer simulation
+    // Transfer of requested BP to arbiter PLC
+    // pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+    // pBPR^ := fbSubSysToArb.q_stRequestedBP;
+
+    ioCurrentBP := fbSubSysToArb.q_stRequestedBP;
+    // NOTE: Setting the returning cohort number to something less than the request cohort number
+    // will prevent the sub system arbiter FB from considering itself active in arbitration.
+    // The next set of tests verify this.
+    ioCurrentBP.nCohortInt := 0;
+
+    // Transfer of current BP to sub system PLC
+    pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
+    pBPC^ := ioCurrentBP;
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Not yet active in arbitration');
+    AssertTrue(fbSubSysToArb.nActiveCohort = 0, 'Active cohort should still be zero, per ioCurrentBP.nCohortInt setting above.');
+    AssertFalse(fbArbiter.nActiveCohort <> 0, 'Arbiter indicates it is included in arbitration prematurely, checkrequest might be broken');
+    AssertTrue(fbSubSysToArb.nRequestCohort = nCohortScratch, 'Cohort index should not have changed because there have been no additional requests added to the arbiter');
+    TEST_FINISHED_NAMED('Not yet active in arbitration');
+
+    //Ethercat transfer simulation
+    // Transfer of requested BP to arbiter PLC
+    // pBPR := ADR(fbArbToSubSys.i_RequestedBP);
+    // pBPR^ := fbSubSysToArb.q_stRequestedBP;
+
+    ioCurrentBP := fbSubSysToArb.q_stRequestedBP;
+    // NOTE: Now we simulate the FB_ArbiterToSubSys_IO updating the cohort number to the same value as the request cohort, indicating that cohort has been included
+    ioCurrentBP.nCohortInt := 2;
+
+    // Transfer of current BP to sub system PLC
+    pBPC := ADR(fbSubSysToArb.i_stCurrentBP);
+    pBPC^ := ioCurrentBP;
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Active in arbitration');
+    AssertTrue(fbSubSysToArb.nActiveCohort = fbSubSysToArb.nRequestCohort, 'Active cohort and request cohort do not match');
+    AssertTrue(fbArbiter.nActiveCohort = 1, 'Arbiter does not indicate it is included in higher arbitration');
+    TEST_FINISHED_NAMED('Active in arbitration');
+    END_METHOD
+
+    METHOD VetoFunction
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+        stReq    :    ST_BeamParams := (nTran:=12);
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
+        fbArbToSubSys : FB_ArbiterToSubSys_IO;
+        
+        pBPC : POINTER TO ST_BeamParams_IO;
+        pBPR : POINTER TO ST_BeamParams_IO;
+        
+        ioCurrentBP : ST_BeamParams_IO; 
+        
+        FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
+        
+    END_VAR
+    VAR CONSTANT
+        SysID : DWORD := 42;
+    END_VAR
+    // This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+    // trusted with a grain of salt.
+
+    fbArbiter.AddRequest(nId, stReq,'Device'); // some device asking its local arbiter for some beam parameters
+
+
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Request propagated');
+        AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request not propagated');
+    TEST_FINISHED();
+
+    // Veto activated
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    // Veto activated
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=TRUE);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Request sustained');
+        AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Request still being propagated');
+        AssertTrue(fbArbiter.CheckRequest(nId), 'Request still not valid');
+    TEST_FINISHED();
+
+    // Veto activated
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    // Veto activated
+    ///////////////////////////////////////
+    //Sub system cycle
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+    fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO, i_bVeto:=FALSE);
+    //END of sub system cycle
+    ///////////////////////////////////////
+
+    TEST('Request restored');
+        AssertTrue(fbSubSysToArb.q_stRequestedBP.nTran = stReq.nTran, 'Request still being sustained');
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_ArbiterToSubSys_IO`_
+    * `FB_HardwareFFOutput`_
+    * `FB_SubSysToArbiter_IO`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
 
 
 FB_SubSysToArbiter_IO
@@ -4876,14 +7774,73 @@ FB_SubSysToArbiter_IO
 
     END_FUNCTION_BLOCK
 
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+    	nReqID	: DWORD;
+    END_VAR
+    VAR_INST
+        xFirstTime : BOOL := TRUE;
+        nId : DWORD;
+    END_VAR
+    // Check this id matches what we've seen before
+    IF xFirstTime THEN
+        nId := nReqId;
+    ELSIF nId <> nReqId THEN
+        fbLog(sMsg := 'SubSysToArbiter Check mismatched with a different ID', eSevr := TcEventSeverity.Error);
+        RETURN;
+    END_IF
+
+    nActiveCohort := ULINT_TO_UDINT(i_stCurrentBP.nCohortInt);
+
+    // i_stCurrentBP.nCohortInt is incremented by the FB_ArbiterToSubSys block on the other side of the EL669* interface
+    CheckRequest := nRequestCohort <= nActiveCohort;
+    END_METHOD
+
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+    	nReqID    :    DWORD; //StateID to remove
+    END_VAR
+    // Update internal BP request struct
+    q_stRequestedBP := BP_TO_IO(PMPS_GVL.cstFullBeam);
+
+    nRequestCohort := nRequestCohort + 1;
+
+    // Mark the current cohort id
+    q_stRequestedBP.nCohortInt := nRequestCohort;
+
+    RemoveRequest := TRUE;
+    END_METHOD
+
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    // Check the request is coming from the same source we're used to
+
+    // Update internal BP request struct
+    q_stRequestedBP := BP_TO_IO(stReqBP);
+
+    nRequestCohort := nRequestCohort + 1;
+
+    // Mark the current cohort id
+    q_stRequestedBP.nCohortInt := nRequestCohort;
+
+    RequestBP := TRUE;
+    END_METHOD
+
 
 Related:
+    * `BP_TO_IO`_
     * `FB_Arbiter`_
     * `FB_FastFault`_
     * `FB_HardwareFFOutput`_
     * `FB_VetoArbiter`_
     * `IO_TO_BP`_
     * `PMPS_GVL`_
+    * `ST_BeamParams`_
 
 
 FB_SXU
@@ -5032,7 +7989,7 @@ FB_SXU
             pv: HiK
             io: i
         '}
-    	fHiK : LREAL := 5.5; 
+    	fHiK : LREAL := 5.7; 
     END_VAR
     IF NOT bInitialized THEN
         Init();
@@ -5070,6 +8027,7 @@ FB_SXU
     END_IF
 
     END_FUNCTION_BLOCK
+
     ACTION Init:
     UndAdrUpdate();
 
@@ -5083,6 +8041,7 @@ FB_SXU
     END_FOR
     bInitialized := TRUE;
     END_ACTION
+
     ACTION UndAdrUpdate:
     fbSegment[26] := ADR(fbSegment_26);
     fbSegment[27] := ADR(fbSegment_27);
@@ -5107,6 +8066,18 @@ FB_SXU
     fbSegment[46] := ADR(fbSegment_46);
     fbSegment[47] := ADR(fbSegment_47);
     END_ACTION
+
+    PROPERTY rCurrentPhotonEnergy : REAL
+    VAR
+    END_VAR
+    rCurrentPhotonEnergy := fCurrentPhotonEnergy;
+    END_PROPERTY
+
+    PROPERTY rTargetPhotonEnergy : REAL
+    VAR
+    END_VAR
+    rTargetPhotonEnergy := fTargetPhotonEnergy;
+    END_PROPERTY
 
 
 Related:
@@ -5301,6 +8272,48 @@ FB_VetoArbiter
 
     END_FUNCTION_BLOCK
 
+    METHOD CheckRequest : BOOL
+    VAR_INPUT
+    	nReqID	: DWORD;
+    END_VAR
+    IF bVeto THEN
+    	CheckRequest := TRUE;
+    ELSE
+    	CheckRequest := HigherAuthority.CheckRequest(nReqID);
+    END_IF
+    END_METHOD
+
+    METHOD RemoveRequest : BOOL
+    VAR_INPUT
+    	(*StateID to remove*)
+    	nReqID	: DWORD;
+    END_VAR
+    IF bVeto THEN
+        RemoveRequest := TRUE;
+    ELSE
+        RemoveRequest := HigherAuthority.RemoveRequest(nReqID);    
+    END_IF
+    END_METHOD
+
+    METHOD RequestBP : BOOL
+    VAR_INPUT
+    	(*StateID of state requesting beam parameter set*)
+    	nReqID	: DWORD;
+    	(*Requested beam params*)
+    	stReqBP	: ST_BeamParams;
+    END_VAR
+    IF NOT bVeto THEN
+    	// Pass request along to higher authority
+    	RequestBP := HigherAuthority.RequestBP(nReqID, stReqBP);
+    ELSE
+        RequestBP := TRUE;
+    END_IF
+
+    IF RequestBP THEN
+        stStandbyBP := stReqBP;
+    END_IF
+    END_METHOD
+
 
 Related:
     * `FB_FastFault`_
@@ -5330,7 +8343,154 @@ FB_VetoArbiter_Test
 
     END_FUNCTION_BLOCK
 
+    METHOD VetoArbiter
 
+    VAR_INPUT
+    END_VAR
+    VAR   
+        nId    :    DWORD := 1;
+    	nId2 : DWORD := 10;
+        stReq    :  ST_BeamParams := (nTran:=0.12);
+    	stReq2	:	ST_BeamParams := (nTran:=0.10);
+    END_VAR
+    VAR_INST
+        fbArbiter    :    FB_Arbiter(1);
+        
+        fbHigherArb : FB_Arbiter(2);
+    	
+    	ArbBP : ST_BeamParams:=(nTran:=1);
+    	
+    	VetoArb : FB_VetoArbiter;
+    	
+    	FFO : FB_HardwareFFOutput;
+    	
+    	fbHA : FB_DummyHA;
+        
+    END_VAR
+    TEST('VetoNotIn');
+    fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq, sDevName :='Device');
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb,
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+        
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb,
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
+
+    TEST_FINISHED();
+
+    TEST('VetoIn');
+    // Veto device is in
+    // This should effectively remove the fbArbiter request from the higher arbiter pool
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := TRUE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := TRUE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+        
+    AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
+    AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
+    AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
+
+    TEST_FINISHED();
+
+    TEST('AnotherRequest');
+    // Another request is added, should be approved immediately, and with no effect on the final set
+    fbArbiter.RequestBP(nReqID := nId2, stReqBP:=stReq2);
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := TRUE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+        
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := TRUE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    AssertTrue(ArbBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device remained in, trans should still be 100');
+    AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (2)');
+    AssertTrue(fbArbiter.CheckRequest(nId2), '2nd Request should be considered valid');
+
+    TEST_FINISHED();
+
+    TEST('RemoveVeto');
+    // Removal of veto device, should produce a fault
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    AssertFalse(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Should produce a fast fault at this point because the request is not yet back in the pool');
+
+    //////////////////// Cycle  
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);
+
+    //////////////////// Cycle    
+    fbHigherArb.ElevateRequest(fbHA);
+
+    VetoArb.bVeto := FALSE;
+    VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
+    	LowerAuthority:=fbArbiter,
+    	FFO:=FFO);    
+        
+    AssertTrue(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Fault should be gone.');
+
+    TEST_FINISHED();
+    END_METHOD
+
+
+Related:
+    * `FB_Arbiter`_
+    * `FB_DummyHA`_
+    * `FB_HardwareFFOutput`_
+    * `FB_VetoArbiter`_
+    * `PMPS_GVL`_
+    * `ST_BeamParams`_
 
 
 FB_VetoDevice
@@ -5548,5 +8708,19 @@ PE_Ranges
 
     END_FUNCTION_BLOCK
 
+    METHOD FB_init : BOOL
+    VAR_INPUT
+    	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    END_VAR
+    {IF defined (L)}
+    	PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesL;
+    {ELSIF defined (K)}
+    	PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesK;
+    {END_IF}
+    END_METHOD
 
+
+Related:
+    * `PMPS_GVL`_
 
