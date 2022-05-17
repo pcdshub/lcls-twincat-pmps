@@ -3,14 +3,14 @@
   <POU Name="FB_TempSensor_FFO" Id="{e7283f0f-d3c0-4044-8021-5daf2e8ba234}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_TempSensor_FFO EXTENDS FB_TempSensor
 VAR_INPUT
-	{attribute 'pytmc' :=
+	{attribute 'pytmc' := '
         pv: FAULT_SP
         io: input
         field: EGU C
         field: PREC 2
     '}
 	fFaultThreshold : LREAL; //Faults when the threshold is reached. Trigger value.
-	{attribute 'pytmc' :=
+	{attribute 'pytmc' := '
         pv: FAULT_SP_HYS
         io: input
         field: EGU %
@@ -18,7 +18,8 @@ VAR_INPUT
     '}
 	fHysteresis : LREAL :=1; // percentage determining how far below the trigger value the fault should be released
 	sDevName: STRING;
-	bVeto : BOOL:=FALSE; // This Fault can be Vetoed if the bVeto is TRUE
+	bVeto : BOOL:=FALSE; // This Fault will be will not trip the beam if the bVeto is TRUE 
+	bAutoReset : BOOL:=TRUE;
 END_VAR
 VAR_IN_OUT
 	io_fbFFHWO    :    FB_HardwareFFOutput;
@@ -48,18 +49,20 @@ fTemp := INT_TO_LREAL(iRaw) * fResolution;
 fHysteresis:=  LIMIT(1, fHysteresis, 100);
 
 // Evaluate the threshold trip point
-IF (fTemp >= fFaultThreshold) OR NOT bConnected THEN
+IF (fTemp >= fFaultThreshold) THEN
 	bFAULT_OK := FALSE;
-ELSIF (fTemp < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) AND bConnected THEN
+ELSIF (fTemp < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
 	bFAULT_OK := TRUE;
 END_IF
+bFAULT_OK R= NOT bConnected
+
 
 ACT_Logger();
 
 (*FAST FAULT*)
 FFO(i_xOK := bFAULT_OK OR bVeto,
     i_xReset :=,
-	i_xAutoReset :=,
+	i_xAutoReset := bAutoReset,
 	i_DevName := sDevName,
     io_fbFFHWO := io_fbFFHWO);]]></ST>
     </Implementation>
