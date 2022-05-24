@@ -157,6 +157,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-subsystoarb-test">FB_SubsysToArb_Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-subsystoarbiter-io">FB_SubSysToArbiter_IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-sxu">FB_SXU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-tempsensor-ffo">FB_TempSensor_FFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-undulatorsegment">FB_UndulatorSegment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-vetoarbiter">FB_VetoArbiter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-vetoarbiter-test">FB_VetoArbiter_Test</a></li>
@@ -8143,6 +8144,100 @@ END_FUNCTION_BLOCK
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#fb-undulatorsegment">FB_UndulatorSegment</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="fb-tempsensor-ffo">
+<h2>FB_TempSensor_FFO<a class="headerlink" href="#fb-tempsensor-ffo" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_TempSensor_FFO</span> <span class="n">EXTENDS</span> <span class="n">FB_TempSensor</span>
+<span class="n">VAR_INPUT</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">FAULT_SP</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">C</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">PREC</span> <span class="mi">2</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">fFaultThreshold</span> <span class="p">:</span> <span class="n">LREAL</span><span class="p">;</span> <span class="o">//</span><span class="n">Faults</span> <span class="n">when</span> <span class="n">the</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="n">reached</span><span class="o">.</span> <span class="n">Trigger</span> <span class="n">value</span><span class="o">.</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">FAULT_SP_HYS</span>
+        <span class="n">io</span><span class="p">:</span> <span class="nb">input</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="o">%</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">PREC</span> <span class="mi">2</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">fHysteresis</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span><span class="mi">1</span><span class="p">;</span> <span class="o">//</span> <span class="n">percentage</span> <span class="n">determining</span> <span class="n">how</span> <span class="n">far</span> <span class="n">below</span> <span class="n">the</span> <span class="n">trigger</span> <span class="n">value</span> <span class="n">the</span> <span class="n">fault</span> <span class="n">should</span> <span class="n">be</span> <span class="n">released</span>
+    <span class="n">sDevName</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+    <span class="n">bVeto</span> <span class="p">:</span> <span class="n">BOOL</span><span class="o">:=</span><span class="n">FALSE</span><span class="p">;</span> <span class="o">//</span> <span class="n">This</span> <span class="n">Fault</span> <span class="n">will</span> <span class="n">be</span> <span class="n">will</span> <span class="ow">not</span> <span class="n">trip</span> <span class="n">the</span> <span class="n">beam</span> <span class="k">if</span> <span class="n">the</span> <span class="n">bVeto</span> <span class="ow">is</span> <span class="n">TRUE</span>
+    <span class="n">bAutoReset</span> <span class="p">:</span> <span class="n">BOOL</span><span class="o">:=</span><span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_IN_OUT</span>
+    <span class="n">io_fbFFHWO</span>    <span class="p">:</span>    <span class="n">FB_HardwareFFOutput</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;instance-path&#39;</span><span class="p">}</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;noinit&#39;</span><span class="p">}</span>
+    <span class="n">sPath</span><span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+    <span class="n">bFAULT_OK</span><span class="p">:</span><span class="n">BOOL</span> <span class="o">:=</span><span class="n">FALSE</span><span class="p">;</span>
+    <span class="n">FFO</span>    <span class="p">:</span>    <span class="n">FB_FastFault</span> <span class="o">:=</span><span class="p">(</span>
+        <span class="n">i_Desc</span> <span class="o">:=</span> <span class="s1">&#39;Fault occurs when the temprature trip point is reached&#39;</span><span class="p">,</span>
+        <span class="n">i_TypeCode</span> <span class="o">:=</span> <span class="mi">16</span><span class="c1">#f700);</span>
+    <span class="n">rtRESET</span> <span class="p">:</span>       <span class="n">R_TRIG</span><span class="p">;</span>
+    <span class="n">ftFAULT</span> <span class="p">:</span>       <span class="n">F_TRIG</span><span class="p">;</span>
+    <span class="n">ftConnected</span>     <span class="p">:</span>       <span class="n">F_TRIG</span><span class="p">;</span>
+    <span class="n">fbLogger</span> <span class="p">:</span> <span class="n">FB_LogMessage</span> <span class="o">:=</span> <span class="p">(</span><span class="n">eSubsystem</span><span class="o">:=</span><span class="n">E_SubSystem</span><span class="o">.</span><span class="n">MPS</span><span class="p">,</span> <span class="n">nMinTimeViolationAcceptable</span><span class="o">:=</span><span class="mi">10</span><span class="p">);</span>
+<span class="n">END_VAR</span>
+<span class="o">//</span> <span class="n">The</span> <span class="n">manual</span> <span class="n">states</span> <span class="n">that</span> <span class="n">we</span> <span class="n">are</span> <span class="n">disconnected</span> <span class="k">if</span> <span class="n">we</span> <span class="n">are</span> <span class="n">both</span> <span class="n">overrange</span> <span class="ow">and</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">error</span> <span class="n">state</span>
+<span class="n">bConnected</span> <span class="o">:=</span> <span class="n">NOT</span> <span class="p">(</span><span class="n">bOverrange</span> <span class="n">AND</span> <span class="n">bError</span><span class="p">);</span>
+<span class="n">fTemp</span> <span class="o">:=</span> <span class="n">INT_TO_LREAL</span><span class="p">(</span><span class="n">iRaw</span><span class="p">)</span> <span class="o">*</span> <span class="n">fResolution</span><span class="p">;</span>
+
+<span class="o">//</span><span class="n">Verify</span> <span class="n">Hysteresis</span> <span class="ow">is</span> <span class="n">between</span> <span class="mi">1</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="n">Shouldn</span><span class="s1">&#39;t be 0. shouldn&#39;</span><span class="n">t</span> <span class="n">be</span> <span class="n">a</span> <span class="mi">100</span> <span class="n">either</span><span class="o">.</span>
+<span class="n">fHysteresis</span><span class="o">:=</span>  <span class="n">LIMIT</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">fHysteresis</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Evaluate</span> <span class="n">the</span> <span class="n">threshold</span> <span class="n">trip</span> <span class="n">point</span>
+<span class="n">IF</span> <span class="p">(</span><span class="n">fTemp</span> <span class="o">&gt;=</span> <span class="n">fFaultThreshold</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">bFAULT_OK</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="n">ELSIF</span> <span class="p">(</span><span class="n">fTemp</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">fFaultThreshold</span> <span class="o">-</span> <span class="n">fFaultThreshold</span><span class="o">*</span><span class="n">fHysteresis</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span> <span class="n">THEN</span>
+    <span class="n">bFAULT_OK</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="n">END_IF</span>
+<span class="n">bFAULT_OK</span> <span class="n">R</span><span class="o">=</span> <span class="n">NOT</span> <span class="n">bConnected</span>
+
+
+<span class="n">ACT_Logger</span><span class="p">();</span>
+
+<span class="p">(</span><span class="o">*</span><span class="n">FAST</span> <span class="n">FAULT</span><span class="o">*</span><span class="p">)</span>
+<span class="n">FFO</span><span class="p">(</span><span class="n">i_xOK</span> <span class="o">:=</span> <span class="n">bFAULT_OK</span> <span class="n">OR</span> <span class="n">bVeto</span><span class="p">,</span>
+    <span class="n">i_xReset</span> <span class="o">:=</span><span class="p">,</span>
+    <span class="n">i_xAutoReset</span> <span class="o">:=</span> <span class="n">bAutoReset</span><span class="p">,</span>
+    <span class="n">i_DevName</span> <span class="o">:=</span> <span class="n">sDevName</span><span class="p">,</span>
+    <span class="n">io_fbFFHWO</span> <span class="o">:=</span> <span class="n">io_fbFFHWO</span><span class="p">);</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">ACTION</span> <span class="n">ACT_Logger</span><span class="p">:</span>
+<span class="n">ftFAULT</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span> <span class="n">FFO</span><span class="o">.</span><span class="n">i_xOK</span><span class="p">);</span>
+<span class="n">rtRESET</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">FFO</span><span class="o">.</span><span class="n">i_xOK</span><span class="p">);</span>
+<span class="n">ftConnected</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span> <span class="n">bConnected</span><span class="p">);</span>
+
+<span class="n">IF</span><span class="p">(</span><span class="n">ftConnected</span><span class="o">.</span><span class="n">Q</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">fbLogger</span><span class="p">(</span><span class="n">sMsg</span> <span class="o">:=</span> <span class="s1">&#39;Sensor Connection Fault, beam off&#39;</span><span class="p">,</span> <span class="n">eSevr</span><span class="o">:=</span><span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Critical</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
+<span class="n">IF</span><span class="p">(</span><span class="n">ftFAULT</span><span class="o">.</span><span class="n">Q</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">fbLogger</span><span class="p">(</span><span class="n">sMsg</span> <span class="o">:=</span> <span class="s1">&#39;Temp Threshold Fault, beam off&#39;</span><span class="p">,</span> <span class="n">eSevr</span><span class="o">:=</span><span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Critical</span><span class="p">);</span>
+<span class="n">END_IF</span>
+
+<span class="n">IF</span><span class="p">(</span><span class="n">rtRESET</span><span class="o">.</span><span class="n">Q</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="n">fbLogger</span><span class="p">(</span><span class="n">sMsg</span> <span class="o">:=</span> <span class="s1">&#39;Temp Threshold Fault condition clear&#39;</span><span class="p">,</span> <span class="n">eSevr</span><span class="o">:=</span><span class="n">TcEventSeverity</span><span class="o">.</span><span class="n">Info</span><span class="p">);</span>
+<span class="n">END_IF</span>
+<span class="n">END_ACTION</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-fastfault">FB_FastFault</a></p></li>
+<li><p><a class="reference internal" href="#fb-hardwareffoutput">FB_HardwareFFOutput</a></p></li>
 </ul>
 </dd>
 </dl>
