@@ -1,0 +1,21 @@
+
+Pragmas
+-------
+
+.. csv-table::
+    :header: PLC Name, Total Pragmas, Errors
+    :align: center
+
+    :ref:`PMPS <PMPS_overview_pragmas>`, 221, 0
+
+
+.. _PMPS_overview_pragmas:
+
+
+PMPS
+^^^^
+
+Total pragmas found: 221
+Total linter errors: 0
+
+
