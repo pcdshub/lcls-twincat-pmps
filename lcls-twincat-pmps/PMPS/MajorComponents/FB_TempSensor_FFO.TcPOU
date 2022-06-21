@@ -54,7 +54,7 @@ IF (fTemp >= fFaultThreshold) THEN
 ELSIF (fTemp < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
 	bFAULT_OK := TRUE;
 END_IF
-bFAULT_OK R= NOT bConnected
+bFAULT_OK R= NOT bConnected;
 
 
 ACT_Logger();
