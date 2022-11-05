@@ -39,6 +39,7 @@ VAR_GLOBAL RETAIN
         io: i
     '}
     AccumulatedFF : UDINT; // Any time a FF occurs
+	BP_jsonDoc 		: SJsonValue;
 END_VAR
 VAR_GLOBAL CONSTANT
 	
