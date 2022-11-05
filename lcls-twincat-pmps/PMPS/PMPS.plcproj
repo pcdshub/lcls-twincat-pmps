@@ -36,6 +36,15 @@
     <ProjectVersion>0.0.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AncillaryComponents\FB_JsonDocToSafeBP.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncillaryComponents\FB_JsonFileToJsonDoc.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncillaryComponents\FB_TempSensor_FFO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -246,9 +255,6 @@
     <Compile Include="MajorComponents\FB_RateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\FB_TempSensor_FFO.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -414,6 +420,7 @@
     <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="ImplicitChecks" />
+    <Folder Include="AncillaryComponents" />
     <Folder Include="TestComponents" />
     <Folder Include="TestComponents\DUT" />
     <Folder Include="VISUs" />
@@ -422,6 +429,10 @@
     <PlaceholderReference Include="LCLS General">
       <DefaultResolution>LCLS General, * (SLAC)</DefaultResolution>
       <Namespace>LCLS_General</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="lcls-twincat-motion">
+      <DefaultResolution>lcls-twincat-motion, * (SLAC)</DefaultResolution>
+      <Namespace>lcls_twincat_motion</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_MC2">
       <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
@@ -485,19 +496,22 @@
     <PlaceholderResolution Include="LCLS General">
       <Resolution>LCLS General, * (SLAC)</Resolution>
     </PlaceholderResolution>
+    <PlaceholderResolution Include="lcls-twincat-motion">
+      <Resolution>lcls-twincat-motion, * (SLAC)</Resolution>
+    </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_JsonXml">
       <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PMPS.tmc">
-      <SubType>Content</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PinnedGlobalDataType Include="ST_BeamParams_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Aperture_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Attenuator_IO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PMPS.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

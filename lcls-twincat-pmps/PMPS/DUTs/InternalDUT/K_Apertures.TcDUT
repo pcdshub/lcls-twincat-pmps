@@ -3,6 +3,7 @@
   <DUT Name="K_Apertures" Id="{04413d3a-4ef2-46de-bc60-04e348e96066}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
+{attribute 'to_string'}
 TYPE K_Apertures :
 (
 	SL1K0 := 1,

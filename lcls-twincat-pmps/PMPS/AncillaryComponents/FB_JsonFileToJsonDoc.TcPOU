@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_JsonFileToJsonDoc" Id="{4992a0eb-7258-4be8-bca4-7f89818f10dd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_JsonFileToJsonDoc
+VAR_INPUT
+	bExecute             : BOOL; //Rising Edge
+	sPLCName			 : STRING;
+	sSrcNetId            : T_AmsNetId;
+    sSrcPathName         : T_MaxString;
+END_VAR
+VAR_OUTPUT
+	PMPS_jsonDoc 		: SJsonValue;
+	bHasPLC              : BOOL;
+	bBusy                : BOOL;
+	bError               : BOOL;
+    nErrId               : UDINT;
+	sErrMsg				 :STRING;
+END_VAR
+VAR_IN_OUT
+	io_fbFFHWO    :    FB_HardwareFFOutput;
+END_VAR
+VAR
+	(* JSON *)
+	fbJson 			: FB_JsonDomParser;
+	jsonDoc 		: SJsonValue;
+	jsonProp		: SJsonValue;
+	
+	(*File*)
+	fbFileOpen           : FB_FileOpen;
+    fbFileClose          : FB_FileClose;
+    fbFileRead           : FB_FileRead;
+    fbFileWrite          : FB_FileWrite;
+    hSrcFile             : UINT := 0;(* File handle of the source file *)
+	Step: INT;
+	index: INT;
+	nStateCount:INT;
+    RisingEdge           : R_TRIG;
+    buffRead             : ARRAY[1..1000000] OF BYTE;(* Buffer *)
+	sbuffRead			:STRING(1000000);
+    cbReadLength         : UDINT := 0;
+	tTimeOut             : TIME := DEFAULT_ADS_TIMEOUT;
+	
+	(*Logger*)
+	tNewMessage : R_TRIG;
+    fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);	
+	(*FFO*)
+	FFO    :    FB_FastFault :=(
+        i_Desc := 'Fault occurs when there is an error reading json file',
+        i_TypeCode := 16#FF13);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Retrieve JSON content *)
+RisingEdge(CLK:=bExecute); 
+
+CASE Step OF 
+    0:     (* Idle state *) 
+          IF RisingEdge.Q THEN 
+               bBusy := TRUE; 
+               bError:= FALSE; 
+               nErrId:=0; 
+               Step := 1; 
+               cbReadLength:=0; 
+               hSrcFile:=0; 
+			   fbLogger(sMsg:='Start Reading Json File.', eSevr:=TcEventSeverity.Info);
+          END_IF 
+	1:     (* Open source file *) 
+          fbFileOpen( bExecute := FALSE ); 
+          fbFileOpen( sNetId := sSrcNetId, sPathName := sSrcPathName, 
+                         nMode := FOPEN_MODEREAD OR FOPEN_MODETEXT, 
+                         ePath := PATH_GENERIC, tTimeout := tTimeOut, bExecute := TRUE ); 
+          Step := Step + 1; 
+	2: 
+          fbFileOpen( bExecute := FALSE ); 
+          IF NOT fbFileOpen.bBusy THEN 
+               IF fbFileOpen.bError THEN 
+                    nErrId := fbFileOpen.nErrId; 
+                    bError := TRUE; 
+					sErrMsg:= 'Error Opening Json File';
+                    Step := 900 + Step; 
+               ELSE 
+                    hSrcFile := fbFileOpen.hFile; 
+                    Step := Step + 1; 
+               END_IF 
+          END_IF 
+	3:
+		(* Read data from source file *) 
+          cbReadLength := 0; 
+          fbFileRead( bExecute:= FALSE ); 
+          fbFileRead( sNetId:=sSrcNetId, hFile:=hSrcFile, 
+                         pReadBuff:= ADR(sbuffRead), cbReadLen:= SIZEOF(sbuffRead), 
+                         bExecute:=TRUE, tTimeout:=tTimeOut ); 
+          Step := Step + 1; 
+		  
+	4: (*Read file and load to JsonDoc*)
+		 fbFileRead( bExecute:= FALSE ); 
+          IF NOT fbFileRead.bBusy THEN 
+               IF fbFileRead.bError THEN 
+                    nErrId := fbFileRead.nErrId; 
+                    bError := TRUE; 
+					sErrMsg:= 'Error reading Json File';
+                    Step := 900 +Step; 
+               ELSE 
+                    cbReadLength := fbFileRead.cbRead;
+					IF( cbReadLength= 0) THEN
+						nErrId := fbFileRead.nErrId; 
+                   		 bError := TRUE; 
+						sErrMsg:= 'Zero bytes were read from the Json File';
+                    	Step := 900 +Step; 
+					END_IF
+					jsonDoc := fbJson.ParseDocument(sbuffRead);
+                    Step := Step + 1; 
+               END_IF 
+          END_IF 
+		  
+	 5: (* Close source file *) 
+        fbFileClose( bExecute := FALSE ); 
+        fbFileClose( sNetId:=sSrcNetId, hFile:=hSrcFile, bExecute:=TRUE, tTimeout:=tTimeOut ); 
+          Step := Step + 1; 
+		  
+	 6 :  
+		fbFileClose( bExecute := FALSE ); 
+          IF NOT fbFileClose.bBusy THEN 
+               IF fbFileClose.bError THEN 
+                    nErrId := fbFileClose.nErrId; 
+                    bError := TRUE; 
+					Step:=900+Step;
+					sErrMsg:= 'Error closing Json File';
+               END_IF 
+               Step := Step + 1;
+               hSrcFile := 0; 
+          END_IF 
+	  7:
+		(* Error or ready => Cleanup *) 
+          IF (hSrcFile <> 0 ) THEN 
+               Step := 5; (* Close the source file *) 
+          ELSE 
+			  (* Ready *) 
+               Step := 10;
+          END_IF  
+	 10: (*Last step opening and loading buffer to JSON DOM*)
+	   Step := 20;
+	 
+	   
+	 20: (*Start parsing JSON Data*) (*Find the PLC Name*)  
+	 	jsonDoc := fbJson.ParseDocument(sbuffRead);
+		bHasPLC := fbJson.HasMember(jsonDoc, sPLCName);
+		IF (bHasPLC) THEN
+			jsonProp := fbJson.FindMember(jsonDoc, sPLCName);
+			IF jsonProp <> 0 THEN	
+				Step := Step+1;
+				ELSE
+					Step := 900 + Step;
+					nErrId := Step; 
+					bError := TRUE; 
+					sErrMsg:=  CONCAT('Error PLC name not found in Json File : ',sPLCName);
+				END_IF
+		ELSE
+			Step := 900 + Step;
+			nErrId := Step; 
+			bError := TRUE; 
+			sErrMsg:=  CONCAT('Error PLC name not found in Json File : ',sPLCName);		
+		END_IF
+	21: //write to the PMPS JSonDoc global variable
+	  PMPS_jsonDoc := jsonProp;
+	  Step := 30;
+	  
+	30: (*ALL good here*)
+		fbLogger(sMsg:='Reading Json File Completed Successfully.', eSevr:=TcEventSeverity.Info);
+	 	bExecute:= FALSE;
+	    bBusy:=FALSE;
+		Step := 0;
+	
+END_CASE
+
+//Fault in error state
+IF(Step>=900) THEN
+	FFO.i_xOK := FALSE;
+	Step:=0;
+END_IF
+ACT_FFO();
+ACT_LOGGER();]]></ST>
+    </Implementation>
+    <Action Name="ACT_FFO" Id="{1844e8c8-f3e5-4b60-983a-6b459b91a50f}">
+      <Implementation>
+        <ST><![CDATA[(*FAST FAULT*)
+FFO(i_xOK := ,
+    i_xReset := ,
+	i_xAutoReset :=TRUE,
+	i_DevName := sPLCName,
+    io_fbFFHWO := io_fbFFHWO);]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="ACT_Logger" Id="{b5f0d2c8-a7df-48fe-8fee-ba4f7ee57792}">
+      <Implementation>
+        <ST><![CDATA[// Log valve open
+tNewMessage(CLK:= NOT(FbLogger.sMsg = sErrMsg) AND NOT (sErrMsg =''));
+IF tNewMessage.Q THEN fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical); END_IF
+]]></ST>
+      </Implementation>
+    </Action>
+  </POU>
+</TcPlcObject>

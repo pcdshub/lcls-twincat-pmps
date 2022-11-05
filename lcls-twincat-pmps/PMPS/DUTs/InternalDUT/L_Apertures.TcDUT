@@ -3,6 +3,7 @@
   <DUT Name="L_Apertures" Id="{81aad000-5d47-45fe-a236-7c80dfbb79b7}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
+{attribute 'to_string'}
 TYPE L_Apertures :
 (
 	SL1L0 := 1,
