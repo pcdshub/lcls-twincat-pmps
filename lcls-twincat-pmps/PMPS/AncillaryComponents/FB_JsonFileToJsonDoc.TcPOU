@@ -20,6 +20,9 @@ VAR_IN_OUT
 	io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR
+	(*Get AMS Net ID*)
+	fb_GetLocalAmsNetId: FB_GetLocalAmsNetId;
+
 	(* JSON *)
 	fbJson 			: FB_JsonDomParser;
 	jsonDoc 		: SJsonValue;
@@ -39,7 +42,7 @@ VAR
 	sbuffRead			:STRING(1000000);
     cbReadLength         : UDINT := 0;
 	tTimeOut             : TIME := DEFAULT_ADS_TIMEOUT;
-	
+	bInit : BOOL;
 	(*Logger*)
 	tNewMessage : R_TRIG;
     fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);	
@@ -50,9 +53,15 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(* Retrieve JSON content *)
-RisingEdge(CLK:=bExecute); 
+      <ST><![CDATA[(* Get Local AMS net ID*)
+IF NOT (bInit) THEN
+	fb_GetLocalAmsNetId.bExecute := TRUE;
+	bInit :=  TRUE;
+END_IF
+fb_GetLocalAmsNetId(bExecute:=);
 
+(* Retrieve JSON content *)
+RisingEdge(CLK:=bExecute); 
 CASE Step OF 
     0:     (* Idle state *) 
           IF RisingEdge.Q THEN 
@@ -64,7 +73,8 @@ CASE Step OF
                hSrcFile:=0; 
 			   fbLogger(sMsg:='Start Reading Json File.', eSevr:=TcEventSeverity.Info);
           END_IF 
-	1:     (* Open source file *) 
+	1: (* Open source file *) 
+		   sSrcNetId := fb_GetLocalAmsNetId.AddrString;
           fbFileOpen( bExecute := FALSE ); 
           fbFileOpen( sNetId := sSrcNetId, sPathName := sSrcPathName, 
                          nMode := FOPEN_MODEREAD OR FOPEN_MODETEXT, 

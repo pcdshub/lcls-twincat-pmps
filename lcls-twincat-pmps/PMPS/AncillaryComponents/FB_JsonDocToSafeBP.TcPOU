@@ -164,39 +164,45 @@ VAR
 	sAperture:STRING;
 	nAperture:INT;
 	sEV:STRING;
+	sBC:STRING;
 	nIndex:INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[jsonValue := fbJson.FindMember(jsonProp, 'IM1K0-XTES-RETICLE');
-IF jsonValue <> 0 THEN
+        <ST><![CDATA[bHasAllParameters :=  fbJson.HasMember(jsonProp, sStateName);
+jsonValue := fbJson.FindMember(jsonProp, sStateName);
+IF bHasAllParameters THEN
 	//nTran
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nTran');
 	jsonnTran := fbJson.FindMember(jsonValue, 'nTran');
-	bHasAllParameters R= TO_BOOL(jsonnTran=0);
 	arrStates[Index].stBeamParams.nTran := TO_REAL(fbJson.GetString(jsonnTran));
 	
 	//nRate
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nRate');
 	jsonnRate := fbJson.FindMember(jsonValue, 'nRate');
-	bHasAllParameters R= TO_BOOL(jsonnRate=0);
 	arrStates[Index].stBeamParams.nRate:= TO_UDINT(fbJson.GetString(jsonnRate));
 	
 	//neVRange
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'neVRange');
 	jsonParam := fbJson.FindMember(jsonValue, 'neVRange');
-	bHasAllParameters R= TO_BOOL(jsonParam=0);
 	sEV:=(fbJson.GetString(jsonParam));
 	FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries BY 1 DO
 	    arrStates[Index].stBeamParams.neVRange := SHL(arrStates[Index].stBeamParams.neVRange,1);
 		arrStates[Index].stBeamParams.neVRange := arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
 	END_FOR
 	//nBeamClassRange
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nBeamClassRange');
 	jsonParam := fbJson.FindMember(jsonValue, 'nBeamClassRange');
-	bHasAllParameters R= TO_BOOL(jsonParam=0);
-	
+	sBC:=(fbJson.GetString(jsonParam));
+	FOR nIndex := 0 TO 15 BY 1 DO
+	    arrStates[Index].stBeamParams.nBCRange := SHL(arrStates[Index].stBeamParams.nBCRange,1);
+		arrStates[Index].stBeamParams.nBCRange := arrStates[Index].stBeamParams.nBCRange+HEXASCNIBBLE_TO_BYTE(sBC[nIndex]);
+	END_FOR
 	
 	//ApertureName and Values
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_name');
 	jsonParam := fbJson.FindMember(jsonValue, 'ap_name');
 	sAperture := fbJson.GetString(jsonParam);
-	bHasAllParameters R= TO_BOOL(jsonParam=0);
 {IF defined (L)}
 	IF ('SL1L0' = sAperture) THEN
 			nAperture := L_Apertures.SL1L0;
@@ -209,14 +215,14 @@ IF jsonValue <> 0 THEN
 	END_IF
 {END_IF}	
 	//Gap Height
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_ygap');
 	jsonParam := fbJson.FindMember(jsonValue, 'ap_ygap');
 	arrStates[Index].stBeamParams.astApertures[nAperture].Height := TO_REAL(fbJson.GetString(jsonParam));
-	bHasAllParameters R= TO_BOOL(jsonParam=0);
 	
 	//Gap Width
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_xgap');
 	jsonParam := fbJson.FindMember(jsonValue, 'ap_xgap');
 	arrStates[Index].stBeamParams.astApertures[nAperture].Width := TO_REAL(fbJson.GetString(jsonParam));	
-	bHasAllParameters R= TO_BOOL(jsonParam=0);
 	
 ELSE
 	nErrId := 900+Step; 
@@ -226,16 +232,10 @@ END_IF
 
 M_LoadSafeBP:=bHasAllParameters;
 
-(*
-IF (jsonnTran<>0) AND (jsonnRate <>0)THEN
-	M_LoadSafeBP := TRUE;
-	ELSE M_LoadSafeBP := FALSE;
-END_IF*)
 
 
 //TODO
-//ADD the rest of the BP
-//Check the slits information before loading to the correct array index]]></ST>
+//ADD the rest of the BP]]></ST>
       </Implementation>
     </Method>
   </POU>
