@@ -19,7 +19,7 @@ VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
 	//ARRAY [1.. MOTION_GVL.MAX_STATES] ;
-	arrStates: ARRAY[1..MOTION_GVL.MAX_STATES] OF DUT_PositionState;
+	arrStates: ARRAY[1..MAX_STATES] OF DUT_PositionState;
 	io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR
@@ -78,7 +78,7 @@ CASE Step OF
 		END_IF
 		
 	 21: (*Check device States in DOM*)
-	 		FOR Index:=1 TO MOTION_GVL.MAX_STATES BY 1 DO
+	 		FOR Index:=1 TO MAX_STATES BY 1 DO
 				  IF NOT ((arrStates[Index].sName= '') OR (arrStates[Index].sName= 'Invalid')) THEN
 					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sName)) THEN
 							  Step := 900+ Step;
@@ -190,6 +190,7 @@ IF bHasAllParameters THEN
 	    arrStates[Index].stBeamParams.neVRange := SHL(arrStates[Index].stBeamParams.neVRange,1);
 		arrStates[Index].stBeamParams.neVRange := arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
 	END_FOR
+	
 	//nBeamClassRange
 	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nBeamClassRange');
 	jsonParam := fbJson.FindMember(jsonValue, 'nBeamClassRange');
@@ -208,7 +209,7 @@ IF bHasAllParameters THEN
 			nAperture := L_Apertures.SL1L0;
 	ELSE nAperture := L_Apertures.SL2L0;
 	END_IF
-{ELSIF defined (K)} // Attribute 'to_string' only build 4024 TO_STRING(PMPS.K_Apertures.SL1K0) - need another non hardoced way
+{ELSIF defined (K)} // Attribute 'to_string' only build 4024 TO_STRING(PMPS.K_Apertures.SL1K0) - need another non hardcoded way
 	IF ('SL1K0' = sAperture) THEN
 			nAperture := PMPS.K_Apertures.SL1K0;
 	ELSE nAperture := PMPS.K_Apertures.SL2K0;
@@ -223,6 +224,15 @@ IF bHasAllParameters THEN
 	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_xgap');
 	jsonParam := fbJson.FindMember(jsonValue, 'ap_xgap');
 	arrStates[Index].stBeamParams.astApertures[nAperture].Width := TO_REAL(fbJson.GetString(jsonParam));	
+	
+	
+	//Read Transition ID for the State
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
+	jsonParam := fbJson.FindMember(jsonValue, 'id');
+	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetString(jsonParam));
+	
+	//Set to True to indicate this state has been initialized
+	arrStates[Index].bValid := bHasAllParameters;
 	
 ELSE
 	nErrId := 900+Step; 
