@@ -229,7 +229,7 @@ IF bHasAllParameters THEN
 	//Read Transition ID for the State
 	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
 	jsonParam := fbJson.FindMember(jsonValue, 'id');
-	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetString(jsonParam));
+	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
 	
 	//Set to True to indicate this state has been initialized
 	arrStates[Index].bValid := bHasAllParameters;
