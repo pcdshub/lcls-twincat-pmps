@@ -80,7 +80,7 @@ CASE Step OF
 	 21: (*Check device States in DOM*)
 	 		FOR Index:=1 TO MAX_STATES BY 1 DO
 				  IF NOT ((arrStates[Index].sName= '') OR (arrStates[Index].sName= 'Invalid')) THEN
-					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sName)) THEN
+					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsName)) THEN
 							  Step := 900+ Step;
 							  nErrId := Step; 
 							  bError := TRUE; 
@@ -110,7 +110,7 @@ CASE Step OF
 	 23:  (*loop Device State Arrays to find all States*)
 	      FOR Index:=1 TO nStateCount BY 1 DO
 			  IF NOT (arrStates[Index].sName= '') THEN
-				  IF(NOT M_LoadSafeBP(arrStates[Index].sName, Index)) THEN
+				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsName, Index)) THEN
 					  Step := 900+ Step;
 				  END_IF
 			   ELSE EXIT;
