@@ -38,6 +38,7 @@ VAR
     q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
 END_VAR
 VAR CONSTANT
+	//Limited to total of 6 digital outputs
     MAX_BEAM_CLASS_LINES : BYTE := 8;
     BC_1HZ : BYTE := 1;
     BC_10HZ : BYTE := 2;

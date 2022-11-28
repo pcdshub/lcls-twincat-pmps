@@ -79,12 +79,12 @@ CASE Step OF
 		
 	 21: (*Check device States in DOM*)
 	 		FOR Index:=1 TO MAX_STATES BY 1 DO
-				  IF NOT ((arrStates[Index].sName= '') OR (arrStates[Index].sName= 'Invalid')) THEN
+				  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
 					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
 							  Step := 900+ Step;
 							  nErrId := Step; 
 							  bError := TRUE; 
-							  sErrMsg:= CONCAT('Error loading device state in Json File : ',arrStates[Index].sName);
+							  sErrMsg:= CONCAT('Error loading device state in Json File : ',arrStates[Index].sPmpsState);
 							  EXIT;
 					  END_IF
 				   ELSE 
@@ -232,7 +232,7 @@ IF bHasAllParameters THEN
 	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
 	
 	//Set to True to indicate this state has been initialized
-	arrStates[Index].bValid := bHasAllParameters;
+//	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
 	
 ELSE
 	nErrId := 900+Step; 
