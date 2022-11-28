@@ -16,6 +16,7 @@ VAR
     xaStopper : BOOL := FALSE;
     xaAtt : BOOL := FALSE;
     xaApt : BOOL := FALSE;
+	xBCOK : BOOL := FALSE;
     
     idx : UINT;
     
@@ -26,6 +27,8 @@ END_VAR
       <ST><![CDATA[xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
 xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
 xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
+xBCOK	:= BeamParam1.nBCRange <> BeamParam2.nBCRange;
+
 
 //ast Attenuators
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
@@ -44,7 +47,7 @@ FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
 END_FOR
 
 
-F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt;]]></ST>
+F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
