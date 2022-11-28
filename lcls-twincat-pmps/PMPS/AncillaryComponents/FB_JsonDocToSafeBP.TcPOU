@@ -110,7 +110,7 @@ CASE Step OF
 	 23:  (*loop Device State Arrays to find all States*)
 	      FOR Index:=1 TO nStateCount BY 1 DO
 			  IF NOT (arrStates[Index].sName= '') THEN
-				  IF(NOT M_LoadSafeBP(arrStates[Index].sName, Index)) THEN
+				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
 					  Step := 900+ Step;
 				  END_IF
 			   ELSE EXIT;
@@ -229,7 +229,7 @@ IF bHasAllParameters THEN
 	//Read Transition ID for the State
 	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
 	jsonParam := fbJson.FindMember(jsonValue, 'id');
-	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetString(jsonParam));
+	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
 	
 	//Set to True to indicate this state has been initialized
 //	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
