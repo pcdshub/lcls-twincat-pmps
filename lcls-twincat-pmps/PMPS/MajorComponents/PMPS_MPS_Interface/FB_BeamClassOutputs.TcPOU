@@ -4,6 +4,7 @@
     <Declaration><![CDATA[(*
 Sets the beam class assertion lines for a given beam class.
 *)
+{attribute 'no_check'}
 FUNCTION_BLOCK FB_BeamClassOutputs
 VAR_INPUT
     BP : ST_BeamParams;

@@ -22,7 +22,6 @@ END_VAR
       <ST><![CDATA[TcUnit.RUN();
 
 
-(*TODO LIST FOR SC*)
 ]]></ST>
     </Implementation>
   </POU>

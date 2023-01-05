@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="F_eVWithinSpec" Id="{ad5603cd-deff-4556-b0bb-d0d6587d070e}" SpecialFunc="None">
     <Declaration><![CDATA[//reV must be within permitted range.
+{attribute 'no_check'}
 FUNCTION F_eVWithinSpec : BOOL
 VAR_INPUT
     reV    :    REAL;    //Photon energy to check if within permitted range

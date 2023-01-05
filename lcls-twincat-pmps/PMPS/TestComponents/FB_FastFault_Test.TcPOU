@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_FastFault_Test" Id="{2ec3826d-e723-4fb3-ae0d-bdcd8662dc40}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
+{attribute 'no_check'}
 FUNCTION_BLOCK FB_FastFault_Test EXTENDS TcUnit.FB_TestSuite
 VAR_INPUT
 END_VAR
@@ -90,7 +91,8 @@ TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FFOvrdAndNextFault" Id="{b17e0363-eca4-4d26-afa9-1c5d39a76914}">
-      <Declaration><![CDATA[METHOD FFOvrdAndNextFault
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD FFOvrdAndNextFault
 VAR_INPUT
 END_VAR
 VAR_INST
@@ -195,7 +197,8 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="FFRegistration" Id="{3ff41afd-9e3c-4c36-9c04-7ce787b90bc6}">
-      <Declaration><![CDATA[METHOD FFRegistration
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD FFRegistration
 VAR_INPUT
 END_VAR
 VAR_INST

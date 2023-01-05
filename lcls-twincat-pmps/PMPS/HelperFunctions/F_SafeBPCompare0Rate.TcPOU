@@ -3,7 +3,9 @@
   <POU Name="F_SafeBPCompare0Rate" Id="{61333098-b080-43b8-8c0d-b267fc83ae7a}" SpecialFunc="None">
     <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
 the result will be true. *)
-(* 0-rate means this function will return true regardless of other conditions if the beam rate
+(* When the Mode PV is in Cu 0-rate means this function will return true regardless of other conditions if the beam rate
+is zero *)
+(* When the Mode PV is in SC 0-bc means this function will return true regardless of other conditions if the beam class
 is zero *)
 FUNCTION F_SafeBPCompare0Rate : BOOL
 VAR_INPUT
@@ -11,16 +13,36 @@ VAR_INPUT
     BeamParam2    :    ST_BeamParams;
 END_VAR
 VAR
-    // Beam-rate is zero, masks all others considerations.
+    {attribute 'pytmc' := '
+        pv: LFE:LCLSMODE
+        link: SIOC:FEEH:MP01:LCLSMODE_RBV
+    '}
+    HXR_MODE : FB_LREALFromEPICS;
+	{attribute 'pytmc' := '
+        pv: KFE:LCLSMODE
+        link: SIOC:FEES:MP01:LCLSMODE_RBV
+    '}
+	SXR_MODE : FB_LREALFromEPICS;
+	
+	// Beam-rate is zero, masks all others considerations.
     xZeroRate: BOOL;
+	//Beam class is zero i.e beam off, masks all other considerations.
+	xZeroBC : BOOL;
     
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-xZeroRate    := BeamParam1.nRate = 0;
+      <ST><![CDATA[{IF defined (L)}
+	PMPS_GVL.M_Mode := LREAL_TO_INT(HXR_MODE.fValue);
+{ELSIF defined (K)}
+	PMPS_GVL.M_Mode := LREAL_TO_INT(SXR_MODE.fValue);
+{END_IF}
 
-F_SafeBPCompare0Rate := xZeroRate OR F_SafeBPCompare(BeamParam1, BeamParam2);
+
+xZeroRate  := (BeamParam1.nRate = 0) AND (PMPS_GVL.M_Mode = 0);
+xZeroBC  := (BeamParam1.nBCRange <= 1) AND (PMPS_GVL.M_Mode =1);
+
+F_SafeBPCompare0Rate := (xZeroRate OR xZeroBC) OR F_SafeBPCompare(BeamParam1, BeamParam2);
 ]]></ST>
     </Implementation>
   </POU>

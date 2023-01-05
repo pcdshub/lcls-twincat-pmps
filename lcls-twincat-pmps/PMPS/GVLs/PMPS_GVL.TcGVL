@@ -24,6 +24,18 @@ VAR_GLOBAL
         field: EGU eV
     '}
 	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+	
+	{attribute 'pytmc' := '
+        pv: @(PREFIX)LCLSMODE
+		io: i
+		field: ZRST NC ;
+	    field: ONST SC ;
+	    field: TWST Misconfigured ;
+    '}
+	// 0 – NC (normal conducting, copper linac)
+	// 1 – SC (superconducting linac)
+	// 2 – Misconfigured (something in link node not set correctly.
+	M_Mode: INT:=0;
    
     PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR
@@ -63,6 +75,7 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
+		nBCRange := 2#0111_1111_1111_1111,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
 		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
 
@@ -77,6 +90,7 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
+		nBCRange := 2#0000_0000_0000_0000,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
 		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
     );

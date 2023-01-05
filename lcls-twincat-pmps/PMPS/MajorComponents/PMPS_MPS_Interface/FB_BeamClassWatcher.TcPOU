@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_BeamClassWatcher" Id="{677f919e-aae8-4b0a-b3e5-5af158fb050e}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+M. Ghaly
+The Beam class watcher ensures the current and target beam class is within
+the arbirated bounds. 
+
+
+The abritrated bounds come from a simple AND of all the permitted beam class ranges. See
+the arbitrate action of the arbiter FB. It also reads a PV and ensures that the asserted Beam Class
+is the same as the PV from the ATCA crate
+
+Note, this protection logic does not account for beam-off when determining fast-fault
+status. If a device is requesting a limited range of BC, this request must be honored,
+regardless of current beam-rate.
+*)
+{attribute 'reflection'}
+FUNCTION_BLOCK FB_BeamClassWatcher
+VAR_INPUT
+    i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
+    i_stMachineTargetBeamParams    :    ST_BeamParams; //Link to global machine target beam params
+    i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
+    // Reset fault
+    i_xReset: BOOL;
+    sName : STRING := 'BeamClassWatcher';
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+    io_fbFFHWO    :    FB_HardwareFFOutput;
+END_VAR
+VAR
+    xBeamClassWithinBounds    :    BOOL;
+    fbFF    :    FB_FastFault :=(
+        i_DevName := sName,
+        i_Desc := 'Fault occurs when the asserted beamclass or pv beam class falls outside the permitted range.',
+        i_TypeCode := 7 );
+        
+   {attribute 'pytmc' := '
+        pv: ResidualBeamClass
+		io: i
+        archive: 1Hz monitor
+        field: EGU bc-bitmask
+    '}
+    bcResidual : DWORD;
+    
+    fbLog : FB_LogMessage := (
+        eSubSystem := E_Subsystem.MPS,
+        eSevr := TcEventSeverity.Critical
+        );
+    bLogOneShot : BOOL;
+    sDevName : T_MaxString := 'Beam Class Watcher';
+    
+    fbGetHN : FB_GetHostName;
+    bInit : BOOL := TRUE;
+    
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath    :    T_MaxString;
+    
+    fbStr : FB_FormatString := (
+        sOut := 'Non-zero beam class residual: %32b; Req: %32b; Act: %32b');
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bInit THEN
+    fbGetHN(bExecute:=TRUE);
+    bInit R= NOT fbGetHN.bBusy;
+END_IF
+    
+xBeamClassWithinBounds := (i_stCurrentBeamParams.nBCRange AND i_stRequestedBeamParams.nBCRange) = i_stCurrentBeamParams.nBCRange
+					AND  (i_stCurrentBeamParams.nBeamClass <= i_stRequestedBeamParams.nBeamClass);
+
+bcResidual := (i_stCurrentBeamParams.nBCRange XOR i_stRequestedBeamParams.nBCRange) AND i_stCurrentBeamParams.nBCRange;
+
+IF bcResidual <> 0 AND bLogOneShot THEN
+    fbLog.sJson := F_PMPS_JSON(
+        CONCAT(fbGetHN.sHostName, sDevName),
+        sPath,
+        PMPS_CODES.PEW_FAULT);
+    
+    fbStr.arg1 := F_DWORD(bcResidual);
+    fbStr.arg2 := F_WORD(i_stCurrentBeamParams.nBCRange);
+    fbStr.arg3 := F_WORD(i_stRequestedBeamParams.nBCRange);
+    
+    fbStr();
+        
+    fbLog(sMsg:=fbStr.sOut);
+    bLogOneShot := FALSE;
+ELSIF bcResidual = 0 THEN
+    bLogOneShot := TRUE;
+END_IF
+
+fbFF(i_xOK := xBeamClassWithinBounds,
+    io_fbFFHWO := io_fbFFHWO,);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

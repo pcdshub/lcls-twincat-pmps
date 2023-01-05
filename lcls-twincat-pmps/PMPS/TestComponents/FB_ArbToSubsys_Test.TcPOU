@@ -14,7 +14,8 @@ END_VAR
       <ST><![CDATA[BasicFunction();]]></ST>
     </Implementation>
     <Method Name="BasicFunction" Id="{3c4c05f2-7e24-41a0-b488-1e2c73951edf}">
-      <Declaration><![CDATA[METHOD BasicFunction
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD BasicFunction
 VAR_INPUT
 END_VAR
 VAR CONSTANT
@@ -108,18 +109,5 @@ TEST_FINISHED_NAMED('Request has become active');
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_ArbToSubsys_Test">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ArbToSubsys_Test.BasicFunction">
-      <LineId Id="3" Count="1" />
-      <LineId Id="84" Count="0" />
-      <LineId Id="5" Count="11" />
-      <LineId Id="85" Count="0" />
-      <LineId Id="17" Count="25" />
-      <LineId Id="86" Count="5" />
-      <LineId Id="43" Count="8" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

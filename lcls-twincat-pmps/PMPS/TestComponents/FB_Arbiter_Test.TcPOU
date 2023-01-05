@@ -73,9 +73,13 @@ VAR
     
     nRateReqID    :    UDINT    := 4;
     stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+	
+	nBCRangeReqID : UDINT    := 5;
+	stBCReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
     
-    stArbitratedBP    :    ST_BeamParams;
-    stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;;
+    stArbitratedBP    :    ST_BeamParams;// :=  PMPS_GVL.cstFullBeam;;
+    stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+	
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
@@ -86,10 +90,15 @@ END_VAR]]></Declaration>
 stAttReqBP.nTran := 0.50;
 stEVReqBP.neVRange := 2#1111_1111_1111_1111_1111_1100_1111_1111;
 stRateReqBP.nRate := 10;
+stBCReqBP.nBCRange := 2#0111_0000_0000_0000;
+stBCReqBP.nBeamClass := 15;
 
-stExpectedBP.nTran     :=     stAttReqBP.nTran;
+stExpectedBP.nTran     := stAttReqBP.nTran;
 stExpectedBP.neVRange := stEVReqBP.neVRange;
 stExpectedBP.nRate := stRateReqBP.nRate;
+stExpectedBP.nBCRange := stBCReqBP.nBCRange;
+stExpectedBP.nBeamClass := stBCReqBP.nBeamClass;
+
 
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP, sDevName:= 'Device' ),
@@ -106,6 +115,10 @@ AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP, sDevName:= 'Device'),
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP, sDevName:= 'Device'),
                     'Safest stRateReqBP request failed to load');
+
+//Load arbiter with beam parameter sets
+AssertTrue(fbArbiter.AddRequest(nBCRangeReqID, stBCReqBP, sDevName:= 'Device'),
+                    'Safest stBCReqBP request failed to load');
 
 stArbitratedBP := fbArbiter.GetArbitratedBP();
 
@@ -187,7 +200,8 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="FullArbitrationStack" Id="{17fe9309-58be-432c-a642-5a1fae576773}">
-      <Declaration><![CDATA[METHOD FullArbitrationStack
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD FullArbitrationStack
 VAR_INPUT
 END_VAR
 VAR   

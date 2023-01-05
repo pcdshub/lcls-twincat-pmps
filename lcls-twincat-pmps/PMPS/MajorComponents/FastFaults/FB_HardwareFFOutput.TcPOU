@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_HardwareFFOutput" Id="{4c5345fc-1911-455c-a3d8-14bade73dcd8}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'reflection'}
+{attribute 'no_check'}
 FUNCTION_BLOCK FB_HardwareFFOutput
 VAR CONSTANT
     FF_ARRAY_UPPER_BOUND : UINT := PMPS_PARAM.MAX_FAST_FAULTS;
@@ -98,7 +99,8 @@ xOK := True;
       </Implementation>
     </Action>
     <Method Name="EvaluateOverrides" Id="{b05563e8-13ae-495e-807c-befe31dea571}">
-      <Declaration><![CDATA[METHOD EvaluateOverrides : BOOL
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD EvaluateOverrides : BOOL
 VAR_INPUT
 END_VAR
 VAR
@@ -179,7 +181,8 @@ ExecuteLogging();
       </Implementation>
     </Action>
     <Method Name="ExecuteLogging" Id="{0b57308b-9b1c-4482-8d48-fd43e479e123}">
-      <Declaration><![CDATA[METHOD ExecuteLogging : BOOL
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD ExecuteLogging : BOOL
 VAR_INPUT
 END_VAR
 VAR
@@ -298,7 +301,8 @@ fbJson.ResetDocument();]]></ST>
       </Implementation>
     </Method>
     <Method Name="IdxCheckIn" Id="{9a63f75f-7c14-46d0-b762-024d9e3e2e01}">
-      <Declaration><![CDATA[METHOD INTERNAL IdxCheckIn : BOOL
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD INTERNAL IdxCheckIn : BOOL
 VAR_INPUT
     Idx : DINT;
     OK : BOOL;
@@ -347,7 +351,8 @@ THIS^.astFF[Idx] := stFF;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Register" Id="{23e16e56-a8bb-4023-a4d1-ddbd32f89678}">
-      <Declaration><![CDATA[METHOD INTERNAL Register : BOOL
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD INTERNAL Register : BOOL
 VAR_INPUT
     stFFInfo : ST_FFInfo := (
         sPath := '',

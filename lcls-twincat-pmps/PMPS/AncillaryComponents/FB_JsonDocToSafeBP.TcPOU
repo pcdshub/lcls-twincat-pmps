@@ -19,7 +19,7 @@ VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
 	//ARRAY [1.. MOTION_GVL.MAX_STATES] ;
-	arrStates: ARRAY[1..MAX_STATES] OF DUT_PositionState;
+	arrStates: ARRAY[*] OF ST_DbStateParams;
 	io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR
@@ -31,8 +31,8 @@ VAR
 	jsonnTran      : SJsonValue;
 	jsonnRate      : SJsonValue;
 	Step: INT;
-	index: INT;
-	nStateCount:INT;
+	index: DINT;
+	nStateCount:DINT;
     RisingEdge           : R_TRIG;
 
 	(*Logger*)
@@ -78,8 +78,8 @@ CASE Step OF
 		END_IF
 		
 	 21: (*Check device States in DOM*)
-	 		FOR Index:=1 TO MAX_STATES BY 1 DO
-				  IF NOT ((arrStates[Index].sName= '') OR (arrStates[Index].sName= 'Invalid')) THEN
+	 		FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
+				  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
 					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
 							  Step := 900+ Step;
 							  nErrId := Step; 
@@ -109,7 +109,7 @@ CASE Step OF
 
 	 23:  (*loop Device State Arrays to find all States*)
 	      FOR Index:=1 TO nStateCount BY 1 DO
-			  IF NOT (arrStates[Index].sName= '') THEN
+			  IF NOT (arrStates[Index].sPmpsState= '') THEN
 				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
 					  Step := 900+ Step;
 				  END_IF
@@ -157,7 +157,7 @@ IF tNewMessage.Q THEN fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
       <Declaration><![CDATA[METHOD M_LoadSafeBP : BOOL
 VAR_INPUT
 	sStateName : STRING;
-	Index:INT;
+	Index:DINT;
 END_VAR
 VAR
 	//bHasAllParameters : BOOL := TRUE;
@@ -187,8 +187,8 @@ IF bHasAllParameters THEN
 	jsonParam := fbJson.FindMember(jsonValue, 'neVRange');
 	sEV:=(fbJson.GetString(jsonParam));
 	FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries BY 1 DO
-	    arrStates[Index].stBeamParams.neVRange := SHL(arrStates[Index].stBeamParams.neVRange,1);
-		arrStates[Index].stBeamParams.neVRange := arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
+	    This^.arrStates[Index].stBeamParams.neVRange := SHL(This^.arrStates[Index].stBeamParams.neVRange,1);
+		This^.arrStates[Index].stBeamParams.neVRange := This^.arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
 	END_FOR
 	
 	//nBeamClassRange
@@ -232,7 +232,7 @@ IF bHasAllParameters THEN
 	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
 	
 	//Set to True to indicate this state has been initialized
-//	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
+	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
 	
 ELSE
 	nErrId := 900+Step; 

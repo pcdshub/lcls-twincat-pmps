@@ -3,6 +3,7 @@
   <POU Name="F_DifferentBeamParams" Id="{a38d8879-5f7d-4866-9636-9bf4011c964f}" SpecialFunc="None">
     <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
 the result will be true. *)
+{attribute 'no_check'}
 FUNCTION F_DifferentBeamParams : BOOL
 VAR_INPUT
     BeamParam1    :    ST_BeamParams;
@@ -27,7 +28,7 @@ END_VAR
       <ST><![CDATA[xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
 xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
 xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
-xBCOK	:= BeamParam1.nBCRange <> BeamParam2.nBCRange;
+xBCOK	:= BeamParam1.nBCRange <> BeamParam2.nBCRange;// OR BeamParam1.nBeamClass <> BeamParam2.nBeamClass ; //Is this right?
 
 
 //ast Attenuators
