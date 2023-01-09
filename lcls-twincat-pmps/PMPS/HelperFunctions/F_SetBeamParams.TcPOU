@@ -19,7 +19,7 @@ END_VAR
 BeamParams.astAttenuators := astAuxAtt;
 BeamParams.neVRange := neVRange;
 BeamParams.nRate    := MIN(nRate,1000000);
-BeamParams.nBCRange	:= nBCRange;
+BeamParams.nBCRange	:= MIN(nBCRange,32767);
 
 F_SetBeamParams    := BeamParams;]]></ST>
     </Implementation>

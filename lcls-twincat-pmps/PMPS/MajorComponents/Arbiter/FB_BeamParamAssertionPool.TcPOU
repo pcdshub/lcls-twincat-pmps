@@ -27,7 +27,7 @@ VAR
     hTable         : T_HHASHTABLE;(* hash table handle *)
     pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
     indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
-	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// MG 
+	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0, nBCRange :=0);// MG 
 END_VAR
 ]]></Declaration>
     <Implementation>

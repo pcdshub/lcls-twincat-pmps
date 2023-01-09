@@ -34,7 +34,7 @@ VAR_INPUT
 		 {attribute 'pytmc' := 'pv: ReqBP:BeamClassRanges
             io: o'}
         {attribute 'displaymode' := 'binary'}
-        nBCRange : WORD := 65535;
+        nBCRange : WORD := 32767;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -50,7 +50,7 @@ VAR
     bApply : BOOL;
 
     nControlDeviceID : DWORD;
-	sControlDeviceName: STRING:= 'BP Cntrl Dev';
+	sControlDeviceName: STRING:= 'BP Cntrl Device';
     rtApply : R_TRIG;
 
 END_VAR
