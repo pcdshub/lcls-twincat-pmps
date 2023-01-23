@@ -78,6 +78,7 @@ CASE Step OF
 		END_IF
 		
 	 21: (*Check device States in DOM*)
+	 		nStateCount :=0;
 	 		FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
 				  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
 					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
@@ -88,7 +89,7 @@ CASE Step OF
 							  EXIT;
 					  END_IF
 				   ELSE 
-					   nStateCount :=Index-1;
+					   nStateCount :=nStateCount+1;
 					   bHasAllStates :=TRUE;
 					   EXIT;
 				  END_IF
@@ -108,7 +109,7 @@ CASE Step OF
 		 END_IF;
 
 	 23:  (*loop Device State Arrays to find all States*)
-	      FOR Index:=1 TO nStateCount BY 1 DO
+	      FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
 			  IF NOT (arrStates[Index].sPmpsState= '') THEN
 				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
 					  Step := 900+ Step;
@@ -124,6 +125,7 @@ CASE Step OF
 	 	bExecute:= FALSE;
 	    bBusy:=FALSE;
 		Step := 0;
+		FFO.i_xOK := TRUE;
 END_CASE
 
 

@@ -179,6 +179,7 @@ CASE Step OF
 		fbLogger(sMsg:='Reading Json File Completed Successfully.', eSevr:=TcEventSeverity.Info);
 	 	bExecute:= FALSE;
 	    bBusy:=FALSE;
+		FFO.i_xOK := TRUE;
 		Step := 0;
 	
 END_CASE

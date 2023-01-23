@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_MachineModeFromEPICS" Id="{e77c5ce7-1295-45e2-913d-511a3f59fc41}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MachineModeFromEPICS
+(*
+Readback options are:
+
+0 – NC (normal conducting, copper linac)
+
+1 – SC (superconducting linac)
+
+2 – Misconfigured (something in link node not set correctly.
+
+*)
+VAR_IN_OUT
+	BP : ST_BeamParams;
+    fbMPS_MachineMode : FB_LREALFromEPICS;
+	FFO : FB_HardwareFFOutput;
+END_VAR
+VAR_OUTPUT
+	xError : BOOL;
+END_VAR
+VAR
+
+	ffModeReadBack : FB_FastFault := (
+		i_DevName := 'Arbiter',
+		i_Desc := 'Issue with Machine mode readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
+		i_TypeCode := 16#313,
+		i_xAutoReset:=True);
+END_VAR
+VAR CONSTANT
+	cFailSafeMM : INT := 3;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbMPS_MachineMode();
+
+IF fbMPS_MachineMode.bValid THEN
+	PMPS_GVL.M_Mode := LREAL_TO_INT(fbMPS_MachineMode.fValue);
+ELSE
+	PMPS_GVL.M_Mode := cFailSafeMM;
+END_IF
+
+ffModeReadBack(i_xOK:=(fbMPS_MachineMode.bValid) AND fbMPS_MachineMode.fValue <2 , io_fbFFHWO:=FFO);
+
+BP.xValid R= NOT fbMPS_MachineMode.bValid;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

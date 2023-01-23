@@ -35,7 +35,7 @@ VAR_GLOBAL
 	// 0 – NC (normal conducting, copper linac)
 	// 1 – SC (superconducting linac)
 	// 2 – Misconfigured (something in link node not set correctly.
-	M_Mode: INT:=0;
+	M_Mode: INT:=2;
    
     PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR

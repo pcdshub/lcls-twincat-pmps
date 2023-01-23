@@ -13,17 +13,7 @@ VAR_INPUT
     BeamParam2    :    ST_BeamParams;
 END_VAR
 VAR
-    {attribute 'pytmc' := '
-        pv: LFE:LCLSMODE
-        link: SIOC:FEEH:MP01:LCLSMODE_RBV
-    '}
-    HXR_MODE : FB_LREALFromEPICS;
-	{attribute 'pytmc' := '
-        pv: KFE:LCLSMODE
-        link: SIOC:FEES:MP01:LCLSMODE_RBV
-    '}
-	SXR_MODE : FB_LREALFromEPICS;
-	
+
 	// Beam-rate is zero, masks all others considerations.
     xZeroRate: BOOL;
 	//Beam class is zero i.e beam off, masks all other considerations.
@@ -32,13 +22,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[{IF defined (L)}
-	PMPS_GVL.M_Mode := LREAL_TO_INT(HXR_MODE.fValue);
-{ELSIF defined (K)}
-	PMPS_GVL.M_Mode := LREAL_TO_INT(SXR_MODE.fValue);
-{END_IF}
-
-
+      <ST><![CDATA[
 xZeroRate  := (BeamParam1.nRate = 0) AND (PMPS_GVL.M_Mode = 0);
 xZeroBC  := (BeamParam1.nBCRange <= 1) AND (PMPS_GVL.M_Mode =1);
 
