@@ -27,6 +27,7 @@ IO_TO_BP.neVRange := IO.neVRange;
 IO_TO_BP.neV := IO.neV;
 IO_TO_BP.nBCRange := IO.nBCRange;
 IO_TO_BP.nBeamClass := IO.nBeamClass;
+IO_TO_BP.nMachineMode := IO.nMachineMode;
 IO_TO_BP.nRate := IO.nRate;
 IO_TO_BP.xValid := IO.xValid;
 IO_TO_BP.xValidToggle := IO.xValidToggle;]]></ST>

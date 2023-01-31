@@ -29,16 +29,16 @@ VAR
 		i_xAutoReset:=True);
 END_VAR
 VAR CONSTANT
-	cFailSafeMM : INT := 3;
+	cFailSafeMM : USINT := 3;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbMPS_MachineMode();
 
 IF fbMPS_MachineMode.bValid THEN
-	PMPS_GVL.M_Mode := LREAL_TO_INT(fbMPS_MachineMode.fValue);
+	BP.nMachineMode := LREAL_TO_USINT(fbMPS_MachineMode.fValue);
 ELSE
-	PMPS_GVL.M_Mode := cFailSafeMM;
+	BP.nMachineMode := cFailSafeMM;
 END_IF
 
 ffModeReadBack(i_xOK:=(fbMPS_MachineMode.bValid) AND fbMPS_MachineMode.fValue <2 , io_fbFFHWO:=FFO);

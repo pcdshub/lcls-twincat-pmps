@@ -92,7 +92,7 @@ ELSIF bcResidual = 0 THEN
     bLogOneShot := TRUE;
 END_IF
 
-fbFF(i_xOK := xBeamClassWithinBounds,
+fbFF(i_xOK := xBeamClassWithinBounds OR (i_stCurrentBeamParams.nMachineMode = 0),
     io_fbFFHWO := io_fbFFHWO,);
 ]]></ST>
     </Implementation>

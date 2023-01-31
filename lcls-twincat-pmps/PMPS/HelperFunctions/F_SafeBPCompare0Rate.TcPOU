@@ -23,8 +23,8 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-xZeroRate  := (BeamParam1.nRate = 0) AND (PMPS_GVL.M_Mode = 0);
-xZeroBC  := (BeamParam1.nBCRange <= 1) AND (PMPS_GVL.M_Mode =1);
+xZeroRate  := (BeamParam1.nRate = 0) AND (PMPS_GVL.stCurrentBeamParameters.nMachineMode = 0);
+xZeroBC  := (BeamParam1.nBCRange <= 1) AND (PMPS_GVL.stCurrentBeamParameters.nMachineMode =1);
 
 F_SafeBPCompare0Rate := (xZeroRate OR xZeroBC) OR F_SafeBPCompare(BeamParam1, BeamParam2);
 ]]></ST>

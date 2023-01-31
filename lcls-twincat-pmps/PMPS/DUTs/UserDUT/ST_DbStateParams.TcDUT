@@ -28,6 +28,11 @@ STRUCT
     bBeamParamsLoaded: BOOL;
 
     // Transition ID associated with this state
+	{attribute 'pytmc' := '
+        pv: PMPS_ID
+        io: i
+        field: DESC Assertion Request ID
+    '}
     nRequestAssertionID: UDINT;
 END_STRUCT
 END_TYPE

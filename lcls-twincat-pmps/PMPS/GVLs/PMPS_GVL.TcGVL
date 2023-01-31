@@ -25,17 +25,7 @@ VAR_GLOBAL
     '}
 	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
 	
-	{attribute 'pytmc' := '
-        pv: @(PREFIX)LCLSMODE
-		io: i
-		field: ZRST NC ;
-	    field: ONST SC ;
-	    field: TWST Misconfigured ;
-    '}
-	// 0 – NC (normal conducting, copper linac)
-	// 1 – SC (superconducting linac)
-	// 2 – Misconfigured (something in link node not set correctly.
-	M_Mode: INT:=2;
+
    
     PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR
