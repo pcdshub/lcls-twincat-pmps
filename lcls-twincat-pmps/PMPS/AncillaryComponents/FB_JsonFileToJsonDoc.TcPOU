@@ -81,7 +81,6 @@ CASE Step OF
 			   END_FOR
 			   sErrMsg:='';
 			   nFileLength:=0;
-			   sbuffReadSmall:='';
 			   jsonDoc := fbJson.ParseDocument(sbuffRead);
 
           END_IF 
@@ -109,7 +108,6 @@ CASE Step OF
 		  
 	3: (* Read data from source file to buffer string*) 
           cbReadLength := 0; 
-		  sbuffReadSmall:='';
           fbFileRead( bExecute:= FALSE ); 
           fbFileRead( sNetId:=sSrcNetId, hFile:=hSrcFile, 
                          pReadBuff:= ADR(sbuffRead), cbReadLen:= SIZEOF(sbuffRead), 

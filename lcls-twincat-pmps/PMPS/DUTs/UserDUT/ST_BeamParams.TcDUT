@@ -18,7 +18,7 @@
         '}
         nRate : UDINT := 0;
         (* Photon energy ranges *)
-        {attribute 'pytmc' := 'pv: PhotonEnergyRanges
+        {attribute 'pytmc' := 'pv: eVRanges
             io: i
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
@@ -52,7 +52,7 @@
         aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
         
         (* Apertures *)
-		{attribute 'pytmc' := 'pv: Apertures
+		{attribute 'pytmc' := 'pv: Apt
         io: i'}
         astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
         
