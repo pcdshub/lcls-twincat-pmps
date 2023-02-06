@@ -24,6 +24,8 @@ VAR_GLOBAL
         field: EGU eV
     '}
 	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+	
+
    
     PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR
@@ -39,6 +41,7 @@ VAR_GLOBAL RETAIN
         io: i
     '}
     AccumulatedFF : UDINT; // Any time a FF occurs
+	BP_jsonDoc 		: SJsonValue;
 END_VAR
 VAR_GLOBAL CONSTANT
 	
@@ -62,6 +65,7 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
+		nBCRange := 2#0111_1111_1111_1111,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
 		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
 
@@ -76,6 +80,7 @@ VAR_GLOBAL CONSTANT
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
+		nBCRange := 2#0000_0000_0000_0000,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
 		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
     );

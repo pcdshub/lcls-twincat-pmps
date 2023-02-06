@@ -36,7 +36,22 @@
     <ProjectVersion>0.0.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AncillaryComponents\FB_JsonDocToSafeBP.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncillaryComponents\FB_JsonFileToJsonDoc.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncillaryComponents\FB_TempSensor_FFO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncillaryComponents\FB_PressSensor_FFO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\InternalDUT\E_MPSBeamRates.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\InternalDUT\E_MPSBeamClasses.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\InternalDUT\K_Apertures.TcDUT">
@@ -97,6 +112,9 @@
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="DUTs\UserDUT\ST_BeamParams.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UserDUT\ST_DbStateParams.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\UserDUT\ST_Device.TcDUT">
@@ -246,7 +264,7 @@
     <Compile Include="MajorComponents\FB_RateFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\FB_TempSensor_FFO.TcPOU">
+    <Compile Include="MajorComponents\FB_BeamClassFromEPICS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\I_LowerAuthority.TcIO">
@@ -319,10 +337,21 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassOutputs_BCD.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_CTLS_Outputs.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_MachineModeFromEPICS.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_PhotonEnergyWatcher.TcPOU">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="MajorComponents\PMPS_MPS_Interface\FB_BeamClassWatcher.TcPOU">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -414,6 +443,7 @@
     <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="ImplicitChecks" />
+    <Folder Include="AncillaryComponents" />
     <Folder Include="TestComponents" />
     <Folder Include="TestComponents\DUT" />
     <Folder Include="VISUs" />
@@ -471,7 +501,7 @@
     <SubObject Include="FB_SafeBPCompare_Test.BPComparisonCheck" />
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="TcUnit,newest,www.tcunit.org">
+    <LibraryReference Include="TcUnit,1.2.0.0,www.tcunit.org">
       <Namespace>TcUnit</Namespace>
       <Parameters>
         <Parameter xmlns="">
@@ -485,19 +515,64 @@
     <PlaceholderResolution Include="LCLS General">
       <Resolution>LCLS General, * (SLAC)</Resolution>
     </PlaceholderResolution>
+    <PlaceholderResolution Include="SysDir">
+      <Resolution>SysDir, * (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="SysFile">
+      <Resolution>SysFile, * (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_EtherCAT">
+      <Resolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_IoFunctions">
+      <Resolution>Tc2_IoFunctions, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Math">
+      <Resolution>Tc2_Math, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_MC2">
+      <Resolution>Tc2_MC2, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_ModbusSrv">
+      <Resolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_SerialCom">
+      <Resolution>Tc2_SerialCom, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Standard">
+      <Resolution>Tc2_Standard, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_System">
+      <Resolution>Tc2_System, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_TcpIp">
+      <Resolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Utilities">
+      <Resolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_EventLogger">
+      <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
     <PlaceholderResolution Include="Tc3_JsonXml">
       <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="PMPS.tmc">
-      <SubType>Content</SubType>
-    </None>
+    <PlaceholderResolution Include="Tc3_Module">
+      <Resolution>Tc3_Module, * (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="TcUnit">
+      <Resolution>TcUnit, * (www.tcunit.org)</Resolution>
+    </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
     <PinnedGlobalDataType Include="ST_BeamParams_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Aperture_IO" />
     <PinnedGlobalDataType Include="ST_PMPS_Attenuator_IO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PMPS.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

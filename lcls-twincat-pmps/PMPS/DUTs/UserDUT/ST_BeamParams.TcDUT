@@ -18,11 +18,29 @@
         '}
         nRate : UDINT := 0;
         (* Photon energy ranges *)
-        {attribute 'pytmc' := 'pv: PhotonEnergyRanges
+        {attribute 'pytmc' := 'pv: eVRanges
             io: i
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
         neVRange : DWORD := 0;
+				 (* Photon energy  *)
+        {attribute 'pytmc' := 'pv: PhotonEnergy
+            io: i
+            field: EGU eV'}
+        neV : REAL := 0;
+		(* Beamclass ranges *)
+		 {attribute 'pytmc' := 'pv: BeamClassRanges
+            io: i'}
+        {attribute 'displaymode' := 'binary'}
+        nBCRange : WORD := 0;
+		(* Beamclass *)
+		{attribute 'pytmc' := 'pv: BeamClass
+            io: i'}
+		nBeamClass : USINT :=0;
+		(* Machine Mode *)
+		{attribute 'pytmc' := 'pv: MachineMode
+            io: i'}
+		nMachineMode: USINT:=3;
         (* Beamline attenuators *)
         {attribute 'pytmc' := 'pv: AuxAtt
         io: i'}
@@ -34,6 +52,8 @@
         aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
         
         (* Apertures *)
+		{attribute 'pytmc' := 'pv: Apt
+        io: i'}
         astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
         
         // Toggle for watchdog

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="ST_DbStateParams" Id="{7523cde4-ced6-40a0-9532-67fcbef1ed9f}">
+    <Declaration><![CDATA[TYPE ST_DbStateParams :
+	 // Defines The parameters that are loaded from the json db for every state name
+STRUCT
+	  // PMPS database lookup name for this state
+    {attribute 'pytmc' := '
+        pv: PMPS_STATE
+        io: i
+        field: DESC PMPS Database Lookup Key
+    '}
+    sPmpsState: STRING;
+
+    // Beam parameters associated with this state
+    {attribute 'pytmc' := '
+        pv: BP
+        io: i
+    '}
+    stBeamParams: ST_BeamParams := PMPS_GVL.cst0RateBeam;
+
+    // Set to TRUE once the PMPS library has loaded a valid state from the database
+    {attribute 'pytmc' := '
+        pv: PMPS_LOADED
+        io: i
+        field: DESC TRUE if PMPS loaded parameters from the database.
+    '}
+    bBeamParamsLoaded: BOOL;
+
+    // Transition ID associated with this state
+	{attribute 'pytmc' := '
+        pv: PMPS_ID
+        io: i
+        field: DESC Assertion Request ID
+    '}
+    nRequestAssertionID: UDINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

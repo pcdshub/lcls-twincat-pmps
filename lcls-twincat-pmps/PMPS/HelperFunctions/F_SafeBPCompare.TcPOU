@@ -4,6 +4,7 @@
     <Declaration><![CDATA[(*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
 the result will be true. *)
 // Does not consider status. Status must be evaluated elsewhere.
+{attribute 'no_check'}
 FUNCTION F_SafeBPCompare : BOOL
 VAR_INPUT
     BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
@@ -18,7 +19,8 @@ VAR
     xEvOK: BOOL := FALSE;
     // Internal Beam Rate OK boolean
     xRateOK: BOOL;
-    
+    //Internal Beam Class Range OK boolean
+	xBCOK : BOOL := FALSE;
     idx : UINT;
     xAuxAttOK : BOOL := TRUE;
     xAuxAprtOK : BOOL := TRUE;
@@ -32,7 +34,8 @@ END_VAR
       <ST><![CDATA[
 xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
 xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
-xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
+xRateOK    := (BeamParam1.nRate <= BeamParam2.nRate) OR (PMPS_GVL.stCurrentBeamParameters.nMachineMode =1); //ignore in SC mode
+xBCOK := ((BeamParam1.nBCRange AND BeamParam2.nBCRange) = BeamParam1.nBCRange) OR (PMPS_GVL.stCurrentBeamParameters.nMachineMode =0); //ignore in NC mode;
 
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
     Att1 REF= BeamParam1.astAttenuators[idx];
@@ -45,7 +48,7 @@ FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO
     BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
 END_FOR
 
-F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
+F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK AND xBCOK;
 ]]></ST>
     </Implementation>
   </POU>

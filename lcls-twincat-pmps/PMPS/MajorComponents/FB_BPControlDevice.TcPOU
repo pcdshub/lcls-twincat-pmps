@@ -30,6 +30,11 @@ VAR_INPUT
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
         neVRange : DWORD := 4294967295;
+		(* Beamclass ranges *)
+		 {attribute 'pytmc' := 'pv: ReqBP:BeamClassRanges
+            io: o'}
+        {attribute 'displaymode' := 'binary'}
+        nBCRange : WORD := 32767;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -45,7 +50,7 @@ VAR
     bApply : BOOL;
 
     nControlDeviceID : DWORD;
-	sControlDeviceName: STRING:= 'BP Cntrl Dev';
+	sControlDeviceName: STRING:= 'BP Cntrl Device';
     rtApply : R_TRIG;
 
 END_VAR
@@ -55,6 +60,7 @@ END_VAR
 EpicsReqBP.nTran := nTran;
 EpicsReqBP.neVRange := neVRange;
 EpicsReqBP.nRate := nRate;
+EpicsReqBP.nBCRange := nBCRange;
 
 rtApply(CLK:=bApply);
 IF rtApply.Q THEN

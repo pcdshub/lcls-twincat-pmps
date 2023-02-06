@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_TempSensor_FFO" Id="{e7283f0f-d3c0-4044-8021-5daf2e8ba234}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TempSensor_FFO EXTENDS FB_TempSensor
+VAR_INPUT
+	{attribute 'pytmc' := '
+        pv: FAULT_SP
+        io: input
+        field: EGU C
+        field: PREC 2
+    '}
+	fFaultThreshold : LREAL; //Faults when the threshold is reached. Trigger value.
+	{attribute 'pytmc' := '
+        pv: FAULT_SP_HYS
+        io: input
+        field: EGU %
+        field: PREC 2
+    '}
+	fHysteresis : LREAL :=1; // percentage determining how far below the trigger value the fault should be released
+	sDevName: STRING;
+	bVeto : BOOL:=FALSE; // This Fault will be will not trip the beam if the bVeto is TRUE 
+	bAutoReset : BOOL:=TRUE;
+END_VAR
+VAR_IN_OUT
+	io_fbFFHWO    :    FB_HardwareFFOutput;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	{attribute 'instance-path'}
+	{attribute 'noinit'}
+	sPath: STRING;
+	bFAULT_OK:BOOL :=FALSE;
+	FFO    :    FB_FastFault :=(
+        i_Desc := 'Fault occurs when the temprature trip point is reached',
+        i_TypeCode := 16#f700);
+	rtRESET	:	R_TRIG;
+	ftFAULT	:	F_TRIG;
+	ftConnected	:	F_TRIG;
+	fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ // The manual states that we are disconnected if we are both overrange and in an error state
+bConnected := NOT (bOverrange AND bError);
+fTemp := INT_TO_LREAL(iRaw) * fResolution;
+
+//Verify Hysteresis is between 1-100, Shouldn't be 0. shouldn't be a 100 either.
+fHysteresis:=  LIMIT(1, fHysteresis, 100);
+
+// Evaluate the threshold trip point
+IF (fTemp >= fFaultThreshold) THEN
+	bFAULT_OK := FALSE;
+ELSIF (fTemp < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
+	bFAULT_OK := TRUE;
+END_IF
+bFAULT_OK R= NOT bConnected;
+
+
+ACT_Logger();
+
+(*FAST FAULT*)
+FFO(i_xOK := bFAULT_OK OR bVeto,
+    i_xReset :=,
+	i_xAutoReset := bAutoReset,
+	i_DevName := sDevName,
+    io_fbFFHWO := io_fbFFHWO);]]></ST>
+    </Implementation>
+    <Action Name="ACT_Logger" Id="{2576dc82-55ff-4de9-a3d9-4a950f0ab28a}">
+      <Implementation>
+        <ST><![CDATA[ftFAULT(CLK:= FFO.i_xOK);
+rtRESET(CLK:=FFO.i_xOK);
+ftConnected(CLK:= bConnected);
+
+IF(ftConnected.Q) THEN
+	fbLogger(sMsg := 'Sensor Connection Fault, beam off', eSevr:=TcEventSeverity.Critical);
+END_IF
+
+IF(ftFAULT.Q) THEN
+	fbLogger(sMsg := 'Temp Threshold Fault, beam off', eSevr:=TcEventSeverity.Critical);
+END_IF
+
+IF(rtRESET.Q) THEN
+	fbLogger(sMsg := 'Temp Threshold Fault condition clear', eSevr:=TcEventSeverity.Info);
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Action>
+  </POU>
+</TcPlcObject>

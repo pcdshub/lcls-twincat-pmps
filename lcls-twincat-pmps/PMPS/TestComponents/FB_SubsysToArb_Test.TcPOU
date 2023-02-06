@@ -15,7 +15,8 @@ END_VAR
 VetoFunction();]]></ST>
     </Implementation>
     <Method Name="BasicFunction" Id="{69a03e5d-8fdd-408d-93e6-d01b60c62c48}">
-      <Declaration><![CDATA[METHOD BasicFunction
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD BasicFunction
 VAR_INPUT
 END_VAR
 VAR   

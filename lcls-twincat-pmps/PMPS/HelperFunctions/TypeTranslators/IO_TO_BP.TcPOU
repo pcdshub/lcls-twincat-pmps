@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="IO_TO_BP" Id="{9adf1afe-3d64-4ec4-b76c-d1ce92f03d86}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION IO_TO_BP : ST_BeamParams
+    <Declaration><![CDATA[{attribute 'no_check'}
+FUNCTION IO_TO_BP : ST_BeamParams
 VAR_INPUT
     IO : ST_BeamParams_IO;
 END_VAR
@@ -23,6 +24,10 @@ IO_TO_BP.aVetoDevices := IO.aVetoDevices;
 IO_TO_BP.nTran := IO.nTran;
 IO_TO_BP.nCohortInt := ULINT_TO_UDINT(IO.nCohortInt);
 IO_TO_BP.neVRange := IO.neVRange;
+IO_TO_BP.neV := IO.neV;
+IO_TO_BP.nBCRange := IO.nBCRange;
+IO_TO_BP.nBeamClass := IO.nBeamClass;
+IO_TO_BP.nMachineMode := IO.nMachineMode;
 IO_TO_BP.nRate := IO.nRate;
 IO_TO_BP.xValid := IO.xValid;
 IO_TO_BP.xValidToggle := IO.xValidToggle;]]></ST>

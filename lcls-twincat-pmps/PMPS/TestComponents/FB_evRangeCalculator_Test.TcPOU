@@ -17,7 +17,8 @@ END_VAR
       <ST><![CDATA[BasicFunction();]]></ST>
     </Implementation>
     <Method Name="BasicFunction" Id="{2787ce06-fe9f-4a43-87a2-e050fc9f0a9f}">
-      <Declaration><![CDATA[METHOD BasicFunction
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD BasicFunction
 VAR_INPUT
 END_VAR
 VAR

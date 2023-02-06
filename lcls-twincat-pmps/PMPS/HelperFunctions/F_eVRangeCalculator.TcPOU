@@ -17,6 +17,7 @@ reV = 300 + <rHyst = (0000_0000_0000_0110)
 reV = 300 + >rHyst = (0000_0000_0000_0100)
 
 *)
+{attribute 'no_check'}
 FUNCTION F_eVRangeCalculator : DWORD // Bit-range of current photon energy
 VAR_INPUT
     reV    :    REAL; // Photon energy (keV)

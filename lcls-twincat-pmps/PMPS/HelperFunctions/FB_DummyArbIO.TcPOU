@@ -38,6 +38,8 @@ VAR
    tonPE : TON;
    tonApt : TON;
    tonSatt : TON;
+   tonBCRange: TON;
+   tonBC :TON;
       
 END_VAR
 ]]></Declaration>
@@ -82,6 +84,15 @@ ELSIF bAutoUpdateBP THEN
             q_stSimulatedBPReadback.neVRange.0 := TRUE;
         ELSE
             q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
+		END_IF
+	END_IF
+	
+	tonBCRange(IN:=stReqOutBP.nBCRange<>q_stSimulatedBPReadback.nBCRange, PT:=tPEDelay);
+	 IF tonBCRange.Q THEN
+        IF stReqOutBP.nBCRange = 0 THEN
+            q_stSimulatedBPReadback.nBCRange := 0;
+        ELSE
+            q_stSimulatedBPReadback.nBCRange := stReqOutBP.nBCRange;
 		END_IF
 	END_IF
 	

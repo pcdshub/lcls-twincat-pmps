@@ -3,6 +3,7 @@
   <DUT Name="L_Attenuators" Id="{fbbe85ee-383c-4931-afa7-af2367ddc0a1}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
+{attribute 'to_string'}
 TYPE L_Attenuators :
 (
 	AT1L0 := 1, // FEE Combo Gas/Solid Attenuator

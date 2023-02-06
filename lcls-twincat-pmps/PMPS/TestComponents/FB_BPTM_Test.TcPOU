@@ -25,10 +25,10 @@ END_VAR
 VAR    
     //Final and transition assertions
     nTransitionID    :    UDINT := 1;
-    stTransitionAssertion    :    ST_BeamParams := (nRate := 10);
+    stTransitionAssertion    :    ST_BeamParams := (nRate := 10, nBCRange:=0);
     
     nReqID    :    UDINT    := 2;
-    stReqAssertion    :    ST_BeamParams := (nTran := 0.2);
+    stReqAssertion    :    ST_BeamParams := (nTran := 0.2, nBCRange:=2#0000_0000_0000_0011);
     
 END_VAR
 VAR_INST
@@ -51,6 +51,9 @@ fbSubSysIO(LA := fbArbiter, FFO := ffo);
 
 // Note: this struct may also be (over)written to in the tests below, specifically rate.
 fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
+
+//MG: Need to set the Machine mode testing SC
+PMPS_GVL.stCurrentBeamParameters.nMachineMode :=1;
 
 CASE eTestStep OF
 
@@ -92,6 +95,7 @@ E_BPTMTestStates.Transitioning:
     TEST('BPTM Authorizes Transition');
 
     fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
+	fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request   
     
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
         NOT fbBPTM_TestBasicFunction.xEntry THEN
@@ -271,6 +275,7 @@ fbSubSysIO(LA := fbArbFullErr, FFO := ffo);]]></ST>
     <Method Name="InterruptAtAllSteps" Id="{57f1a367-2f35-4862-95b6-e41c9bfb9e3f}">
       <Declaration><![CDATA[// Test the BPTM seamlessly handles new requests at any stage
 // Verify old requests are removed from arbiter
+{attribute 'no_check'}
 METHOD InterruptAtAllSteps
 VAR_INPUT
 END_VAR

@@ -149,6 +149,7 @@ nRequestsCount := nEntryCount;]]></ST>
     <Method Name="ArbitrateBP" Id="{a1827a5c-2882-4b86-a919-45b183561daf}">
       <Declaration><![CDATA[// Kernel of the arbiter
 // Logic for determining which beam parameter is the most conservative across all request sets.
+{attribute 'no_check'}
 METHOD INTERNAL ArbitrateBP : ST_BP_ArbInternal
 VAR_INPUT
     stBP1    :    ST_BP_ArbInternal;
@@ -156,6 +157,7 @@ VAR_INPUT
 END_VAR
 VAR
     idx : UINT := 1;
+	bcBitmask : WORD:=0;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
@@ -184,6 +186,21 @@ END_FOR
 
 //Photon energy ranges
 ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
+
+//Beam Class ranges
+ArbitrateBP.nBCRange := stBP1.nBCRange AND stBP2.nBCRange;
+
+//Beam Class 
+//Assert the highest allowed beamclass
+IF (ArbitrateBP.nBCRange = 0) THEN ArbitrateBP.nBeamClass := 0; END_IF
+FOR idx:=1 TO 15 BY 1 DO
+	IF (idx =1 ) THEN bcBitmask :=1; END_IF
+	IF (ArbitrateBP.nBCRange AND bcBitmask) = bcBitmask THEN 
+		ArbitrateBP.nBeamClass := TO_USINT(idx);
+	END_IF
+	bcBitmask := ROL(bcBitmask,1);
+END_FOR
+
 
 //Rate
 ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);]]></ST>

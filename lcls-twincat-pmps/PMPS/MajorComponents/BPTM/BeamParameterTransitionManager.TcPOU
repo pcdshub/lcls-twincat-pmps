@@ -8,6 +8,7 @@ NOTE:
 The BPTM will throw an error if the arbiter does not have enough space for the transition and new final assertion. 
 
  *)
+{attribute 'no_check'}
 FUNCTION_BLOCK BeamParameterTransitionManager
 VAR_IN_OUT
     
@@ -21,7 +22,7 @@ VAR_INPUT
     i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
     
     i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
-    i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+    i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0, nBCRange :=0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
     
     i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
     i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
@@ -274,7 +275,8 @@ LogActions('Deauthorizing transition');]]></ST>
       </Implementation>
     </Action>
     <Method Name="LogActions" Id="{41e851fc-2139-47b9-addb-eed4474544fc}">
-      <Declaration><![CDATA[METHOD LogActions : BOOL
+      <Declaration><![CDATA[{attribute 'no_check'}
+METHOD LogActions : BOOL
 VAR_INPUT
 	LogStr : STRING;
 END_VAR

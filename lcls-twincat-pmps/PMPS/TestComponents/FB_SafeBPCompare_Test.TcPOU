@@ -23,22 +23,25 @@ END_VAR
 VAR
     stBeamOn_MoreConservative    :    ST_BeamParams;
     stBeamOff_LessConservative    :    ST_BeamParams;
+	fb_BeamClassOutputs_BCD:FB_BeamClassOutputs_BCD;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[stBeamOn_MoreConservative  := F_SetBeamParams(
     0, //0% transmission is more conservative than 50
     16#FFFF_FFFF,
     120, //rate
+	16#000F,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stBeamOff_LessConservative:= F_SetBeamParams(
     0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
     16#FFFF_FFFF,
     0, //rate, hence, more conservative
+	16#0001,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
 
 TEST('BeamOffIsSafe');
-    
+ 
 AssertTrue(
     F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
     'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
@@ -47,6 +50,7 @@ TEST_FINISHED();]]></ST>
     </Method>
     <Method Name="BPComparisonCheck" Id="{204e7277-8e23-4c94-9e2b-614a24b72a02}">
       <Declaration><![CDATA[//Verify BP comparison remains logical.
+{attribute 'no_check'}
 METHOD BPComparisonCheck
 VAR_INPUT
 END_VAR
@@ -66,12 +70,14 @@ stSafer := F_SetBeamParams(
     0.51, //
     16#FFFFFFFF,
     1,
+	16#0000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
     0.61, //
     16#FFFFFFFF,
     1,
+	16#F000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
     
 AssertTrue(
@@ -105,12 +111,14 @@ stSafer := F_SetBeamParams(
     0, //
     16#FFFFFFFF,
     1,
+	16#0000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 stNotSoSafe := F_SetBeamParams(
     0, //
     16#FFFFFFFF,
     1,
+	16#000F,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
@@ -220,12 +228,14 @@ stSafer := F_SetBeamParams(
     0,
     16#FFFF_FFFF,
     1,
+	16#0000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
 
 stNotSoSafe := F_SetBeamParams(
     0,
     16#FFFF_FFFF,
     10,
+	16#0001,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
     
 AssertTrue(
@@ -270,12 +280,14 @@ stSafer := F_SetBeamParams(
     0, 
     2#0000_0000_0000_0000_0000_0000_0000_0010,
     1,
+	16#0000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
     0, 
     2#0000_0000_0000_0000_0000_0000_0000_0110,
     1,
+	16#0001,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
     
 AssertTrue(
