@@ -15,6 +15,98 @@ FB_Arbiter
       - Type
       - Description
       - Pragma
+    * - $(PREFIX):AP:Entry:001:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:001:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -25,6 +117,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:001:ID_RBV
@@ -39,8 +138,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:001:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:001:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:001:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -74,6 +179,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:002:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:002:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -84,6 +281,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:002:ID_RBV
@@ -98,8 +302,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:002:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:002:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:002:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -133,6 +343,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:003:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:003:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -143,6 +445,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:003:ID_RBV
@@ -157,8 +466,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:003:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:003:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:003:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -192,6 +507,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:004:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:004:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -202,6 +609,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:004:ID_RBV
@@ -216,8 +630,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:004:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:004:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:004:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -251,6 +671,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:005:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:005:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -261,6 +773,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:005:ID_RBV
@@ -275,8 +794,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:005:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:005:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:005:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -310,6 +835,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:006:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:006:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -320,6 +937,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:006:ID_RBV
@@ -334,8 +958,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:006:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:006:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:006:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -369,6 +999,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:007:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:007:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -379,6 +1101,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:007:ID_RBV
@@ -393,8 +1122,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:007:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:007:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:007:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -428,6 +1163,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:008:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:008:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -438,6 +1265,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:008:ID_RBV
@@ -452,8 +1286,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:008:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:008:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:008:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -487,6 +1327,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:009:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:009:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -497,6 +1429,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:009:ID_RBV
@@ -511,8 +1450,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:009:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:009:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:009:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -546,6 +1491,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:010:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:010:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -556,6 +1593,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:010:ID_RBV
@@ -570,8 +1614,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:010:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:010:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:010:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -605,6 +1655,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:011:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:011:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -615,6 +1757,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:011:ID_RBV
@@ -629,8 +1778,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:011:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:011:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:011:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -664,6 +1819,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:012:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:012:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -674,6 +1921,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:012:ID_RBV
@@ -688,8 +1942,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:012:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:012:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:012:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -723,6 +1983,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:013:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:013:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -733,6 +2085,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:013:ID_RBV
@@ -747,8 +2106,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:013:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:013:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:013:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -782,6 +2147,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:014:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:014:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -792,6 +2249,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:014:ID_RBV
@@ -806,8 +2270,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:014:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:014:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:014:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -841,6 +2311,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:015:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:015:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -851,6 +2413,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:015:ID_RBV
@@ -865,8 +2434,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:015:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:015:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:015:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -900,6 +2475,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:016:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:016:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -910,6 +2577,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:016:ID_RBV
@@ -924,8 +2598,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:016:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:016:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:016:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -959,6 +2639,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:017:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:017:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -969,6 +2741,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:017:ID_RBV
@@ -983,8 +2762,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:017:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:017:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:017:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -1018,6 +2803,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:018:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:018:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1028,6 +2905,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:018:ID_RBV
@@ -1042,8 +2926,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:018:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:018:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:018:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -1077,6 +2967,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:019:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:019:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1087,6 +3069,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:019:ID_RBV
@@ -1101,8 +3090,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:019:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:019:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:019:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -1136,6 +3131,98 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):AP:Entry:020:Apt:01:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:01:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:01:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:02:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:02:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:02:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:03:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:03:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:03:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:04:Height_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:04:OK_RBV
+      - bi
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:Apt:04:Width_RBV
+      - ai
+      - Assertion Pool
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:BeamClass_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:BeamClassRanges_RBV
+      - longin
+      - Assertion Pool
+      - | io: input
+
+
     * - $(PREFIX):AP:Entry:020:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1146,6 +3233,13 @@ FB_Arbiter
       - waveform
       - Assertion Pool
       - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:eVRanges_RBV
+      - longin
+      - Assertion Pool
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):AP:Entry:020:ID_RBV
@@ -1160,8 +3254,14 @@ FB_Arbiter
       - | io: input
 
 
-    * - $(PREFIX):AP:Entry:020:PhotonEnergyRanges_RBV
+    * - $(PREFIX):AP:Entry:020:MachineMode_RBV
       - longin
+      - Assertion Pool
+      - | io: input
+
+
+    * - $(PREFIX):AP:Entry:020:PhotonEnergy_RBV
+      - ai
       - Assertion Pool
       - | field: EGU eV
         | io: input
@@ -1201,14 +3301,119 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):ArbitratedBP:Apt:01:Height_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:01:OK_RBV
+      - bi
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:01:Width_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:02:Height_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:02:OK_RBV
+      - bi
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:02:Width_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:03:Height_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:03:OK_RBV
+      - bi
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:03:Width_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:04:Height_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:04:OK_RBV
+      - bi
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:Apt:04:Width_RBV
+      - ai
+      - Arbitrated BP
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:BeamClass_RBV
+      - longin
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:BeamClassRanges_RBV
+      - longin
+      - Arbitrated BP
+      - | io: input
+
+
     * - $(PREFIX):ArbitratedBP:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
       - | io: input
 
 
-    * - $(PREFIX):ArbitratedBP:PhotonEnergyRanges_RBV
+    * - $(PREFIX):ArbitratedBP:eVRanges_RBV
       - longin
+      - Arbitrated BP
+      - | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:MachineMode_RBV
+      - longin
+      - Arbitrated BP
+      - | io: input
+
+
+    * - $(PREFIX):ArbitratedBP:PhotonEnergy_RBV
+      - ai
       - Arbitrated BP
       - | field: EGU eV
         | io: input
@@ -1260,15 +3465,120 @@ FB_ArbiterToSubSys_IO
       - Type
       - Description
       - Pragma
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).RequestedBP.astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).RequestedBP.astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).RequestedBP.astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).RequestedBP.astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:BeamClass_RBV
+      - longin
+      - $(SYMBOL).RequestedBP.nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).RequestedBP.nBCRange
+      - | io: input
+
+
     * - $(PREFIX):RequestedBP:FromSubSys:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
       - | io: input
 
 
-    * - $(PREFIX):RequestedBP:FromSubSys:PhotonEnergyRanges_RBV
+    * - $(PREFIX):RequestedBP:FromSubSys:eVRanges_RBV
       - longin
       - $(SYMBOL).RequestedBP.neVRange
+      - | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:MachineMode_RBV
+      - longin
+      - $(SYMBOL).RequestedBP.nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):RequestedBP:FromSubSys:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).RequestedBP.neV
       - | field: EGU eV
         | io: input
 
@@ -1326,6 +3636,24 @@ FB_ArbiterToSubSys_IO
 
 
   
+FB_BeamClassOutputs_BCD
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+    :header-rows: 1
+    :align: center
+
+    * - Record
+      - Type
+      - Description
+      - Pragma
+    * - $(PREFIX):BeamClassChannel_RBV
+      - longin
+      - Hardwire channel state
+      - | io: input
+
+
+ 
 FB_BeamParamAssertionPool
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1337,6 +3665,98 @@ FB_BeamParamAssertionPool
       - Type
       - Description
       - Pragma
+    * - $(PREFIX):Entry:001:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[1].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[1].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[1].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[1].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:001:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[1].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[1].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:001:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1347,6 +3767,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[1].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:001:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[1].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:001:ID_RBV
@@ -1361,9 +3788,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:001:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:001:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[1].neVRange
+      - $(SYMBOL).epicsDataPool[1].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:001:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[1].neV
       - | field: EGU eV
         | io: input
 
@@ -1396,6 +3829,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:002:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[2].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[2].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[2].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[2].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:002:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[2].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[2].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:002:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1406,6 +3931,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[2].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:002:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[2].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:002:ID_RBV
@@ -1420,9 +3952,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:002:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:002:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[2].neVRange
+      - $(SYMBOL).epicsDataPool[2].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:002:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[2].neV
       - | field: EGU eV
         | io: input
 
@@ -1455,6 +3993,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:003:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[3].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[3].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[3].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[3].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:003:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[3].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[3].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:003:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1465,6 +4095,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[3].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:003:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[3].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:003:ID_RBV
@@ -1479,9 +4116,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:003:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:003:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[3].neVRange
+      - $(SYMBOL).epicsDataPool[3].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:003:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[3].neV
       - | field: EGU eV
         | io: input
 
@@ -1514,6 +4157,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:004:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[4].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[4].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[4].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[4].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:004:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[4].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[4].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:004:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1524,6 +4259,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[4].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:004:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[4].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:004:ID_RBV
@@ -1538,9 +4280,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:004:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:004:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[4].neVRange
+      - $(SYMBOL).epicsDataPool[4].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:004:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[4].neV
       - | field: EGU eV
         | io: input
 
@@ -1573,6 +4321,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:005:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[5].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[5].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[5].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[5].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:005:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[5].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[5].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:005:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1583,6 +4423,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[5].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:005:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[5].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:005:ID_RBV
@@ -1597,9 +4444,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:005:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:005:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[5].neVRange
+      - $(SYMBOL).epicsDataPool[5].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:005:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[5].neV
       - | field: EGU eV
         | io: input
 
@@ -1632,6 +4485,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:006:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[6].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[6].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[6].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[6].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:006:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[6].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[6].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:006:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1642,6 +4587,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[6].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:006:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[6].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:006:ID_RBV
@@ -1656,9 +4608,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:006:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:006:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[6].neVRange
+      - $(SYMBOL).epicsDataPool[6].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:006:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[6].neV
       - | field: EGU eV
         | io: input
 
@@ -1691,6 +4649,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:007:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[7].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[7].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[7].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[7].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:007:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[7].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[7].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:007:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1701,6 +4751,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[7].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:007:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[7].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:007:ID_RBV
@@ -1715,9 +4772,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:007:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:007:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[7].neVRange
+      - $(SYMBOL).epicsDataPool[7].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:007:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[7].neV
       - | field: EGU eV
         | io: input
 
@@ -1750,6 +4813,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:008:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[8].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[8].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[8].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[8].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:008:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[8].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[8].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:008:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1760,6 +4915,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[8].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:008:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[8].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:008:ID_RBV
@@ -1774,9 +4936,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:008:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:008:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[8].neVRange
+      - $(SYMBOL).epicsDataPool[8].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:008:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[8].neV
       - | field: EGU eV
         | io: input
 
@@ -1809,6 +4977,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:009:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[9].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[9].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[9].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[9].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:009:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[9].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[9].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:009:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1819,6 +5079,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[9].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:009:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[9].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:009:ID_RBV
@@ -1833,9 +5100,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:009:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:009:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[9].neVRange
+      - $(SYMBOL).epicsDataPool[9].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:009:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[9].neV
       - | field: EGU eV
         | io: input
 
@@ -1868,6 +5141,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:010:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[10].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[10].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[10].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[10].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:010:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[10].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[10].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:010:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1878,6 +5243,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[10].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:010:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[10].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:010:ID_RBV
@@ -1892,9 +5264,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:010:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:010:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[10].neVRange
+      - $(SYMBOL).epicsDataPool[10].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:010:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[10].neV
       - | field: EGU eV
         | io: input
 
@@ -1927,6 +5305,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:011:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[11].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[11].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[11].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[11].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:011:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[11].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[11].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:011:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1937,6 +5407,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[11].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:011:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[11].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:011:ID_RBV
@@ -1951,9 +5428,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:011:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:011:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[11].neVRange
+      - $(SYMBOL).epicsDataPool[11].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:011:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[11].neV
       - | field: EGU eV
         | io: input
 
@@ -1986,6 +5469,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:012:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[12].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[12].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[12].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[12].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:012:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[12].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[12].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:012:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -1996,6 +5571,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[12].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:012:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[12].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:012:ID_RBV
@@ -2010,9 +5592,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:012:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:012:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[12].neVRange
+      - $(SYMBOL).epicsDataPool[12].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:012:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[12].neV
       - | field: EGU eV
         | io: input
 
@@ -2045,6 +5633,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:013:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[13].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[13].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[13].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[13].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:013:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[13].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[13].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:013:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2055,6 +5735,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[13].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:013:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[13].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:013:ID_RBV
@@ -2069,9 +5756,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:013:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:013:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[13].neVRange
+      - $(SYMBOL).epicsDataPool[13].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:013:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[13].neV
       - | field: EGU eV
         | io: input
 
@@ -2104,6 +5797,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:014:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[14].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[14].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[14].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[14].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:014:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[14].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[14].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:014:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2114,6 +5899,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[14].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:014:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[14].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:014:ID_RBV
@@ -2128,9 +5920,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:014:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:014:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[14].neVRange
+      - $(SYMBOL).epicsDataPool[14].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:014:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[14].neV
       - | field: EGU eV
         | io: input
 
@@ -2163,6 +5961,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:015:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[15].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[15].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[15].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[15].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:015:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[15].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[15].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:015:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2173,6 +6063,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[15].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:015:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[15].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:015:ID_RBV
@@ -2187,9 +6084,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:015:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:015:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[15].neVRange
+      - $(SYMBOL).epicsDataPool[15].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:015:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[15].neV
       - | field: EGU eV
         | io: input
 
@@ -2222,6 +6125,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:016:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[16].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[16].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[16].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[16].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:016:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[16].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[16].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:016:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2232,6 +6227,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[16].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:016:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[16].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:016:ID_RBV
@@ -2246,9 +6248,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:016:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:016:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[16].neVRange
+      - $(SYMBOL).epicsDataPool[16].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:016:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[16].neV
       - | field: EGU eV
         | io: input
 
@@ -2281,6 +6289,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:017:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[17].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[17].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[17].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[17].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:017:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[17].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[17].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:017:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2291,6 +6391,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[17].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:017:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[17].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:017:ID_RBV
@@ -2305,9 +6412,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:017:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:017:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[17].neVRange
+      - $(SYMBOL).epicsDataPool[17].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:017:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[17].neV
       - | field: EGU eV
         | io: input
 
@@ -2340,6 +6453,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:018:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[18].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[18].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[18].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[18].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:018:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[18].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[18].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:018:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2350,6 +6555,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[18].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:018:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[18].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:018:ID_RBV
@@ -2364,9 +6576,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:018:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:018:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[18].neVRange
+      - $(SYMBOL).epicsDataPool[18].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:018:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[18].neV
       - | field: EGU eV
         | io: input
 
@@ -2399,6 +6617,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:019:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[19].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[19].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[19].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[19].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:019:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[19].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[19].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:019:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2409,6 +6719,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[19].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:019:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[19].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:019:ID_RBV
@@ -2423,9 +6740,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:019:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:019:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[19].neVRange
+      - $(SYMBOL).epicsDataPool[19].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:019:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[19].neV
       - | field: EGU eV
         | io: input
 
@@ -2458,6 +6781,98 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
+    * - $(PREFIX):Entry:020:Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[20].astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[20].astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[20].astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).epicsDataPool[20].astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Entry:020:BeamClass_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[20].nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[20].nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Entry:020:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -2468,6 +6883,13 @@ FB_BeamParamAssertionPool
       - waveform
       - $(SYMBOL).epicsDataPool[20].sDevName
       - | io: input
+
+
+    * - $(PREFIX):Entry:020:eVRanges_RBV
+      - longin
+      - $(SYMBOL).epicsDataPool[20].neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):Entry:020:ID_RBV
@@ -2482,9 +6904,15 @@ FB_BeamParamAssertionPool
       - | io: input
 
 
-    * - $(PREFIX):Entry:020:PhotonEnergyRanges_RBV
+    * - $(PREFIX):Entry:020:MachineMode_RBV
       - longin
-      - $(SYMBOL).epicsDataPool[20].neVRange
+      - $(SYMBOL).epicsDataPool[20].nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):Entry:020:PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).epicsDataPool[20].neV
       - | field: EGU eV
         | io: input
 
@@ -9543,15 +13971,120 @@ ST_BeamParams
       - Type
       - Description
       - Pragma
+    * - $(PREFIX):Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):BeamClass_RBV
+      - longin
+      - $(SYMBOL).nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
       - | io: input
 
 
-    * - $(PREFIX):PhotonEnergyRanges_RBV
+    * - $(PREFIX):eVRanges_RBV
       - longin
       - $(SYMBOL).neVRange
+      - | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX):MachineMode_RBV
+      - longin
+      - $(SYMBOL).nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).neV
       - | field: EGU eV
         | io: input
 
@@ -9644,6 +14177,98 @@ ST_BP_ArbInternal
       - Type
       - Description
       - Pragma
+    * - $(PREFIX):Apt:01:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[1].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:01:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[1].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:01:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[1].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:02:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[2].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:02:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[2].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:02:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[2].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:03:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[3].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:03:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[3].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:03:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[3].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:04:Height_RBV
+      - ai
+      - $(SYMBOL).astApertures[4].Height
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):Apt:04:OK_RBV
+      - bi
+      - $(SYMBOL).astApertures[4].xOK
+      - | io: input
+
+
+    * - $(PREFIX):Apt:04:Width_RBV
+      - ai
+      - $(SYMBOL).astApertures[4].Width
+      - | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX):BeamClass_RBV
+      - longin
+      - $(SYMBOL).nBeamClass
+      - | io: input
+
+
+    * - $(PREFIX):BeamClassRanges_RBV
+      - longin
+      - $(SYMBOL).nBCRange
+      - | io: input
+
+
     * - $(PREFIX):Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -9654,6 +14279,13 @@ ST_BP_ArbInternal
       - waveform
       - $(SYMBOL).sDevName
       - | io: input
+
+
+    * - $(PREFIX):eVRanges_RBV
+      - longin
+      - $(SYMBOL).neVRange
+      - | field: EGU eV
+        | io: input
 
 
     * - $(PREFIX):ID_RBV
@@ -9668,9 +14300,15 @@ ST_BP_ArbInternal
       - | io: input
 
 
-    * - $(PREFIX):PhotonEnergyRanges_RBV
+    * - $(PREFIX):MachineMode_RBV
       - longin
-      - $(SYMBOL).neVRange
+      - $(SYMBOL).nMachineMode
+      - | io: input
+
+
+    * - $(PREFIX):PhotonEnergy_RBV
+      - ai
+      - $(SYMBOL).neV
       - | field: EGU eV
         | io: input
 
@@ -10085,6 +14723,167 @@ Database Records
       - Type
       - Description
       - Pragma
+    * - $(PREFIX)LCLSGeneral:GlobalLogTrickleTrip_RBV
+      - bi
+      - Tripped by overall log count
+      - | io: input
+
+
+    * - $(PREFIX)LCLSGeneral:LogHost_RBV
+      - waveform
+      - The log host IP address
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogHost
+      - waveform
+      - The log host IP address
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogPort_RBV
+      - longin
+      - The log host UDP port
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogPort
+      - longout
+      - The log host UDP port
+      - | io: output
+
+
+    * - $(PREFIX)LCLSGeneral:LogMessageCount_RBV
+      - longin
+      - Total log messages on the last cycle
+      - | io: input
+
+
+    * - $(PREFIX)AccumulatedFastFaults_RBV
+      - longin
+      - PMPS_GVL.AccumulatedFF
+      - | io: input
+
+
+    * - $(PREFIX)SuccessfulPreemptions_RBV
+      - longin
+      - PMPS_GVL.SuccessfulPreemption
+      - | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Veto_RBV
+      - waveform
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:01:Height_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:01:Width_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:01:OK_RBV
+      - bi
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:02:Height_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:02:Width_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:02:OK_RBV
+      - bi
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:03:Height_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:03:Width_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:03:OK_RBV
+      - bi
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:04:Height_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:04:Width_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:Apt:04:OK_RBV
+      - bi
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:BeamClassRanges_RBV
+      - longin
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:BeamClass_RBV
+      - longin
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
     * - $(PREFIX)0RateBeamCnst:Cohort_RBV
       - longin
       - Cohort inc on each arb cycle
@@ -10092,11 +14891,10 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)0RateBeamCnst:PhotonEnergyRanges_RBV
+    * - $(PREFIX)0RateBeamCnst:MachineMode_RBV
       - longin
       - 0-rate beam constant
       - | archive: 1s monitor
-        | field: EGU eV
         | io: input
 
 
@@ -10118,6 +14916,22 @@ Database Records
         | io: input
 
 
+    * - $(PREFIX)0RateBeamCnst:PhotonEnergy_RBV
+      - ai
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)0RateBeamCnst:eVRanges_RBV
+      - longin
+      - 0-rate beam constant
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
     * - $(PREFIX)0RateBeamCnst:Valid_RBV
       - bi
       - 0-rate beam constant
@@ -10125,79 +14939,116 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)0RateBeamCnst:Veto_RBV
+    * - $(PREFIX)FullBeamCnst:Veto_RBV
       - waveform
-      - 0-rate beam constant
+      - Full beam constant
       - | archive: 1s monitor
         | io: input
 
 
-    * - $(PREFIX)AccumulatedFastFaults_RBV
-      - longin
-      - PMPS_GVL.AccumulatedFF
-      - | io: input
-
-
-    * - $(PREFIX)CurrentBP:Cohort_RBV
-      - longin
-      - Cohort inc on each arb cycle
-      - | archive: 1s monitor
-        | io: input
-
-
-    * - $(PREFIX)CurrentBP:PhotonEnergyRanges_RBV
-      - longin
-      - PMPS_GVL.stCurrentBeamParameters.neVRange
-      - | archive: 1s monitor
-        | field: EGU eV
-        | io: input
-
-
-    * - $(PREFIX)CurrentBP:Rate_RBV
-      - longin
-      - PMPS_GVL.stCurrentBeamParameters.nRate
-      - | archive: 1s monitor
-        | field: EGU Hz
-        | io: input
-
-
-    * - $(PREFIX)CurrentBP:Transmission_RBV
+    * - $(PREFIX)FullBeamCnst:Apt:01:Height_RBV
       - ai
-      - PMPS_GVL.stCurrentBeamParameters.nTran
+      - Full beam constant
       - | archive: 1s monitor
-        | field: HOPR 1
-        | field: LOPR 0
-        | field: PREC 2
+        | field: EGU mm
         | io: input
 
 
-    * - $(PREFIX)CurrentBP:Valid_RBV
+    * - $(PREFIX)FullBeamCnst:Apt:01:Width_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:01:OK_RBV
       - bi
-      - PMPS_GVL.stCurrentBeamParameters.xValid
+      - Full beam constant
       - | archive: 1s monitor
         | io: input
 
 
-    * - $(PREFIX)CurrentBP:Veto_RBV
-      - waveform
-      - PMPS_GVL.stCurrentBeamParameters.aVetoDevices
-      - | archive: 1s monitor
-        | io: input
-
-
-    * - $(PREFIX)eVRangeCnst_RBV
-      - waveform
-      - Active eV Range constants
-      - | archive: 1s monitor
-        | field: EGU eV
-        | io: input
-
-
-    * - $(PREFIX)eVRangeHyst_RBV
+    * - $(PREFIX)FullBeamCnst:Apt:02:Height_RBV
       - ai
-      - eV Range hystersis
+      - Full beam constant
       - | archive: 1s monitor
-        | field: EGU eV
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:02:Width_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:02:OK_RBV
+      - bi
+      - Full beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:03:Height_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:03:Width_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:03:OK_RBV
+      - bi
+      - Full beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:04:Height_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:04:Width_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:Apt:04:OK_RBV
+      - bi
+      - Full beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:BeamClassRanges_RBV
+      - longin
+      - Full beam constant
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:BeamClass_RBV
+      - longin
+      - Full beam constant
+      - | archive: 1s monitor
         | io: input
 
 
@@ -10208,11 +15059,10 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)FullBeamCnst:PhotonEnergyRanges_RBV
+    * - $(PREFIX)FullBeamCnst:MachineMode_RBV
       - longin
       - Full beam constant
       - | archive: 1s monitor
-        | field: EGU eV
         | io: input
 
 
@@ -10234,6 +15084,22 @@ Database Records
         | io: input
 
 
+    * - $(PREFIX)FullBeamCnst:PhotonEnergy_RBV
+      - ai
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)FullBeamCnst:eVRanges_RBV
+      - longin
+      - Full beam constant
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
     * - $(PREFIX)FullBeamCnst:Valid_RBV
       - bi
       - Full beam constant
@@ -10241,10 +15107,11 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)FullBeamCnst:Veto_RBV
+    * - $(PREFIX)eVRangeCnst_RBV
       - waveform
-      - Full beam constant
+      - Active eV Range constants
       - | archive: 1s monitor
+        | field: EGU eV
         | io: input
 
 
@@ -10264,40 +15131,293 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:GlobalLogTrickleTrip_RBV
+    * - $(PREFIX)eVRangeHyst_RBV
+      - ai
+      - eV Range hystersis
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Veto_RBV
+      - waveform
+      - PMPS_GVL.stCurrentBeamParameters.aVetoDevices
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:01:Height_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[1].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:01:Width_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[1].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:01:OK_RBV
       - bi
-      - Tripped by overall log count
-      - | io: input
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[1].xOK
+      - | archive: 1s monitor
+        | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:LogHost
-      - waveform
-      - The log host IP address
-      - | io: output
+    * - $(PREFIX)CurrentBP:Apt:02:Height_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[2].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:LogHost_RBV
-      - waveform
-      - The log host IP address
-      - | io: output
+    * - $(PREFIX)CurrentBP:Apt:02:Width_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[2].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:LogMessageCount_RBV
+    * - $(PREFIX)CurrentBP:Apt:02:OK_RBV
+      - bi
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[2].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:03:Height_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[3].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:03:Width_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[3].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:03:OK_RBV
+      - bi
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[3].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:04:Height_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[4].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:04:Width_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[4].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Apt:04:OK_RBV
+      - bi
+      - PMPS_GVL.stCurrentBeamParameters.astApertures[4].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:BeamClassRanges_RBV
       - longin
-      - Total log messages on the last cycle
-      - | io: input
+      - PMPS_GVL.stCurrentBeamParameters.nBCRange
+      - | archive: 1s monitor
+        | io: input
 
 
-    * - $(PREFIX)LCLSGeneral:LogPort
-      - longout
-      - The log host UDP port
-      - | io: output
-
-
-    * - $(PREFIX)LCLSGeneral:LogPort_RBV
+    * - $(PREFIX)CurrentBP:BeamClass_RBV
       - longin
-      - The log host UDP port
-      - | io: output
+      - PMPS_GVL.stCurrentBeamParameters.nBeamClass
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Cohort_RBV
+      - longin
+      - Cohort inc on each arb cycle
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:MachineMode_RBV
+      - longin
+      - PMPS_GVL.stCurrentBeamParameters.nMachineMode
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Rate_RBV
+      - longin
+      - PMPS_GVL.stCurrentBeamParameters.nRate
+      - | archive: 1s monitor
+        | field: EGU Hz
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Transmission_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.nTran
+      - | archive: 1s monitor
+        | field: HOPR 1
+        | field: LOPR 0
+        | field: PREC 2
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:PhotonEnergy_RBV
+      - ai
+      - PMPS_GVL.stCurrentBeamParameters.neV
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:eVRanges_RBV
+      - longin
+      - PMPS_GVL.stCurrentBeamParameters.neVRange
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)CurrentBP:Valid_RBV
+      - bi
+      - PMPS_GVL.stCurrentBeamParameters.xValid
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Veto_RBV
+      - waveform
+      - PMPS_GVL.stRequestedBeamParameters.aVetoDevices
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:01:Height_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[1].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:01:Width_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[1].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:01:OK_RBV
+      - bi
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[1].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:02:Height_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[2].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:02:Width_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[2].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:02:OK_RBV
+      - bi
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[2].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:03:Height_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[3].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:03:Width_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[3].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:03:OK_RBV
+      - bi
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[3].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:04:Height_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[4].Height
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:04:Width_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[4].Width
+      - | archive: 1s monitor
+        | field: EGU mm
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:Apt:04:OK_RBV
+      - bi
+      - PMPS_GVL.stRequestedBeamParameters.astApertures[4].xOK
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:BeamClassRanges_RBV
+      - longin
+      - PMPS_GVL.stRequestedBeamParameters.nBCRange
+      - | archive: 1s monitor
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:BeamClass_RBV
+      - longin
+      - PMPS_GVL.stRequestedBeamParameters.nBeamClass
+      - | archive: 1s monitor
+        | io: input
 
 
     * - $(PREFIX)RequestedBP:Cohort_RBV
@@ -10307,11 +15427,10 @@ Database Records
         | io: input
 
 
-    * - $(PREFIX)RequestedBP:PhotonEnergyRanges_RBV
+    * - $(PREFIX)RequestedBP:MachineMode_RBV
       - longin
-      - PMPS_GVL.stRequestedBeamParameters.neVRange
+      - PMPS_GVL.stRequestedBeamParameters.nMachineMode
       - | archive: 1s monitor
-        | field: EGU eV
         | io: input
 
 
@@ -10333,24 +15452,27 @@ Database Records
         | io: input
 
 
+    * - $(PREFIX)RequestedBP:PhotonEnergy_RBV
+      - ai
+      - PMPS_GVL.stRequestedBeamParameters.neV
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
+    * - $(PREFIX)RequestedBP:eVRanges_RBV
+      - longin
+      - PMPS_GVL.stRequestedBeamParameters.neVRange
+      - | archive: 1s monitor
+        | field: EGU eV
+        | io: input
+
+
     * - $(PREFIX)RequestedBP:Valid_RBV
       - bi
       - PMPS_GVL.stRequestedBeamParameters.xValid
       - | archive: 1s monitor
         | io: input
-
-
-    * - $(PREFIX)RequestedBP:Veto_RBV
-      - waveform
-      - PMPS_GVL.stRequestedBeamParameters.aVetoDevices
-      - | archive: 1s monitor
-        | io: input
-
-
-    * - $(PREFIX)SuccessfulPreemptions_RBV
-      - longin
-      - PMPS_GVL.SuccessfulPreemption
-      - | io: input
 
 
 

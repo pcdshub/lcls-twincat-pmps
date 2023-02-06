@@ -78,6 +78,35 @@ E_BPTMTestStates
 
 
 
+E_MPSBeamClasses
+^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE E_MPSBeamClasses :
+    (
+    	Beam_Off    :=  0,
+        Kicker_STBY :=  1,
+        BC1Hz       :=  2,
+        BC10Hz      :=  3,
+        Diagnostic  :=  4,
+        BC120Hz     :=  5,
+        Tuning      :=  6,
+        MAP_1       :=  7,
+        MAP_5       :=  8,
+        MAP_10      :=  9,
+        MAP_25      := 10,
+        MAP_50      := 11,
+    	MAP_100     := 12,
+        FULL        := 13,
+    	SPARE1      := 14,
+        SPARE2      := 15
+    );
+    END_TYPE
+
+
+
+
 E_MPSBeamRates
 ^^^^^^^^^^^^^^
 
@@ -112,6 +141,7 @@ K_Apertures
 
     {attribute 'qualified_only'}
     {attribute 'strict'}
+    {attribute 'to_string'}
     TYPE K_Apertures :
     (
     	SL1K0 := 1,
@@ -174,6 +204,7 @@ L_Apertures
 
     {attribute 'qualified_only'}
     {attribute 'strict'}
+    {attribute 'to_string'}
     TYPE L_Apertures :
     (
     	SL1L0 := 1,
@@ -191,6 +222,7 @@ L_Attenuators
 
     {attribute 'qualified_only'}
     {attribute 'strict'}
+    {attribute 'to_string'}
     TYPE L_Attenuators :
     (
     	AT1L0 := 1, // FEE Combo Gas/Solid Attenuator
@@ -292,11 +324,29 @@ ST_BeamParams
             '}
             nRate : UDINT := 0;
             (* Photon energy ranges *)
-            {attribute 'pytmc' := 'pv: PhotonEnergyRanges
+            {attribute 'pytmc' := 'pv: eVRanges
                 io: i
                 field: EGU eV'}
             {attribute 'displaymode' := 'binary'}
             neVRange : DWORD := 0;
+    				 (* Photon energy  *)
+            {attribute 'pytmc' := 'pv: PhotonEnergy
+                io: i
+                field: EGU eV'}
+            neV : REAL := 0;
+    		(* Beamclass ranges *)
+    		 {attribute 'pytmc' := 'pv: BeamClassRanges
+                io: i'}
+            {attribute 'displaymode' := 'binary'}
+            nBCRange : WORD := 0;
+    		(* Beamclass *)
+    		{attribute 'pytmc' := 'pv: BeamClass
+                io: i'}
+    		nBeamClass : USINT :=0;
+    		(* Machine Mode *)
+    		{attribute 'pytmc' := 'pv: MachineMode
+                io: i'}
+    		nMachineMode: USINT:=3;
             (* Beamline attenuators *)
             {attribute 'pytmc' := 'pv: AuxAtt
             io: i'}
@@ -308,6 +358,8 @@ ST_BeamParams
             aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
             
             (* Apertures *)
+    		{attribute 'pytmc' := 'pv: Apt
+            io: i'}
             astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
             
             // Toggle for watchdog
@@ -356,6 +408,53 @@ ST_BP_ArbInternal
 
 
 Related:
+    * `ST_BeamParams`_
+
+
+ST_DbStateParams
+^^^^^^^^^^^^^^^^
+
+::
+
+    TYPE ST_DbStateParams :
+    	 // Defines The parameters that are loaded from the json db for every state name
+    STRUCT
+    	  // PMPS database lookup name for this state
+        {attribute 'pytmc' := '
+            pv: PMPS_STATE
+            io: i
+            field: DESC PMPS Database Lookup Key
+        '}
+        sPmpsState: STRING;
+
+        // Beam parameters associated with this state
+        {attribute 'pytmc' := '
+            pv: BP
+            io: i
+        '}
+        stBeamParams: ST_BeamParams := PMPS_GVL.cst0RateBeam;
+
+        // Set to TRUE once the PMPS library has loaded a valid state from the database
+        {attribute 'pytmc' := '
+            pv: PMPS_LOADED
+            io: i
+            field: DESC TRUE if PMPS loaded parameters from the database.
+        '}
+        bBeamParamsLoaded: BOOL;
+
+        // Transition ID associated with this state
+    	{attribute 'pytmc' := '
+            pv: PMPS_ID
+            io: i
+            field: DESC Assertion Request ID
+        '}
+        nRequestAssertionID: UDINT;
+    END_STRUCT
+    END_TYPE
+
+
+Related:
+    * `PMPS_GVL`_
     * `ST_BeamParams`_
 
 
@@ -761,6 +860,8 @@ PMPS_GVL
             field: EGU eV
         '}
     	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
+    	
+
        
         PERange : PE_Ranges; //Included to place the ev ranges properly
     END_VAR
@@ -776,6 +877,7 @@ PMPS_GVL
             io: i
         '}
         AccumulatedFF : UDINT; // Any time a FF occurs
+    	BP_jsonDoc 		: SJsonValue;
     END_VAR
     VAR_GLOBAL CONSTANT
     	
@@ -799,6 +901,7 @@ PMPS_GVL
             nTran := 1,
             neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
             nRate    := UDINT#1000000,
+    		nBCRange := 2#0111_1111_1111_1111,
             astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
     		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
 
@@ -813,6 +916,7 @@ PMPS_GVL
             nTran := 1,
             neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
             nRate    := 0,
+    		nBCRange := 2#0000_0000_0000_0000,
             astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
     		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
         );
@@ -1039,6 +1143,7 @@ BeamParameterTransitionManager
     The BPTM will throw an error if the arbiter does not have enough space for the transition and new final assertion. 
 
      *)
+    {attribute 'no_check'}
     FUNCTION_BLOCK BeamParameterTransitionManager
     VAR_IN_OUT
         
@@ -1052,7 +1157,7 @@ BeamParameterTransitionManager
         i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
         
         i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
-        i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
+        i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0, nBCRange :=0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
         
         i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
         i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
@@ -1385,6 +1490,7 @@ BeamParameterTransitionManager
     xTranBP := FALSE;
     END_ACTION
 
+    {attribute 'no_check'}
     METHOD LogActions : BOOL
     VAR_INPUT
     	LogStr : STRING;
@@ -1411,6 +1517,7 @@ BP_TO_IO
 
 ::
 
+    {attribute 'no_check'}
     FUNCTION BP_TO_IO : ST_BeamParams_IO
     VAR_INPUT
         BP : ST_BeamParams;
@@ -1430,6 +1537,10 @@ BP_TO_IO
     BP_TO_IO.nTran := BP.nTran;
     BP_TO_IO.nCohortInt := ULINT_TO_UDINT(BP.nCohortInt);
     BP_TO_IO.neVRange := BP.neVRange;
+    BP_TO_IO.neV := BP.neV;
+    BP_TO_IO.nBCRange := BP.nBCRange;
+    BP_TO_IO.nBeamClass := BP.nBeamClass;
+    BP_TO_IO.nMachineMode := BP.nMachineMode;
     BP_TO_IO.nRate := BP.nRate;
     BP_TO_IO.xValid := BP.xValid;
     BP_TO_IO.xValidToggle := BP.xValidToggle;
@@ -1854,6 +1965,7 @@ F_DifferentBeamParams
 
     (*Compares BeamParam1 to BeamParam2, if any parameters of BeamParam1 are different than BeamParam2
     the result will be true. *)
+    {attribute 'no_check'}
     FUNCTION F_DifferentBeamParams : BOOL
     VAR_INPUT
         BeamParam1    :    ST_BeamParams;
@@ -1867,6 +1979,7 @@ F_DifferentBeamParams
         xaStopper : BOOL := FALSE;
         xaAtt : BOOL := FALSE;
         xaApt : BOOL := FALSE;
+    	xBCOK : BOOL := FALSE;
         
         idx : UINT;
         
@@ -1875,6 +1988,8 @@ F_DifferentBeamParams
     xAttOK := BeamParam1.nTran <> BeamParam2.nTran;
     xEvOK := BeamParam1.neVRange <> BeamParam2.neVRange;
     xRateOK     := BeamParam1.nRate <> BeamParam2.nRate;
+    xBCOK	:= BeamParam1.nBCRange <> BeamParam2.nBCRange;// OR BeamParam1.nBeamClass <> BeamParam2.nBeamClass ; //Is this right?
+
 
     //ast Attenuators
     FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
@@ -1893,7 +2008,7 @@ F_DifferentBeamParams
     END_FOR
 
 
-    F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt;
+    F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
 
     END_FUNCTION
 
@@ -1996,6 +2111,7 @@ F_eVRangeCalculator
     reV = 300 + >rHyst = (0000_0000_0000_0100)
 
     *)
+    {attribute 'no_check'}
     FUNCTION F_eVRangeCalculator : DWORD // Bit-range of current photon energy
     VAR_INPUT
         reV    :    REAL; // Photon energy (keV)
@@ -2067,6 +2183,7 @@ F_eVWithinSpec
 ::
 
     //reV must be within permitted range.
+    {attribute 'no_check'}
     FUNCTION F_eVWithinSpec : BOOL
     VAR_INPUT
         reV    :    REAL;    //Photon energy to check if within permitted range
@@ -2180,6 +2297,7 @@ F_SafeBPCompare
     (*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
     the result will be true. *)
     // Does not consider status. Status must be evaluated elsewhere.
+    {attribute 'no_check'}
     FUNCTION F_SafeBPCompare : BOOL
     VAR_INPUT
         BeamParam1    :    ST_BeamParams; //Must be more conservative than 2
@@ -2194,7 +2312,8 @@ F_SafeBPCompare
         xEvOK: BOOL := FALSE;
         // Internal Beam Rate OK boolean
         xRateOK: BOOL;
-        
+        //Internal Beam Class Range OK boolean
+    	xBCOK : BOOL := FALSE;
         idx : UINT;
         xAuxAttOK : BOOL := TRUE;
         xAuxAprtOK : BOOL := TRUE;
@@ -2205,7 +2324,8 @@ F_SafeBPCompare
     END_VAR
     xAttOK := BeamParam1.nTran <= MIN(PMPS_GVL.TRANS_SCALING_FACTOR, (BeamParam2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR );
     xEvOK := (BeamParam1.neVRange AND BeamParam2.neVRange) = BeamParam1.neVRange;
-    xRateOK    := BeamParam1.nRate <= BeamParam2.nRate;
+    xRateOK    := (BeamParam1.nRate <= BeamParam2.nRate) OR (PMPS_GVL.stCurrentBeamParameters.nMachineMode =1); //ignore in SC mode
+    xBCOK := ((BeamParam1.nBCRange AND BeamParam2.nBCRange) = BeamParam1.nBCRange) OR (PMPS_GVL.stCurrentBeamParameters.nMachineMode =0); //ignore in NC mode;
 
     FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
         Att1 REF= BeamParam1.astAttenuators[idx];
@@ -2218,7 +2338,7 @@ F_SafeBPCompare
         BeamParam1.astApertures[idx].Width > BeamParam2.astApertures[idx].Width;
     END_FOR
 
-    F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK;
+    F_SafeBPCompare := xAttOK AND xEvOK AND xRateOK AND xAuxAprtOK AND xAuxAttOK AND xBCOK;
 
     END_FUNCTION
 
@@ -2237,7 +2357,9 @@ F_SafeBPCompare0Rate
 
     (*Compares BeamParam1 to BeamParam2: if the parameters of BeamParam1 are more conservative than BeamParam2
     the result will be true. *)
-    (* 0-rate means this function will return true regardless of other conditions if the beam rate
+    (* When the Mode PV is in Cu 0-rate means this function will return true regardless of other conditions if the beam rate
+    is zero *)
+    (* When the Mode PV is in SC 0-bc means this function will return true regardless of other conditions if the beam class
     is zero *)
     FUNCTION F_SafeBPCompare0Rate : BOOL
     VAR_INPUT
@@ -2245,19 +2367,24 @@ F_SafeBPCompare0Rate
         BeamParam2    :    ST_BeamParams;
     END_VAR
     VAR
-        // Beam-rate is zero, masks all others considerations.
+
+    	// Beam-rate is zero, masks all others considerations.
         xZeroRate: BOOL;
+    	//Beam class is zero i.e beam off, masks all other considerations.
+    	xZeroBC : BOOL;
         
     END_VAR
-    xZeroRate    := BeamParam1.nRate = 0;
+    xZeroRate  := (BeamParam1.nRate = 0) AND (PMPS_GVL.stCurrentBeamParameters.nMachineMode = 0);
+    xZeroBC  := (BeamParam1.nBCRange <= 1) AND (PMPS_GVL.stCurrentBeamParameters.nMachineMode =1);
 
-    F_SafeBPCompare0Rate := xZeroRate OR F_SafeBPCompare(BeamParam1, BeamParam2);
+    F_SafeBPCompare0Rate := (xZeroRate OR xZeroBC) OR F_SafeBPCompare(BeamParam1, BeamParam2);
 
     END_FUNCTION
 
 
 Related:
     * `F_SafeBPCompare`_
+    * `PMPS_GVL`_
     * `ST_BeamParams`_
 
 
@@ -2271,6 +2398,7 @@ F_SetBeamParams
         nTran    :    REAL := 0;
         neVRange    :    DWORD := 0;
         nRate    :    UDINT := 0;
+    	nBCRange : WORD := 0;
         astAuxAtt : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     END_VAR
     VAR
@@ -2281,6 +2409,7 @@ F_SetBeamParams
     BeamParams.astAttenuators := astAuxAtt;
     BeamParams.neVRange := neVRange;
     BeamParams.nRate    := MIN(nRate,1000000);
+    BeamParams.nBCRange	:= MIN(nBCRange,32767);
 
     F_SetBeamParams    := BeamParams;
 
@@ -2562,6 +2691,7 @@ FB_Arbiter
 
     // Kernel of the arbiter
     // Logic for determining which beam parameter is the most conservative across all request sets.
+    {attribute 'no_check'}
     METHOD INTERNAL ArbitrateBP : ST_BP_ArbInternal
     VAR_INPUT
         stBP1    :    ST_BP_ArbInternal;
@@ -2569,6 +2699,7 @@ FB_Arbiter
     END_VAR
     VAR
         idx : UINT := 1;
+    	bcBitmask : WORD:=0;
     END_VAR
     //<TODO>Add something here to register the key that won for each param
 
@@ -2596,6 +2727,21 @@ FB_Arbiter
 
     //Photon energy ranges
     ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
+
+    //Beam Class ranges
+    ArbitrateBP.nBCRange := stBP1.nBCRange AND stBP2.nBCRange;
+
+    //Beam Class 
+    //Assert the highest allowed beamclass
+    IF (ArbitrateBP.nBCRange = 0) THEN ArbitrateBP.nBeamClass := 0; END_IF
+    FOR idx:=1 TO 15 BY 1 DO
+    	IF (idx =1 ) THEN bcBitmask :=1; END_IF
+    	IF (ArbitrateBP.nBCRange AND bcBitmask) = bcBitmask THEN 
+    		ArbitrateBP.nBeamClass := TO_USINT(idx);
+    	END_IF
+    	bcBitmask := ROL(bcBitmask,1);
+    END_FOR
+
 
     //Rate
     ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);
@@ -2890,9 +3036,13 @@ FB_Arbiter_Test
         
         nRateReqID    :    UDINT    := 4;
         stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    	
+    	nBCRangeReqID : UDINT    := 5;
+    	stBCReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
         
-        stArbitratedBP    :    ST_BeamParams;
-        stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;;
+        stArbitratedBP    :    ST_BeamParams;// :=  PMPS_GVL.cstFullBeam;;
+        stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+    	
     END_VAR
     VAR_INST
         fbArbiter    :    FB_Arbiter(1);
@@ -2902,10 +3052,15 @@ FB_Arbiter_Test
     stAttReqBP.nTran := 0.50;
     stEVReqBP.neVRange := 2#1111_1111_1111_1111_1111_1100_1111_1111;
     stRateReqBP.nRate := 10;
+    stBCReqBP.nBCRange := 2#0111_0000_0000_0000;
+    stBCReqBP.nBeamClass := 15;
 
-    stExpectedBP.nTran     :=     stAttReqBP.nTran;
+    stExpectedBP.nTran     := stAttReqBP.nTran;
     stExpectedBP.neVRange := stEVReqBP.neVRange;
     stExpectedBP.nRate := stRateReqBP.nRate;
+    stExpectedBP.nBCRange := stBCReqBP.nBCRange;
+    stExpectedBP.nBeamClass := stBCReqBP.nBeamClass;
+
 
     //Load arbiter with beam parameter sets
     AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP, sDevName:= 'Device' ),
@@ -2922,6 +3077,10 @@ FB_Arbiter_Test
     //Load arbiter with beam parameter sets
     AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP, sDevName:= 'Device'),
                         'Safest stRateReqBP request failed to load');
+
+    //Load arbiter with beam parameter sets
+    AssertTrue(fbArbiter.AddRequest(nBCRangeReqID, stBCReqBP, sDevName:= 'Device'),
+                        'Safest stBCReqBP request failed to load');
 
     stArbitratedBP := fbArbiter.GetArbitratedBP();
 
@@ -3000,6 +3159,7 @@ FB_Arbiter_Test
     END_IF
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD FullArbitrationStack
     VAR_INPUT
     END_VAR
@@ -3407,6 +3567,7 @@ FB_ArbToSubsys_Test
 
     END_FUNCTION_BLOCK
 
+    {attribute 'no_check'}
     METHOD BasicFunction
     VAR_INPUT
     END_VAR
@@ -3541,6 +3702,76 @@ Related:
     * `ST_BeamParams`_
 
 
+FB_BeamClassFromEPICS
+^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_BeamClassFromEPICS
+
+    (*
+    enum MPSBeamClass {
+        Beam Off    =  0,
+        Kicker STBY =  1,
+        BC1Hz       =  2,
+        BC10Hz      =  3,
+        Diagnostic  =  4,
+        BC120Hz     =  5,
+        Tuning      =  6,
+        1% MAP      =  7,
+        5% MAP      = 8,
+        10% MAP     = 9,
+        25% MAP     = 10,
+        50% MAP     = 11,
+    	100% MAP    = 12,
+        FULL        = 13,
+    	SPARE       = 14,
+        SPARE       = 15
+    }
+    *)
+
+    VAR_IN_OUT
+    	BP : ST_BeamParams;
+        fbMPS_BeamClass : FB_LREALFromEPICS;
+    	FFO : FB_HardwareFFOutput;
+    END_VAR
+    VAR_OUTPUT
+    	xError : BOOL;
+    END_VAR
+    VAR
+
+    	
+    	ffBeamClassReadBack : FB_FastFault := (
+    		i_DevName := 'Arbiter',
+    		i_Desc := 'Issue with beam class readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
+    		i_TypeCode := 16#213,
+    		i_xAutoReset:=True);
+    END_VAR
+    VAR CONSTANT
+    	cFailSafeBC : USINT := 16;
+    END_VAR
+    fbMPS_BeamClass();
+
+    IF fbMPS_BeamClass.bValid THEN
+    	BP.nBeamClass := LREAL_TO_USINT(fbMPS_BeamClass.fValue);
+    ELSE
+    	BP.nBeamClass := cFailSafeBC;
+    END_IF
+    BP.nBCRange := TO_WORD(BP.nBeamClass);
+
+    ffBeamClassReadback(i_xOK:=fbMPS_BeamClass.bValid, io_fbFFHWO:=FFO);
+
+    BP.xValid R= NOT fbMPS_BeamClass.bValid;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `ST_BeamParams`_
+
+
 FB_BeamClassOutputs
 ^^^^^^^^^^^^^^^^^^^
 
@@ -3549,6 +3780,7 @@ FB_BeamClassOutputs
     (*
     Sets the beam class assertion lines for a given beam class.
     *)
+    {attribute 'no_check'}
     FUNCTION_BLOCK FB_BeamClassOutputs
     VAR_INPUT
         BP : ST_BeamParams;
@@ -3583,6 +3815,7 @@ FB_BeamClassOutputs
         q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
     END_VAR
     VAR CONSTANT
+    	//Limited to total of 6 digital outputs
         MAX_BEAM_CLASS_LINES : BYTE := 8;
         BC_1HZ : BYTE := 1;
         BC_10HZ : BYTE := 2;
@@ -3640,12 +3873,187 @@ Related:
     * `ST_BeamParams`_
 
 
+FB_BeamClassOutputs_BCD
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    Sets the beam class assertion lines for a given beam class.
+    *)
+    {attribute 'no_check'}
+    FUNCTION_BLOCK FB_BeamClassOutputs_BCD
+    VAR_INPUT
+        BP : ST_BeamParams;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+        nBeamClass   :    BYTE;
+        wBeamClass    :    BYTE;
+
+        InitCounter: BYTE;
+        counter    :    INT;
+        
+        // Beam class lines are restricted to 4 channels in the current design.
+        // There are 16 possible beamclasses with 0 -15 with 0 no beam.
+    	// First out put is the LSB and bit 4 is MSB
+        {attribute 'pytmc' := 'pv: BeamClassChannel
+            io: i
+            field: DESC Hardwire channel state'}
+            epicsBitmap : WORD;
+            
+        {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
+                                  [2] := TIIB[PMPS_Premp]^Channel 2^Output;
+                                  [3] := TIIB[PMPS_Premp]^Channel 3^Output;
+                                  [4] := TIIB[PMPS_Premp]^Channel 4^Output;'} 
+        q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
+    END_VAR
+    VAR CONSTANT
+    	//Limited to total of 4 digital outputs
+        MAX_BEAM_CLASS_LINES : BYTE := 4;
+
+    END_VAR
+    //Initialize BC lines to zero on every pass
+    FOR InitCounter := 1 TO MAX_BEAM_CLASS_LINES DO
+        q_BC_ASSERTION_LINES[InitCounter] := FALSE;
+    END_FOR
+
+    //Set BC lines according to beam class
+    // There are 4 digital outputs the BC is going to be a BCD
+    q_BC_ASSERTION_LINES[1] := BP.nBeamClass.0;
+    q_BC_ASSERTION_LINES[2] := BP.nBeamClass.1;
+    q_BC_ASSERTION_LINES[3] := BP.nBeamClass.2;
+    q_BC_ASSERTION_LINES[4] := BP.nBeamClass.3;
+
+    // Readbacks for EPICS
+    epicsBitmap.0 := q_BC_ASSERTION_LINES[1];
+    epicsBitmap.1 := q_BC_ASSERTION_LINES[2];
+    epicsBitmap.2 := q_BC_ASSERTION_LINES[3];
+    epicsBitmap.3 := q_BC_ASSERTION_LINES[4];
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `ST_BeamParams`_
+
+
+FB_BeamClassWatcher
+^^^^^^^^^^^^^^^^^^^
+
+::
+
+    (*
+    M. Ghaly
+    The Beam class watcher ensures the current and target beam class is within
+    the arbirated bounds. 
+
+
+    The abritrated bounds come from a simple AND of all the permitted beam class ranges. See
+    the arbitrate action of the arbiter FB. It also reads a PV and ensures that the asserted Beam Class
+    is the same as the PV from the ATCA crate
+
+    Note, this protection logic does not account for beam-off when determining fast-fault
+    status. If a device is requesting a limited range of BC, this request must be honored,
+    regardless of current beam-rate.
+    *)
+    {attribute 'reflection'}
+    FUNCTION_BLOCK FB_BeamClassWatcher
+    VAR_INPUT
+        i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
+        i_stMachineTargetBeamParams    :    ST_BeamParams; //Link to global machine target beam params
+        i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
+        // Reset fault
+        i_xReset: BOOL;
+        sName : STRING := 'BeamClassWatcher';
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR_IN_OUT
+        io_fbFFHWO    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR
+        xBeamClassWithinBounds    :    BOOL;
+        fbFF    :    FB_FastFault :=(
+            i_DevName := sName,
+            i_Desc := 'Fault occurs when the asserted beamclass or pv beam class falls outside the permitted range.',
+            i_TypeCode := 7 );
+            
+       {attribute 'pytmc' := '
+            pv: ResidualBeamClass
+    		io: i
+            archive: 1Hz monitor
+            field: EGU bc-bitmask
+        '}
+        bcResidual : DWORD;
+        
+        fbLog : FB_LogMessage := (
+            eSubSystem := E_Subsystem.MPS,
+            eSevr := TcEventSeverity.Critical
+            );
+        bLogOneShot : BOOL;
+        sDevName : T_MaxString := 'Beam Class Watcher';
+        
+        fbGetHN : FB_GetHostName;
+        bInit : BOOL := TRUE;
+        
+        {attribute 'instance-path'}
+        {attribute 'noinit'}
+        sPath    :    T_MaxString;
+        
+        fbStr : FB_FormatString := (
+            sOut := 'Non-zero beam class residual: %32b; Req: %32b; Act: %32b');
+    END_VAR
+    IF bInit THEN
+        fbGetHN(bExecute:=TRUE);
+        bInit R= NOT fbGetHN.bBusy;
+    END_IF
+        
+    xBeamClassWithinBounds := (i_stCurrentBeamParams.nBCRange AND i_stRequestedBeamParams.nBCRange) = i_stCurrentBeamParams.nBCRange
+    					AND  (i_stCurrentBeamParams.nBeamClass <= i_stRequestedBeamParams.nBeamClass);
+
+    bcResidual := (i_stCurrentBeamParams.nBCRange XOR i_stRequestedBeamParams.nBCRange) AND i_stCurrentBeamParams.nBCRange;
+
+    IF bcResidual <> 0 AND bLogOneShot THEN
+        fbLog.sJson := F_PMPS_JSON(
+            CONCAT(fbGetHN.sHostName, sDevName),
+            sPath,
+            PMPS_CODES.PEW_FAULT);
+        
+        fbStr.arg1 := F_DWORD(bcResidual);
+        fbStr.arg2 := F_WORD(i_stCurrentBeamParams.nBCRange);
+        fbStr.arg3 := F_WORD(i_stRequestedBeamParams.nBCRange);
+        
+        fbStr();
+            
+        fbLog(sMsg:=fbStr.sOut);
+        bLogOneShot := FALSE;
+    ELSIF bcResidual = 0 THEN
+        bLogOneShot := TRUE;
+    END_IF
+
+    fbFF(i_xOK := xBeamClassWithinBounds OR (i_stCurrentBeamParams.nMachineMode = 0),
+        io_fbFFHWO := io_fbFFHWO,);
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `F_PMPS_JSON`_
+    * `PMPS_CODES`_
+    * `ST_BeamParams`_
+
+
 FB_BeamParamAssertionPool
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
     (* This function block implements simple database. Data element values are stored in the hash table.  *)
+    {attribute 'no_check'}
     FUNCTION_BLOCK FB_BeamParamAssertionPool
     VAR_INPUT
         key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
@@ -3670,7 +4078,7 @@ FB_BeamParamAssertionPool
         hTable         : T_HHASHTABLE;(* hash table handle *)
         pRefPtr        : POINTER TO ST_BP_ArbInternal := 0;
         indexOfElem    : ULINT;(* Integer value (max. size: x86=>32bit, x64=>64bit)*)
-    	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);// MG 
+    	cstSafeBeam :ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0, nBCRange :=0);// MG 
     END_VAR
     ;
 
@@ -3811,6 +4219,11 @@ FB_BPControlDevice
                 field: EGU eV'}
             {attribute 'displaymode' := 'binary'}
             neVRange : DWORD := 4294967295;
+    		(* Beamclass ranges *)
+    		 {attribute 'pytmc' := 'pv: ReqBP:BeamClassRanges
+                io: o'}
+            {attribute 'displaymode' := 'binary'}
+            nBCRange : WORD := 32767;
     END_VAR
     VAR_OUTPUT
     END_VAR
@@ -3826,13 +4239,14 @@ FB_BPControlDevice
         bApply : BOOL;
 
         nControlDeviceID : DWORD;
-    	sControlDeviceName: STRING:= 'BP Cntrl Dev';
+    	sControlDeviceName: STRING:= 'BP Cntrl Device';
         rtApply : R_TRIG;
 
     END_VAR
     EpicsReqBP.nTran := nTran;
     EpicsReqBP.neVRange := neVRange;
     EpicsReqBP.nRate := nRate;
+    EpicsReqBP.nBCRange := nBCRange;
 
     rtApply(CLK:=bApply);
     IF rtApply.Q THEN
@@ -3982,10 +4396,10 @@ FB_BPTM_Test
     VAR    
         //Final and transition assertions
         nTransitionID    :    UDINT := 1;
-        stTransitionAssertion    :    ST_BeamParams := (nRate := 10);
+        stTransitionAssertion    :    ST_BeamParams := (nRate := 10, nBCRange:=0);
         
         nReqID    :    UDINT    := 2;
-        stReqAssertion    :    ST_BeamParams := (nTran := 0.2);
+        stReqAssertion    :    ST_BeamParams := (nTran := 0.2, nBCRange:=2#0000_0000_0000_0011);
         
     END_VAR
     VAR_INST
@@ -4006,6 +4420,9 @@ FB_BPTM_Test
 
     // Note: this struct may also be (over)written to in the tests below, specifically rate.
     fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
+
+    //MG: Need to set the Machine mode testing SC
+    PMPS_GVL.stCurrentBeamParameters.nMachineMode :=1;
 
     CASE eTestStep OF
 
@@ -4047,6 +4464,7 @@ FB_BPTM_Test
         TEST('BPTM Authorizes Transition');
 
         fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
+    	fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request   
         
         IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
             NOT fbBPTM_TestBasicFunction.xEntry THEN
@@ -4222,6 +4640,7 @@ FB_BPTM_Test
 
     // Test the BPTM seamlessly handles new requests at any stage
     // Verify old requests are removed from arbiter
+    {attribute 'no_check'}
     METHOD InterruptAtAllSteps
     VAR_INPUT
     END_VAR
@@ -4648,6 +5067,8 @@ FB_DummyArbIO
        tonPE : TON;
        tonApt : TON;
        tonSatt : TON;
+       tonBCRange: TON;
+       tonBC :TON;
           
     END_VAR
     LA.ElevateRequest(THIS^);
@@ -4685,6 +5106,15 @@ FB_DummyArbIO
                 q_stSimulatedBPReadback.neVRange.0 := TRUE;
             ELSE
                 q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
+    		END_IF
+    	END_IF
+    	
+    	tonBCRange(IN:=stReqOutBP.nBCRange<>q_stSimulatedBPReadback.nBCRange, PT:=tPEDelay);
+    	 IF tonBCRange.Q THEN
+            IF stReqOutBP.nBCRange = 0 THEN
+                q_stSimulatedBPReadback.nBCRange := 0;
+            ELSE
+                q_stSimulatedBPReadback.nBCRange := stReqOutBP.nBCRange;
     		END_IF
     	END_IF
     	
@@ -4856,6 +5286,7 @@ FB_evRangeCalculator_Test
 
     END_FUNCTION_BLOCK
 
+    {attribute 'no_check'}
     METHOD BasicFunction
     VAR_INPUT
     END_VAR
@@ -5207,6 +5638,7 @@ FB_FastFault_Test
 ::
 
     {attribute 'call_after_init'}
+    {attribute 'no_check'}
     FUNCTION_BLOCK FB_FastFault_Test EXTENDS TcUnit.FB_TestSuite
     VAR_INPUT
     END_VAR
@@ -5292,6 +5724,7 @@ FB_FastFault_Test
     TEST_FINISHED();
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD FFOvrdAndNextFault
     VAR_INPUT
     END_VAR
@@ -5395,6 +5828,7 @@ FB_FastFault_Test
     END_IF
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD FFRegistration
     VAR_INPUT
     END_VAR
@@ -5426,6 +5860,7 @@ FB_HardwareFFOutput
 ::
 
     {attribute 'reflection'}
+    {attribute 'no_check'}
     FUNCTION_BLOCK FB_HardwareFFOutput
     VAR CONSTANT
         FF_ARRAY_UPPER_BOUND : UINT := PMPS_PARAM.MAX_FAST_FAULTS;
@@ -5532,6 +5967,7 @@ FB_HardwareFFOutput
     //ExecuteLogging();
     END_ACTION
 
+    {attribute 'no_check'}
     METHOD EvaluateOverrides : BOOL
     VAR_INPUT
     END_VAR
@@ -5598,6 +6034,7 @@ FB_HardwareFFOutput
 
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD ExecuteLogging : BOOL
     VAR_INPUT
     END_VAR
@@ -5701,6 +6138,7 @@ FB_HardwareFFOutput
     fbJson.ResetDocument();
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD INTERNAL IdxCheckIn : BOOL
     VAR_INPUT
         Idx : DINT;
@@ -5748,6 +6186,7 @@ FB_HardwareFFOutput
     THIS^.astFF[Idx] := stFF;
     END_METHOD
 
+    {attribute 'no_check'}
     METHOD INTERNAL Register : BOOL
     VAR_INPUT
         stFFInfo : ST_FFInfo := (
@@ -6048,6 +6487,544 @@ Related:
     * `FB_UndulatorSegment`_
 
 
+FB_JsonDocToSafeBP
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_JsonDocToSafeBP
+    VAR_INPUT
+    	bExecute             : BOOL; //Rising Edge
+    	jsonDoc 		: SJsonValue;
+    	sDeviceName : STRING;
+    	//asDeviceStateNames: ARRAY [1.. MOTION_GVL.MAX_STATES] OF STRING;
+    END_VAR
+    VAR_OUTPUT
+    	bHasDevice		: BOOL;
+    	bHasAllStates		: BOOL;
+    	bHasAllParameters :BOOL := TRUE;
+    	bBusy                : BOOL;
+        bError               : BOOL;
+        nErrId               : UDINT;
+    	sErrMsg				 :STRING;
+    END_VAR
+    VAR_IN_OUT
+    	//ARRAY [1.. MOTION_GVL.MAX_STATES] ;
+    	arrStates: ARRAY[*] OF ST_DbStateParams;
+    	io_fbFFHWO    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR
+    	(* JSON *)
+    	fbJson 			: FB_JsonDomParser;
+    	jsonProp		: SJsonValue;
+    	jsonValue		: SJsonValue;
+    	jsonParam		: SJsonValue;
+    	jsonnTran      : SJsonValue;
+    	jsonnRate      : SJsonValue;
+    	Step: INT;
+    	index: DINT;
+    	nStateCount:DINT;
+        RisingEdge           : R_TRIG;
+
+    	(*Logger*)
+    	tNewMessage : R_TRIG;
+        fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);	
+    	(*FFO*)
+    	FFO    :    FB_FastFault :=(
+            i_Desc := 'Fault occurs when there is an error loading safe beam parameters from json file',
+            i_TypeCode := 16#FF13);
+    	sbuffReadSmall: INT;
+    END_VAR
+    (* Retrieve JSON content *)
+    RisingEdge(CLK:=bExecute); 
+
+    CASE Step OF 
+        0:     (* Idle state *) 
+              IF RisingEdge.Q THEN 
+                   bBusy := TRUE; 
+                   bError:= FALSE; 
+                   nErrId:=0; 
+    			   sErrMsg :='';
+                   Step := 20; 
+    			   fbLogger(sMsg:='Start Parsing Json DOC.', eSevr:=TcEventSeverity.Info);
+              END_IF 
+    	
+    	 20: (*Find the Device Name*)  
+    		bHasDevice := fbJson.HasMember(jsonDoc, sDeviceName);
+    		IF (bHasDevice) THEN
+    			jsonProp := fbJson.FindMember(jsonDoc, sDeviceName);
+    			IF jsonProp <> 0 THEN	
+    				Step := Step+1;
+    				ELSE
+    					Step := 900 + Step;
+    					nErrId := Step; 
+    					bError := TRUE; 
+    					sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);
+    				END_IF
+    		ELSE
+    			Step := 900 + Step;
+    			nErrId := Step; 
+    			bError := TRUE; 
+    			sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);		
+    		END_IF
+    		
+    	 21: (*Check device States in DOM*)
+    	 		nStateCount :=0;
+    	 		FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
+    				  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
+    					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
+    							  Step := 900+ Step;
+    							  nErrId := Step; 
+    							  bError := TRUE; 
+    							  sErrMsg:= CONCAT('Error loading device state in Json File : ',arrStates[Index].sPmpsState);
+    							  fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+    							  EXIT;
+    					    ELSE 
+    							nStateCount :=nStateCount+1;
+    					  END_IF
+    				   ELSE   
+    					   bHasAllStates :=TRUE;
+    					   EXIT;
+    				  END_IF
+    		    END_FOR
+
+    		   Step := Step+1;
+    			
+    	 22: //MAke sure state array input has State name data
+    		  IF (nStateCount =0) THEN
+    			  bHasAllStates :=FALSE;
+    			  Step := 900+ Step;
+    			  nErrId := Step; 
+    			  bError := TRUE; 
+    			  sErrMsg:= CONCAT('Error Input State array is empty : ',sDeviceName);				  
+    		 ELSE 
+    			 Step := Step+1;		 
+    		 END_IF;
+
+    	 23:  (*loop Device State Arrays to find load all States BP*)
+    	      FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
+    			  IF NOT (arrStates[Index].sPmpsState= '') THEN
+    				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
+    					  Step := 900+ Step;
+    					  fbLogger.sMsg := CONCAT('Error Parsing beam parameters - Device/States: ', arrStates[Index].sPmpsState);
+    					  fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+    				  END_IF
+    			   ELSE 
+    					EXIT;
+    			   END_IF
+    		  END_FOR
+    		  IF (bHasAllParameters) THEN Step := 30;
+    			  ELSE Step := 900+ Step;
+    		  END_IF
+    		  
+    	 30: (*ALL good here*)
+    	 	fbLogger.sMsg := CONCAT('Complete Parsing Json Doc. Device: ', sDeviceName);
+    		fbLogger.sMsg := CONCAT(fbLogger.sMsg ,' - States Count: ');
+    		fbLogger.sMsg := CONCAT(fbLogger.sMsg ,TO_STRING(nStateCount));
+    	  	fbLogger(eSevr:=TcEventSeverity.Info);
+    	 	bExecute:= FALSE;
+    	    bBusy:=FALSE;
+    		Step := 0;
+    		FFO.i_xOK := TRUE;
+    END_CASE
+
+
+    //Fault in error state
+    IF(Step>=900) THEN
+    	FFO.i_xOK := FALSE;
+    	Step:=0;
+    END_IF
+    ACT_FFO();
+    ACT_LOGGER();
+
+    END_FUNCTION_BLOCK
+
+    ACTION ACT_FFO:
+    (*FAST FAULT*)
+    FFO(i_xOK := ,
+        i_xReset := ,
+    	i_xAutoReset :=TRUE,
+    	i_DevName := sDeviceName,
+        io_fbFFHWO := io_fbFFHWO);
+    END_ACTION
+
+    ACTION ACT_Logger:
+    // Log valve open
+    tNewMessage(CLK:= NOT(FbLogger.sMsg = sErrMsg) AND NOT (sErrMsg =''));
+    IF tNewMessage.Q THEN fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical); END_IF
+    END_ACTION
+
+    METHOD M_LoadSafeBP : BOOL
+    VAR_INPUT
+    	sStateName : STRING;
+    	Index:DINT;
+    END_VAR
+    VAR
+    	//bHasAllParameters : BOOL := TRUE;
+    	sAperture:STRING;
+    	nAperture:INT := -1;
+    	sEV:STRING;
+    	sBC:STRING;
+    	nIndex:INT;
+    END_VAR
+    bHasAllParameters :=  fbJson.HasMember(jsonProp, sStateName);
+    jsonValue := fbJson.FindMember(jsonProp, sStateName);
+    IF bHasAllParameters THEN
+    	//nTran
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nTran');
+    	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nTran', eSevr:=TcEventSeverity.Critical); END_IF
+    	jsonnTran := fbJson.FindMember(jsonValue, 'nTran');
+    	arrStates[Index].stBeamParams.nTran := TO_REAL(fbJson.GetString(jsonnTran));
+    	
+    	//nRate
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nRate');
+    	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nRate', eSevr:=TcEventSeverity.Critical); END_IF
+    	jsonnRate := fbJson.FindMember(jsonValue, 'nRate');
+    	arrStates[Index].stBeamParams.nRate:= TO_UDINT(fbJson.GetString(jsonnRate));
+    	
+    	//neVRange
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'neVRange');
+    	jsonParam := fbJson.FindMember(jsonValue, 'neVRange');
+    	sEV:=(fbJson.GetString(jsonParam));
+    	bHasAllParameters R= NOT (LEN(sEV)=32);
+    	This^.arrStates[Index].stBeamParams.neVRange :=0;
+    	IF (NOT bHasAllParameters) THEN 
+    		fbLogger(sMsg:= 'Error Loading eVRange', eSevr:=TcEventSeverity.Critical); 
+    		ELSE
+    			FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries BY 1 DO
+    				This^.arrStates[Index].stBeamParams.neVRange := SHL(This^.arrStates[Index].stBeamParams.neVRange,1);
+    				This^.arrStates[Index].stBeamParams.neVRange := This^.arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
+    			END_FOR
+    	END_IF
+    	
+    	//nBeamClassRange
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nBeamClassRange');
+    	jsonParam := fbJson.FindMember(jsonValue, 'nBeamClassRange');
+    	sBC:=(fbJson.GetString(jsonParam));
+    	bHasAllParameters R= NOT (LEN(sBC)=15);
+    	arrStates[Index].stBeamParams.nBCRange :=0;
+    	IF (NOT bHasAllParameters) THEN 
+    			fbLogger(sMsg:= 'Error Loading Beam Class Range. Make sure Bitmask is equal than 15 bits.', eSevr:=TcEventSeverity.Critical);
+    	ELSE
+    		FOR nIndex := 0 TO 14 BY 1 DO
+    			arrStates[Index].stBeamParams.nBCRange := SHL(arrStates[Index].stBeamParams.nBCRange,1);
+    			arrStates[Index].stBeamParams.nBCRange := arrStates[Index].stBeamParams.nBCRange+HEXASCNIBBLE_TO_BYTE(sBC[nIndex]);
+    		END_FOR
+    	 END_IF
+    	
+    	//ApertureName and Values
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_name');
+    	jsonParam := fbJson.FindMember(jsonValue, 'ap_name');
+    	sAperture := fbJson.GetString(jsonParam);
+    {IF defined (L)}
+    	IF ('SL1L0' = sAperture) THEN nAperture := L_Apertures.SL1L0;
+    	ELSIF ('SL2L0' = sAperture) THEN nAperture := L_Apertures.SL2L0; 
+    	END_IF
+    {ELSIF defined (K)} // Attribute 'to_string' only build 4024 TO_STRING(PMPS.K_Apertures.SL1K0) - need another non hardcoded way
+    	IF ('SL1K0' = sAperture) THEN nAperture := K_Apertures.SL1K0;
+    	ELSIF ('SL2K0' = sAperture) THEN nAperture := K_Apertures.SL2K0;
+    	END_IF
+    {END_IF}
+    	IF (nAperture>-1) THEN	
+    		//Gap Height
+    		bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_ygap');
+    		jsonParam := fbJson.FindMember(jsonValue, 'ap_ygap');
+    		arrStates[Index].stBeamParams.astApertures[nAperture].Height := TO_REAL(fbJson.GetString(jsonParam));
+    		
+    		//Gap Width
+    		bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_xgap');
+    		jsonParam := fbJson.FindMember(jsonValue, 'ap_xgap');
+    		arrStates[Index].stBeamParams.astApertures[nAperture].Width := TO_REAL(fbJson.GetString(jsonParam));
+
+    		IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading aperture gap', eSevr:=TcEventSeverity.Critical); END_IF	
+    	END_IF
+    	
+    	//Read Transition ID for the State
+    	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
+    	jsonParam := fbJson.FindMember(jsonValue, 'id');
+    	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Assertion ID', eSevr:=TcEventSeverity.Critical); END_IF
+    	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
+    	
+    	//Set to True to indicate this state has been initialized
+    	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
+    END_IF
+
+    IF NOT(	bHasAllParameters) THEN
+    	nErrId := 900+Step; 
+        bError := TRUE; 
+    	sErrMsg:= CONCAT('Error loading BP Data - Device-State: ',sStateName); 	
+    	fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+    END_IF
+
+    M_LoadSafeBP:=bHasAllParameters;
+
+
+
+    //TODO
+    //ADD the rest of the BP
+    END_METHOD
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `K_Apertures`_
+    * `L_Apertures`_
+    * `PMPS_GVL`_
+    * `ST_DbStateParams`_
+
+
+FB_JsonFileToJsonDoc
+^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_JsonFileToJsonDoc
+    VAR_INPUT
+    	bExecute             : BOOL; //Rising Edge
+    	sPLCName			 : STRING;
+    	sSrcNetId            : T_AmsNetId;
+        sSrcPathName         : T_MaxString;
+    END_VAR
+    VAR_OUTPUT
+    	PMPS_jsonDoc 		: SJsonValue;
+    	bHasPLC              : BOOL;
+    	bBusy                : BOOL;
+    	bError               : BOOL;
+        nErrId               : UDINT;
+    	sErrMsg				 :STRING;
+    END_VAR
+    VAR_IN_OUT
+    	io_fbFFHWO    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR
+    	(*Get AMS Net ID*)
+    	fb_GetLocalAmsNetId: FB_GetLocalAmsNetId;
+
+    	(* JSON *)
+    	fbJson 			: FB_JsonDomParser;
+    	jsonDoc 		: SJsonValue;
+    	jsonProp		: SJsonValue;
+    	
+    	(*File*)
+    	fbFileOpen           : FB_FileOpen;
+        fbFileClose          : FB_FileClose;
+        fbFileRead           : FB_FileRead;
+        hSrcFile             : UINT := 0;(* File handle of the source file *)
+    	Step: INT;
+    	index: DINT;
+        RisingEdge           : R_TRIG;
+    	(* Buffer *)
+    	sbuffRead			:STRING(100000);
+        cbReadLength         : UDINT := 0;
+    	nFileLength	 : UDINT := 0;
+    	bfbJsonExceptionRaised: BOOL;
+    	tTimeOut             : TIME := DEFAULT_ADS_TIMEOUT;
+    	bInit : BOOL;
+    	(*Logger*)
+    	tNewMessage : R_TRIG;
+        fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);	
+    	(*FFO*)
+    	FFO    :    FB_FastFault :=(
+            i_Desc := 'Fault occurs when there is an error reading json file',
+            i_TypeCode := 16#FF13);
+    END_VAR
+    (* Get Local AMS net ID*)
+    IF NOT (bInit) THEN
+    	fb_GetLocalAmsNetId.bExecute := TRUE;
+    	bInit :=  TRUE;
+    END_IF
+    fb_GetLocalAmsNetId(bExecute:=);
+
+    (* Retrieve JSON content *)
+    RisingEdge(CLK:=bExecute); 
+    CASE Step OF 
+        0:     (* Idle state *) 
+              IF RisingEdge.Q THEN 
+                   bBusy := TRUE; 
+                   bError:= FALSE; 
+                   nErrId:=0; 
+    			   Step := 1;   
+                   cbReadLength:=0; 
+                   hSrcFile:=0; 
+    			   fbLogger(sMsg:='Start Reading Json File.', eSevr:=TcEventSeverity.Info);
+    			   //Clear all json values and read buffer;
+    			   PMPS_jsonDoc := 0;
+    			   jsonDoc:=0;
+    			   jsonProp:=0;
+    			   FOR index:=1  TO 100000 DO
+    				  sbuffRead[index]:=0;   //clear buffer
+    			   END_FOR
+    			   sErrMsg:='';
+    			   nFileLength:=0;
+    			   jsonDoc := fbJson.ParseDocument(sbuffRead);
+
+              END_IF 
+    	1: (* Open source file *) 
+    		   sSrcNetId := fb_GetLocalAmsNetId.AddrString;
+              fbFileOpen( bExecute := FALSE ); 
+              fbFileOpen( sNetId := sSrcNetId, sPathName := sSrcPathName, 
+                             nMode := FOPEN_MODEREAD OR FOPEN_MODETEXT, 
+                             ePath := PATH_GENERIC, tTimeout := tTimeOut, bExecute := TRUE ); 
+              Step := Step + 1; 
+    		  
+    	2: (* Check Open file was successful*)
+              fbFileOpen( bExecute := FALSE ); 
+              IF NOT fbFileOpen.bBusy THEN 
+                   IF fbFileOpen.bError THEN 
+                        nErrId := fbFileOpen.nErrId; 
+                        bError := TRUE; 
+    					sErrMsg:= CONCAT('Error Opening Json File. E:', TO_STRING(nErrId));
+                        Step := 900 + Step; 
+                   ELSE 
+                        hSrcFile := fbFileOpen.hFile; 
+                        Step := Step + 1; 
+                   END_IF 
+              END_IF 
+    		  
+    	3: (* Read data from source file to buffer string*) 
+              cbReadLength := 0; 
+              fbFileRead( bExecute:= FALSE ); 
+              fbFileRead( sNetId:=sSrcNetId, hFile:=hSrcFile, 
+                             pReadBuff:= ADR(sbuffRead), cbReadLen:= SIZEOF(sbuffRead), 
+                             bExecute:=TRUE, tTimeout:=tTimeOut ); 
+              Step := Step + 1; 
+    		  
+    	4: (* Check read file was successful and data read in buffer string*)
+    		 fbFileRead( bExecute:= FALSE ); 
+              IF NOT fbFileRead.bBusy THEN 
+                   IF fbFileRead.bError THEN 
+                        nErrId := fbFileRead.nErrId; 
+                        bError := TRUE; 
+    					sErrMsg:= CONCAT('Error reading Json File. E: ', TO_STRING(nErrId));
+                        Step := 900 +Step; 
+                   ELSE 
+                        cbReadLength := fbFileRead.cbRead;
+    					nFileLength := nFileLength + cbReadLength;
+    					Step := Step + 1 ;
+                   END_IF 
+              END_IF 
+    		  
+     	5: (* Check Bytes read*)
+    		 IF( nFileLength =0) THEN // oh no, we read zero bytes
+    			nErrId := fbFileRead.nErrId; 
+    			bError := TRUE; 
+    			sErrMsg:= CONCAT( 'Zero bytes were read from the Json File. E:', TO_STRING(nErrId));
+    			Step := 900 +Step; 
+    		ELSE // we read something, lets log about it
+    			fbLogger(sMsg:=CONCAT('Total numbers of Bytes read from file : ', TO_STRING(nFileLength)), eSevr:=TcEventSeverity.Info);
+    			Step := Step + 1 ;
+    	   END_IF;
+    		 
+
+
+    		  
+    	 6: (* Close source file *) 
+            fbFileClose( bExecute := FALSE ); 
+            fbFileClose( sNetId:=sSrcNetId, hFile:=hSrcFile, bExecute:=TRUE, tTimeout:=tTimeOut ); 
+              Step := Step + 1; 
+    		  
+    	 7 :  (*Check file was closed successfully.*)
+    		fbFileClose( bExecute := FALSE ); 
+              IF NOT fbFileClose.bBusy THEN 
+                   IF fbFileClose.bError THEN 
+                        nErrId := fbFileClose.nErrId; 
+                        bError := TRUE; 
+    					Step:=900+Step;
+    					sErrMsg:= CONCAT('Error closing Json File. E:', TO_STRING(nErrId));
+                   END_IF 
+                   Step := Step + 1;
+                   hSrcFile := 0; 
+              END_IF 
+    		  
+    	  8: (* Error or ready => Cleanup *) 
+              IF (hSrcFile <> 0 ) THEN 
+                   Step := 6; (* Close the source file *) 
+              ELSE 
+    			  (* Ready *) 
+                   Step := 10;
+              END_IF  
+    		  
+    	 10: (*Parse read buffer string to JSON DOM object*)
+    	 	//cbJsonParserLength := fbJson.CopyDocument(sbuffRead,cbReadLength);
+    	    jsonDoc := fbJson.ParseDocument(sbuffRead);
+    		bfbJsonExceptionRaised:= fbJson.ExceptionRaised();
+    		IF (jsonDoc <> 0) AND NOT (bfbJsonExceptionRaised) THEN	
+    			Step := 20;
+    		ELSE
+    			Step := 900 + Step;
+    			nErrId := Step; 
+    			bError := TRUE; 
+    			sErrMsg:= CONCAT('Error Parsing JSON Data. S:',TO_STRING(nErrId));
+    		END_IF
+    	 
+    	   
+    	 20: (*Find the PLC Name*)  
+    		bHasPLC := fbJson.HasMember(jsonDoc, sPLCName);
+    		IF (bHasPLC) THEN
+    			jsonProp := fbJson.FindMember(jsonDoc, sPLCName);
+    			IF jsonProp <> 0 THEN	
+    				Step := Step+1;
+    				ELSE
+    					Step := 900 + Step;
+    					nErrId := Step; 
+    					bError := TRUE; 
+    					sErrMsg:=  CONCAT('Error Loading PLC data from Json File : ',sPLCName);
+    				END_IF
+    		ELSE
+    			Step := 900 + Step;
+    			nErrId := Step; 
+    			bError := TRUE; 
+    			sErrMsg:=  CONCAT('Error PLC name not found in Json File : ',sPLCName);		
+    		END_IF
+    		
+    	21: (*write to the PMPS JSonDoc variable*)
+    	  PMPS_jsonDoc := jsonProp;
+    	  Step := 30;
+    	  
+    	30: (*ALL good here*)
+    		fbLogger(sMsg:='Reading and Parsing Json File Completed Successfully.', eSevr:=TcEventSeverity.Info);
+    	 	// Release allocated memory
+    		//jsonDoc := fbJson.NewDocument();
+    		bExecute:= FALSE;
+    	    bBusy:=FALSE;
+    		FFO.i_xOK := TRUE;
+    		Step := 0;
+    	
+    END_CASE
+
+    //Fault in error state
+    IF(Step>=900) THEN
+    	FFO.i_xOK := FALSE;
+    	bBusy:=FALSE;
+    	Step:=0;
+    END_IF
+    ACT_FFO();
+    ACT_LOGGER();
+
+    END_FUNCTION_BLOCK
+
+    ACTION ACT_FFO:
+    (*FAST FAULT*)
+    FFO(i_xOK := ,
+        i_xReset := ,
+    	i_xAutoReset :=TRUE,
+    	i_DevName := sPLCName,
+        io_fbFFHWO := io_fbFFHWO);
+    END_ACTION
+
+    ACTION ACT_Logger:
+    // Log valve open
+    tNewMessage(CLK:= NOT(FbLogger.sMsg = sErrMsg) AND NOT (sErrMsg =''));
+    IF tNewMessage.Q THEN fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical); END_IF
+    END_ACTION
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+
+
 FB_KPhotonEnergy
 ^^^^^^^^^^^^^^^^
 
@@ -6182,6 +7159,7 @@ FB_LinearDeviceStateTable
 ::
 
     (* This function block implements simple database. Data element values are stored in the hash table.  *)
+    {attribute 'no_check'}
     FUNCTION_BLOCK FB_LinearDeviceStateTable
     VAR_INPUT
         key         : DWORD := 0;(* Entry key: used by A_Lookup, A_Remove method, the key variable is also used by A_Add method *)
@@ -6625,6 +7603,62 @@ Related:
     * `L_Stopper`_
 
 
+FB_MachineModeFromEPICS
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_MachineModeFromEPICS
+    (*
+    Readback options are:
+
+    0 – NC (normal conducting, copper linac)
+
+    1 – SC (superconducting linac)
+
+    2 – Misconfigured (something in link node not set correctly.
+
+    *)
+    VAR_IN_OUT
+    	BP : ST_BeamParams;
+        fbMPS_MachineMode : FB_LREALFromEPICS;
+    	FFO : FB_HardwareFFOutput;
+    END_VAR
+    VAR_OUTPUT
+    	xError : BOOL;
+    END_VAR
+    VAR
+
+    	ffModeReadBack : FB_FastFault := (
+    		i_DevName := 'Arbiter',
+    		i_Desc := 'Issue with Machine mode readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
+    		i_TypeCode := 16#313,
+    		i_xAutoReset:=True);
+    END_VAR
+    VAR CONSTANT
+    	cFailSafeMM : USINT := 3;
+    END_VAR
+    fbMPS_MachineMode();
+
+    IF fbMPS_MachineMode.bValid THEN
+    	BP.nMachineMode := LREAL_TO_USINT(fbMPS_MachineMode.fValue);
+    ELSE
+    	BP.nMachineMode := cFailSafeMM;
+    END_IF
+
+    ffModeReadBack(i_xOK:=(fbMPS_MachineMode.bValid) AND fbMPS_MachineMode.fValue <2 , io_fbFFHWO:=FFO);
+
+    BP.xValid R= NOT fbMPS_MachineMode.bValid;
+
+    END_FUNCTION_BLOCK
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+    * `ST_BeamParams`_
+
+
 FB_MachineSimulator
 ^^^^^^^^^^^^^^^^^^^
 
@@ -6985,6 +8019,97 @@ Related:
     * `ST_BeamParams`_
 
 
+FB_PressSensor_FFO
+^^^^^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_PressSensor_FFO 
+    VAR_INPUT
+    	{attribute 'pytmc' := '
+            pv: Press
+            io: input
+            field: EGU Torr
+            field: PREC 2
+        '}
+    	rPress : REAL; 
+    	{attribute 'pytmc' := '
+            pv: FAULT_SP
+            io: input
+            field: EGU Torr
+            field: PREC 2
+        '}
+    	fFaultThreshold : LREAL; //Faults when the threshold is reached. Trigger value.
+    	{attribute 'pytmc' := '
+            pv: FAULT_SP_HYS
+            io: input
+            field: EGU %
+            field: PREC 2
+        '}
+    	fHysteresis : LREAL :=1; // percentage determining how far below the trigger value the fault should be released
+    	sDevName: STRING;
+    	bVeto : BOOL:=FALSE; // This Fault will be will not trip the beam if the bVeto is TRUE 
+    	bAutoReset : BOOL:=TRUE;
+    END_VAR
+    VAR_IN_OUT
+    	io_fbFFHWO    :    FB_HardwareFFOutput;
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    	{attribute 'instance-path'}
+    	{attribute 'noinit'}
+    	sPath: STRING;
+    	bFAULT_OK:BOOL :=FALSE;
+    	FFO    :    FB_FastFault :=(
+            i_Desc := 'Fault occurs when the temprature trip point is reached',
+            i_TypeCode := 16#f700);
+    	rtRESET	:	R_TRIG;
+    	ftFAULT	:	F_TRIG;
+    	fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);
+    END_VAR
+    //Verify Hysteresis is between 1-100, Shouldn't be 0. shouldn't be a 100 either.
+    fHysteresis:=  LIMIT(1, fHysteresis, 100);
+
+    // Evaluate the threshold trip point
+    IF (rPress >= fFaultThreshold) THEN
+    	bFAULT_OK := FALSE;
+    ELSIF (rPress < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
+    	bFAULT_OK := TRUE;
+    END_IF
+
+
+
+    ACT_Logger();
+
+    (*FAST FAULT*)
+    FFO(i_xOK := bFAULT_OK OR bVeto,
+        i_xReset :=,
+    	i_xAutoReset := bAutoReset,
+    	i_DevName := sDevName,
+        io_fbFFHWO := io_fbFFHWO);
+
+    END_FUNCTION_BLOCK
+
+    ACTION ACT_Logger:
+    ftFAULT(CLK:= FFO.i_xOK);
+    rtRESET(CLK:=FFO.i_xOK);
+
+    IF(ftFAULT.Q) THEN
+    	fbLogger(sMsg := 'Temp Threshold Fault, beam off', eSevr:=TcEventSeverity.Critical);
+    END_IF
+
+    IF(rtRESET.Q) THEN
+    	fbLogger(sMsg := 'Temp Threshold Fault condition clear', eSevr:=TcEventSeverity.Info);
+    END_IF
+    END_ACTION
+
+
+Related:
+    * `FB_FastFault`_
+    * `FB_HardwareFFOutput`_
+
+
 FB_RateFromEPICS
 ^^^^^^^^^^^^^^^^
 
@@ -7105,21 +8230,24 @@ FB_SafeBPCompare_Test
     VAR
         stBeamOn_MoreConservative    :    ST_BeamParams;
         stBeamOff_LessConservative    :    ST_BeamParams;
+    	fb_BeamClassOutputs_BCD:FB_BeamClassOutputs_BCD;
     END_VAR
     stBeamOn_MoreConservative  := F_SetBeamParams(
         0, //0% transmission is more conservative than 50
         16#FFFF_FFFF,
         120, //rate
+    	16#000F,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
     stBeamOff_LessConservative:= F_SetBeamParams(
         0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
         16#FFFF_FFFF,
         0, //rate, hence, more conservative
+    	16#0001,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
 
     TEST('BeamOffIsSafe');
-        
+     
     AssertTrue(
         F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
         'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
@@ -7127,6 +8255,7 @@ FB_SafeBPCompare_Test
     END_METHOD
 
     //Verify BP comparison remains logical.
+    {attribute 'no_check'}
     METHOD BPComparisonCheck
     VAR_INPUT
     END_VAR
@@ -7144,12 +8273,14 @@ FB_SafeBPCompare_Test
         0.51, //
         16#FFFFFFFF,
         1,
+    	16#0000,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
     stNotSoSafe := F_SetBeamParams(
         0.61, //
         16#FFFFFFFF,
         1,
+    	16#F000,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
         
     AssertTrue(
@@ -7183,12 +8314,14 @@ FB_SafeBPCompare_Test
         0, //
         16#FFFFFFFF,
         1,
+    	16#0000,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
     stNotSoSafe := F_SetBeamParams(
         0, //
         16#FFFFFFFF,
         1,
+    	16#000F,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
 
     FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
@@ -7298,12 +8431,14 @@ FB_SafeBPCompare_Test
         0,
         16#FFFF_FFFF,
         1,
+    	16#0000,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
 
     stNotSoSafe := F_SetBeamParams(
         0,
         16#FFFF_FFFF,
         10,
+    	16#0001,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //
         
     AssertTrue(
@@ -7348,12 +8483,14 @@ FB_SafeBPCompare_Test
         0, 
         2#0000_0000_0000_0000_0000_0000_0000_0010,
         1,
+    	16#0000,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
     stNotSoSafe := F_SetBeamParams(
         0, 
         2#0000_0000_0000_0000_0000_0000_0000_0110,
         1,
+    	16#0001,
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
         
     AssertTrue(
@@ -7368,6 +8505,7 @@ FB_SafeBPCompare_Test
 
 
 Related:
+    * `FB_BeamClassOutputs_BCD`_
     * `F_SafeBPCompare`_
     * `F_SafeBPCompare0Rate`_
     * `F_SetBeamParams`_
@@ -7510,6 +8648,7 @@ FB_SubsysToArb_Test
 
     END_FUNCTION_BLOCK
 
+    {attribute 'no_check'}
     METHOD BasicFunction
     VAR_INPUT
     END_VAR
@@ -8141,7 +9280,7 @@ FB_TempSensor_FFO
     ELSIF (fTemp < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
     	bFAULT_OK := TRUE;
     END_IF
-    bFAULT_OK R= NOT bConnected
+    bFAULT_OK R= NOT bConnected;
 
 
     ACT_Logger();
@@ -8711,6 +9850,7 @@ IO_TO_BP
 
 ::
 
+    {attribute 'no_check'}
     FUNCTION IO_TO_BP : ST_BeamParams
     VAR_INPUT
         IO : ST_BeamParams_IO;
@@ -8730,6 +9870,10 @@ IO_TO_BP
     IO_TO_BP.nTran := IO.nTran;
     IO_TO_BP.nCohortInt := ULINT_TO_UDINT(IO.nCohortInt);
     IO_TO_BP.neVRange := IO.neVRange;
+    IO_TO_BP.neV := IO.neV;
+    IO_TO_BP.nBCRange := IO.nBCRange;
+    IO_TO_BP.nBeamClass := IO.nBeamClass;
+    IO_TO_BP.nMachineMode := IO.nMachineMode;
     IO_TO_BP.nRate := IO.nRate;
     IO_TO_BP.xValid := IO.xValid;
     IO_TO_BP.xValidToggle := IO.xValidToggle;
