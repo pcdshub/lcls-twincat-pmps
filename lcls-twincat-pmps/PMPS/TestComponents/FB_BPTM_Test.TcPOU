@@ -52,6 +52,9 @@ fbSubSysIO(LA := fbArbiter, FFO := ffo);
 // Note: this struct may also be (over)written to in the tests below, specifically rate.
 fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
 
+//MG: Need to set the Machine mode testing SC
+PMPS_GVL.stCurrentBeamParameters.nMachineMode :=1;
+
 CASE eTestStep OF
 
 E_BPTMTestStates.Init:
@@ -92,6 +95,7 @@ E_BPTMTestStates.Transitioning:
     TEST('BPTM Authorizes Transition');
 
     fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
+	fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request   
     
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
         NOT fbBPTM_TestBasicFunction.xEntry THEN

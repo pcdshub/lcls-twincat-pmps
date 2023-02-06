@@ -91,7 +91,6 @@ ELSIF bAutoUpdateBP THEN
 	 IF tonBCRange.Q THEN
         IF stReqOutBP.nBCRange = 0 THEN
             q_stSimulatedBPReadback.nBCRange := 0;
-            q_stSimulatedBPReadback.nBCRange.0 := TRUE;
         ELSE
             q_stSimulatedBPReadback.nBCRange := stReqOutBP.nBCRange;
 		END_IF
