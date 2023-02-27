@@ -53,7 +53,7 @@ fbSubSysIO(LA := fbArbiter, FFO := ffo);
 fbBPTM_TestBasicFunction.stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback;
 
 //MG: Need to set the Machine mode testing SC
-PMPS_GVL.stCurrentBeamParameters.nMachineMode :=1;
+PMPS_GVL.stCurrentBeamParameters.nMachineMode :=0;
 
 CASE eTestStep OF
 
@@ -93,7 +93,7 @@ E_BPTMTestStates.WaitingForBeam:
     
 E_BPTMTestStates.Transitioning:
     TEST('BPTM Authorizes Transition');
-
+	
     fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
 	fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request   
     

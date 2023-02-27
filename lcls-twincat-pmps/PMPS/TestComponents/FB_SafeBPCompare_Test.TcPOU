@@ -23,6 +23,8 @@ END_VAR
 VAR
     stBeamOn_MoreConservative    :    ST_BeamParams;
     stBeamOff_LessConservative    :    ST_BeamParams;
+	stBeam0Rate    :    ST_BeamParams;
+	stBeam0BC    :    ST_BeamParams;
 	fb_BeamClassOutputs_BCD:FB_BeamClassOutputs_BCD;
 END_VAR]]></Declaration>
       <Implementation>
@@ -30,21 +32,99 @@ END_VAR]]></Declaration>
     0, //0% transmission is more conservative than 50
     16#FFFF_FFFF,
     120, //rate
-	16#000F,
+	16#0001,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stBeamOff_LessConservative:= F_SetBeamParams(
     0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
     16#FFFF_FFFF,
     0, //rate, hence, more conservative
-	16#0001,
+	16#000F,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
 
-TEST('BeamOffIsSafe');
+// Set Machine Mode to NC
+PMPS_GVL.stCurrentBeamParameters.nMachineMode := 0;
+
+TEST('BeamOffIsSafeNC');
  
 AssertTrue(
     F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
-    'SafeBPCompare does not think beam rate = 0 is safer than anything else.'); 
+    'SafeBPCompare in NC does not think beam rate = 0 is safer than anything else.'); 
+TEST_FINISHED();
+
+
+TEST('BeamClass0IsNOTSafeNC');
+
+
+stBeam0BC  := F_SetBeamParams(
+    1, //0% transmission is more conservative than 50
+    16#FFFF_FFFF,
+    1000, //rate
+	16#0000,
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+	
+AssertFalse(
+    F_SafeBPCompare0Rate(stBeam0BC, stBeamOn_MoreConservative),
+    'SafeBPCompare beam class = 0 is NOT safer than anything else in NC mode.'); 
+TEST_FINISHED();
+
+
+
+
+//SC tests
+stBeamOn_MoreConservative  := F_SetBeamParams(
+    0, //0% transmission is more conservative than 50
+    16#FFFF_FFFF,
+    0, //rate
+	16#000F,
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+stBeamOff_LessConservative:= F_SetBeamParams(
+    0.5, //50% transmission, less conservative, without 0-rate this beam parameter set would be less safe than above
+    16#FFFF_FFFF,
+    1000, 
+	16#0000, //zero beam, hence, more conservative
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY); //0 beam rate means this bps is actually safer than BeamOn
+
+// Set Machine Mode to SC
+PMPS_GVL.stCurrentBeamParameters.nMachineMode := 1;
+	
+TEST('BeamOffIsSafeSC');
+ 
+AssertTrue(
+    F_SafeBPCompare0Rate(stBeamOff_LessConservative, stBeamOn_MoreConservative),
+    'SafeBPCompare in SC mode does not think beam class = 0 is safer than anything else.'); 
+TEST_FINISHED();
+
+TEST('Beam0RateIsNOTSafeSC');
+
+
+stBeam0Rate  := F_SetBeamParams(
+    1, //0% transmission is more conservative than 50
+    16#FFFF_FFFF,
+    0, //rate
+	16#00FF,
+    PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
+
+	
+AssertFalse(
+    F_SafeBPCompare0Rate(stBeam0Rate, stBeamOn_MoreConservative),
+    'SafeBPCompare beam rate = 0 is NOT safer than anything else in SC mode.'); 
+TEST_FINISHED();
+
+
+// Set Machine Mode to Misconfigured
+PMPS_GVL.stCurrentBeamParameters.nMachineMode := 2;
+TEST('WrongMachineMode');
+ 
+AssertFalse(
+    F_SafeBPCompare0Rate(stBeam0Rate, stBeam0BC),
+    'SafeBPCompare in Misconfigured mode does not think beam rate = 0 is safer than anything else.'); 
+	
+AssertFalse(
+    F_SafeBPCompare0Rate(stBeam0BC, stBeam0Rate),
+    'SafeBPCompare in Misconfiigured mode does not think beam class = 0 is safer than anything else.'); 
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
@@ -63,7 +143,9 @@ VAR
     xFailedTest : BOOL; // To exit loops early
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[// Test in NC mode
+PMPS_GVL.stCurrentBeamParameters.nMachineMode :=0;
+
 TEST('BPComparisonTran');
 //Attenuation
 stSafer := F_SetBeamParams(
@@ -77,7 +159,7 @@ stNotSoSafe := F_SetBeamParams(
     0.61, //
     16#FFFFFFFF,
     1,
-	16#F000,
+	16#0000,
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY); 
     
 AssertTrue(

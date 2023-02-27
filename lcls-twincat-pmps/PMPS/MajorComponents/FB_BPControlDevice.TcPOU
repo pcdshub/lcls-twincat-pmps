@@ -50,7 +50,7 @@ VAR
     bApply : BOOL;
 
     nControlDeviceID : DWORD;
-	sControlDeviceName: STRING:= 'BP Cntrl Device';
+	sControlDeviceName: STRING:= 'BP Control Device';
     rtApply : R_TRIG;
 
 END_VAR
