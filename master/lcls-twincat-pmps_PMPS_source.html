@@ -6703,6 +6703,7 @@ END_METHOD
 <span class="o">//</span><span class="n">Fault</span> <span class="ow">in</span> <span class="n">error</span> <span class="n">state</span>
 <span class="n">IF</span><span class="p">(</span><span class="n">Step</span><span class="o">&gt;=</span><span class="mi">900</span><span class="p">)</span> <span class="n">THEN</span>
     <span class="n">FFO</span><span class="o">.</span><span class="n">i_xOK</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
+    <span class="n">bBusy</span><span class="o">:=</span><span class="n">FALSE</span><span class="p">;</span>
     <span class="n">Step</span><span class="o">:=</span><span class="mi">0</span><span class="p">;</span>
 <span class="n">END_IF</span>
 <span class="n">ACT_FFO</span><span class="p">();</span>
