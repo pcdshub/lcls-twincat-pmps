@@ -143,6 +143,7 @@ END_CASE
 //Fault in error state
 IF(Step>=900) THEN
 	FFO.i_xOK := FALSE;
+	bBusy:=FALSE;
 	Step:=0;
 END_IF
 ACT_FFO();
