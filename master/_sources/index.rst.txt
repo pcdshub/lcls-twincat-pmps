@@ -7,6 +7,7 @@ lcls-twincat-pmps
 
     lcls-twincat-pmps_pragmas
     lcls-twincat-pmps_nc
+    lcls-twincat-pmps_ethercat
     lcls-twincat-pmps_boxes
     lcls-twincat-pmps_links
 
