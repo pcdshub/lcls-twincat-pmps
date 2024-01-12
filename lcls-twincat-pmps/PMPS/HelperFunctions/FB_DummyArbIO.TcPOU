@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_DummyArbIO" Id="{2832ee2c-eae8-4c8f-9ee2-8e9eb8d3e7f9}" SpecialFunc="None">
     <Declaration><![CDATA[(* Use to test other library integrations of PMPS preemptive functionality *)
 (* This block stands in for the FB_SubSysToArb_IO block. *)

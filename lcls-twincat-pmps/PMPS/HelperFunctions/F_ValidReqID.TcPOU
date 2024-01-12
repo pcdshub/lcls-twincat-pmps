@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="F_ValidReqID" Id="{da241a71-d251-4194-bb1e-c62816f4a193}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_ValidReqID : BOOL
 VAR_INPUT
@@ -11,8 +11,5 @@ END_VAR
     <Implementation>
       <ST><![CDATA[F_ValidReqID := ReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND ReqID <> 0;]]></ST>
     </Implementation>
-    <LineIds Name="F_ValidReqID">
-      <LineId Id="7" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

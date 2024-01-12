@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_AttenuatorStatus" Id="{37847fe3-1c27-4bcc-83af-f8856a1023a0}">
     <Declaration><![CDATA[TYPE ST_AttenuatorStatus :
 STRUCT

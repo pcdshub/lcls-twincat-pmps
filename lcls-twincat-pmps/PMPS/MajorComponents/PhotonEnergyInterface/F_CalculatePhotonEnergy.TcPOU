@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="F_CalculatePhotonEnergy" Id="{98a6c884-5453-4269-81f4-62a502722fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_CalculatePhotonEnergy : LREAL
 VAR_INPUT
@@ -59,9 +59,5 @@ fDenominator := (e * fUndulatorPeriod_mm * 1E-3 * (1.0 + EXPT(fUndulatorStrength
 F_CalculatePhotonEnergy := (2.0 * EXPT(fElectronEnergy_GeV / m_e, 2.0) * h * c) / MAX(fDenominator, 4.94065645841247E-324);
 ]]></ST>
     </Implementation>
-    <LineIds Name="F_CalculatePhotonEnergy">
-      <LineId Id="3" Count="28" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

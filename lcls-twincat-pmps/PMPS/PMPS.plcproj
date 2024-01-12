@@ -5,7 +5,7 @@
     <ProjectGuid>{12553481-002f-4f4e-a6cc-b95ac65f55ff}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
-    <WriteProductVersion>true</WriteProductVersion>
+    <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>PMPS</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
@@ -485,8 +485,6 @@
     </SubObject>
     <SubObject Include="FB_evRangeCalculator_Test.BasicFunction" />
     <SubObject Include="FB_eVWithinSpec_Test.evWithinRangeChecks" />
-    <SubObject Include="FB_FastFault_Test.FFCombinedFunctionality" />
-    <SubObject Include="FB_FastFault_Test.FFRegistration" />
     <SubObject Include="FB_KStopper.FB_init" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Add" />
     <SubObject Include="FB_LinearDeviceStateTable.A_Count" />

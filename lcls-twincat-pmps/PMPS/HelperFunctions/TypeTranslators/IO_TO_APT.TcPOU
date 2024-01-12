@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="IO_TO_APT" Id="{612c94fe-4ac7-47d4-a1e8-700a8f5271ed}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION IO_TO_APT : ST_PMPS_Aperture
 VAR_INPUT

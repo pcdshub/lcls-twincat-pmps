@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.30">
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.35" TcVersionFixed="true">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{7E016B85-166E-4B4F-AAC4-ECA8DDD44F13}" PersistentType="true">ST_PMPS_Attenuator_IO</Name>
@@ -34,9 +34,7 @@
 			<SubItem>
 				<Name>Width</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
-				<Comment>
-					<![CDATA[ distance between horizontal slits (x)]]>
-				</Comment>
+				<Comment><![CDATA[ distance between horizontal slits (x)]]></Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>0</BitOffs>
 				<Properties>
@@ -51,9 +49,7 @@
 			<SubItem>
 				<Name>Height</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
-				<Comment>
-					<![CDATA[ distance between vertical slits (y)]]>
-				</Comment>
+				<Comment><![CDATA[ distance between vertical slits (y)]]></Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>32</BitOffs>
 				<Properties>
@@ -68,9 +64,7 @@
 			<SubItem>
 				<Name>xOK</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<Comment>
-					<![CDATA[ status of aperture, false if error or in motion]]>
-				</Comment>
+				<Comment><![CDATA[ status of aperture, false if error or in motion]]></Comment>
 				<BitSize>8</BitSize>
 				<BitOffs>64</BitOffs>
 				<Properties>
@@ -137,15 +131,15 @@
 			</SubItem>
 		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="172.21.148.42.1.1" ShowHideConfigurations="#x106">
+	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" TargetNetId="172.21.148.95.1.1" Target64Bit="true" ShowHideConfigurations="#x3c7">
 		<System>
 			<Licenses>
 				<Target>
 					<ManualSelect>{94C91BCC-DC1F-4EBC-AEFD-2DC25DF4708B}</ManualSelect>
-					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
-					<ManualSelect>{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</ManualSelect>
 					<ManualSelect>{3FF18E97-7754-401B-93FB-70544DE28A13}</ManualSelect>
 					<ManualSelect>{B27B051A-CA6A-42EA-833E-82CC92903D83}</ManualSelect>
+					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
+					<ManualSelect>{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</ManualSelect>
 				</Target>
 			</Licenses>
 			<Tasks>

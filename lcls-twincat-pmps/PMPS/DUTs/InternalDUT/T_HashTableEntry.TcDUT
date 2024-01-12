@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="T_HashTableEntry" Id="{981738f9-cdaa-4fe1-95f5-e01133a08af9}">
     <Declaration><![CDATA[TYPE T_HashTableEntry :
 STRUCT

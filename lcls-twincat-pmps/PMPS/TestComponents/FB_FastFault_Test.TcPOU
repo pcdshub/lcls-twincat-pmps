@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FastFault_Test" Id="{2ec3826d-e723-4fb3-ae0d-bdcd8662dc40}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 {attribute 'no_check'}
@@ -111,13 +111,15 @@ VAR_INST
 	Expiration : DINT; 
 	OvdTime : TIME ;
 	Expire: TIMESTRUCT;
-//seconds:ULINT;
+
+    fbGetTzInfo: FB_GetTimeZoneInformation;
 	specificLocalTimeToFileTime : FB_TzSpecificLocalTimeToFileTime;
     fileTime: T_FILETIME;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFVetoAndNextFault');
 fbTime();
+fbGetTzInfo(bExecute:=TRUE);
 
 // I noticed something weird going on with the PEWatcher on the L line. It was faulted, and the fast fault
 // was not tripping off beam. It had been previously overridden so I was wondering why it wasn't causing a trip.
@@ -150,16 +152,15 @@ FirstPass := FALSE;
 END_IF
 
 
-IF fbTime.bValid AND fbTimePass  THEN
+IF fbTime.bValid AND fbTimePass AND NOT fbGetTzInfo.bBusy THEN
 	
 	Now := SystemTime_TO_DT(fbTime.systemTime);
 	Expire:= fbTime.systemTime;
 	Expire.wSecond:= Expire.wSecond+5;
-	specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := , out => fileTime);
+	specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := fbGetTzInfo.tzInfo, out => fileTime);
 	Expiration := TO_DINT((SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600);;
 
     WRITE_PROTECTED_DINT(ADR(rFF.Ovrd.Expiration), Expiration );
-	WRITE_PROTECTED_TIME(ADR(rFF.Ovrd.Timer.PT), OvrdTime );
     WRITE_PROTECTED_BOOL(ADR(rFF.Ovrd.Activate), TRUE);
 	
 	fbTimePass:=FALSE;

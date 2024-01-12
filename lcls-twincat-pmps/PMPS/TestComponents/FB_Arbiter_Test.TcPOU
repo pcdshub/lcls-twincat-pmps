@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_Arbiter_Test" Id="{33ac0bc1-5ef2-4a28-bd81-83e3f5956062}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_Arbiter_Test EXTENDS TcUnit.FB_TestSuite
@@ -329,15 +329,12 @@ END_IF
     <Method Name="RemoveReq" Id="{0f0c060b-fb07-4a71-b5b6-828444ee58c6}">
       <Declaration><![CDATA[METHOD RemoveReq
 VAR
-    
-    Arb : FB_Arbiter(20);
-    
-    DummyHA : FB_DummyHA;
-    
     Result : BOOL;
-    
 END_VAR
-]]></Declaration>
+VAR_INST
+    Arb : FB_Arbiter(20);
+    DummyHA : FB_DummyHA;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 Arb.AddRequest(30, PMPS_GVL.cst0RateBeam, 'Device');

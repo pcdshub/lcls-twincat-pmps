@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_MachineModeFromEPICS" Id="{e77c5ce7-1295-45e2-913d-511a3f59fc41}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_MachineModeFromEPICS
 (*
