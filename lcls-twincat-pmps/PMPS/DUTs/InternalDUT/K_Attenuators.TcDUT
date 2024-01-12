@@ -5,11 +5,11 @@
 {attribute 'strict'}
 TYPE K_Attenuators :
 (
-	AT1K0 := 1, // FEE Gas Attenuator
+    AT1K0 := 1, // FEE Gas Attenuator
     AT1K4 := 2, // TMO Solid Attenuator in the FEE
-	AT1K2 := 3, // RIX Solid Attenuator
-	AT2K2 := 4, // RIX Solid Attenuator
-	AT1K3 := 5 // TXI Solid Attenuator
+    AT1K2 := 3, // RIX Solid Attenuator
+    AT2K2 := 4, // RIX Solid Attenuator
+    AT1K3 := 5 // TXI Solid Attenuator
 );
 END_TYPE
 ]]></Declaration>

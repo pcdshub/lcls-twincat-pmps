@@ -4,7 +4,7 @@
     <Declaration><![CDATA[
 TYPE E_MPSBeamClasses :
 (
-	Beam_Off    :=  0,
+    Beam_Off    :=  0,
     Kicker_STBY :=  1,
     BC1Hz       :=  2,
     BC10Hz      :=  3,
@@ -16,9 +16,9 @@ TYPE E_MPSBeamClasses :
     MAP_10      :=  9,
     MAP_25      := 10,
     MAP_50      := 11,
-	MAP_100     := 12,
+    MAP_100     := 12,
     FULL        := 13,
-	SPARE1      := 14,
+    SPARE1      := 14,
     SPARE2      := 15
 );
 END_TYPE

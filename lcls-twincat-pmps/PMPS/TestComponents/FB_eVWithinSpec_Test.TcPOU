@@ -22,7 +22,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('evWithinRangeChecks');
-    
+
 //Upper limit equal
 AssertTrue(
     F_eVWithinSpec(300, 2#0000_0000_0000_0010),
@@ -43,7 +43,7 @@ AssertFalse(
 AssertFalse(
     F_eVWithinSpec(1701, 2#1000_0000_0000_0000),
     'eV range should not evaluate past 1.7keV');
-    
+
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>

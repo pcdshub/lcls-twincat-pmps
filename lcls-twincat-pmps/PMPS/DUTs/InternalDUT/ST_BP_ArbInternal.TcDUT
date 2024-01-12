@@ -3,18 +3,18 @@
   <DUT Name="ST_BP_ArbInternal" Id="{cafc2631-22b5-4976-a8a9-7355cd6daf26}">
     <Declaration><![CDATA[TYPE ST_BP_ArbInternal EXTENDS ST_BeamParams :
 STRUCT
-	{attribute 'pytmc' := 'pv: ID
-		io: i
-	'}
-	nId : DWORD;
-	{attribute 'pytmc' := 'pv: Live
-		io: i
-	'}
-	LiveInTable : BOOL;
-	{attribute 'pytmc' := 'pv: Device
-		io: i
-	'}
-	sDevName: STRING;
+    {attribute 'pytmc' := 'pv: ID
+        io: i
+    '}
+    nId : DWORD;
+    {attribute 'pytmc' := 'pv: Live
+        io: i
+    '}
+    LiveInTable : BOOL;
+    {attribute 'pytmc' := 'pv: Device
+        io: i
+    '}
+    sDevName: STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

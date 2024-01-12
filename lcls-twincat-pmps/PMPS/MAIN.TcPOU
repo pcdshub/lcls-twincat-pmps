@@ -3,7 +3,7 @@
   <POU Name="MAIN" Id="{87d6bba0-cac0-4c5b-b8ef-b01bdb9ad7f6}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-    fbSetPERanges : PE_Ranges;    
+    fbSetPERanges : PE_Ranges;
 
     fbDiffBPTest    :    FB_DiffBP_Test;
     fbBPTMTest    :    FB_BPTM_Test;
@@ -12,7 +12,7 @@ VAR
     ////fbPEWTest    :    FB_PhotonEnergyWatcher_Test;---
     fbFFTest    :    FB_FastFault_Test;
     fbArbiterTest    :    FB_Arbiter_Test;
-	fbVetoArbiterTest : FB_VetoArbiter_Test;
+    fbVetoArbiterTest : FB_VetoArbiter_Test;
     fbevRangeCalcTest : FB_evRangeCalculator_Test;
     fbSubSysToArbTest : FB_SubsysToArb_Test;
     fbArbToSubSysTest : FB_ArbToSubsys_Test;

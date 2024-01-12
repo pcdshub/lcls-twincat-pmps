@@ -5,7 +5,7 @@
 {attribute 'strict'}
 TYPE L_Stopper :
 (
-	ST1L0 := 1, // ST1
+    ST1L0 := 1, // ST1
     ST1L1 := 2, // ST2
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
 );

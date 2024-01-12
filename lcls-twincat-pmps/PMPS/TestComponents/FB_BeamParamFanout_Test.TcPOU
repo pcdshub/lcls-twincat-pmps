@@ -27,9 +27,9 @@ fbBPF.xTxPDO_state := 0; //OP
 fbBPF();
 AssertTrue(fbBPF.stBP.xValidToggle,
     'Does not start valid');
-    
-fbBPF.xTxPDO_state := 1; // Not op    
-    
+
+fbBPF.xTxPDO_state := 1; // Not op
+
 AssertFalse(fbBPF.stBP.xValidToggle,
     'Does not indicate invalid after IF goes non-op');
 

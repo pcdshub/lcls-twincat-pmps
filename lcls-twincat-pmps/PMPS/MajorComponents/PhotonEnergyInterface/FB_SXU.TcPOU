@@ -9,32 +9,32 @@ END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
         pv: CurrentPhotonEnergy
-		io: i
+        io: i
         field: DESC Calculated current photon energy
         field: PREC 3
         field: EGU eV
     '}
-	fCurrentPhotonEnergy : LREAL;
-	{attribute 'pytmc' := '
+    fCurrentPhotonEnergy : LREAL;
+    {attribute 'pytmc' := '
         pv: TargetPhotonEnergy
-		io: i
+        io: i
         field: DESC Calculated desired photon energy
         field: PREC 3
         field: EGU eV
     '}
-	fTargetPhotonEnergy : LREAL;
-	    {attribute 'pytmc' := '
+    fTargetPhotonEnergy : LREAL;
+        {attribute 'pytmc' := '
         pv: SeedUndulatorNumber
-		io: i
+        io: i
         field: DESC Seed undulator number
     '}
-	nSeedUndulator : UDINT; // Set to zero when no undulators are active
+    nSeedUndulator : UDINT; // Set to zero when no undulators are active
     {attribute 'pytmc' := '
         pv: TargetSeedUndulatorNumber
-		io: i
+        io: i
         field: DESC Seed undulator number for target K
     '}
-	nTargetSeedUndulator : UDINT; // Set to zero when no undulators are active
+    nTargetSeedUndulator : UDINT; // Set to zero when no undulators are active
 END_VAR
 
 
@@ -119,12 +119,12 @@ END_VAR
 
 VAR CONSTANT
     {attribute 'pytmc' := '
-		pv: FirstSegment
-		io: i'}
+        pv: FirstSegment
+        io: i'}
     iLowBound  : UDINT := 26;
     {attribute 'pytmc' := '
-		pv: LastSegment
-	 	io: i'}
+        pv: LastSegment
+         io: i'}
     iHighBound : UDINT := 47;
     {attribute 'pytmc' := '
         pv: Period
@@ -136,13 +136,13 @@ VAR CONSTANT
         pv: LowK
         io: i
     '}
-	fLowK : LREAL := 1.5;
-	
-	{attribute 'pytmc' := '
+    fLowK : LREAL := 1.5;
+
+    {attribute 'pytmc' := '
         pv: HiK
         io: i
     '}
-	fHiK : LREAL := 5.7; 
+    fHiK : LREAL := 5.7;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -161,22 +161,22 @@ FOR iIndex := iLowBound TO iHighBound DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
-		
-		//Mark the seed undulator, first undulator operating within K bounds
-		IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
-			nSeedUndulator := iIndex;
-			fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
-		END_IF
-        
+
+        //Mark the seed undulator, first undulator operating within K bounds
+        IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
+            nSeedUndulator := iIndex;
+            fCurrentPhotonEnergy := fbCurrentSegment.fPhotonEnergyAct;
+        END_IF
+
         IF fbCurrentSegment.xTargetActive AND nTargetSeedUndulator = 0 THEN
-			nTargetSeedUndulator := iIndex;
-			fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
-		END_IF
+            nTargetSeedUndulator := iIndex;
+            fTargetPhotonEnergy := fbCurrentSegment.fPhotonEnergyDes;
+        END_IF
     END_IF
 END_FOR
 
 IF nSeedUndulator = 0 THEN
-	fCurrentPhotonEnergy := 0;
+    fCurrentPhotonEnergy := 0;
 END_IF
 
 IF nTargetSeedUndulator = 0 THEN
@@ -191,9 +191,9 @@ UndAdrUpdate();
 FOR iIndex := iLowBound TO iHighBound DO
         IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
-		fbCurrentSegment.fPeriod_mm := fPeriod_mm;
-		fbCurrentSegment.fLowK := fLowK;
-		fbCurrentSegment.fHiK := fHiK;
+        fbCurrentSegment.fPeriod_mm := fPeriod_mm;
+        fbCurrentSegment.fLowK := fLowK;
+        fbCurrentSegment.fHiK := fHiK;
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>

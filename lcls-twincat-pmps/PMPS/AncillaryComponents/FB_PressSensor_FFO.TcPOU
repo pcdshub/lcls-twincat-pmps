@@ -1,49 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_PressSensor_FFO" Id="{09ab3883-be1e-4684-be4b-0a2f4c088ff5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_PressSensor_FFO 
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PressSensor_FFO
 VAR_INPUT
-	{attribute 'pytmc' := '
+    {attribute 'pytmc' := '
         pv: Press
         io: input
         field: EGU Torr
         field: PREC 2
     '}
-	rPress : REAL; 
-	{attribute 'pytmc' := '
+    rPress : REAL;
+    {attribute 'pytmc' := '
         pv: FAULT_SP
         io: input
         field: EGU Torr
         field: PREC 2
     '}
-	fFaultThreshold : LREAL; //Faults when the threshold is reached. Trigger value.
-	{attribute 'pytmc' := '
+    fFaultThreshold : LREAL; //Faults when the threshold is reached. Trigger value.
+    {attribute 'pytmc' := '
         pv: FAULT_SP_HYS
         io: input
         field: EGU %
         field: PREC 2
     '}
-	fHysteresis : LREAL :=1; // percentage determining how far below the trigger value the fault should be released
-	sDevName: STRING;
-	bVeto : BOOL:=FALSE; // This Fault will be will not trip the beam if the bVeto is TRUE 
-	bAutoReset : BOOL:=TRUE;
+    fHysteresis : LREAL :=1; // percentage determining how far below the trigger value the fault should be released
+    sDevName: STRING;
+    bVeto : BOOL:=FALSE; // This Fault will be will not trip the beam if the bVeto is TRUE
+    bAutoReset : BOOL:=TRUE;
 END_VAR
 VAR_IN_OUT
-	io_fbFFHWO    :    FB_HardwareFFOutput;
+    io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	{attribute 'instance-path'}
-	{attribute 'noinit'}
-	sPath: STRING;
-	bFAULT_OK:BOOL :=FALSE;
-	FFO    :    FB_FastFault :=(
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath: STRING;
+    bFAULT_OK:BOOL :=FALSE;
+    FFO    :    FB_FastFault :=(
         i_Desc := 'Fault occurs when the temprature trip point is reached',
         i_TypeCode := 16#f700);
-	rtRESET	:	R_TRIG;
-	ftFAULT	:	F_TRIG;
-	fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);
+    rtRESET	:	R_TRIG;
+    ftFAULT	:	F_TRIG;
+    fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -53,9 +53,9 @@ fHysteresis:=  LIMIT(1, fHysteresis, 100);
 
 // Evaluate the threshold trip point
 IF (rPress >= fFaultThreshold) THEN
-	bFAULT_OK := FALSE;
+    bFAULT_OK := FALSE;
 ELSIF (rPress < (fFaultThreshold - fFaultThreshold*fHysteresis/100)) THEN
-	bFAULT_OK := TRUE;
+    bFAULT_OK := TRUE;
 END_IF
 
 
@@ -65,8 +65,8 @@ ACT_Logger();
 (*FAST FAULT*)
 FFO(i_xOK := bFAULT_OK OR bVeto,
     i_xReset :=,
-	i_xAutoReset := bAutoReset,
-	i_DevName := sDevName,
+    i_xAutoReset := bAutoReset,
+    i_DevName := sDevName,
     io_fbFFHWO := io_fbFFHWO);]]></ST>
     </Implementation>
     <Action Name="ACT_Logger" Id="{1d653481-dd30-4081-aa0d-3dbc870b518b}">
@@ -75,11 +75,11 @@ FFO(i_xOK := bFAULT_OK OR bVeto,
 rtRESET(CLK:=FFO.i_xOK);
 
 IF(ftFAULT.Q) THEN
-	fbLogger(sMsg := 'Temp Threshold Fault, beam off', eSevr:=TcEventSeverity.Critical);
+    fbLogger(sMsg := 'Temp Threshold Fault, beam off', eSevr:=TcEventSeverity.Critical);
 END_IF
 
 IF(rtRESET.Q) THEN
-	fbLogger(sMsg := 'Temp Threshold Fault condition clear', eSevr:=TcEventSeverity.Info);
+    fbLogger(sMsg := 'Temp Threshold Fault condition clear', eSevr:=TcEventSeverity.Info);
 END_IF
 
 ]]></ST>

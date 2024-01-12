@@ -18,15 +18,15 @@ END_VAR
     <Method Name="FB_init" Id="{5d0b5574-a18b-4ee7-8dbc-20956a5fb48c}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[{IF defined (L)}
-	PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesL;
+    PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesL;
 {ELSIF defined (K)}
-	PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesK;
+    PMPS_GVL.g_areVBoundaries := PMPS_GVL.g_areVBoundariesK;
 {END_IF}]]></ST>
       </Implementation>
     </Method>

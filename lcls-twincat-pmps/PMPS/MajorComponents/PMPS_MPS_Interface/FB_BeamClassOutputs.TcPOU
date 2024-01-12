@@ -17,7 +17,7 @@ VAR
 
     InitCounter: BYTE;
     counter    :    INT;
-    
+
     // Beam class lines are restricted to 8 channels in the current design, since
     // there are no plans to use all 16. Channels 1-7 may be allocated to any other
     // beam classes so long as they are ordered least to greatest.
@@ -26,12 +26,12 @@ VAR
         io: i
         field: DESC Hardwire channel state'}
         epicsBitmap : WORD;
-        
+
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
                               [2] := TIIB[PMPS_Premp]^Channel 2^Output;
                               [3] := TIIB[PMPS_Premp]^Channel 3^Output;
                               [4] := TIIB[PMPS_Premp]^Channel 4^Output;
-                              
+
                               [5] := TIIB[PMPS_Premp]^Channel 5^Output;
                               [6] := TIIB[PMPS_Premp]^Channel 6^Output;
                               [7] := TIIB[PMPS_Premp]^Channel 7^Output;
@@ -39,7 +39,7 @@ VAR
     q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
 END_VAR
 VAR CONSTANT
-	//Limited to total of 6 digital outputs
+    //Limited to total of 6 digital outputs
     MAX_BEAM_CLASS_LINES : BYTE := 8;
     BC_1HZ : BYTE := 1;
     BC_10HZ : BYTE := 2;
@@ -56,7 +56,7 @@ ELSIF BP.nRate >= 10 THEN
 ELSIF BP.nRate >= 1 THEN
     nBeamClass := BC_1HZ;
 ELSE
-	nBeamClass := 0;
+    nBeamClass := 0;
 END_IF
 
 

@@ -7,34 +7,34 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	{attribute 'pytmc' := '
+    {attribute 'pytmc' := '
         pv: eEnrg
         link: BEND:DMPH:400:BACT
         field: EGU GeV
     '}
     fbHgvpuElectronEnergy : FB_LREALFromEPICS;
-	
+
     {attribute 'pytmc' := '
         pv: EEnergy
-		io: i
+        io: i
         field: DESC Electron Energy
         field: EGU GeV
     '}
     fElectronEnergyVal : LREAL;
-    
+
     {attribute 'pytmc' := '
         pv: EEnergyValid
-		io: i
+        io: i
         field: DESC Electron Energy Valid
     '}
     bElectronEnergyValid : BOOL;
-    
-	{attribute 'pytmc' := '
+
+    {attribute 'pytmc' := '
         pv: UND
         link: USEG:UNDH:
     '}
     fbHgvpu : FB_Hgvpu;
-	
+
 END_VAR
 ]]></Declaration>
     <Implementation>

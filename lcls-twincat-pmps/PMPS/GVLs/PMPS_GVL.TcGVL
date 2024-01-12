@@ -5,31 +5,31 @@
 VAR_GLOBAL
     {attribute 'pytmc' := '
         pv: @(PREFIX)RequestedBP
-		io: i
+        io: i
         archive: 1Hz monitor
     '}
     stRequestedBeamParameters    :    ST_BeamParams; //Summarized request for the line, as recognized by the line arbiter PLC
     {attribute 'pytmc' := '
         pv: @(PREFIX)CurrentBP
-		io: i
+        io: i
         archive: 1Hz monitor
     '}
     stCurrentBeamParameters    :    ST_BeamParams; //Currently active BP set, broadcast by the line arbiter PLC
-	
+
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC Active eV Range constants
         field: EGU eV
     '}
-	g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
-	
+    g_areVBoundaries    :    ARRAY [0..g_cBoundaries]    OF    REAL;
 
-   
+
+
     PERange : PE_Ranges; //Included to place the ev ranges properly
 END_VAR
-VAR_GLOBAL RETAIN    
+VAR_GLOBAL RETAIN
     // Statistics
     {attribute 'pytmc' := '
         pv: @(PREFIX)SuccessfulPreemptions
@@ -41,174 +41,174 @@ VAR_GLOBAL RETAIN
         io: i
     '}
     AccumulatedFF : UDINT; // Any time a FF occurs
-	BP_jsonDoc 		: SJsonValue;
+    BP_jsonDoc 		: SJsonValue;
 END_VAR
 VAR_GLOBAL CONSTANT
-	
+
     EXCLUDED_ASSERTION_ID    :    UDINT    := 16#FFFFFFFF; //An assertion ID that should always return "not found" in the assertion pool
     VISIBLE_TEST_VELOCITY    :    LREAL    := 10;
     FAST_TEST_VELOCITY        :    LREAL    := 100;
     MAX_DEVICE_STATES        :    UDINT    := 300;
-	
-	TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
 
-	AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
+    TRANS_SCALING_FACTOR : REAL := REAL#1.0; // Scaling factor for fixed-point transmission
+
+    AUX_ATTENUATORS : UINT := 16; // Maximum # of attenuators in the PMPS
     MAX_VETO_DEVICES   :   UINT := 16;
-	stAttenuators : ST_PMPS_Attenuator :=(nTran:=1,xAttOK:=1);
-	{attribute 'pytmc' := '
+    stAttenuators : ST_PMPS_Attenuator :=(nTran:=1,xAttOK:=1);
+    {attribute 'pytmc' := '
         pv: @(PREFIX)FullBeamCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC Full beam constant
-    '}    
+    '}
     cstFullBeam    :    ST_BeamParams := (
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := UDINT#1000000,
-		nBCRange := 2#0111_1111_1111_1111,
+        nBCRange := 2#0111_1111_1111_1111,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
-		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+        astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
 
     );
     {attribute 'pytmc' := '
         pv: @(PREFIX)0RateBeamCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC 0-rate beam constant
-    '}    
+    '}
     cst0RateBeam    :    ST_BeamParams := ( // Use for transition requests
         nTran := 1,
         neVRange :=  2#1111_1111_1111_1111_1111_1111_1111_1111,
         nRate    := 0,
-		nBCRange := 2#0000_0000_0000_0000,
+        nBCRange := 2#0000_0000_0000_0000,
         astApertures := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)],
-		astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
+        astAttenuators :=  [PMPS_GVL.AUX_ATTENUATORS(stAttenuators)]
     );
    (*  {attribute 'pytmc' := '
         pv: @(PREFIX)SafeBeamCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC Safe beam constant
-    '} 
+    '}
    cstSafeBeam    :    ST_BeamParams := (
         nTran := 0,
         neVRange := 0,
         nRate    := 0
     );*)
-    
+
     cnMaxStateArrayLen : INT := 20;
-    
-   
+
+
     MAX_APERTURES : UINT := 4; // Maximum # of power slits in the PMPS
     {warning disable C0228}
     DUMMY_AUX_ATT_ARRAY : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
     {warning restore C0228}
-    
-    
-    
+
+
+
     g_cBoundaries    :    INT    := 31;
-	
-	
+
+
 //////////////////////////
 // L Undulator constants
 //////////////////////////
 
-///////////////////////////////////////		
-	
+///////////////////////////////////////
+
     {attribute 'pytmc' := '
         pv: @(PREFIX)eVRangeHyst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC eV Range hystersis
         field: EGU eV
     '}
     reVHyst: REAL := 5; //
-    
+
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)L:eVRangeCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
     '}
     g_areVBoundariesL    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
     1.0E3,
-	1.7E3,
-	2.1E3,
+    1.7E3,
+    2.1E3,
     2.5E3,
-	3.8E3,
-	4.0E3,
+    3.8E3,
+    4.0E3,
     5.0E3,
     7.0E3,
-	7.5E3,
+    7.5E3,
     7.7E3,
     8.9E3,
     10.0E3,
     11.1E3,
     12.0E3,
-	13.0E3,
-	13.5E3,
+    13.0E3,
+    13.5E3,
     14.0E3,
     16.9E3,
     18.0E3,
     20.0E3,
     22.0E3,
     24.0E3,
-	25.0E3,
-	25.5E3,
-	26.0E3,
-	27.0E3,
-	28.0E3,
-	28.5E3,
-	29.0E3,
-	30.0E3,
-	60.0E3,
-	90.0E3
-	];
+    25.0E3,
+    25.5E3,
+    26.0E3,
+    27.0E3,
+    28.0E3,
+    28.5E3,
+    29.0E3,
+    30.0E3,
+    60.0E3,
+    90.0E3
+    ];
 
 
     {attribute 'pytmc' := '
         pv: @(PREFIX)K:eVRangeCnst
-		io: i
+        io: i
         archive: 1Hz monitor
         field: DESC eV Range constants
         field: EGU eV
     '}
     g_areVBoundariesK    :    ARRAY [0..g_cBoundaries]    OF    REAL    := [
     100,
-	250,
+    250,
     270,
     350,
     400,
     450,
-	480,
-	530,
+    480,
+    530,
     680,
-	730,
+    730,
     850,
-	1.10E3,
+    1.10E3,
     1.15E3,
     1.25E3,
     1.45E3,
-	1.50E3,
+    1.50E3,
     1.55E3,
     1.65E3,
-	1.70E3,
+    1.70E3,
     1.75E3,
     1.82E3,
-	1.85E3,
-	2.00E3,
-	2.20E3,
-	2.50E3,
-	2.80E3,
-	3.00E3,
-	3.15E3,
-	3.50E3,
-	4.00E3,
-	5.30E3,
+    1.85E3,
+    2.00E3,
+    2.20E3,
+    2.50E3,
+    2.80E3,
+    3.00E3,
+    3.15E3,
+    3.50E3,
+    4.00E3,
+    5.30E3,
     7.00E3
-	];
+    ];
 
 
 END_VAR]]></Declaration>

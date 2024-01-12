@@ -19,38 +19,38 @@ VetoFunction();]]></ST>
 METHOD BasicFunction
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
     pBPC : POINTER TO ST_BeamParams_IO;
-    
-    ioCurrentBP : ST_BeamParams_IO; 
-    
+
+    ioCurrentBP : ST_BeamParams_IO;
+
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
-    
+
     nCohortScratch : UDINT;
-    
+
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be
 // trusted with a grain of salt.
 
 TEST('Add to arbiter');
 
 IF NOT fbArbiter.CheckRequestInPool(nID) THEN
     AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
-END_IF  
-   
-TEST_FINISHED();   
+END_IF
+
+TEST_FINISHED();
 
 ///////////////////////////////////////
 //Sub system cycle
@@ -66,7 +66,7 @@ AssertTrue(fbSubSysToArb.nRequestCohort <> 0, 'Cohort index should move to 1 wit
 TEST_FINISHED_NAMED('Initial Elevation');
 
 nCohortScratch := fbSubSysToArb.nRequestCohort;
-    
+
 //Ethercat transfer simulation
 // Transfer of requested BP to arbiter PLC
 // pBPR := ADR(fbArbToSubSys.i_RequestedBP);
@@ -125,29 +125,29 @@ TEST_FINISHED_NAMED('Active in arbitration');
       <Declaration><![CDATA[METHOD VetoFunction
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
     fbArbToSubSys : FB_ArbiterToSubSys_IO;
-    
+
     pBPC : POINTER TO ST_BeamParams_IO;
     pBPR : POINTER TO ST_BeamParams_IO;
-    
-    ioCurrentBP : ST_BeamParams_IO; 
-    
+
+    ioCurrentBP : ST_BeamParams_IO;
+
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
-    
+
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be
 // trusted with a grain of salt.
 
 fbArbiter.AddRequest(nId, stReq,'Device'); // some device asking its local arbiter for some beam parameters

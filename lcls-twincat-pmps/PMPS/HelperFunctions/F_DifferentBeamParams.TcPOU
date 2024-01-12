@@ -17,11 +17,11 @@ VAR
     xaStopper : BOOL := FALSE;
     xaAtt : BOOL := FALSE;
     xaApt : BOOL := FALSE;
-	xBCOK : BOOL := FALSE;
-    
+    xBCOK : BOOL := FALSE;
+
     idx : UINT;
-    
-    
+
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -33,7 +33,7 @@ xBCOK	:= BeamParam1.nBCRange <> BeamParam2.nBCRange;// OR BeamParam1.nBeamClass 
 
 //ast Attenuators
 FOR idx:=1 TO PMPS_GVL.AUX_ATTENUATORS DO
-    xaAtt S= (BeamParam1.astAttenuators[idx].nTran <> BeamParam2.astAttenuators[idx].nTran);   
+    xaAtt S= (BeamParam1.astAttenuators[idx].nTran <> BeamParam2.astAttenuators[idx].nTran);
 END_FOR
 
 // Stoppers

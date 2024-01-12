@@ -11,7 +11,7 @@ VAR
 END_VAR
 VAR CONSTANT
     ArbID : DWORD := 1;
-	HigherArbID : DWORD := 2;
+    HigherArbID : DWORD := 2;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[VetoArbiter();]]></ST>
@@ -21,25 +21,25 @@ END_VAR]]></Declaration>
 
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
-	nId2 : DWORD := 10;
+    nId2 : DWORD := 10;
     stReq    :  ST_BeamParams := (nTran:=0.12);
-	stReq2	:	ST_BeamParams := (nTran:=0.10);
+    stReq2	:	ST_BeamParams := (nTran:=0.10);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     fbHigherArb : FB_Arbiter(2);
-	
-	ArbBP : ST_BeamParams:=(nTran:=1);
-	
-	VetoArb : FB_VetoArbiter;
-	
-	FFO : FB_HardwareFFOutput;
-	
-	fbHA : FB_DummyHA;
-    
+
+    ArbBP : ST_BeamParams:=(nTran:=1);
+
+    VetoArb : FB_VetoArbiter;
+
+    FFO : FB_HardwareFFOutput;
+
+    fbHA : FB_DummyHA;
+
 END_VAR
 
 ]]></Declaration>
@@ -48,21 +48,21 @@ END_VAR
 TEST('VetoNotIn');
 fbArbiter.AddRequest(nReqID:=nId, stReqBP:=stReq, sDevName :='Device');
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb,
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
-    
-//////////////////// Cycle    
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
+
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb,
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
 
@@ -72,22 +72,22 @@ TEST('VetoIn');
 // Veto device is in
 // This should effectively remove the fbArbiter request from the higher arbiter pool
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := TRUE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := TRUE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
-    
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
+
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
 AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
 AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
@@ -98,21 +98,21 @@ TEST('AnotherRequest');
 // Another request is added, should be approved immediately, and with no effect on the final set
 fbArbiter.RequestBP(nReqID := nId2, stReqBP:=stReq2);
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := TRUE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
-    
-//////////////////// Cycle    
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
+
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := TRUE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
 AssertTrue(ArbBP.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device remained in, trans should still be 100');
 AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (2)');
@@ -122,40 +122,40 @@ TEST_FINISHED();
 
 TEST('RemoveVeto');
 // Removal of veto device, should produce a fault
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
 AssertFalse(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Should produce a fast fault at this point because the request is not yet back in the pool');
 
-//////////////////// Cycle  
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
 
-//////////////////// Cycle    
+//////////////////// Cycle
 fbHigherArb.ElevateRequest(fbHA);
 
 VetoArb.bVeto := FALSE;
 VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
-	LowerAuthority:=fbArbiter,
-	FFO:=FFO);    
-    
+    LowerAuthority:=fbArbiter,
+    FFO:=FFO);
+
 AssertTrue(VetoArb.ffKeepItSecretKeepItSafe.i_xOK, 'Fault should be gone.');
 
 TEST_FINISHED();

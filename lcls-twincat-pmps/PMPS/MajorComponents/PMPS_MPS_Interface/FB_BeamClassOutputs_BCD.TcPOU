@@ -17,23 +17,23 @@ VAR
 
     InitCounter: BYTE;
     counter    :    INT;
-    
+
     // Beam class lines are restricted to 4 channels in the current design.
     // There are 16 possible beamclasses with 0 -15 with 0 no beam.
-	// First out put is the LSB and bit 4 is MSB
+    // First out put is the LSB and bit 4 is MSB
     {attribute 'pytmc' := 'pv: BeamClassChannel
         io: i
         field: DESC Hardwire channel state'}
         epicsBitmap : WORD;
-        
+
     {attribute 'TcLinkTo' := '[1] := TIIB[PMPS_Premp]^Channel 1^Output;
                               [2] := TIIB[PMPS_Premp]^Channel 2^Output;
                               [3] := TIIB[PMPS_Premp]^Channel 3^Output;
-                              [4] := TIIB[PMPS_Premp]^Channel 4^Output;'} 
+                              [4] := TIIB[PMPS_Premp]^Channel 4^Output;'}
     q_BC_ASSERTION_LINES    AT    %Q*    : ARRAY [1..MAX_BEAM_CLASS_LINES] OF    BOOL;
 END_VAR
 VAR CONSTANT
-	//Limited to total of 4 digital outputs
+    //Limited to total of 4 digital outputs
     MAX_BEAM_CLASS_LINES : BYTE := 4;
 
 END_VAR

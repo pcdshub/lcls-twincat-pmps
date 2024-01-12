@@ -12,7 +12,7 @@ STRUCT
             io: i
             field: EGU mm'}
     Height : REAL; // distance between vertical slits (y)
-    
+
     {attribute 'pytmc' := 'pv: OK
         io: i'}
     xOK : BOOL; // status of aperture, false if error or in motion

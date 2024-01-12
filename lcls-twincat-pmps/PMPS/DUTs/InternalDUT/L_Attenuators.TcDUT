@@ -6,7 +6,7 @@
 {attribute 'to_string'}
 TYPE L_Attenuators :
 (
-	AT1L0 := 1, // FEE Combo Gas/Solid Attenuator
+    AT1L0 := 1, // FEE Combo Gas/Solid Attenuator
     AT2L0 := 2 // FEE Solid Attenuator
 );
 END_TYPE

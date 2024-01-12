@@ -9,7 +9,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
+    fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
 END_VAR
 VAR CONSTANT
     OvrdTime : TIME := T#2s;
@@ -27,7 +27,7 @@ END_VAR
 VAR_INST
     fbFF    :    FB_FastFault;
     fbFFO    :    FB_HardwareFFOutput;
-    
+
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[TEST('FFCombinedFunctionality');
@@ -40,7 +40,7 @@ fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
     i_xReset := TRUE);
 
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
-    
+
 AssertTrue(fbFFO.q_xFastFaultOut,
     'Fast fault did not clear');
 
@@ -51,13 +51,13 @@ fbFFO(i_xReset := FALSE); //Reset released at start of cycle
 
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
     i_xOK := FALSE); //Reset is still set true from last call.
-    
+
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
     'Fast fault did not trip the beam');
-    
-    
+
+
 //FFO remains faulted until local (FF) and FFO receieve fresh reset request, and faults
 //are actually cleared
 
@@ -67,12 +67,12 @@ fbFFO.i_xReset := TRUE; //Reset requested
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
     i_xOK := FALSE,
     i_xReset := FALSE);
-    
+
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
     'Fast fault output cleared while fault remains, very bad');
-    
+
 //Attempt to clear FF while fault remains fails
 fbFFO.EvaluateOutput(i_xReset := FALSE);
 
@@ -81,12 +81,12 @@ fbFFO.i_xReset := TRUE; //Reset requested
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
     i_xOK := FALSE,
     i_xReset := TRUE); //This reset should fail.
-    
+
 fbFFO.EvaluateOutput(); //FFO eval called at end of cycle
 
 AssertFalse(fbFFO.q_xFastFaultOut,
     'Fast fault cleared while fault remains, very bad');
-    
+
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
@@ -101,19 +101,19 @@ VAR_INST
     fbFFO    :    FB_HardwareFFOutput := (i_sNetID:='',
         bAutoReset := TRUE);
     rFF : REFERENCE TO ST_FF;
-    
+
     FirstPass : BOOL := TRUE;
-	fbTimePass : BOOL := TRUE;
+    fbTimePass : BOOL := TRUE;
     OvrdActvTstDone : BOOL := FALSE;
-    
+
     TestsDone : BOOL := FALSE;
-	Now: DATE_AND_TIME;
-	Expiration : DINT; 
-	OvdTime : TIME ;
-	Expire: TIMESTRUCT;
+    Now: DATE_AND_TIME;
+    Expiration : DINT;
+    OvdTime : TIME ;
+    Expire: TIMESTRUCT;
 
     fbGetTzInfo: FB_GetTimeZoneInformation;
-	specificLocalTimeToFileTime : FB_TzSpecificLocalTimeToFileTime;
+    specificLocalTimeToFileTime : FB_TzSpecificLocalTimeToFileTime;
     fileTime: T_FILETIME;
 END_VAR]]></Declaration>
       <Implementation>
@@ -128,49 +128,49 @@ IF  FirstPass  THEN
 
     fbFF(io_fbFFHWO := fbFFO, //FF reset somehwere in code
         i_xOK := TRUE);
-    
+
     fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
-        
+
     AssertTrue(fbFFO.q_xFastFaultOut,
         'Fast fault did not clear');
-    
-    
+
+
     //Induce fault with FF
-    
+
     fbFF(io_fbFFHWO := fbFFO, //FF faulted
-        i_xOK := FALSE); 
-        
+        i_xOK := FALSE);
+
     fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
-    
+
     AssertFalse(fbFFO.q_xFastFaultOut,
         'Fast fault did not trip the beam');
 
     rFF REF= fbFFO.astFF[fbFF.RegistrationIdx];
-	
-FirstPass := FALSE; 
-    
+
+FirstPass := FALSE;
+
 END_IF
 
 
 IF fbTime.bValid AND fbTimePass AND NOT fbGetTzInfo.bBusy THEN
-	
-	Now := SystemTime_TO_DT(fbTime.systemTime);
-	Expire:= fbTime.systemTime;
-	Expire.wSecond:= Expire.wSecond+5;
-	specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := fbGetTzInfo.tzInfo, out => fileTime);
-	Expiration := TO_DINT((SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600);;
+
+    Now := SystemTime_TO_DT(fbTime.systemTime);
+    Expire:= fbTime.systemTime;
+    Expire.wSecond:= Expire.wSecond+5;
+    specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(Expire), tzInfo := fbGetTzInfo.tzInfo, out => fileTime);
+    Expiration := TO_DINT((SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600);;
 
     WRITE_PROTECTED_DINT(ADR(rFF.Ovrd.Expiration), Expiration );
     WRITE_PROTECTED_BOOL(ADR(rFF.Ovrd.Activate), TRUE);
-	
-	fbTimePass:=FALSE;
-    
+
+    fbTimePass:=FALSE;
+
 END_IF
 
 // On every cycle:
 fbFF(io_fbFFHWO := fbFFO, //FF faulted
-    i_xOK := FALSE); 
-    
+    i_xOK := FALSE);
+
 fbFFO.ExecuteNoLog(); //FFO eval called at end of cycle
 
 
@@ -178,21 +178,21 @@ IF rFF.Ovrd.Active AND rFF.BeamPermitted THEN
 
     AssertTrue(fbFFO.q_xFastFaultOut,
         'Fast fault should be overridden so FFO should be true');
-    
+
     OvrdActvTstDone := TRUE;
 END_IF
 
 IF OvrdActvTstDone and NOT rFF.Ovrd.Active and not rff.BeamPermitted THEN
-    
+
     AssertFalse(fbFFO.q_xFastFaultOut,
         'Fast fault override expired so beam should be off.');
    // AssertFalse(rFF.BeamPermitted, 'Beam should not be permitted now');
-    
+
     TestsDone := TRUE;
 END_IF
 
 
-IF TestsDone THEN    
+IF TestsDone THEN
     TEST_FINISHED_NAMED('FFVetoAndNextFault');
 END_IF]]></ST>
       </Implementation>

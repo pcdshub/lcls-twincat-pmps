@@ -7,7 +7,7 @@ FUNCTION_BLOCK FB_MachineSimulator
 VAR_INPUT
     i_stAssertedParams    :    ST_BeamParams;
     i_xFault    :    BOOL;
-    
+
     xEnableAtt : BOOL;
     xEnablePE : BOOL;
     xEnableRate : BOOL;
@@ -39,7 +39,7 @@ IF xEnableAtt THEN
         iq_stMachineParams.nTran := nTargetTran;
     END_IF
 END_IF
-    
+
 //Pulse Energy
 (*
 IF xEnablePE THEN

@@ -22,7 +22,7 @@ VAR_INST
     fbPEW    :    FB_PhotonEnergyWatcher;
     fbFFO    :    FB_HardwareFFOutput;
     q_Output    :    BOOL;
-    
+
     stCurBeamParams    :    ST_BeamParams;
     stMachineTargetBeamParams    :    ST_BeamParams;
     stReqBeamParams    :    ST_BeamParams;
@@ -35,39 +35,39 @@ fbFFO(i_xReset:=TRUE);
 
 //All eV OK
 stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
-    
+
 stMachineTargetBeamParams.neVRange := 2#0000_0000_1000_0000;
 
-stReqBeamParams.neVRange := 2#1111_1111_1111_1111;    
+stReqBeamParams.neVRange := 2#1111_1111_1111_1111;
 
 fbFFO(i_xReset:=FALSE); //Reset request released
-    
+
 fbPEW(i_stCurrentBeamParams := stCurBeamParams,
     i_stMachineTargetBeamParams := stMachineTargetBeamParams,
     i_stRequestedBeamParams := stReqBeamParams,
     io_fbFFHWO := fbFFO,
     i_xReset := TRUE); //Clear local FF within PEW
-    
+
 fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output); //This simulates a completed PLC cycle
 //Evaluate output should be called once at the end of a PLC cycle.
 
 AssertTrue(q_Output,
     'Beam within limits, FFO should be true');
-    
-    
+
+
 //Req eV moved out of range
 stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0);
-    
+
 stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0);
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
 
-fbPEW.i_xReset := FALSE; //release local FF reset req    
+fbPEW.i_xReset := FALSE; //release local FF reset req
 fbPEW(i_stCurrentBeamParams := stCurBeamParams,
     i_stMachineTargetBeamParams := stMachineTargetBeamParams,
     i_stRequestedBeamParams := stReqBeamParams,
     io_fbFFHWO := fbFFO);
-    
+
 fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
 
 AssertFalse(q_Output,
@@ -75,7 +75,7 @@ AssertFalse(q_Output,
 
 //Beam and target eV moved back within permitted ranges, reset clears fault
 stCurBeamParams.neVRange := F_eVRangeCalculator( 300, 0);
-    
+
 stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0);
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
@@ -88,17 +88,17 @@ fbPEW(i_stCurrentBeamParams := stCurBeamParams, //Beam params are now within spe
     i_stMachineTargetBeamParams := stMachineTargetBeamParams,
     i_stRequestedBeamParams := stReqBeamParams,
     io_fbFFHWO := fbFFO);
-    
+
 fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
 
 AssertTrue(q_Output,
     'Beam within limits after reset, FFO should be true');
-    
+
 //At this point, the fast fault would be cleared
 
 //Current beam eV moved out of range
 stCurBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
-    
+
 stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Still within range
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
@@ -107,7 +107,7 @@ fbPEW(i_stCurrentBeamParams := stCurBeamParams,
     i_stMachineTargetBeamParams := stMachineTargetBeamParams,
     i_stRequestedBeamParams := stReqBeamParams,
     io_fbFFHWO := fbFFO);
-    
+
 fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
 
 AssertFalse(q_Output,
@@ -118,7 +118,7 @@ fbFFO(i_xReset:=FALSE); //Reset released
 fbFFO(i_xReset:=TRUE); //New reset request comes in at the top of a cycle, but will be overridden
 
 stCurBeamParams.neVRange := F_eVRangeCalculator(300, 0); //Now within range
-    
+
 stMachineTargetBeamParams.neVRange := F_eVRangeCalculator(800, 0); //Moved out of range
 
 stReqBeamParams.neVRange := 2#0000_1111_0011_1111;
@@ -128,12 +128,12 @@ fbPEW(i_stCurrentBeamParams := stCurBeamParams,
     i_stMachineTargetBeamParams := stMachineTargetBeamParams,
     i_stRequestedBeamParams := stReqBeamParams,
     io_fbFFHWO := fbFFO);
-    
+
 fbFFO.EvaluateOutput(q_xFastFaultOut=>q_Output);
 
 AssertFalse(q_Output,
     'Target beam moved beyond set limits, should produce a fault');
-    
+
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>

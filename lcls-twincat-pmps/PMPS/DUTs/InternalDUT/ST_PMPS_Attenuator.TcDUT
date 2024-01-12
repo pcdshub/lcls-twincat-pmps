@@ -8,11 +8,11 @@ STRUCT
             io: i
             field: EGU %
         '}
-		nTran : UINT;
+        nTran : UINT;
         {attribute 'pytmc' := 'pv: OK
             io: i
         '}
-		xAttOK : UINT; // true = no errors and attenuator is stable
+        xAttOK : UINT; // true = no errors and attenuator is stable
         *)
 END_STRUCT
 END_TYPE

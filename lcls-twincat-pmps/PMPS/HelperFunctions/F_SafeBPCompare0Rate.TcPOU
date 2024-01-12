@@ -14,11 +14,11 @@ VAR_INPUT
 END_VAR
 VAR
 
-	// Beam-rate is zero, masks all others considerations.
+    // Beam-rate is zero, masks all others considerations.
     xZeroRate: BOOL;
-	//Beam class is zero i.e beam off, masks all other considerations.
-	xZeroBC : BOOL;
-    
+    //Beam class is zero i.e beam off, masks all other considerations.
+    xZeroBC : BOOL;
+
 END_VAR
 ]]></Declaration>
     <Implementation>

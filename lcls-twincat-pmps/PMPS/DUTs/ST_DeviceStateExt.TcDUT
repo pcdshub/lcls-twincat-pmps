@@ -6,7 +6,7 @@
 //properly
 TYPE ST_DeviceStateExt EXTENDS ST_DeviceState :
 STRUCT
-	xValid	:	BOOL := FALSE;
+    xValid	:	BOOL := FALSE;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -5,32 +5,32 @@
 Implements the procedure for safely transitioning between device states.
 
 NOTE:
-The BPTM will throw an error if the arbiter does not have enough space for the transition and new final assertion. 
+The BPTM will throw an error if the arbiter does not have enough space for the transition and new final assertion.
 
  *)
 {attribute 'no_check'}
 FUNCTION_BLOCK BeamParameterTransitionManager
 VAR_IN_OUT
-    
+
     fbArbiter    :    FB_Arbiter; //Connect to local arbiter
-    
+
 END_VAR
 VAR_INPUT
-	i_sDeviceName	: 	STRING:='Device'; // Name of the device requesting the transition	
+    i_sDeviceName	: 	STRING:='Device'; // Name of the device requesting the transition
 
     i_TransitionAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
     i_stTransitionAssertion : ST_BeamParams := PMPS_GVL.cst0RateBeam; //Assertion required during transition (always safer than anything inbetween)
-    
+
     i_nRequestedAssertionID    :    UDINT := 0; // Must not be 0 or EXCLUDED_ID
     i_stRequestedAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0, nBCRange :=0);// PMPS_GVL.cstSafeBeam; //Requested assertion, change whenever
-    
+
     i_xMoving    :    BOOL := FALSE; //Provide rising edge when device begins moving <remove>
     i_xDoneMoving    :    BOOL := FALSE; //Provide rising edge when device is done with a move
-    
+
     stCurrentBeamParameters    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Connect to current beam parameters
-    
+
     // Rising edge to cycle back through the BPTM process. Use if something in the process timed out or failed. This will interrupt a current process
-    bRetry : BOOL := FALSE; 
+    bRetry : BOOL := FALSE;
 END_VAR
 VAR_OUTPUT
 
@@ -38,58 +38,58 @@ VAR_OUTPUT
 
     bError : BOOL; // Set if some issue occurs within the bptm
     nErrId : UINT; // Set to non-zero to help understand the error.
-    
+
     bDone : BOOL;
     bBusy : BOOL;
-    
+
 END_VAR
 
 VAR
     nTargetAssertionID    :    UDINT := 0;
     stTargetAssertion    :    ST_BeamParams; // Target assertion
     nCurrentAssertionID    :    UDINT := 0;  // ID of last set state (zero until a state is reached)
-    
+
     xNewBP    :    BOOL;
     xTranBP    :    BOOL;
     xFinalBPInArb : BOOL;
     xFinalBP    :    BOOL;
-    
+
     eBPTMState : E_BPTMState := Init;
     ePrevState : E_BPTMState := Init;
-    
+
     xEntry : BOOL;
     rTransition : R_TRIG;
     xNewTarget : BOOL;
-	
-	bTransAssertionFailed : BOOL;
+
+    bTransAssertionFailed : BOOL;
     bFinalAssertionFailed : BOOL;
-	
-	LogStrBuffer : ARRAY [0..LogBuffSize] OF STRING;
-	LogBuffIdx : FB_Index := (LowerLimit:=0, UpperLimit:=LogBuffSize);
-    
+
+    LogStrBuffer : ARRAY [0..LogBuffSize] OF STRING;
+    LogBuffIdx : FB_Index := (LowerLimit:=0, UpperLimit:=LogBuffSize);
+
     nAssrtAttempt : INT; // Number of times we have tried asserting a BP set
-    
+
     rtRetry : R_TRIG;
-    
+
     rtError : R_TRIG;
-    
+
     ffTimeout : FB_FastFault := (
         i_Desc := 'Preemptive requests timed out in BPTM',
         i_TypeCode := 16#A,
         i_xAutoReset := FALSE);
-        
-	rtDoneMoving : R_TRIG;
+
+    rtDoneMoving : R_TRIG;
     bLatchDoneMoving : BOOL;
-    
-    bFirstMove : BOOL := TRUE;    
-        
+
+    bFirstMove : BOOL := TRUE;
+
 END_VAR
 VAR CONSTANT
-	LogBuffSize : INT := 40;
+    LogBuffSize : INT := 40;
     cMaxAttempts : INT := 3;
     (* The thought here is, a BPTM needs at most 2 arbiter slots to complete a transition.
     If we're at capacity, it means some BPTM before this one has begun a transition,
-    and will require at least one more arbiter spot to complete. 
+    and will require at least one more arbiter spot to complete.
     *)
     cReqArbCapacity : UDINT := 2;
 END_VAR]]></Declaration>
@@ -105,10 +105,10 @@ bLatchDoneMoving S= rtDoneMoving.Q;
 
 // Logic for interrupting BPTM and changing requests
 IF nTargetAssertionID <> i_nRequestedAssertionID OR rtRetry.Q THEN
-    
+
     bError := FALSE;
     nErrID := 0;
-    
+
     bDone := FALSE;
     bBusy := TRUE;
 
@@ -116,12 +116,12 @@ IF nTargetAssertionID <> i_nRequestedAssertionID OR rtRetry.Q THEN
     CASE eBPTMState OF
         Transitioning:
             DeauthorizeTransition();
-        //CleaningUp: 
-	END_CASE
-        
+        //CleaningUp:
+    END_CASE
+
     eBPTMState := E_BPTMState.NewTarget;
     xEntry := eBPTMState <> ePrevState;
-    
+
 END_IF
 
 IF xEntry THEN nAssrtAttempt := 0; END_IF
@@ -142,52 +142,52 @@ CASE eBPTMState OF
         ELSE
             SetNewTarget();
         END_IF
-        
+
     RequestBP:
         IF PMPS_PARAM.MAX_ASSERTIONS - fbArbiter.nEntryCount >= cReqArbCapacity THEN
             AssertTransitionBP();
             AssertFinalBP();
             eBPTMState := E_BPTMState.WaitForBP;
-		ELSE
+        ELSE
             LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
             nErrId := PMPS_CODES.NoRoomInArb;
             bError := TRUE;
         END_IF
-    
+
     WaitForBP:
         WaitingForTransitionAssertion_DO();
         WaitingForFinalAssertion_DO();
         IF xTranBP AND xFinalBPInArb THEN eBPTMState := E_BPTMState.Transitioning; END_IF
-        
+
     Transitioning:
         IF xEntry THEN
             AuthorizeTransition();
         ELSIF bLatchDoneMoving OR (bFirstMove AND i_xDoneMoving) THEN
             DeauthorizeTransition();
             eBPTMState := E_BPTMState.WaitForFinalBP;
-		END_IF
-        
+        END_IF
+
     WaitForFinalBP:
         xFinalBP := F_SafeBPCompare(stCurrentBeamParameters, stTargetAssertion);
         IF xFinalBP THEN
             eBPTMState := E_BPTMState.CleaningUp;
         END_IF
-    
+
     CleaningUp:
         IF xEntry THEN
             RemoveTransitionAssertion();
-		ELSE
-			eBPTMState := E_BPTMState.Done;
-		END_IF
+        ELSE
+            eBPTMState := E_BPTMState.Done;
+        END_IF
 
     Done:
         bDone := TRUE;
         bFirstMove := FALSE;
         LogActions('Returning to idle');
         eBPTMState := E_BPTMState.Idle;
-    
+
     Error:
-        bError := TRUE;    
+        bError := TRUE;
         eBPTMState := E_BPTMState.Idle;
 END_CASE
 
@@ -217,7 +217,7 @@ LogActions(CONCAT('Asserting target req.: ', DWORD_TO_HEXSTR(nTargetAssertionID,
 bFinalAssertionFailed := NOT fbArbiter.AddRequest(
     nTargetAssertionID,
     stTargetAssertion,
-	i_sDeviceName
+    i_sDeviceName
 );
 
 IF bFinalAssertionFailed THEN
@@ -229,7 +229,7 @@ IF bFinalAssertionFailed THEN
     END_IF
 ELSE
     // Remembering final assertionID for removal later
-    nCurrentAssertionID := nTargetAssertionID;    
+    nCurrentAssertionID := nTargetAssertionID;
 END_IF
 
 ]]></ST>
@@ -245,7 +245,7 @@ LogActions( CONCAT('Requesting transition id: ', DWORD_TO_STRING(i_TransitionAss
 bTransAssertionFailed := NOT fbArbiter.AddRequest(
     i_TransitionAssertionID,
     i_stTransitionAssertion,
-	i_sDeviceName
+    i_sDeviceName
 );
 
 IF bTransAssertionFailed THEN
@@ -254,7 +254,7 @@ IF bTransAssertionFailed THEN
     IF nAssrtAttempt > cMaxAttempts THEN
         bError := TRUE;
         nErrID := PMPS_CODES.TransAssrtFail;
-    END_IF    
+    END_IF
 END_IF
     ]]></ST>
       </Implementation>
@@ -278,7 +278,7 @@ LogActions('Deauthorizing transition');]]></ST>
       <Declaration><![CDATA[{attribute 'no_check'}
 METHOD LogActions : BOOL
 VAR_INPUT
-	LogStr : STRING;
+    LogStr : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -309,24 +309,24 @@ IF fbArbiter.nEntryCount < cReqArbCapacity THEN
 
     LogActions( CONCAT('Removing transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
     fbArbiter.RemoveRequest(i_TransitionAssertionID);
-    
+
     LogActions( CONCAT('Requesting transition id: ', DWORD_TO_STRING(i_TransitionAssertionID)) );
     bTransAssertionFailed := NOT fbArbiter.AddRequest(
         i_TransitionAssertionID,
         i_stTransitionAssertion,
-		i_sDeviceName
+        i_sDeviceName
     );
-    
+
     IF bTransAssertionFailed THEN
         LogActions('Assert trans. failed. ');
         nAssrtAttempt := nAssrtAttempt + 1;
         IF nAssrtAttempt > cMaxAttempts THEN
             bError := TRUE;
             nErrID := PMPS_CODES.TransAssrtFail;
-        END_IF    
+        END_IF
     END_IF
-    
-    
+
+
 
 ELSE
     LogActions('Arbiter at capacity, leaving space for other BPTM to finish.');
@@ -338,21 +338,21 @@ END_IF    ]]></ST>
         <ST><![CDATA[
 IF F_ValidReqID(i_nRequestedAssertionID) AND
     F_ValidReqID(i_TransitionAssertionID) THEN
-    
+
     stTargetAssertion := i_stRequestedAssertion;
     nTargetAssertionID := i_nRequestedAssertionID;
-	
-	LogActions('New target set');
-	
+
+    LogActions('New target set');
+
     xNewBP := TRUE;
-    
+
 ELSE
     IF NOT F_ValidReqID(i_nRequestedAssertionID) THEN
-        
+
         nErrID := PMPS_CODES.BadTargetID;
     ELSIF NOT F_ValidReqID(i_TransitionAssertionID) THEN
         nErrID := PMPS_CODES.BadTransID;
-	END_IF
+    END_IF
     LogActions('Error in set new target');
     bError := TRUE;
 END_IF

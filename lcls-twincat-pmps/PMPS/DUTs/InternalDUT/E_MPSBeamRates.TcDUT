@@ -4,7 +4,7 @@
     <Declaration><![CDATA[
 TYPE E_MPSBeamRates :
 (
-	MPSRateInvalid            :=  0,
+    MPSRateInvalid            :=  0,
     MPSRate0Hz                :=  1,
     (* Previously used 2 and 3 for single shot and burst *)
     MPSRate1Hz                :=  4,

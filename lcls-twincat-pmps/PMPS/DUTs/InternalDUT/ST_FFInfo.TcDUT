@@ -38,7 +38,7 @@ STRUCT
     InUse   :   BOOL := FALSE; // If this FF is currently in-use
 ///////////////////////////////////////////
 
- 
+
     AutoReset   :   BOOL; // Automatically clear fast fault (latching vs non-latching)
     Vetoable  : BOOL := TRUE; // Can this fast fault be masked by the veto device input?
 

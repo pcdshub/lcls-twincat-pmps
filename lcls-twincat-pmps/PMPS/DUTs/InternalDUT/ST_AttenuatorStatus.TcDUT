@@ -3,11 +3,11 @@
   <DUT Name="ST_AttenuatorStatus" Id="{37847fe3-1c27-4bcc-83af-f8856a1023a0}">
     <Declaration><![CDATA[TYPE ST_AttenuatorStatus :
 STRUCT
-    AtTarget : BIT;     //0 
+    AtTarget : BIT;     //0
     Moving : BIT;       //1
     LocalMode : BIT;    //2  (* means the attenuator ignores PMPS preemptive requests and operates from a local setpoint *)
     PMPSMode : BIT;     //3  (* means the attenuator is only taking setpoints from the pmps *)
-    OK : BIT;           //4  
+    OK : BIT;           //4
     Toggle : BIT;       //5  just here for fun
     Include : BIT;      //6  Consider this device status
 END_STRUCT

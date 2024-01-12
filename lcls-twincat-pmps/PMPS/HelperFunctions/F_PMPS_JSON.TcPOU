@@ -3,12 +3,12 @@
   <POU Name="F_PMPS_JSON" Id="{b8964841-9199-4a13-8d4e-26257c18b849}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_PMPS_JSON : STRING
 VAR_INPUT
-	sDevName : STRING := '';
-	sPath : STRING := '';
-	nTypeCode : UINT := 0;
+    sDevName : STRING := '';
+    sPath : STRING := '';
+    nTypeCode : UINT := 0;
 END_VAR
 VAR
-	
+
 END_VAR
 ]]></Declaration>
     <Implementation>

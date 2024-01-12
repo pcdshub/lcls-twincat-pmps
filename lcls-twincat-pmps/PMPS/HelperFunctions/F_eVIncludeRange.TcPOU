@@ -4,10 +4,10 @@
     <Declaration><![CDATA[FUNCTION F_eVIncludeRange : DWORD
 (*
     Given an lower and upper end of an inclusion range, return the corresponding eV bitmask.
-    
+
     eVs between fLower and fUpper will be considered safe, with the exception of the endpoints and values
     near the endpoints if they land far from an eV boundary.
-    
+
     Call this in your init cycle to set up your eV bitmasks for more readable code
     that is also more resiliant to eV range definition adjustments.
 *)

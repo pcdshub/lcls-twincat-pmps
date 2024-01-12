@@ -15,8 +15,8 @@ END_VAR
     <Method Name="FB_init" Id="{b9d18c45-d79e-4449-b3f3-e12a72064f46}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
     eVetoDeviceIN : K_Stopper := K_Stopper.DEFAULT;
     eVetoDeviceOUT : K_Stopper := K_Stopper.DEFAULT;
     sVetoDeviceName : STRING;

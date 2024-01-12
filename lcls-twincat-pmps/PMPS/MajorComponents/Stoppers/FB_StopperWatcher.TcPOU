@@ -8,7 +8,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	stCurrentBP : ST_BeamParams;
+    stCurrentBP : ST_BeamParams;
 END_VAR
 VAR
     i_StopperOutLS AT %I* : BOOL;
@@ -19,7 +19,7 @@ VAR
 
     Stopper : UINT;
     StopperName : STRING;
-	{attribute 'instance-path'}
+    {attribute 'instance-path'}
     {attribute 'noinit'}
     sPath    :    T_MaxString;
 
@@ -30,13 +30,13 @@ VAR
     rtIn : R_TRIG;
     rtOut : R_TRIG;
 
-	bInit: BOOL := TRUE;
+    bInit: BOOL := TRUE;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF bInit THEN
-	fbLogMsg.sJson := F_PMPS_JSON(StopperName, sPath, 1000);
-	bInit := FALSE;
+    fbLogMsg.sJson := F_PMPS_JSON(StopperName, sPath, 1000);
+    bInit := FALSE;
 END_IF
 
 

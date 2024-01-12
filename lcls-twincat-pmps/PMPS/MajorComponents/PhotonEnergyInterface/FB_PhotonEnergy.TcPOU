@@ -8,11 +8,11 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	BP : ST_BeamParams;
+    BP : ST_BeamParams;
 END_VAR
 VAR
     nCurrentPhotonEnergyBitmask : UDINT;
-	nTargetPhotonEnergyBitmask : UDINT;
+    nTargetPhotonEnergyBitmask : UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>

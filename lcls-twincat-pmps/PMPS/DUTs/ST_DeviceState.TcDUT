@@ -3,20 +3,20 @@
   <DUT Name="ST_DeviceState" Id="{83155e5b-c608-4d41-b295-c67628bd27d3}">
     <Declaration><![CDATA[TYPE ST_DeviceState :
 STRUCT
-	
-	//State name
-	sStateName	:	STRING;
-	nStateRef	:	UDINT; //Primary key of device state database
-	
-	//////////////////
-	// This stuff may belong in a sub-class or something
-	//Position
-	rPosition	:	REAL := 0; //Center of the state
-	//Tolerance
-	rTolerance :	REAL := 0; //+/- amount
-	//////////////////
-	//Required beam parameters
-	stReqBeamParam	:	ST_BeamParams;
+
+    //State name
+    sStateName	:	STRING;
+    nStateRef	:	UDINT; //Primary key of device state database
+
+    //////////////////
+    // This stuff may belong in a sub-class or something
+    //Position
+    rPosition	:	REAL := 0; //Center of the state
+    //Tolerance
+    rTolerance :	REAL := 0; //+/- amount
+    //////////////////
+    //Required beam parameters
+    stReqBeamParam	:	ST_BeamParams;
 
 END_STRUCT
 END_TYPE
