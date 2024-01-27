@@ -26,6 +26,13 @@ STRUCT
         field: DESC TRUE if PMPS loaded parameters from the database.
     '}
     bBeamParamsLoaded: BOOL;
+	
+	 // Reactive parameters associated with this state
+    {attribute 'pytmc' := '
+        pv: ReactiveParams
+        io: i
+    '}
+	stReactiveParams : ST_ReactiveParams;
 
     // Transition ID associated with this state
 	{attribute 'pytmc' := '

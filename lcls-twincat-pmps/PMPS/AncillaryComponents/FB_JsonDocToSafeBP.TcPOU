@@ -6,7 +6,6 @@ VAR_INPUT
 	bExecute             : BOOL; //Rising Edge
 	jsonDoc 		: SJsonValue;
 	sDeviceName : STRING;
-	//asDeviceStateNames: ARRAY [1.. MOTION_GVL.MAX_STATES] OF STRING;
 END_VAR
 VAR_OUTPUT
 	bHasDevice		: BOOL;
@@ -101,7 +100,7 @@ CASE Step OF
 
 		   Step := Step+1;
 			
-	 22: //MAke sure state array input has State name data
+	 22: //Make sure state array input has State name data
 		  IF (nStateCount =0) THEN
 			  bHasAllStates :=FALSE;
 			  Step := 900+ Step;
@@ -263,6 +262,17 @@ IF bHasAllParameters THEN
 	
 	//Set to True to indicate this state has been initialized
 	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
+	
+	//Read additional Non-BP Parameters
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'reactive_temp');
+	jsonParam := fbJson.FindMember(jsonValue, 'reactive_temp');
+	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Temperature Threshold', eSevr:=TcEventSeverity.Critical); END_IF
+	arrStates[Index].stReactiveParams.nTempSP := TO_REAL(fbJson.GetString(jsonParam));
+	
+	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'reactive_pressure');
+	jsonParam := fbJson.FindMember(jsonValue, 'reactive_pressure');
+	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Pressure Threshold', eSevr:=TcEventSeverity.Critical); END_IF
+	arrStates[Index].stReactiveParams.nPressSP := TO_REAL(fbJson.GetString(jsonParam));
 END_IF
 
 IF NOT(	bHasAllParameters) THEN

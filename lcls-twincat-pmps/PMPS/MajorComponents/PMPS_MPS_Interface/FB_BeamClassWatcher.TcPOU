@@ -21,8 +21,8 @@ VAR_INPUT
     i_stCurrentBeamParams    :    ST_BeamParams; //Link to global beam params
     i_stMachineTargetBeamParams    :    ST_BeamParams; //Link to global machine target beam params
     i_stRequestedBeamParams    :    ST_BeamParams; //Link to arbiter output or beam param. requestor
-    // Reset fault
-    i_xReset: BOOL;
+    //Auto Reset fault
+    i_xAutoReset: BOOL;
     sName : STRING := 'BeamClassWatcher';
 END_VAR
 VAR_OUTPUT
@@ -93,7 +93,7 @@ ELSIF bcResidual = 0 THEN
 END_IF
 
 fbFF(i_xOK := xBeamClassWithinBounds OR (i_stCurrentBeamParams.nMachineMode = 0),
-    io_fbFFHWO := io_fbFFHWO,);
+    io_fbFFHWO := io_fbFFHWO, i_xAutoReset := i_xAutoReset);
 ]]></ST>
     </Implementation>
   </POU>
