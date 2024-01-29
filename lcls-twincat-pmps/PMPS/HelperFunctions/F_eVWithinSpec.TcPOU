@@ -10,12 +10,12 @@ VAR_INPUT
 END_VAR
 VAR
     //Holding register for permitted ranges
-    nPermittedRangeHolding    :    DWORD; 
+    nPermittedRangeHolding    :    DWORD;
     //For loop counter
     nIndex    :    INT;
-    // Lower boundary for range check 
+    // Lower boundary for range check
     rPreviousBoundary: REAL := 0;
-	Boundaries: ARRAY [0..PMPS_GVL.g_cBoundaries] OF REAL;
+    Boundaries: ARRAY [0..PMPS_GVL.g_cBoundaries] OF REAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,27 +24,27 @@ The within range bool is initialized to false.
 Load the word representation of ranges into a holding register.
 If the bit at position zero of the holding register is true, and the input eV is
 below the boundary at the index position of the boundary array, and the previous boundary
-(which initializes at 0), then the within range bool is set. 
+(which initializes at 0), then the within range bool is set.
 Then, we stash the upper boundary as the lower boundary for the next comparison,
 and shift the holding register right, which moves the next bit to the zero position.
 *)
 
 {IF defined (L)}
-	Boundaries := PMPS_GVL.g_areVBoundariesL;
+    Boundaries := PMPS_GVL.g_areVBoundariesL;
 {ELSIF defined (K)}
-	Boundaries := PMPS_GVL.g_areVBoundariesK;
+    Boundaries := PMPS_GVL.g_areVBoundariesK;
 {END_IF}
 
 nPermittedRangeHolding := nPermittedRange;
 
 FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries DO
-        
-    F_eVWithinSpec S= nPermittedRangeHolding.0 AND( 
+
+    F_eVWithinSpec S= nPermittedRangeHolding.0 AND(
         (reV <= Boundaries[nIndex]) AND
         (reV >= rPreviousBoundary) );
-        
+
     IF F_eVWithinSpec THEN RETURN; END_IF
-    
+
     rPreviousBoundary := Boundaries[nIndex];
     nPermittedRangeHolding := SHR(nPermittedRangeHolding, 1);
 END_FOR

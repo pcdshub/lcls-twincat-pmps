@@ -3,11 +3,11 @@
   <POU Name="F_BPWithID" Id="{e3bfa99b-9d0a-4973-9793-594c4c68e1ba}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_BPWithID : ST_BP_ArbInternal
 VAR_INPUT
-	BP : REFERENCE TO ST_BeamParams;
-	ID : DWORD;
+    BP : REFERENCE TO ST_BeamParams;
+    ID : DWORD;
 END_VAR
 VAR
-	BpInt : ST_BP_ArbInternal;
+    BpInt : ST_BP_ArbInternal;
 END_VAR
 ]]></Declaration>
     <Implementation>

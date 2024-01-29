@@ -5,13 +5,13 @@
 {attribute 'strict'}
 TYPE K_Stopper :
 (
-	ST3K4 := 1, // TMO PPS stopper in
+    ST3K4 := 1, // TMO PPS stopper in
     ST1K2 := 2, // RIX PPS stopper in
     MR1K1_IN := 3, // Monochromator focus optic vertical state
     MR1K1_OUT := 4, // Monochromator focus optic vertical state
     MR1K3_IN := 5, // TXI Offset Mirror horizontal state
     MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
-	ST4K4 := 7, //TMO ST4K4 Photon Terminator In Limit Switch
+    ST4K4 := 7, //TMO ST4K4 Photon Terminator In Limit Switch
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
 );
 END_TYPE

@@ -11,8 +11,5 @@ END_VAR
     <Implementation>
       <ST><![CDATA[F_ValidReqID := ReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND ReqID <> 0;]]></ST>
     </Implementation>
-    <LineIds Name="F_ValidReqID">
-      <LineId Id="7" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

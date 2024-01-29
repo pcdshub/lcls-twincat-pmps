@@ -6,7 +6,7 @@
 {attribute 'to_string'}
 TYPE K_Apertures :
 (
-	SL1K0 := 1,
+    SL1K0 := 1,
     SL2K0 := 2
 );
 END_TYPE

@@ -17,41 +17,41 @@ enum MPSBeamClass {
     10% MAP     = 9,
     25% MAP     = 10,
     50% MAP     = 11,
-	100% MAP    = 12,
+    100% MAP    = 12,
     FULL        = 13,
-	SPARE       = 14,
+    SPARE       = 14,
     SPARE       = 15
 }
 *)
 
 VAR_IN_OUT
-	BP : ST_BeamParams;
+    BP : ST_BeamParams;
     fbMPS_BeamClass : FB_LREALFromEPICS;
-	FFO : FB_HardwareFFOutput;
+    FFO : FB_HardwareFFOutput;
 END_VAR
 VAR_OUTPUT
-	xError : BOOL;
+    xError : BOOL;
 END_VAR
 VAR
 
-	
-	ffBeamClassReadBack : FB_FastFault := (
-		i_DevName := 'Arbiter',
-		i_Desc := 'Issue with beam class readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
-		i_TypeCode := 16#213,
-		i_xAutoReset:=True);
+
+    ffBeamClassReadBack : FB_FastFault := (
+        i_DevName := 'Arbiter',
+        i_Desc := 'Issue with beam class readback from Accelerator. Gateway or EPICS connection. Must be fixed.',
+        i_TypeCode := 16#213,
+        i_xAutoReset:=True);
 END_VAR
 VAR CONSTANT
-	cFailSafeBC : USINT := 16;
+    cFailSafeBC : USINT := 16;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbMPS_BeamClass();
 
 IF fbMPS_BeamClass.bValid THEN
-	BP.nBeamClass := LREAL_TO_USINT(fbMPS_BeamClass.fValue);
+    BP.nBeamClass := LREAL_TO_USINT(fbMPS_BeamClass.fValue);
 ELSE
-	BP.nBeamClass := cFailSafeBC;
+    BP.nBeamClass := cFailSafeBC;
 END_IF
 BP.nBCRange := TO_WORD(BP.nBeamClass);
 

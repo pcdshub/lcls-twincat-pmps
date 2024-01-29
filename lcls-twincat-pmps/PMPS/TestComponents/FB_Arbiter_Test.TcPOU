@@ -22,13 +22,13 @@ DoS();]]></ST>
       <Declaration><![CDATA[METHOD ArbiterCapacity
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
-    
+
     nRandID : DWORD;
     testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
-    
+
     idx : DWORD;
 
 END_VAR
@@ -36,9 +36,9 @@ VAR_INST
     fbArbCapacityTest    :    FB_Arbiter(1);
 
     Cycle : INT := 0;
-    
+
     CycleLimit : INT := 20;
-    
+
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
@@ -61,25 +61,25 @@ TEST_FINISHED();
 VAR_INPUT
 END_VAR
 VAR
-    
+
      nTranReqID    :    UDINT    := 1;
     stAttReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-    
+
     nPPEReqID    :    UDINT    := 2;
     stPPEReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-    
+
     nEVReqID    :    UDINT    := 3;
     stEVReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-    
+
     nRateReqID    :    UDINT    := 4;
     stRateReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
-	nBCRangeReqID : UDINT    := 5;
-	stBCReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-    
+
+    nBCRangeReqID : UDINT    := 5;
+    stBCReqBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
+
     stArbitratedBP    :    ST_BeamParams;// :=  PMPS_GVL.cstFullBeam;;
     stExpectedBP    :    ST_BeamParams := PMPS_GVL.cstFullBeam;
-	
+
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
@@ -103,15 +103,15 @@ stExpectedBP.nBeamClass := stBCReqBP.nBeamClass;
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nTranReqID, stAttReqBP, sDevName:= 'Device' ),
                     'Safest attenuation request failed to load');
-                    
+
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nPPEReqID, stPPEReqBP, sDevName:= 'Device'),
                     'Safest PPE request failed to load');
-                    
+
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nEVReqID, stEVReqBP, sDevName:= 'Device'),
                     'Safest stEVReqBP request failed to load');
-                    
+
 //Load arbiter with beam parameter sets
 AssertTrue(fbArbiter.AddRequest(nRateReqID, stRateReqBP, sDevName:= 'Device'),
                     'Safest stRateReqBP request failed to load');
@@ -131,19 +131,19 @@ TEST_FINISHED();]]></ST>
     <Method Name="DoS" Id="{24ac30e6-5d2c-49e1-805c-d238fae62a1b}">
       <Declaration><![CDATA[METHOD DoS
 VAR
-    
 
-    
+
+
     nOrigReqID : UDINT := 30;
     nSecondReqID : UDINT := 35;
-    
+
     nPeskyReqID : UDINT := 40;
-    
-    
+
+
 END_VAR
 VAR_INST
     DosArb : FB_Arbiter(20);
-    
+
     DummyHA : FB_DummyHA := (ReqAcknowledged:=FALSE); // Set req ack false to start so we can control when it is verified
     nTimeoutCounter : UINT;
     bInit : BOOL;
@@ -162,24 +162,24 @@ CASE eDosTestCases OF
     E_ArbDosTestStates.Init: // Init, first request
         DosArb.AddRequest(nOrigReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
         eDosTestCases := E_ArbDosTestStates.SecondReq;
-        
+
     E_ArbDosTestStates.SecondReq: // Add second request
         DosArb.AddRequest(nSecondReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
         eDosTestCases := E_ArbDosTestStates.WaitForAck;
-        
+
     E_ArbDosTestStates.WaitForAck:
         IF nTimeoutCounter > nWaitCount THEN
             DummyHA.ReqAcknowledged := TRUE;
             eDosTestCases := E_ArbDosTestStates.WaitFor2ndAck;
-		END_IF
-    
+        END_IF
+
     E_ArbDosTestStates.WaitFor2ndAck:
         DummyHA.ReqAcknowledged := False;
         IF nTimeoutCounter > nWait2ndCount THEN
             DummyHA.ReqAcknowledged := TRUE;
             eDosTestCases := E_ArbDosTestStates.RunAsserts;
-		END_IF
-    
+        END_IF
+
 END_CASE
 
 DosArb.ElevateRequest(DummyHA);
@@ -191,10 +191,10 @@ DosArb.AddRequest(nPeskyReqID, PMPS_GVL.cst0RateBeam, sDevName:= 'Device');
 
 nTimeoutCounter := nTimeoutCounter + 1;
 
-IF nTimeoutCounter > nTimeoutCounterMAX or eDosTestCases = E_ArbDosTestStates.RunAsserts THEN 
+IF nTimeoutCounter > nTimeoutCounterMAX or eDosTestCases = E_ArbDosTestStates.RunAsserts THEN
     AssertTrue(DosArb.CheckRequest(nOrigReqID), 'Original request still not accepted');
-    AssertTrue(DosArb.CheckRequest(nSecondReqID), 'Second request still not accepted'); 
-   
+    AssertTrue(DosArb.CheckRequest(nSecondReqID), 'Second request still not accepted');
+
     TEST_FINISHED_NAMED('DoS');
 END_IF]]></ST>
       </Implementation>
@@ -204,39 +204,39 @@ END_IF]]></ST>
 METHOD FullArbitrationStack
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
-	
-	nIdDoS : DWORD := 13;
-	stDoSReq : ST_BeamParams := PMPS_GVL.cstFullBeam;
+
+    nIdDoS : DWORD := 13;
+    stDoSReq : ST_BeamParams := PMPS_GVL.cstFullBeam;
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     fbHigherArb : FB_Arbiter(2);
-    
+
     fbSubSysToArb : FB_SubSysToArbiter_IO; // Subsystem interface with beamline arbiter PLC
     pBPR : POINTER TO ST_BeamParams_IO;
-    
+
     fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
     pBPC : POINTER TO ST_BeamParams_IO;
-    
+
     fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
-    
+
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
 
     Cycle : INT := 0;
-    
+
     CycleLimit : INT := 20;
-    
+
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be 
+        <ST><![CDATA[// This simulates a synchronous cycle between the subsystem and arbiter PLC cycles. Ie. phase is locked, and cycle time is the same. This is not always the case, so these tests should be
 // trusted with a grain of salt.
 
 TEST('FullStack');
@@ -245,20 +245,20 @@ TEST('FullStack');
 
 CASE Cycle OF
 
-0: 
+0:
     IF NOT fbArbiter.CheckRequestInPool(nID) THEN
         AssertTrue(fbArbiter.AddRequest(nId, stReq,'Device'), 'Arbiter returned false from AddRequest'); // some device asking its local arbiter for some beam parameters
-    END_IF  
-    
+    END_IF
+
     TEST('JustEnteredRequest');
     AssertFalse(fbArbiter.CheckRequest(nId),
         'Check should fail. Request not arbitrated yet.');
     TEST_FINISHED();
-   
+
 8000:
-    TEST_FINISHED_NAMED('FullStack');   
-    
-END_CASE 
+    TEST_FINISHED_NAMED('FullStack');
+
+END_CASE
 
 
 TEST('VerifyBPRHasBP');
@@ -269,7 +269,7 @@ IF fbHigherArb.CheckRequest(SysID) THEN
 END_IF
 
 TEST('ArbToSubsysPropagation');
-IF fbArbToSubSys.nActiveCohort = fbArbToSubSys.nRequestedCohort 
+IF fbArbToSubSys.nActiveCohort = fbArbToSubSys.nRequestedCohort
     AND fbArbToSubSys.nActiveCohort <> 0 THEN
     AssertTrue(fbHigherArb.CheckRequest(SysID),
         'Active cohort = Requested cohort before higher arbiter confirmed request was active');
@@ -290,8 +290,8 @@ IF fbArbiter.CheckRequest(nId) THEN
     AssertTrue(fbSubSysToArb.CheckRequest(fbArbiter.nLowerAuthorityID), 'Local Arb is not yet included in arbitration');
     TEST_FINISHED_NAMED('VerifyIncludedAtAllLevels');
 END_IF
-      
-    
+
+
 ///////////////////////////////////////
 //Sub system cycle
 fbSubSysToArb(Arbiter := fbArbiter, fbFFHWO := FFO);
@@ -319,7 +319,7 @@ fbBPR(Arbiter := fbHigherArb); // This is getting the arbitrated BP
 
 IF CycleLimit > Cycle THEN
     Cycle := Cycle + 1;
-ELSE 
+ELSE
     Cycle := 8000;
 END_IF
 
@@ -329,13 +329,13 @@ END_IF
     <Method Name="RemoveReq" Id="{0f0c060b-fb07-4a71-b5b6-828444ee58c6}">
       <Declaration><![CDATA[METHOD RemoveReq
 VAR
-    
+
     Arb : FB_Arbiter(20);
-    
+
     DummyHA : FB_DummyHA;
-    
+
     Result : BOOL;
-    
+
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -346,10 +346,10 @@ Arb.ElevateRequest(DummyHA);
 
 TEST('Remove Req');
     Result := Arb.RemoveRequest(77);
-    
+
     AssertFalse( Result, 'RemoveReq returned true, with nothing to remove');
     AssertFalse( Arb.bStartNewAckRequest , 'StartNewAckRequest is set. Something is wrong');
-    
+
 TEST_FINISHED();]]></ST>
       </Implementation>
     </Method>
@@ -358,7 +358,7 @@ TEST_FINISHED();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-    
+
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams;
 END_VAR
@@ -371,13 +371,13 @@ AssertTrue(fbArbiter.AddRequest(nId, stReq, 'Device'),
     'Request failed');
 
 TEST_FINISHED();
-    
+
 TEST('DuplicateID');
 AssertFalse(fbArbiter.AddRequest(nId, stReq, 'Device'),
     'Duplicate request accepted, not good.');
 
 TEST_FINISHED();
-    
+
 TEST('CheckBP');
 AssertFalse(fbArbiter.CheckRequest(nId),
     'Check should fail. Request not arbitrated yet.');
@@ -388,21 +388,21 @@ WRITE_PROTECTED_ULINT(ADR(fbArbiter.nActiveCohort), fbArbiter.nNextCohort);
 AssertTrue(fbArbiter.CheckRequest(nId),
     'Check should pass.');
 
-TEST_FINISHED();      
-    
+TEST_FINISHED();
+
 TEST('IDDoesNotExist');
- 
+
 AssertFalse(fbArbiter.CheckRequest(nId+1),
     'Check returned true when ID does not exist');
 
 TEST_FINISHED();
-    
+
 TEST('RemoveBP');
 AssertTrue(fbArbiter.RemoveRequest(nId),
     'Remove failed');
 AssertFalse(fbArbiter.CheckRequest(nId),
     'Remove did not remove request');
-    
+
 TEST_FINISHED();
 
 TEST('NoRequestsFullBeam');
@@ -416,21 +416,21 @@ TEST_FINISHED();]]></ST>
       <Declaration><![CDATA[METHOD StackArbiters
 VAR_INPUT
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     fbHigherArb : FB_Arbiter(2);
-	
-	ArbBP : ST_BeamParams;
+
+    ArbBP : ST_BeamParams;
 
     Cycle : INT := 0;
-    
+
     CycleLimit : INT := 20;
-    
+
 END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;

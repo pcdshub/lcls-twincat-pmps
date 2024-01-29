@@ -38,7 +38,7 @@ END_IF
       <Declaration><![CDATA[// Returns true when outputs to MPS are updated
 METHOD CheckRequest : BOOL
 VAR_INPUT
-	nReqID	: DWORD;
+    nReqID	: DWORD;
 END_VAR
 VAR_INST
     xFirstTime : BOOL;
@@ -54,7 +54,7 @@ CheckRequest := nRequestCohort < nCohort;]]></ST>
     <Method Name="RemoveRequest" Id="{d5d59f4e-04bb-4fcb-8e84-82d5afdac12d}">
       <Declaration><![CDATA[METHOD RemoveRequest : BOOL
 VAR_INPUT
-	nReqID    :    DWORD; //StateID to remove
+    nReqID    :    DWORD; //StateID to remove
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -64,10 +64,10 @@ END_VAR
     <Method Name="RequestBP" Id="{78798840-b1ee-4202-8b86-21a56b010c7b}">
       <Declaration><![CDATA[METHOD RequestBP : BOOL
 VAR_INPUT
-	(*StateID of state requesting beam parameter set*)
-	nReqID	: DWORD;
-	(*Requested beam params*)
-	stReqBP	: ST_BeamParams;
+    (*StateID of state requesting beam parameter set*)
+    nReqID	: DWORD;
+    (*Requested beam params*)
+    stReqBP	: ST_BeamParams;
 END_VAR
 VAR_INST
     ReqID : DWORD;

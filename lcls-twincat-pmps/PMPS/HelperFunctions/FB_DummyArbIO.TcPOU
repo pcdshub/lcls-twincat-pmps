@@ -8,16 +8,16 @@ FUNCTION_BLOCK FB_DummyArbIO IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
     //stCurrentBP : REFERENCE TO ST_BeamParams; //Set to something to redirect currentBP update
     LA : I_LowerAuthority;
-    
+
     tRateDelay : TIME; // Delay until rate is looped back into q_stSimulatedBPReadback
     tTransDelay : TIME; // Delay until transmission is looped back into q_stSimulatedBPReadback
     tPEDelay : TIME; // Delay until PE is looped back into q_stSimulatedBPReadback
     tAptDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
-	tSattDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
-    
+    tSattDelay : TIME; // Delay until apertures are looped back into q_stSimulatedBPReadback
+
 END_VAR
 VAR_OUTPUT
-    q_stSimulatedBPReadback : ST_BeamParams; // Updated to 
+    q_stSimulatedBPReadback : ST_BeamParams; // Updated to
 END_VAR
 VAR_IN_OUT
     FFO : FB_HardwareFFOutput;
@@ -26,13 +26,13 @@ VAR
    bAutoUpdateBP : BOOL := FALSE; // Set by AutoUpdateBP property, if true causes this FB to update PMPS_GVL.stCurrentBP to the
    // requested value automatically within the RequestBP method and restore it within the RemoveRequest method
    stNewReqBP : ST_BeamParams;
-   
+
    stReqOutBP : ST_BeamParams;// To be written on next ApplyBPReq call
-   
+
    stSaveCurrentBP : ST_BeamParams; // Will be restored after RemoveRequest then ApplyBPReq call
-   
+
    nSavedID : DWORD; // Used to simulate CheckRequest method
-   
+
    tonRate : TON;
    tonTrans : TON;
    tonPE : TON;
@@ -40,7 +40,7 @@ VAR
    tonSatt : TON;
    tonBCRange: TON;
    tonBC :TON;
-      
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -70,13 +70,13 @@ ELSIF bAutoUpdateBP THEN
     tonApt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astApertures), ADR(q_stSimulatedBPReadback.astApertures), SIZEOF(q_stSimulatedBPReadback.astApertures));
     tonApt(PT:=tAptDelay);
     IF tonApt.Q THEN q_stSimulatedBPReadback.astApertures := stReqOutBP.astApertures; END_IF
-    
+
     tonRate(IN:=stReqOutBP.nRate<>q_stSimulatedBPReadback.nRate, PT:=tRateDelay);
     IF tonRate.Q THEN q_stSimulatedBPReadback.nRate := stReqOutBP.nRate; END_IF
-    
+
     tonTrans(IN:=stReqOutBP.nTran<>q_stSimulatedBPReadback.nTran, PT:=tTransDelay);
     IF tonTrans.Q THEN q_stSimulatedBPReadback.nTran := stReqOutBP.nTran; END_IF
-    
+
     tonPE(IN:=stReqOutBP.neVRange<>q_stSimulatedBPReadback.neVRange, PT:=tPEDelay);
     IF tonPE.Q THEN
         IF stReqOutBP.neVRange = 0 THEN
@@ -84,19 +84,19 @@ ELSIF bAutoUpdateBP THEN
             q_stSimulatedBPReadback.neVRange.0 := TRUE;
         ELSE
             q_stSimulatedBPReadback.neVRange := stReqOutBP.neVRange;
-		END_IF
-	END_IF
-	
-	tonBCRange(IN:=stReqOutBP.nBCRange<>q_stSimulatedBPReadback.nBCRange, PT:=tPEDelay);
-	 IF tonBCRange.Q THEN
+        END_IF
+    END_IF
+
+    tonBCRange(IN:=stReqOutBP.nBCRange<>q_stSimulatedBPReadback.nBCRange, PT:=tPEDelay);
+     IF tonBCRange.Q THEN
         IF stReqOutBP.nBCRange = 0 THEN
             q_stSimulatedBPReadback.nBCRange := 0;
         ELSE
             q_stSimulatedBPReadback.nBCRange := stReqOutBP.nBCRange;
-		END_IF
-	END_IF
-	
-	tonSatt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astAttenuators), ADR(q_stSimulatedBPReadback.astAttenuators), SIZEOF(q_stSimulatedBPReadback.astAttenuators));
+        END_IF
+    END_IF
+
+    tonSatt.IN := 0 <> MEMCMP(ADR(stReqOutBP.astAttenuators), ADR(q_stSimulatedBPReadback.astAttenuators), SIZEOF(q_stSimulatedBPReadback.astAttenuators));
     tonSatt(PT:=tSattDelay);
     IF tonSatt.Q THEN q_stSimulatedBPReadback.astAttenuators := stReqOutBP.astAttenuators; END_IF
 END_IF
@@ -128,7 +128,7 @@ END_VAR
     <Method Name="CheckRequest" Id="{1e6cb171-7319-46e7-96e6-0934e38acd54}" FolderPath="HA_Interface\">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
 VAR_INPUT
-	nReqID	: DWORD;
+    nReqID	: DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -138,9 +138,9 @@ END_VAR
     <Method Name="ElevateRequest" Id="{79fc0fa0-8f3b-4b40-940c-90dad8ef33eb}" FolderPath="LA_Interface\">
       <Declaration><![CDATA[// <Arbiter Internal>
 // Elevates the arbitrated BP set to something above.
-// Could be another arbiter, or a BP requester/ IO, 
+// Could be another arbiter, or a BP requester/ IO,
 // or an FB that locks in a specific portion of the BP set.
-METHOD ElevateRequest : BOOL 
+METHOD ElevateRequest : BOOL
 VAR_INPUT
     HigherAuthority : I_HigherAuthority;
 END_VAR
@@ -164,8 +164,8 @@ END_VAR
       <Declaration><![CDATA[
 METHOD RemoveRequest : BOOL
 VAR_INPUT
-	(*StateID to remove*)
-	nReqID	: DWORD;
+    (*StateID to remove*)
+    nReqID	: DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -181,17 +181,17 @@ RemoveRequest := TRUE;]]></ST>
       <Declaration><![CDATA[// Request a BP from this higher authority
 METHOD RequestBP : BOOL
 VAR_INPUT
-	(*StateID of state requesting beam parameter set*)
-	nReqID	: DWORD;
-	(*Requested beam params*)
-	stReqBP	: ST_BeamParams;
+    (*StateID of state requesting beam parameter set*)
+    nReqID	: DWORD;
+    (*Requested beam params*)
+    stReqBP	: ST_BeamParams;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nReqID <> 0 AND nReqID <> PMPS_GVL.EXCLUDED_ASSERTION_ID THEN
     nSavedID := nReqID;
     stReqOutBP := stReqBP;
-    
+
     RequestBP := TRUE;
 ELSE
     RequestBP := FALSE;

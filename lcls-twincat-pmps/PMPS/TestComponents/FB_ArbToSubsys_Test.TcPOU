@@ -21,30 +21,30 @@ END_VAR
 VAR CONSTANT
     SysID : DWORD := 42;
 END_VAR
-VAR   
+VAR
     nId    :    DWORD := 1;
     stReq    :    ST_BeamParams := (nTran:=12);
 END_VAR
 VAR_INST
     fbArbiter    :    FB_Arbiter(1);
-    
+
     pBPR : POINTER TO ST_BeamParams_IO;
-    
+
     stBPRIO : ST_BeamParams_IO := (
         nCohortInt := 1,
         nTran := 35); // Simulates subsystem BP request
-    
+
     fbArbToSubSys : FB_ArbiterToSubSys_IO := (RequestingSystemID:=42); // Beamline arbiter PLC interface with subsystems
     pBPC : POINTER TO ST_BeamParams_IO;
-    
+
     fbBPR : FB_BPRequestor; // Use in the arbiter PLC to apply an arbitrated beam parameter set to the accelerator interface
-    
+
     FFO : FB_HardwareFFOutput; // Dummy FFO not important for these tests
 
     Cycle : INT := 0;
-    
+
     CycleLimit : INT := 20;
-    
+
 END_VAR
 
 ]]></Declaration>
@@ -76,7 +76,7 @@ TEST('New request');
     AssertTrue(fbArbToSubSys.nActiveCohort = 0, 'Active cohort should remain the initial value until the current request is active in higher arbitration');
     AssertTrue(fbArbToSubSys.o_CurrentBP.nCohortInt = fbArbToSubSys.nActiveCohort, 'Cohort being sent to sub system remains unincremented');
 TEST_FINISHED_NAMED('New request');
-    
+
 
 ///////////////////////////////////////
 //Sub system cycle

@@ -7,54 +7,54 @@ STRUCT
         pv: Duration
         io: o
      '}
-    Duration : DINT; // DINT to be compatible with EPICS 
-    
-	{attribute 'pytmc' := '
+    Duration : DINT; // DINT to be compatible with EPICS
+
+    {attribute 'pytmc' := '
         pv: Expiration
         io: o
      '}
-    Expiration : DINT; // DINT to be compatible with EPICS 
-	
-	{attribute 'pytmc' := '
+    Expiration : DINT; // DINT to be compatible with EPICS
+
+    {attribute 'pytmc' := '
         pv: StartDT
         io: o
      '}
-    StartDT : DINT; // DINT to be compatible with EPICS 
-	
+    StartDT : DINT; // DINT to be compatible with EPICS
+
     {attribute 'pytmc' := '
         pv: Activate
         io: o
      '}
     Activate : BOOL;
-    
+
     {attribute 'pytmc' := '
         pv: Deactivate
         io: o
      '}
     Deactivate : BOOL;
-    
+
     {attribute 'pytmc' := '
         pv: ElapsedTime
         io: i
      '}
-    ElapsedTime : DINT; // DINT to be compatible with EPICS 
-    
+    ElapsedTime : DINT; // DINT to be compatible with EPICS
+
     {attribute 'pytmc' := '
         pv: RemainingTime
         io: i
      '}
-    RemainingTime : DINT; // DINT to be compatible with EPICS 
-    
+    RemainingTime : DINT; // DINT to be compatible with EPICS
+
     {attribute 'pytmc' := '
         pv: Active
         io: i
-     '} 
-	Active: BOOL;
-    
+     '}
+    Active: BOOL;
+
     Timer    :   TP;
     OvrdActLogAck : BOOL;
     OvrdExpLogAck : BOOL;
-    
+
     tOvrdActivate : R_TRIG;
     tOvrdExpiring  : F_TRIG;
 END_STRUCT

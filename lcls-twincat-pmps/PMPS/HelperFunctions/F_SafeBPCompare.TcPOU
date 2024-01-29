@@ -20,14 +20,14 @@ VAR
     // Internal Beam Rate OK boolean
     xRateOK: BOOL;
     //Internal Beam Class Range OK boolean
-	xBCOK : BOOL := FALSE;
+    xBCOK : BOOL := FALSE;
     idx : UINT;
     xAuxAttOK : BOOL := TRUE;
     xAuxAprtOK : BOOL := TRUE;
-    
+
     Att1 : REFERENCE TO ST_PMPS_Attenuator;
     Att2 : REFERENCE TO ST_PMPS_Attenuator;
-    
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -40,7 +40,7 @@ xBCOK := ((BeamParam1.nBCRange AND BeamParam2.nBCRange) = BeamParam1.nBCRange) O
 FOR idx:=1 to PMPS_GVL.AUX_ATTENUATORS DO
     Att1 REF= BeamParam1.astAttenuators[idx];
     Att2 REF= BeamParam2.astAttenuators[idx];
-    xAuxAttOK R= ( Att1.nTran > MIN( PMPS_GVL.TRANS_SCALING_FACTOR, ( (Att2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR ) ) );    
+    xAuxAttOK R= ( Att1.nTran > MIN( PMPS_GVL.TRANS_SCALING_FACTOR, ( (Att2.nTran *(PMPS_GVL.TRANS_SCALING_FACTOR+PMPS_PARAM.TRANS_MARGIN))/PMPS_GVL.TRANS_SCALING_FACTOR ) ) );
 END_FOR
 
 FOR idx:=1 to PMPS_GVL.MAX_APERTURES DO

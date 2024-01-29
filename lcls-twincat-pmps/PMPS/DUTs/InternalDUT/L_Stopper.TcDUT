@@ -5,12 +5,12 @@
 {attribute 'strict'}
 TYPE L_Stopper :
 (
-	ST1L0 := 1, // ST1
+    ST1L0 := 1, // ST1
     ST1L1 := 2, // TXI PPS Stopper in
-	MR1L0_L0 := 3, // MR1L0 Pitch state delivery to L0 line
-	MR1L0_TXI := 4, //MR1L0 Pitch state delivery to TXI line
-	MR1L1_IN:= 5, //  TXI Offset Mirror horizontal state
-	MR1L1_OUT:= 6, // TXI Offset Mirror horizontal state
+    MR1L0_L0 := 3, // MR1L0 Pitch state delivery to L0 line
+    MR1L0_TXI := 4, //MR1L0 Pitch state delivery to TXI line
+    MR1L1_IN:= 5, //  TXI Offset Mirror horizontal state
+    MR1L1_OUT:= 6, // TXI Offset Mirror horizontal state
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
 );
 END_TYPE

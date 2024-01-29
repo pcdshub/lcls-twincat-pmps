@@ -12,7 +12,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	Arbiter	: FB_Arbiter;
+    Arbiter	: FB_Arbiter;
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
@@ -28,11 +28,11 @@ VAR
         io: i'}
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
     xTxPDO_state    AT    %I*    :    BIT;
-    
-    
+
+
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Arbiter network interface disconnected or not OP',i_DevName := sName);
-    
+
     // A request is not considered included until the active cohort number is >= the request cohort number.
     {attribute 'pytmc' := 'pv: RequestCohort
         io: i'}
@@ -40,10 +40,10 @@ VAR
     {attribute 'pytmc' := 'pv: ActiveCohort
         io: i'}
     nActiveCohort : UDINT := 0; // Active cohort, updated by incoming BP from arbiter PLC, in the ElevateRequest arbiter call
-    
+
     fbVetoArb : FB_VetoArbiter;
 
-	fbLog : FB_LogMessage;
+    fbLog : FB_LogMessage;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -73,7 +73,7 @@ ffPMPSIO_Disconnect(
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
 VAR_INPUT
-	nReqID	: DWORD;
+    nReqID	: DWORD;
 END_VAR
 VAR_INST
     xFirstTime : BOOL := TRUE;
@@ -97,7 +97,7 @@ CheckRequest := nRequestCohort <= nActiveCohort;]]></ST>
     <Method Name="RemoveRequest" Id="{d73fcee0-bda0-40f1-90f5-f8e021f35983}">
       <Declaration><![CDATA[METHOD RemoveRequest : BOOL
 VAR_INPUT
-	nReqID    :    DWORD; //StateID to remove
+    nReqID    :    DWORD; //StateID to remove
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Update internal BP request struct
@@ -114,10 +114,10 @@ RemoveRequest := TRUE;]]></ST>
     <Method Name="RequestBP" Id="{e2fc147e-ed0b-480c-b8bb-db22a7cb743b}">
       <Declaration><![CDATA[METHOD RequestBP : BOOL
 VAR_INPUT
-	(*StateID of state requesting beam parameter set*)
-	nReqID	: DWORD;
-	(*Requested beam params*)
-	stReqBP	: ST_BeamParams;
+    (*StateID of state requesting beam parameter set*)
+    nReqID	: DWORD;
+    (*Requested beam params*)
+    stReqBP	: ST_BeamParams;
 END_VAR
 ]]></Declaration>
       <Implementation>
