@@ -3,148 +3,147 @@
   <POU Name="FB_JsonDocToSafeBP" Id="{be21f50f-6e98-4ce2-92ee-0a1b1ced09d9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_JsonDocToSafeBP
 VAR_INPUT
-	bExecute             : BOOL; //Rising Edge
-	jsonDoc 		: SJsonValue;
-	sDeviceName : STRING;
-	//asDeviceStateNames: ARRAY [1.. MOTION_GVL.MAX_STATES] OF STRING;
+    bExecute             : BOOL; //Rising Edge
+    jsonDoc 		: SJsonValue;
+    sDeviceName : STRING;
 END_VAR
 VAR_OUTPUT
-	bHasDevice		: BOOL;
-	bHasAllStates		: BOOL;
-	bHasAllParameters :BOOL := TRUE;
-	bBusy                : BOOL;
+    bHasDevice		: BOOL;
+    bHasAllStates		: BOOL;
+    bHasAllParameters :BOOL := TRUE;
+    bBusy                : BOOL;
     bError               : BOOL;
     nErrId               : UDINT;
-	sErrMsg				 :STRING;
+    sErrMsg				 :STRING;
 END_VAR
 VAR_IN_OUT
-	//ARRAY [1.. MOTION_GVL.MAX_STATES] ;
-	arrStates: ARRAY[*] OF ST_DbStateParams;
-	io_fbFFHWO    :    FB_HardwareFFOutput;
+    //ARRAY [1.. MOTION_GVL.MAX_STATES] ;
+    arrStates: ARRAY[*] OF ST_DbStateParams;
+    io_fbFFHWO    :    FB_HardwareFFOutput;
 END_VAR
 VAR
-	(* JSON *)
-	fbJson 			: FB_JsonDomParser;
-	jsonProp		: SJsonValue;
-	jsonValue		: SJsonValue;
-	jsonParam		: SJsonValue;
-	jsonnTran      : SJsonValue;
-	jsonnRate      : SJsonValue;
-	Step: INT;
-	index: DINT;
-	nStateCount:DINT;
+    (* JSON *)
+    fbJson 			: FB_JsonDomParser;
+    jsonProp		: SJsonValue;
+    jsonValue		: SJsonValue;
+    jsonParam		: SJsonValue;
+    jsonnTran      : SJsonValue;
+    jsonnRate      : SJsonValue;
+    Step: INT;
+    index: DINT;
+    nStateCount:DINT;
     RisingEdge           : R_TRIG;
 
-	(*Logger*)
-	tNewMessage : R_TRIG;
-    fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);	
-	(*FFO*)
-	FFO    :    FB_FastFault :=(
+    (*Logger*)
+    tNewMessage : R_TRIG;
+    fbLogger : FB_LogMessage := (eSubsystem:=E_SubSystem.MPS, nMinTimeViolationAcceptable:=10);
+    (*FFO*)
+    FFO    :    FB_FastFault :=(
         i_Desc := 'Fault occurs when there is an error loading safe beam parameters from json file',
         i_TypeCode := 16#FF13);
-	sbuffReadSmall: INT;
+    sbuffReadSmall: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* Retrieve JSON content *)
-RisingEdge(CLK:=bExecute); 
+RisingEdge(CLK:=bExecute);
 
-CASE Step OF 
-    0:     (* Idle state *) 
-          IF RisingEdge.Q THEN 
-               bBusy := TRUE; 
-               bError:= FALSE; 
-               nErrId:=0; 
-			   sErrMsg :='';
-               Step := 20; 
-			   fbLogger(sMsg:='Start Parsing Json DOC.', eSevr:=TcEventSeverity.Info);
-          END_IF 
-	
-	 20: (*Find the Device Name*)  
-		bHasDevice := fbJson.HasMember(jsonDoc, sDeviceName);
-		IF (bHasDevice) THEN
-			jsonProp := fbJson.FindMember(jsonDoc, sDeviceName);
-			IF jsonProp <> 0 THEN	
-				Step := Step+1;
-				ELSE
-					Step := 900 + Step;
-					nErrId := Step; 
-					bError := TRUE; 
-					sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);
-				END_IF
-		ELSE
-			Step := 900 + Step;
-			nErrId := Step; 
-			bError := TRUE; 
-			sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);		
-		END_IF
-		
-	 21: (*Check device States in DOM*)
-	 		nStateCount :=0;
-	 		FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
-				  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
-					  IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
-							  Step := 900+ Step;
-							  nErrId := Step; 
-							  bError := TRUE; 
-							  sErrMsg:= CONCAT('Error loading device state in Json File : ',arrStates[Index].sPmpsState);
-							  fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
-							  EXIT;
-					    ELSE 
-							nStateCount :=nStateCount+1;
-					  END_IF
-				   ELSE   
-					   bHasAllStates :=TRUE;
-					   EXIT;
-				  END_IF
-		    END_FOR
+CASE Step OF
+    0:     (* Idle state *)
+          IF RisingEdge.Q THEN
+               bBusy := TRUE;
+               bError:= FALSE;
+               nErrId:=0;
+               sErrMsg :='';
+               Step := 20;
+               fbLogger(sMsg:='Start Parsing Json DOC.', eSevr:=TcEventSeverity.Info);
+          END_IF
 
-		   Step := Step+1;
-			
-	 22: //MAke sure state array input has State name data
-		  IF (nStateCount =0) THEN
-			  bHasAllStates :=FALSE;
-			  Step := 900+ Step;
-			  nErrId := Step; 
-			  bError := TRUE; 
-			  sErrMsg:= CONCAT('Error Input State array is empty : ',sDeviceName);				  
-		 ELSE 
-			 Step := Step+1;		 
-		 END_IF;
+     20: (*Find the Device Name*)
+        bHasDevice := fbJson.HasMember(jsonDoc, sDeviceName);
+        IF (bHasDevice) THEN
+            jsonProp := fbJson.FindMember(jsonDoc, sDeviceName);
+            IF jsonProp <> 0 THEN
+                Step := Step+1;
+                ELSE
+                    Step := 900 + Step;
+                    nErrId := Step;
+                    bError := TRUE;
+                    sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);
+                END_IF
+        ELSE
+            Step := 900 + Step;
+            nErrId := Step;
+            bError := TRUE;
+            sErrMsg:=  CONCAT('Error device name not found in Json File : ',sDeviceName);
+        END_IF
 
-	 23:  (*loop Device State Arrays to find load all States BP*)
-	      FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
-			  IF NOT (arrStates[Index].sPmpsState= '') THEN
-				  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
-					  Step := 900+ Step;
-					  fbLogger.sMsg := CONCAT('Error Parsing beam parameters - Device/States: ', arrStates[Index].sPmpsState);
-					  fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
-				  END_IF
-			   ELSE 
-					EXIT;
-			   END_IF
-		  END_FOR
-		  IF (bHasAllParameters) THEN Step := 30;
-			  ELSE Step := 900+ Step;
-		  END_IF
-		  
-	 30: (*ALL good here*)
-	 	fbLogger.sMsg := CONCAT('Complete Parsing Json Doc. Device: ', sDeviceName);
-		fbLogger.sMsg := CONCAT(fbLogger.sMsg ,' - States Count: ');
-		fbLogger.sMsg := CONCAT(fbLogger.sMsg ,TO_STRING(nStateCount));
-	  	fbLogger(eSevr:=TcEventSeverity.Info);
-	 	bExecute:= FALSE;
-	    bBusy:=FALSE;
-		Step := 0;
-		FFO.i_xOK := TRUE;
+     21: (*Check device States in DOM*)
+             nStateCount :=0;
+             FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
+                  IF NOT ((arrStates[Index].sPmpsState= '') OR (arrStates[Index].sPmpsState= 'Invalid')) THEN
+                      IF NOT (fbJson.HasMember(jsonProp, arrStates[Index].sPmpsState)) THEN
+                              Step := 900+ Step;
+                              nErrId := Step;
+                              bError := TRUE;
+                              sErrMsg:= CONCAT('Error loading device state in Json File : ',arrStates[Index].sPmpsState);
+                              fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+                              EXIT;
+                        ELSE
+                            nStateCount :=nStateCount+1;
+                      END_IF
+                   ELSE
+                       bHasAllStates :=TRUE;
+                       EXIT;
+                  END_IF
+            END_FOR
+
+           Step := Step+1;
+
+     22: //Make sure state array input has State name data
+          IF (nStateCount =0) THEN
+              bHasAllStates :=FALSE;
+              Step := 900+ Step;
+              nErrId := Step;
+              bError := TRUE;
+              sErrMsg:= CONCAT('Error Input State array is empty : ',sDeviceName);
+         ELSE
+             Step := Step+1;
+         END_IF;
+
+     23:  (*loop Device State Arrays to find load all States BP*)
+          FOR Index:=LOWER_BOUND(arrStates,1) TO UPPER_BOUND(arrStates,1) BY 1 DO
+              IF NOT (arrStates[Index].sPmpsState= '') THEN
+                  IF(NOT M_LoadSafeBP(arrStates[Index].sPmpsState, Index)) THEN
+                      Step := 900+ Step;
+                      fbLogger.sMsg := CONCAT('Error Parsing beam parameters - Device/States: ', arrStates[Index].sPmpsState);
+                      fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+                  END_IF
+               ELSE
+                    EXIT;
+               END_IF
+          END_FOR
+          IF (bHasAllParameters) THEN Step := 30;
+              ELSE Step := 900+ Step;
+          END_IF
+
+     30: (*ALL good here*)
+         fbLogger.sMsg := CONCAT('Complete Parsing Json Doc. Device: ', sDeviceName);
+        fbLogger.sMsg := CONCAT(fbLogger.sMsg ,' - States Count: ');
+        fbLogger.sMsg := CONCAT(fbLogger.sMsg ,TO_STRING(nStateCount));
+          fbLogger(eSevr:=TcEventSeverity.Info);
+         bExecute:= FALSE;
+        bBusy:=FALSE;
+        Step := 0;
+        FFO.i_xOK := TRUE;
 END_CASE
 
 
 //Fault in error state
 IF(Step>=900) THEN
-	FFO.i_xOK := FALSE;
-	bBusy:=FALSE;
-	Step:=0;
+    FFO.i_xOK := FALSE;
+    bBusy:=FALSE;
+    Step:=0;
 END_IF
 ACT_FFO();
 ACT_LOGGER();]]></ST>
@@ -154,8 +153,8 @@ ACT_LOGGER();]]></ST>
         <ST><![CDATA[(*FAST FAULT*)
 FFO(i_xOK := ,
     i_xReset := ,
-	i_xAutoReset :=TRUE,
-	i_DevName := sDeviceName,
+    i_xAutoReset :=TRUE,
+    i_DevName := sDeviceName,
     io_fbFFHWO := io_fbFFHWO);]]></ST>
       </Implementation>
     </Action>
@@ -170,106 +169,117 @@ IF tNewMessage.Q THEN fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
     <Method Name="M_LoadSafeBP" Id="{5023fc20-80a3-4a48-bcd3-d8289f8af669}">
       <Declaration><![CDATA[METHOD M_LoadSafeBP : BOOL
 VAR_INPUT
-	sStateName : STRING;
-	Index:DINT;
+    sStateName : STRING;
+    Index:DINT;
 END_VAR
 VAR
-	//bHasAllParameters : BOOL := TRUE;
-	sAperture:STRING;
-	nAperture:INT := -1;
-	sEV:STRING;
-	sBC:STRING;
-	nIndex:INT;
+    //bHasAllParameters : BOOL := TRUE;
+    sAperture:STRING;
+    nAperture:INT := -1;
+    sEV:STRING;
+    sBC:STRING;
+    nIndex:INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[bHasAllParameters :=  fbJson.HasMember(jsonProp, sStateName);
 jsonValue := fbJson.FindMember(jsonProp, sStateName);
 IF bHasAllParameters THEN
-	//nTran
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nTran');
-	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nTran', eSevr:=TcEventSeverity.Critical); END_IF
-	jsonnTran := fbJson.FindMember(jsonValue, 'nTran');
-	arrStates[Index].stBeamParams.nTran := TO_REAL(fbJson.GetString(jsonnTran));
-	
-	//nRate
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nRate');
-	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nRate', eSevr:=TcEventSeverity.Critical); END_IF
-	jsonnRate := fbJson.FindMember(jsonValue, 'nRate');
-	arrStates[Index].stBeamParams.nRate:= TO_UDINT(fbJson.GetString(jsonnRate));
-	
-	//neVRange
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'neVRange');
-	jsonParam := fbJson.FindMember(jsonValue, 'neVRange');
-	sEV:=(fbJson.GetString(jsonParam));
-	bHasAllParameters R= NOT (LEN(sEV)=32);
-	This^.arrStates[Index].stBeamParams.neVRange :=0;
-	IF (NOT bHasAllParameters) THEN 
-		fbLogger(sMsg:= 'Error Loading eVRange', eSevr:=TcEventSeverity.Critical); 
-		ELSE
-			FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries BY 1 DO
-				This^.arrStates[Index].stBeamParams.neVRange := SHL(This^.arrStates[Index].stBeamParams.neVRange,1);
-				This^.arrStates[Index].stBeamParams.neVRange := This^.arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
-			END_FOR
-	END_IF
-	
-	//nBeamClassRange
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nBeamClassRange');
-	jsonParam := fbJson.FindMember(jsonValue, 'nBeamClassRange');
-	sBC:=(fbJson.GetString(jsonParam));
-	bHasAllParameters R= NOT (LEN(sBC)=15);
-	arrStates[Index].stBeamParams.nBCRange :=0;
-	IF (NOT bHasAllParameters) THEN 
-			fbLogger(sMsg:= 'Error Loading Beam Class Range. Make sure Bitmask is equal than 15 bits.', eSevr:=TcEventSeverity.Critical);
-	ELSE
-		FOR nIndex := 0 TO 14 BY 1 DO
-			arrStates[Index].stBeamParams.nBCRange := SHL(arrStates[Index].stBeamParams.nBCRange,1);
-			arrStates[Index].stBeamParams.nBCRange := arrStates[Index].stBeamParams.nBCRange+HEXASCNIBBLE_TO_BYTE(sBC[nIndex]);
-		END_FOR
-	 END_IF
-	
-	//ApertureName and Values
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_name');
-	jsonParam := fbJson.FindMember(jsonValue, 'ap_name');
-	sAperture := fbJson.GetString(jsonParam);
-{IF defined (L)}
-	IF ('SL1L0' = sAperture) THEN nAperture := L_Apertures.SL1L0;
-	ELSIF ('SL2L0' = sAperture) THEN nAperture := L_Apertures.SL2L0; 
-	END_IF
-{ELSIF defined (K)} // Attribute 'to_string' only build 4024 TO_STRING(PMPS.K_Apertures.SL1K0) - need another non hardcoded way
-	IF ('SL1K0' = sAperture) THEN nAperture := K_Apertures.SL1K0;
-	ELSIF ('SL2K0' = sAperture) THEN nAperture := K_Apertures.SL2K0;
-	END_IF
-{END_IF}
-	IF (nAperture>-1) THEN	
-		//Gap Height
-		bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_ygap');
-		jsonParam := fbJson.FindMember(jsonValue, 'ap_ygap');
-		arrStates[Index].stBeamParams.astApertures[nAperture].Height := TO_REAL(fbJson.GetString(jsonParam));
-		
-		//Gap Width
-		bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_xgap');
-		jsonParam := fbJson.FindMember(jsonValue, 'ap_xgap');
-		arrStates[Index].stBeamParams.astApertures[nAperture].Width := TO_REAL(fbJson.GetString(jsonParam));
+    //nTran
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nTran');
+    IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nTran', eSevr:=TcEventSeverity.Critical); END_IF
+    jsonnTran := fbJson.FindMember(jsonValue, 'nTran');
+    arrStates[Index].stBeamParams.nTran := TO_REAL(fbJson.GetString(jsonnTran));
 
-		IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading aperture gap', eSevr:=TcEventSeverity.Critical); END_IF	
-	END_IF
-	
-	//Read Transition ID for the State
-	bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
-	jsonParam := fbJson.FindMember(jsonValue, 'id');
-	IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Assertion ID', eSevr:=TcEventSeverity.Critical); END_IF
-	arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
-	
-	//Set to True to indicate this state has been initialized
-	arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
+    //nRate
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nRate');
+    IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading nRate', eSevr:=TcEventSeverity.Critical); END_IF
+    jsonnRate := fbJson.FindMember(jsonValue, 'nRate');
+    arrStates[Index].stBeamParams.nRate:= TO_UDINT(fbJson.GetString(jsonnRate));
+
+    //neVRange
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'neVRange');
+    jsonParam := fbJson.FindMember(jsonValue, 'neVRange');
+    sEV:=(fbJson.GetString(jsonParam));
+    bHasAllParameters R= NOT (LEN(sEV)=32);
+    This^.arrStates[Index].stBeamParams.neVRange :=0;
+    IF (NOT bHasAllParameters) THEN
+        fbLogger(sMsg:= 'Error Loading eVRange', eSevr:=TcEventSeverity.Critical);
+        ELSE
+            FOR nIndex := 0 TO PMPS_GVL.g_cBoundaries BY 1 DO
+                This^.arrStates[Index].stBeamParams.neVRange := SHL(This^.arrStates[Index].stBeamParams.neVRange,1);
+                This^.arrStates[Index].stBeamParams.neVRange := This^.arrStates[Index].stBeamParams.neVRange+HEXASCNIBBLE_TO_BYTE(sEV[nIndex]);
+            END_FOR
+    END_IF
+
+    //nBeamClassRange
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'nBeamClassRange');
+    jsonParam := fbJson.FindMember(jsonValue, 'nBeamClassRange');
+    sBC:=(fbJson.GetString(jsonParam));
+    bHasAllParameters R= NOT (LEN(sBC)=15);
+    arrStates[Index].stBeamParams.nBCRange :=0;
+    IF (NOT bHasAllParameters) THEN
+            fbLogger(sMsg:= 'Error Loading Beam Class Range. Make sure Bitmask is equal than 15 bits.', eSevr:=TcEventSeverity.Critical);
+    ELSE
+        FOR nIndex := 0 TO 14 BY 1 DO
+            arrStates[Index].stBeamParams.nBCRange := SHL(arrStates[Index].stBeamParams.nBCRange,1);
+            arrStates[Index].stBeamParams.nBCRange := arrStates[Index].stBeamParams.nBCRange+HEXASCNIBBLE_TO_BYTE(sBC[nIndex]);
+        END_FOR
+     END_IF
+
+    //ApertureName and Values
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_name');
+    jsonParam := fbJson.FindMember(jsonValue, 'ap_name');
+    sAperture := fbJson.GetString(jsonParam);
+{IF defined (L)}
+    IF ('SL1L0' = sAperture) THEN nAperture := L_Apertures.SL1L0;
+    ELSIF ('SL2L0' = sAperture) THEN nAperture := L_Apertures.SL2L0;
+    END_IF
+{ELSIF defined (K)} // Attribute 'to_string' only build 4024 TO_STRING(PMPS.K_Apertures.SL1K0) - need another non hardcoded way
+    IF ('SL1K0' = sAperture) THEN nAperture := K_Apertures.SL1K0;
+    ELSIF ('SL2K0' = sAperture) THEN nAperture := K_Apertures.SL2K0;
+    END_IF
+{END_IF}
+    IF (nAperture>-1) THEN
+        //Gap Height
+        bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_ygap');
+        jsonParam := fbJson.FindMember(jsonValue, 'ap_ygap');
+        arrStates[Index].stBeamParams.astApertures[nAperture].Height := TO_REAL(fbJson.GetString(jsonParam));
+
+        //Gap Width
+        bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'ap_xgap');
+        jsonParam := fbJson.FindMember(jsonValue, 'ap_xgap');
+        arrStates[Index].stBeamParams.astApertures[nAperture].Width := TO_REAL(fbJson.GetString(jsonParam));
+
+        IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading aperture gap', eSevr:=TcEventSeverity.Critical); END_IF
+    END_IF
+
+    //Read Transition ID for the State
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'id');
+    jsonParam := fbJson.FindMember(jsonValue, 'id');
+    IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Assertion ID', eSevr:=TcEventSeverity.Critical); END_IF
+    arrStates[Index].nRequestAssertionID := TO_UDINT(fbJson.GetInt(jsonParam));
+
+    //Set to True to indicate this state has been initialized
+    arrStates[Index].bBeamParamsLoaded := bHasAllParameters;
+
+    //Read additional Non-BP Parameters
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'reactive_temp');
+    jsonParam := fbJson.FindMember(jsonValue, 'reactive_temp');
+    IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Temperature Threshold', eSevr:=TcEventSeverity.Critical); END_IF
+    arrStates[Index].stReactiveParams.nTempSP := TO_REAL(fbJson.GetString(jsonParam));
+
+    bHasAllParameters R= NOT fbJson.HasMember(jsonValue, 'reactive_pressure');
+    jsonParam := fbJson.FindMember(jsonValue, 'reactive_pressure');
+    IF (NOT bHasAllParameters) THEN fbLogger(sMsg:= 'Error Loading Pressure Threshold', eSevr:=TcEventSeverity.Critical); END_IF
+    arrStates[Index].stReactiveParams.nPressSP := TO_REAL(fbJson.GetString(jsonParam));
 END_IF
 
 IF NOT(	bHasAllParameters) THEN
-	nErrId := 900+Step; 
-    bError := TRUE; 
-	sErrMsg:= CONCAT('Error loading BP Data - Device-State: ',sStateName); 	
-	fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
+    nErrId := 900+Step;
+    bError := TRUE;
+    sErrMsg:= CONCAT('Error loading BP Data - Device-State: ',sStateName);
+    fbLogger(sMsg:= sErrMsg, eSevr:=TcEventSeverity.Critical);
 END_IF
 
 M_LoadSafeBP:=bHasAllParameters;

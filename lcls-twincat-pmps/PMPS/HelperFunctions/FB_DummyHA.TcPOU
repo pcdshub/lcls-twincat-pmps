@@ -16,7 +16,7 @@ END_VAR
     <Method Name="CheckRequest" Id="{6032c3d9-45c7-4cc0-b102-000af7719efd}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
 VAR_INPUT
-	nReqID	: DWORD;
+    nReqID	: DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -26,9 +26,9 @@ END_VAR
     <Method Name="ElevateRequest" Id="{f71f404d-56b3-451d-b2b2-c6689b13e32e}">
       <Declaration><![CDATA[// <Arbiter Internal>
 // Elevates the arbitrated BP set to something above.
-// Could be another arbiter, or a BP requester/ IO, 
+// Could be another arbiter, or a BP requester/ IO,
 // or an FB that locks in a specific portion of the BP set.
-METHOD ElevateRequest : BOOL 
+METHOD ElevateRequest : BOOL
 VAR_INPUT
     HigherAuthority : I_HigherAuthority;
 END_VAR
@@ -52,8 +52,8 @@ END_VAR
       <Declaration><![CDATA[
 METHOD RemoveRequest : BOOL
 VAR_INPUT
-	(*StateID to remove*)
-	nReqID	: DWORD;
+    (*StateID to remove*)
+    nReqID	: DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -64,10 +64,10 @@ END_VAR
       <Declaration><![CDATA[
 METHOD RequestBP : BOOL
 VAR_INPUT
-	(*StateID of state requesting beam parameter set*)
-	nReqID	: DWORD;
-	(*Requested beam params*)
-	stReqBP	: ST_BeamParams;
+    (*StateID of state requesting beam parameter set*)
+    nReqID	: DWORD;
+    (*Requested beam params*)
+    stReqBP	: ST_BeamParams;
 END_VAR
 ]]></Declaration>
       <Implementation>

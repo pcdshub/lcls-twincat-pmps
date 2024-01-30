@@ -28,19 +28,19 @@ VAR
     Result : DWORD;
     {attribute 'displaymode' := 'binary'}
     TestEV : DWORD;
-    
+
     {attribute 'displaymode' := 'binary'}
     tEvW : DWORD;
     tEv : REAL;
-    
-    
+
+
     fbStr : FB_FormatString;
-    
+
     MiscNumber : INT;
 END_VAR
 VAR CONSTANT
     nLowerLimitBoundary : INT := 0;
-    
+
     RandomBoundary : INT := 2;
     MNU : INT := 3; //RandomBoundary + 1
     MND : INT := 1; //RandomBoundary - 1
@@ -56,7 +56,7 @@ Result := F_eVRangeCalculator(tEv, 0);
 AssertTrue(
     Result = tEvW,
     'Lower limit not inclusive');
-    
+
 // Lower range flags
 tEvW.nLowerLimitBoundary := TRUE;
 tEv := PMPS_GVL.g_areVBoundaries[nLowerLimitBoundary] / 2;
@@ -64,7 +64,7 @@ Result := F_eVRangeCalculator(tEv, 0);
 AssertTrue(
     Result = tEvW,
     'eV below lower range should come back true');
-    
+
 //Mid range
 tEvW := 0;
 tEvW.RandomBoundary := TRUE;
@@ -91,7 +91,7 @@ Test('Negative eV failsafes');
 //Negative eV
 AssertTrue(
     F_eVRangeCalculator(-300, 0) = 16#FFFF_FFFF,
-    'Working with antimatter? Negative eV should failsafe to FFFF.');    
+    'Working with antimatter? Negative eV should failsafe to FFFF.');
 
 TEST_FINISHED();
 
@@ -99,7 +99,7 @@ Test('Out of range eV failsafes');
 // eV too high
 AssertTrue(
     F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[PMPS_GVL.g_cBoundaries] + 1, 0) = 16#FFFF_FFFF,
-    'eV above the last threshold should failsafe.');    
+    'eV above the last threshold should failsafe.');
 
 TEST_FINISHED();
 
@@ -115,27 +115,27 @@ LastWord := F_eVRangeCalculator(PMPS_GVL.g_areVBoundaries[RandomBoundary], 2#000
     TestEV := 0;
     TestEV.RandomBoundary := TRUE;
     TestEV.MNU := True;
- 
+
     fbStr.arg1 := F_DWORD(Result);
     fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving up does not stick. Result: %b vs. Test: %b';
     fbStr();
-        
+
 AssertTrue(Result = TestEV,
     fbStr.sOut);
-    
+
     Result := F_eVRangeCalculator(
-        PMPS_GVL.g_areVBoundaries[RandomBoundary - 1] - PMPS_GVL.reVHyst + PMPS_GVL.reVHyst/2, 
+        PMPS_GVL.g_areVBoundaries[RandomBoundary - 1] - PMPS_GVL.reVHyst + PMPS_GVL.reVHyst/2,
         LastWord);
     TestEV := 0;
     TestEV.RandomBoundary := TRUE;
     TestEV.MND := True;
-    
+
     fbStr.arg1 := F_DWORD(Result);
     fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving down does not stick. Result: %b vs. Test: %b';
     fbStr();
-    
+
 AssertTrue(Result = TestEV,
     fbStr.sOut);
 
@@ -144,30 +144,30 @@ TEST_FINISHED();
 Test('Check hyst drops');
 
     Result := F_eVRangeCalculator(
-        PMPS_GVL.g_areVBoundaries[MND] - PMPS_GVL.reVHyst*1.1, 
+        PMPS_GVL.g_areVBoundaries[MND] - PMPS_GVL.reVHyst*1.1,
         LastWord);
     TestEV := 0;
     TestEV.MND := TRUE;
-    
+
     fbStr.arg1 := F_DWORD(Result);
     fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving down does not drop. Result: %b vs. Test: %b';
     fbStr();
-    
+
 AssertTrue(Result = TestEV,
     fbStr.sOut);
 
     Result := F_eVRangeCalculator(
-        PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst*1.1, 
+        PMPS_GVL.g_areVBoundaries[RandomBoundary] + PMPS_GVL.reVHyst*1.1,
         LastWord);
     TestEV := 0;
     TestEV.MNU := TRUE;
-    
+
     fbStr.arg1 := F_DWORD(Result);
     fbStr.arg2 := F_DWORD(TestEV);
     fbStr.sFormat := 'Moving up does not drop. Result: %b vs. Test: %b';
     fbStr();
-    
+
 AssertTrue(Result = TestEV,
     fbStr.sOut);
 

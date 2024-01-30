@@ -6,10 +6,10 @@ VAR_INPUT
     (* Undulator period in millimeters, to be set by subclasses *)
     fPeriod_mm : LREAL := 1.0;
     fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
-	
-	fLowK : LREAL := 0;
-	fHiK : LREAL := 6;
-	fKRangeHyst : LREAL := 0.01;
+
+    fLowK : LREAL := 0;
+    fHiK : LREAL := 6;
+    fKRangeHyst : LREAL := 0.01;
 END_VAR
 
 VAR_OUTPUT
@@ -28,49 +28,49 @@ VAR_OUTPUT
         field: EGU eV
     '}
     fPhotonEnergyDes : LREAL;
-	
-	{attribute 'pytmc' := '
+
+    {attribute 'pytmc' := '
         pv: Active
-		io: i
+        io: i
         field: DESC Undulator is considered active
     '}
-	xActive : BOOL; // Undulator is considered active
-    
+    xActive : BOOL; // Undulator is considered active
+
     {attribute 'pytmc' := '
         pv: TargetActive
-		io: i
+        io: i
         field: DESC Target K would make und active
     '}
-	xTargetActive : BOOL; // Undulator is considered active at this target
-    
+    xTargetActive : BOOL; // Undulator is considered active at this target
+
     {attribute 'pytmc' := '
         pv: KAct
-		io: i
+        io: i
         field: DESC Current K
     '}
     fKAct : LREAL;
-    
+
     {attribute 'pytmc' := '
         pv: KDes
-		io: i
+        io: i
         field: DESC Target K
     '}
     fKDes : LREAL;
-    
+
         {attribute 'pytmc' := '
         pv: KActValid
-		io: i
+        io: i
         field: DESC Current K Readback Valid
     '}
     bKActValid : BOOL;
-    
+
     {attribute 'pytmc' := '
         pv: KDesValid
-		io: i
+        io: i
         field: DESC Target K Readback Valid
     '}
     bKDesValid : BOOL;
-    
+
 END_VAR
 
 VAR
@@ -105,18 +105,18 @@ IF __ISVALIDREF(fbElectronEnergy) THEN
             fUndulatorPeriod_mm:=fPeriod_mm,
             fUndulatorStrength:=fbKActual.fValue
         );
-		
-		//Set this undulator active if actual K is within operational range
-		xActive S= fLowK <= fbKActual.fValue AND fbKActual.fValue <= fHiK AND
-		(fbKActual.bValid AND fbKActual.bValid);
-		xActive R= (fLowK - fKRangeHyst) > fbKActual.fValue OR fbKActual.fValue > (fHiK + fKRangeHyst) OR
-					(NOT fbKActual.bValid OR NOT fbKActual.bValid);
-                    
+
+        //Set this undulator active if actual K is within operational range
+        xActive S= fLowK <= fbKActual.fValue AND fbKActual.fValue <= fHiK AND
+        (fbKActual.bValid AND fbKActual.bValid);
+        xActive R= (fLowK - fKRangeHyst) > fbKActual.fValue OR fbKActual.fValue > (fHiK + fKRangeHyst) OR
+                    (NOT fbKActual.bValid OR NOT fbKActual.bValid);
+
         //Set this undulator active if target K is within operational range
-		xTargetActive S= fLowK <= fbKDesired.fValue AND fbKDesired.fValue <= fHiK AND
-		(fbKDesired.bValid AND fbKDesired.bValid);
-		xTargetActive R= (fLowK - fKRangeHyst) > fbKDesired.fValue OR fbKDesired.fValue > (fHiK + fKRangeHyst) OR
-					(NOT fbKDesired.bValid OR NOT fbKDesired.bValid);
+        xTargetActive S= fLowK <= fbKDesired.fValue AND fbKDesired.fValue <= fHiK AND
+        (fbKDesired.bValid AND fbKDesired.bValid);
+        xTargetActive R= (fLowK - fKRangeHyst) > fbKDesired.fValue OR fbKDesired.fValue > (fHiK + fKRangeHyst) OR
+                    (NOT fbKDesired.bValid OR NOT fbKDesired.bValid);
     END_IF
 
     IF fbKDesired.bValid AND fbElectronEnergy.bValid THEN

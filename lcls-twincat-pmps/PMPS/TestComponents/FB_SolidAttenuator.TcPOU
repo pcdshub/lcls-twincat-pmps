@@ -29,7 +29,7 @@ END_VAR
 
 //
 
-//Assuming the blades are ordered thickest to thinnest 
+//Assuming the blades are ordered thickest to thinnest
 REPEAT
     rTryAttenuation := rCurrentAccumulatedAttenuation + stAttenuator.axBlades[nTryIndex].rThickness;
     IF rRequestedAttenuation >= rTryAttenuation THEN

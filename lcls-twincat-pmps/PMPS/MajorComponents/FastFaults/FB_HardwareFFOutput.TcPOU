@@ -20,7 +20,7 @@ VAR_INPUT
      '}
     i_xVeto    :    BOOL;
     bAutoReset : BOOL := FALSE; // Set true for the FFO to automatically permit beam again after all fast faults are cleared
-	i_sNetID : T_AmsNetID:=''; //Set to the Arbiter AmsNetID to be used for the synchronisation. An empty string means the system will sue local time
+    i_sNetID : T_AmsNetID:=''; //Set to the Arbiter AmsNetID to be used for the synchronisation. An empty string means the system will sue local time
 END_VAR
 VAR_OUTPUT
     {attribute 'pytmc' := '
@@ -29,7 +29,7 @@ VAR_OUTPUT
         field: DESC Hardware Output Status
      '}
     q_xFastFaultOut    AT %Q*    :    BOOL;
-	q_xValidSyncTime : BOOL;// system time bValid output True when sync is successful
+    q_xValidSyncTime : BOOL;// system time bValid output True when sync is successful
 END_VAR
 VAR_IN_OUT
 
@@ -39,34 +39,34 @@ VAR
         pv: FF
      '}
     astFF : ARRAY[1..FF_ARRAY_UPPER_BOUND] OF ST_FF;
-    
+
     {attribute 'pytmc' := '
         pv: RegistrationFailure
         io: io
      '}
     xFastFaultRegFail  :   BOOL := FALSE; // Set true if a fast fault fails to register. Holds beam off.
     tFFRegFail : F_TRIG;
-    
+
     {attribute 'instance-path'}
     {attribute 'noinit'}
     sPath    :    T_MaxString;
 
-	{attribute 'pytmc' := '
+    {attribute 'pytmc' := '
         pv: OK
         io: i
      '}
     xOK    :    BOOL:= TRUE; // Current internal state of FFO, indicates if FFO will accept a reset
-    
+
     rtReset    :    R_TRIG;
     rtResetandOK : R_TRIG;
-    
+
     nIndex    :    UINT := 1;
-	
-	IdxOK: BOOL;
-    
+
+    IdxOK: BOOL;
+
     fbTime : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 ); //Get current system time, used for override
-	fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
-	fbGetTimeZone: FB_GetTimeZoneInformation;
+    fbTime_to_UTC: FB_TzSpecificLocalTimeToSystemTime;
+    fbGetTimeZone: FB_GetTimeZoneInformation;
     fbJson : FB_JsonSaxWriter;
     pmpsTypeCode : UDINT := 0; // shows up in json as pmps_typecode
     fbLogger : FB_LogMessage := (
@@ -108,7 +108,7 @@ VAR
     EvalIdx: DINT := 1;
 END_VAR
 VAR CONSTANT
-	MaxTime : DINT:= 4294080;(*49.7 days*)
+    MaxTime : DINT:= 4294080;(*49.7 days*)
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -121,49 +121,49 @@ fbTime_to_UTC(in:= fbTime.systemTime , tzInfo:=fbGetTimeZone.tzInfo);
 q_xValidSyncTime := fbTime.bValid AND NOT fbGetTimeZone.bError;
 
 FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
-    
+
     FF REF= astFF[EvalIdx];
-    
-    IF NOT FF.Info.InUse THEN 
+
+    IF NOT FF.Info.InUse THEN
         CONTINUE;
     ELSE
         // Veto timer
-        IF FF.Ovrd.Deactivate THEN 
+        IF FF.Ovrd.Deactivate THEN
             FF.Ovrd.Timer.PT := T#0s; // Only needs to be set zero for one cycle
         ELSIF FF.Ovrd.Activate THEN
-			FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
-			IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
-				FF.Ovrd.Expiration:= LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime ); 
-           		FF.Ovrd.Timer.PT := TO_DT(FF.Ovrd.Expiration)- SystemTime_TO_DT(fbTime_to_UTC.out);
-			END_IF	
+            FF.Ovrd.StartDT:= TO_DINT(TO_DT(SystemTime_TO_DT(fbTime_to_UTC.out)));
+            IF (FF.Ovrd.StartDT < FF.Ovrd.Expiration) THEN
+                FF.Ovrd.Expiration:= LIMIT(0,FF.Ovrd.Expiration, FF.Ovrd.StartDT+MaxTime );
+                   FF.Ovrd.Timer.PT := TO_DT(FF.Ovrd.Expiration)- SystemTime_TO_DT(fbTime_to_UTC.out);
+            END_IF
         END_IF
-        
+
         // UDINT conversions for ESS module compatibility.
         FF.Ovrd.Timer(
             IN := FF.Ovrd.Activate, // Rising edge activated
             Q => FF.Ovrd.Active);
-            
+
         FF.Ovrd.tOvrdActivate(CLK:=FF.Ovrd.Active);
         FF.Ovrd.OvrdActLogAck S= FF.Ovrd.tOvrdActivate.Q;
-        
+
         FF.Ovrd.tOvrdExpiring(CLK:=FF.Ovrd.Active);
         FF.Ovrd.OvrdExpLogAck S= FF.Ovrd.tOvrdExpiring.Q;
-            
+
         FF.Ovrd.ElapsedTime := TIME_TO_UDINT(FF.Ovrd.Timer.ET);
-        
+
         FF.Ovrd.RemainingTime := MAX(0, TO_DINT(FF.Ovrd.Timer.PT) - FF.Ovrd.ElapsedTime);
-        
+
         // Clear pushbuttons
         FF.Ovrd.Activate := FALSE;
         FF.Ovrd.Deactivate := FALSE;
-        
-    END_IF    
+
+    END_IF
 END_FOR
 ]]></ST>
       </Implementation>
     </Method>
     <Method Name="EvaluateVetos" Id="{a668f2a3-9954-4aeb-ad93-2aac65e64302}">
-      <Declaration><![CDATA[{attribute 'obsolete' := 'Use EvaluateOverrides instead.'} 
+      <Declaration><![CDATA[{attribute 'obsolete' := 'Use EvaluateOverrides instead.'}
 METHOD EvaluateVetos : BOOL
 VAR_INPUT
 END_VAR
@@ -187,7 +187,7 @@ VAR_INPUT
 END_VAR
 VAR
     FF : REFERENCE TO ST_FF;
-    logIdx : DINT := 1; 
+    logIdx : DINT := 1;
 END_VAR
 VAR_INST
     HelloTimer : TOF := ( PT:=T#24h );
@@ -195,10 +195,10 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
-    
+
     FF REF= astFF[logIdx];
-    
-    IF NOT FF.Info.InUse THEN 
+
+    IF NOT FF.Info.InUse THEN
         CONTINUE;
     ELSE
         IF FF.FaultAck THEN
@@ -206,41 +206,41 @@ FOR logIdx := 1 to FF_ARRAY_UPPER_BOUND do
             pmpsTypeCode := 1;
             FormulateLogJson(FF);
             fbLogger(sMsg := 'Fault, beam off', eSevr:=TcEventSeverity.Critical);
-            
+
             FF.FaultAck := FALSE;
         END_IF
-        
+
         IF FF.Ovrd.OvrdActLogAck THEN
-            
+
             pmpsTypeCode := 2;
             FormulateLogJson(FF);
-            
+
             fbLogger(sMsg := 'Override activated', eSevr:=TcEventSeverity.Warning);
-            
+
             FF.Ovrd.OvrdActLogAck := FALSE;
         END_IF
-        
+
         IF FF.Ovrd.OvrdExpLogAck THEN
-            
+
             pmpsTypeCode := 3;
             FormulateLogJson(FF);
-            
+
             fbLogger(sMsg := 'Override released', eSevr:=TcEventSeverity.Warning);
-            
+
             FF.Ovrd.OvrdExpLogAck := FALSE;
         END_IF
-        
+
         IF FF.ClearAck THEN
-            
+
             pmpsTypeCode := 8;
             FormulateLogJson(FF);
-            
+
             fbLogger(sMsg := 'Fault cleared', eSevr:=TcEventSeverity.Info);
-            
+
             FF.ClearAck := FALSE;
         END_IF
-        
-        
+
+
     END_IF
 END_FOR
 
@@ -254,8 +254,8 @@ IF tFFRegFail.Q THEN
     fbJson.AddString(sPath);
     fbJson.EndObject();
     fbJson.CopyDocument(pDoc:=fbLogger.sJson, SIZEOF(fbLogger.sJson));
-    fbLogger(sMsg := 'Fast fault registration failure cleared. This may be bad as a fast fault could go unoticed.', 
-        eSevr:=TcEventSeverity.Warning);  
+    fbLogger(sMsg := 'Fast fault registration failure cleared. This may be bad as a fast fault could go unoticed.',
+        eSevr:=TcEventSeverity.Warning);
 END_IF
 
 // Say hello
@@ -263,7 +263,7 @@ HelloTimer.IN := NOT HelloTimer.Q;
 HelloTimer();
 IF HelloTimer.IN THEN
     pmpsTypeCode := 10;
-    FormulateLogJson(FF);   
+    FormulateLogJson(FF);
     fbLogger(eSubsystem:=E_Subsystem.NILVALUE,
         eSevr := TcEventSeverity.Info,
         sMsg := 'FFO is alive');
@@ -322,11 +322,11 @@ stFF.OK := OK;
 // Reset and latching logic
 stFF.rtReset(CLK:=stFF.Reset (*epics*) OR Reset (*from other PLC logic *) );
 stFF.Reset R= stFF.rtReset.Q;
-stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);    
+stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);
 
 BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active OR (i_xVeto AND stFF.Info.Vetoable);
 
-// Fault generation    
+// Fault generation
 IF NOT BeamPermitted THEN
     THIS^.xOK := FALSE; //Very clever, thanks Zach!
 END_IF
@@ -359,7 +359,7 @@ VAR_INPUT
         Desc := '',
         TypeCode := 16#00,
         DevName := ''); // Fast fault information
-        
+
 END_VAR
 VAR_OUTPUT
     FFOName : T_MaxString;
@@ -372,12 +372,12 @@ END_VAR]]></Declaration>
 Idx := THIS^.nIndex;
 
 IF THIS^.nIndex <= FF_ARRAY_UPPER_BOUND THEN
-    
+
     THIS^.astFF[MIN(THIS^.nIndex,FF_ARRAY_UPPER_BOUND)].Info:=stFFInfo;
-    
+
     THIS^.nIndex := THIS^.nIndex + 1;
-    
-    Register := TRUE; // Add successful    
+
+    Register := TRUE; // Add successful
 ELSE
     fbJson.StartObject();
     fbJson.AddKey('pmps_typecode');

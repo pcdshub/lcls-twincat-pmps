@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <DUT Name="ST_BeamParams" Id="{3dae7c21-9307-42cc-bb38-b1c5674325a1}">
-    <Declaration><![CDATA[TYPE ST_BeamParams : 
+    <Declaration><![CDATA[TYPE ST_BeamParams :
     STRUCT
         (*  Requested pre-optic attenuation %  *)
-		{attribute 'pytmc' := 'pv: Transmission
+        {attribute 'pytmc' := 'pv: Transmission
             io: i
-			field: HOPR 1;
-			field: LOPR 0;
-			field: PREC 2;
+            field: HOPR 1;
+            field: LOPR 0;
+            field: PREC 2;
         '}
-		nTran : REAL := 0;
+        nTran : REAL := 0;
         (* Pulse-rate *)
         {attribute 'pytmc' := 'pv: Rate
             io: i
@@ -23,39 +23,39 @@
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
         neVRange : DWORD := 0;
-				 (* Photon energy  *)
+                 (* Photon energy  *)
         {attribute 'pytmc' := 'pv: PhotonEnergy
             io: i
             field: EGU eV'}
         neV : REAL := 0;
-		(* Beamclass ranges *)
-		 {attribute 'pytmc' := 'pv: BeamClassRanges
+        (* Beamclass ranges *)
+         {attribute 'pytmc' := 'pv: BeamClassRanges
             io: i'}
         {attribute 'displaymode' := 'binary'}
         nBCRange : WORD := 0;
-		(* Beamclass *)
-		{attribute 'pytmc' := 'pv: BeamClass
+        (* Beamclass *)
+        {attribute 'pytmc' := 'pv: BeamClass
             io: i'}
-		nBeamClass : USINT :=0;
-		(* Machine Mode *)
-		{attribute 'pytmc' := 'pv: MachineMode
+        nBeamClass : USINT :=0;
+        (* Machine Mode *)
+        {attribute 'pytmc' := 'pv: MachineMode
             io: i'}
-		nMachineMode: USINT:=3;
+        nMachineMode: USINT:=3;
         (* Beamline attenuators *)
         {attribute 'pytmc' := 'pv: AuxAtt
         io: i'}
         astAttenuators : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
-        
+
         (* Stoppers *)
         {attribute 'pytmc' := 'pv: Veto
         io: i'}
         aVetoDevices : ARRAY [1..PMPS_GVL.MAX_VETO_DEVICES] OF BOOL;
-        
+
         (* Apertures *)
-		{attribute 'pytmc' := 'pv: Apt
+        {attribute 'pytmc' := 'pv: Apt
         io: i'}
         astApertures : ARRAY [1..PMPS_GVL.MAX_APERTURES] OF ST_PMPS_Aperture := [(Width:=1E3, Height:=1E3), (Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3),(Width:=1E3, Height:=1E3)];
-        
+
         // Toggle for watchdog
         xValidToggle : BOOL;
         // Beam parameter set is valid (if readback), or acknowledged (if request)

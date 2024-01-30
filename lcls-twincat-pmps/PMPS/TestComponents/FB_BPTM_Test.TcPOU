@@ -22,14 +22,14 @@ FullArbError();]]></ST>
       <Declaration><![CDATA[METHOD BPTMBasicFunction
 VAR_INPUT
 END_VAR
-VAR    
+VAR
     //Final and transition assertions
     nTransitionID    :    UDINT := 1;
     stTransitionAssertion    :    ST_BeamParams := (nRate := 10, nBCRange:=0);
-    
+
     nReqID    :    UDINT    := 2;
     stReqAssertion    :    ST_BeamParams := (nTran := 0.2, nBCRange:=2#0000_0000_0000_0011);
-    
+
 END_VAR
 VAR_INST
     fbBPTM_TestBasicFunction    :    BeamParameterTransitionManager;
@@ -58,104 +58,104 @@ PMPS_GVL.stCurrentBeamParameters.nMachineMode :=0;
 CASE eTestStep OF
 
 E_BPTMTestStates.Init:
-    
+
     TEST('BPTMTest');
     eTestStep := E_BPTMTestStates.WaitingForBeam;
 
 E_BPTMTestStates.WaitingForBeam:
     TEST('BPTM Waits for Beam');
-    
+
     fbBPTM_TestBasicFunction.i_TransitionAssertionID := nTransitionID;
     fbBPTM_TestBasicFunction.i_stTransitionAssertion := stTransitionAssertion;
-    
+
     fbBPTM_TestBasicFunction.i_nRequestedAssertionID := nReqID;
     fbBPTM_TestBasicFunction.i_stRequestedAssertion := stReqAssertion;
-    
-    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitForBP AND 
+
+    IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitForBP AND
         NOT fbBPTM_TestBasicFunction.xEntry THEN
-    
+
         AssertTrue(fbArbiter.CheckRequestInPool(nTransitionID), 'Arbiter did not accept BPTM transition assertion');
-        
+
         AssertTrue(fbArbiter.CheckRequestInPool(nReqID), 'Arbiter did not accept BPTM transition assertion');
-                
+
         AssertFalse(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
             'Transition should not be authorized until requests are in and beam is ready');
-            
+
         AssertTrue(fbBPTM_TestBasicFunction.bBusy, 'Busy should be true here');
         AssertFalse(fbBPTM_TestBasicFunction.bDone, 'Done should be false');
         AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be false here');
-            
+
         TEST_FINISHED_NAMED('BPTM Waits for Beam');
-        
+
         eTestStep := E_BPTMTestStates.Transitioning;
-    END_IF    
-    
-    
+    END_IF
+
+
 E_BPTMTestStates.Transitioning:
     TEST('BPTM Authorizes Transition');
-	
-    fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request   
-	fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request   
-    
+
+    fbBPTM_TestBasicFunction.stCurrentBeamParameters.nRate := 0; // satisfies the transition request
+    fbBPTM_TestBasicFunction.stCurrentBeamParameters.nBeamClass := 0; // satisfies the transition request
+
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Transitioning AND
         NOT fbBPTM_TestBasicFunction.xEntry THEN
-    
+
         AssertTrue(fbArbiter.CheckRequest(nTransitionID),
             'Transition assertion should be in arbiter');
-        
+
         AssertTrue(fbArbiter.CheckRequest(nReqID),
             'Final assertion should be in arbiter');
-            
+
         AssertTrue(fbBPTM_TestBasicFunction.q_xTransitionAuthorized,
             'Transition should be authorized at this point.');
-            
+
         AssertEquals(nReqID, fbBPTM_TestBasicFunction.nCurrentAssertionID,
             'nCurrentAssertionID not set.');
-    
+
         TEST_FINISHED_NAMED('BPTM Authorizes Transition');
-        
+
         eTestStep := E_BPTMTestStates.WaitingForFinalAssertion;
     END_IF
 
 E_BPTMTestStates.WaitingForFinalAssertion:
     TEST('BPTM Waits for final BP');
-    
+
     fbBPTM_TestBasicFunction.i_xDoneMoving := TRUE;
-    
+
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.WaitForFinalBP THEN
-        
+
         AssertTrue(fbArbiter.CheckRequest(nTransitionID),
-        'Transition assertion should be in arbiter');  
-        
+        'Transition assertion should be in arbiter');
+
         TEST_FINISHED_NAMED('BPTM Waits for final BP');
-        
+
         eTestStep := E_BPTMTestStates.CleaningUp;
-    END_IF    
-    
+    END_IF
+
 E_BPTMTestStates.CleaningUp:
 
     fbSubSysIO.AutoUpdateBP := TRUE;
 
     TEST('Cleaning up');
-    
+
     IF fbBPTM_TestBasicFunction.eBPTMState = E_BPTMState.Done THEN
-        
+
         AssertFalse(fbArbiter.CheckRequestInPool(nTransitionID), 'Transition req should be removed from arb now');
-        
-        eTestStep := E_BPTMTestStates.Done; 
-        
+
+        eTestStep := E_BPTMTestStates.Done;
+
         TEST_FINISHED_NAMED('Cleaning up');
-	END_IF
+    END_IF
 
 E_BPTMTestStates.Done:
 
-    
+
     AssertTrue(fbBPTM_TestBasicFunction.bDone, 'Done should be set');
     AssertFalse(fbBPTM_TestBasicFunction.bError, 'Error should be cleared');
     AssertFalse(fbBPTM_TestBasicFunction.bBusy, 'Busy should be false');
-    
-    TEST_FINISHED_NAMED('BPTMTest');    
-    
+
+    TEST_FINISHED_NAMED('BPTMTest');
+
 END_CASE
 ]]></ST>
       </Implementation>
@@ -165,19 +165,19 @@ END_CASE
 METHOD FullArbError
 VAR_INPUT
 END_VAR
-VAR    
+VAR
     //Final and transition assertions
     nTransitionID    :    UDINT := 1000;
     stTransitionAssertion    :    ST_BeamParams :=  ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
-    
+
     nReqID    :    UDINT    := 2000;
     stReqAssertion    :    ST_BeamParams := ( nTran := 0, neVRange := 0, nRate  := 0);//PMPS_GVL.cstSafeBeam;
-    
+
     idx : UDINT;
-    
+
     nRandID : DWORD;
     testReq : ST_BeamParams := (neVRange := 16#FFEE, nRate:=33);
-    
+
 END_VAR
 VAR_INST
     fbBPTM_TestFullArb    :    BeamParameterTransitionManager;
@@ -195,41 +195,41 @@ END_VAR]]></Declaration>
         <ST><![CDATA[CASE eTestStep OF
 
 E_BPTMTestStates.Init:
-    
+
     TEST('BPTMErrorFullArb');
-    
+
     // Fill the arbiter
     FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS // this fills the arbiter
                     - fbBPTM_TestFullArb.cReqArbCapacity + 1 DO // but test just one over the allowed amount
         fbArbFullErr.AddRequest(nReqID := idx, stReqBP := testReq, sDevName :='Device');
     END_FOR
-    
+
     fbSubSysIO.AutoUpdateBP := TRUE;
-    
+
     AssertTrue(PMPS_PARAM.MAX_ASSERTIONS - fbArbFullErr.nEntryCount < fbBPTM_TestFullArb.cReqArbCapacity,
-        'Arbiter is not full enough, rest of tests will be invalid'); 
-    
+        'Arbiter is not full enough, rest of tests will be invalid');
+
     eTestStep := E_BPTMTestStates.Error;
 
 E_BPTMTestStates.Error:
-    
+
     TEST('BPTM Full Error');
 
     IF fbBPTM_TestFullArb.bError THEN
-        
+
         AssertTrue(fbBPTM_TestFullArb.bError AND fbBPTM_TestFullArb.nErrId = PMPS_CODES.NoRoomInArb,
             'Incorrect error response from full arbiter.');
-            
+
         TEST_FINISHED_NAMED('BPTM Full Error');
-        
+
         eTestStep := E_BPTMTestStates.Retry;
-        
-	END_IF
-    
+
+    END_IF
+
 E_BPTMTestStates.Retry:
-    
+
     TEST('Test Retry Post Failed Final');
-    
+
     // Clear the arbiter
     if entryToRetry THEN
         FOR idx := 1 TO PMPS_PARAM.MAX_ASSERTIONS + 1 DO
@@ -237,35 +237,35 @@ E_BPTMTestStates.Retry:
         END_FOR
         entryToRetry := FALSE;
     END_IF
-    
+
     // Push the retry button
     fbBPTM_TestFullArb.bRetry := TRUE;
-    
+
     tonRetryTimeout(IN:=TRUE);
-    
+
     IF tonRetryTimeout.Q OR fbBPTM_TestFullArb.q_xTransitionAuthorized THEN
         AssertTrue(fbBPTM_TestFullArb.q_xTransitionAuthorized, 'Transition should have been authorized by now');
         AssertTrue(fbArbFullErr.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
         AssertTrue(fbArbFullErr.CheckRequest(nReqID), 'Final ID is missing from arbiter while transition is authorized');
-        
+
         TEST_FINISHED_NAMED('Test Retry Post Failed Final');
-        
+
         eTestStep := E_BPTMTestStates.CleaningUp;
-	END_IF
+    END_IF
 
 E_BPTMTestStates.CleaningUp:
-    TEST_FINISHED_NAMED('BPTMErrorFullArb');    
-    
+    TEST_FINISHED_NAMED('BPTMErrorFullArb');
+
 END_CASE
 
 fbBPTM_TestFullArb(
     fbArbiter := fbArbFullErr,
     i_TransitionAssertionID := nTransitionID,
     i_stTransitionAssertion := stTransitionAssertion,
-    
+
     i_nRequestedAssertionID := nReqID,
     i_stRequestedAssertion := stReqAssertion,
-    
+
     stCurrentBeamParameters := fbSubSysIO.q_stSimulatedBPReadback,
 );
 
@@ -279,31 +279,31 @@ fbSubSysIO(LA := fbArbFullErr, FFO := ffo);]]></ST>
 METHOD InterruptAtAllSteps
 VAR_INPUT
 END_VAR
-VAR    
+VAR
     //Final and transition assertions
     nTransitionID    :    UDINT := 16#DAAD;
     stTranReq    :    ST_BeamParams := PMPS_GVL.cst0RateBeam;
-    
+
     nFirstReqID    :    UDINT    := 16#FEED;
     stFirstReq    :    ST_BeamParams := (nTran :=1, nRate := 16#FEED, neVRange :=2#1111_1111_1111_1111_1111_1111_1111_1111);
-    
+
 END_VAR
 VAR_INST
     fbBPTM_InterruptionTest    :    BeamParameterTransitionManager;
-    
+
     ffo : FB_HardwareFFOutput := (bAutoReset:=TRUE);
     fbSubSysIO : FB_DummyArbIO;
     fbBPR :  FB_BPRequestor;
     xFirstPass    :    BOOL := TRUE;
     eTestStep: E_BPTMTestStates := E_BPTMTestStates.Init;
     tonRetryTimeout : TON := (PT:=T#5s);
-    
+
     fbBPTMDiscCycles : BeamParameterTransitionManager;
     fbSubSysIODisc : FB_DummyArbIO;
     fbArbDisc : FB_Arbiter(1000);
-    
+
     iCount : UINT;
-    
+
     aBPTM : ARRAY [1..cCycle] OF BeamParameterTransitionManager;
     BPTMUnderTest : REFERENCE TO BeamParameterTransitionManager;
     fbArbiter    :    FB_Arbiter(1);
@@ -312,10 +312,10 @@ VAR_INST
     nCycleLim : UINT;
     nCycle : UINT;
     sCurrentTestName : STRING :='';
-    bCycleLimHit : BOOL; 
+    bCycleLimHit : BOOL;
     nAllStepsDone : BYTE;
     tTimeOut : TON := (PT:=T#20ms);
-        
+
     bTestedOnce : BOOl;
 END_VAR
 VAR CONSTANT
@@ -346,22 +346,22 @@ IF NOT bTestedOnce THEN
 TEST('CheckBPTM Cycle Count');
 
 WHILE fbBPTMDiscCycles.eBPTMState <> E_BPTMState.Idle DO
-    
+
     fbBPTMDiscCycles.i_TransitionAssertionID := nTransitionID;
     fbBPTMDiscCycles.i_stTransitionAssertion := stTranReq;
-    
+
     fbBPTMDiscCycles.i_nRequestedAssertionID := nFirstReqID;
     fbBPTMDiscCycles.i_stRequestedAssertion := stFirstReq;
-    
+
     fbBPTMDiscCycles(fbArbiter:=fbArbDisc);
     fbSubSysIODisc(LA:=fbArbDisc, FFO:=ffo);
-    
+
     fbBPTMDiscCycles.stCurrentBeamParameters := fbSubSysIODisc.q_stSimulatedBPReadback;
-    
+
     fbSubSysIODisc.AutoUpdateBP := TRUE;
-    
+
     fbBPTMDiscCycles.i_xDoneMoving S= fbBPTMDiscCycles.q_xTransitionAuthorized;
-    
+
     iCount := iCount + 1;
 END_WHILE
 
@@ -373,36 +373,36 @@ END_IF
 // Run BPTM for nCycleLim cycles, switch to a new target, verify BPTM completes anyways
 
 FOR nCycleLim := 1 TO cCycle DO
-    
+
     nCycle := 0;
-    
+
     bCycleLimHit := FALSE;
-    
+
     BPTMUnderTest REF= aBPTM[nCycleLim];
     ArbIO REF= aArbIO[nCycleLim];
-    
+
     BPTMUnderTest.i_TransitionAssertionID := nTransitionID;
     BPTMUnderTest.i_stTransitionAssertion := stTranReq;
-    
+
     ArbIO.AutoUpdateBP := TRUE;
-    
+
     // Start the test for this Cycle Limit
     sCurrentTestName := CONCAT('CycleLimTest:',INT_TO_STRING(nCycleLim));
     TEST(sCurrentTestName);
-    
+
     nAllStepsDone := 0;
-    
+
     tTimeOut(IN:=FALSE);
-        
+
     WHILE nAllStepsDone <> 16#FF DO
-        
+
         tTimeOut(IN:= TRUE);
 
         IF tTimeOut.Q THEN
             AssertTrue(FALSE, CONCAT('Failed ', BYTE_TO_HEXSTR(nAllStepsDone, 2, FALSE)));
             EXIT;
-        END_IF  
-    
+        END_IF
+
         // Verify all steps complete
         IF bCycleLimHit THEN
             nAllStepsDone.nNewTarget S= BPTMUnderTest.eBPTMState = E_BPTMState.NewTarget;
@@ -415,8 +415,8 @@ FOR nCycleLim := 1 TO cCycle DO
             nAllStepsDone.nIdle S= BPTMUnderTest.eBPTMState = E_BPTMState.Idle;
         ELSE
             nAllStepsDone := 0;
-		END_IF
-    
+        END_IF
+
         // After nCycleLim cycles (nCycle), change the target
         IF nCycle >= nCycleLim THEN
             BPTMUnderTest.i_nRequestedAssertionID := nCycleLim;
@@ -425,19 +425,19 @@ FOR nCycleLim := 1 TO cCycle DO
         ELSE
             BPTMUnderTest.i_nRequestedAssertionID := nFirstReqID;
             BPTMUnderTest.i_stRequestedAssertion := stFirstReq;
-		END_IF
-        
+        END_IF
+
         BPTMUnderTest(fbArbiter:=fbArbiter);
         ArbIO(LA:=fbArbiter, FFO := ffo);
-        
+
         BPTMUnderTest.stCurrentBeamParameters := ArbIO.q_stSimulatedBPReadback;
-        
+
         BPTMUnderTest.i_xDoneMoving := BPTMUnderTest.q_xTransitionAuthorized;
-        
+
         nCycle := nCycle + 1;
-    
-	END_WHILE
-    
+
+    END_WHILE
+
     AssertTrue(fbArbiter.CheckRequestInPool(BPTMUnderTest.i_nRequestedAssertionID),
         CONCAT('Final req not in pool: ', UINT_TO_STRING(nCycleLim)));
     AssertFalse(fbArbiter.CheckRequestInPool(BPTMUnderTest.i_TransitionAssertionID),
@@ -448,15 +448,15 @@ FOR nCycleLim := 1 TO cCycle DO
         CONCAT('Cycle lim not hit', UINT_TO_STRING(nCycleLim)));
     AssertTrue(ArbIO.q_stSimulatedBPReadback.nRate = BPTMUnderTest.i_stRequestedAssertion.nRate,
         'Rates are not equal...');
-    
+
     TEST_FINISHED_NAMED(sCurrentTestName);
-    
+
     // Clean up for next test
-    
+
     fbArbiter.RemoveRequest(nFirstReqID);
     fbArbiter.RemoveRequest(nTransitionID);
     fbArbiter.RemoveRequest(nCycleLim);
-    
+
 END_FOR
 
 END_IF]]></ST>
@@ -468,17 +468,17 @@ END_IF]]></ST>
 METHOD InterruptedTransition
 VAR_INPUT
 END_VAR
-VAR    
+VAR
     //Final and transition assertions
     nTransitionID    :    UDINT := 3;
     stTranReq    :    ST_BeamParams := PMPS_GVL.cstSafeBeam;
-    
+
     nFirstReqID    :    UDINT    := 1;
     stFirstReq    :    ST_BeamParams := (nRate := 100);
-    
+
     nSecondReqID    :    UDINT    := 2;
     stSecReq    :    ST_BeamParams := (nRate:= 200);
-    
+
 END_VAR
 VAR_INST
     fbBPTM_InterruptionTest    :    BeamParameterTransitionManager;
@@ -494,50 +494,50 @@ END_VAR]]></Declaration>
         <ST><![CDATA[CASE eTestStep OF
 
 E_BPTMTestStates.Init:
-    
+
     TEST('BPTM Intr Trans');
-    
+
     fbBPTM_InterruptionTest.i_TransitionAssertionID := nTransitionID;
     fbBPTM_InterruptionTest.i_stTransitionAssertion := stTranReq;
-    
+
     fbBPTM_InterruptionTest.i_nRequestedAssertionID := nFirstReqID;
     fbBPTM_InterruptionTest.i_stRequestedAssertion := stFirstReq;
-    
+
     fbSubSysIO.AutoUpdateBP := TRUE; // Enable auto update
-    
+
     eTestStep := E_BPTMTestStates.WaitingForTransitionAssertion;
 
 E_BPTMTestStates.WaitingForBeam:
 
-    IF fbBPTM_InterruptionTest.eBPTMState = E_BPTMState.WaitingForTransitionAssertion AND 
-        NOT fbBPTM_InterruptionTest.xEntry THEN // since we're not in entry anymore 
-    
+    IF fbBPTM_InterruptionTest.eBPTMState = E_BPTMState.WaitingForTransitionAssertion AND
+        NOT fbBPTM_InterruptionTest.xEntry THEN // since we're not in entry anymore
+
         //change the request to interrupt
         fbBPTM_InterruptionTest.i_nRequestedAssertionID := nSecondReqID;
         fbBPTM_InterruptionTest.i_stRequestedAssertion := stSecReq;
-        
+
         eTestStep := E_BPTMTestStates.Transitioning;
     END_IF
-    
+
 E_BPTMTestStates.Transitioning:
-    
+
     TEST('New Target Gets To Trans Auth');
-    
+
     tonRetryTimeout(IN:=TRUE);
-    
+
     IF tonRetryTimeout.Q OR fbBPTM_InterruptionTest.q_xTransitionAuthorized THEN
         AssertTrue(fbBPTM_InterruptionTest.q_xTransitionAuthorized, 'Transition should have been authorized by now');
         AssertTrue(fbArbiter.CheckRequest(nTransitionID), 'Transition ID is missing from arbiter while transition is authorized');
         AssertTrue(fbArbiter.CheckRequest(nSecondReqID), 'Final ID is missing from arbiter while transition is authorized');
-        
+
         TEST_FINISHED_NAMED('New Target Gets To Trans Auth');
-        
+
         eTestStep := E_BPTMTestStates.CleaningUp;
-	END_IF
+    END_IF
 
 E_BPTMTestStates.CleaningUp:
-    TEST_FINISHED_NAMED('BPTM Intr Trans');    
-    
+    TEST_FINISHED_NAMED('BPTM Intr Trans');
+
 END_CASE
 
 fbBPTM_InterruptionTest(

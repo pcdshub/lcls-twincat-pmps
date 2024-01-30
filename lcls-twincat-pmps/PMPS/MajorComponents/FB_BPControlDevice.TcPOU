@@ -13,9 +13,9 @@ VAR_INPUT
         (*  Requested pre-optic attenuation %  *)
         {attribute 'pytmc' := 'pv: ReqBP:Transmission
             io: o
-			field: HOPR 1;
-			field: LOPR 0;
-			field: PREC 2;
+            field: HOPR 1;
+            field: LOPR 0;
+            field: PREC 2;
         '}
         nTran : REAL := PMPS_GVL.TRANS_SCALING_FACTOR;
         (* Pulse-rate *)
@@ -30,8 +30,8 @@ VAR_INPUT
             field: EGU eV'}
         {attribute 'displaymode' := 'binary'}
         neVRange : DWORD := 4294967295;
-		(* Beamclass ranges *)
-		 {attribute 'pytmc' := 'pv: ReqBP:BeamClassRanges
+        (* Beamclass ranges *)
+         {attribute 'pytmc' := 'pv: ReqBP:BeamClassRanges
             io: o'}
         {attribute 'displaymode' := 'binary'}
         nBCRange : WORD := 32767;
@@ -50,7 +50,7 @@ VAR
     bApply : BOOL;
 
     nControlDeviceID : DWORD;
-	sControlDeviceName: STRING:= 'BP Control Device';
+    sControlDeviceName: STRING:= 'BP Control Device';
     rtApply : R_TRIG;
 
 END_VAR

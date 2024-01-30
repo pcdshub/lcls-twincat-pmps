@@ -32,9 +32,5 @@ END_VAR
       <ST><![CDATA[fbHgvpuElectronEnergy();
 fbSxuElectronEnergy();]]></ST>
     </Implementation>
-    <LineIds Name="FB_AcceleratorLinks">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -5,7 +5,7 @@
 {attribute 'strict'}
 TYPE L_Apertures :
 (
-	SL1L0 := 1,
+    SL1L0 := 1,
     SL2L0 := 2
 );
 END_TYPE

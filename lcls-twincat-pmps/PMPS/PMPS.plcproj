@@ -111,6 +111,9 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="DUTs\UserDUT\ST_ReactiveParams.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\UserDUT\ST_BeamParams.TcDUT">
       <SubType>Code</SubType>
     </Compile>

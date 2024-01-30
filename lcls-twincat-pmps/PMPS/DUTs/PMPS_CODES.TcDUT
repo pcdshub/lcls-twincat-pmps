@@ -5,13 +5,13 @@
 {attribute 'strict'}
 TYPE PMPS_CODES :
 (
-	FAST_FAULT := 16#1, // Generic fast fault
-    PEW_FAULT := 16#7, // Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.    
-    
+    FAST_FAULT := 16#1, // Generic fast fault
+    PEW_FAULT := 16#7, // Fault occurs when the calculated machine photon energy (K value calculated by undulator gap, and electron energy) falls outside the permitted range.
+
     // Arbiter codes
     //////////////////////////////////
         ARB_FULL := 16#201, // Arbiter pool is full.
-    
+
     //BPTM Codes
     //////////////////////////////////
         BadTargetID := 16#300,

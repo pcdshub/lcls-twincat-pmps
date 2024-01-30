@@ -15,7 +15,7 @@ This FB and its subordinate communicate through the ethercat connection between 
 
 A beam parameter set request is sent from the subsystem to this PLC, and includes a cohort number.
 
-This cohort number (i_RequestedBP.nCohortInt) is compared to a local cohort number (nRequestedCohort). 
+This cohort number (i_RequestedBP.nCohortInt) is compared to a local cohort number (nRequestedCohort).
 A request from the subsystem to update or modify its current request is indicated by an increase in the
 i_RequestedBP.nCohortInt value. Then this function block updates the local arbiter request for the subsystem
 and awaits confirmation. Once the new request is confirmed in the preemptive system this function block increments
@@ -31,26 +31,26 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
 *)
 FUNCTION_BLOCK FB_ArbiterToSubSys_IO
 VAR_INPUT
-	RequestingSystemID	:	DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // System ID for making requests to the supreme arbiter
+    RequestingSystemID	:	DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // System ID for making requests to the supreme arbiter
     sName : STRING := 'ArbiterToSubSys';
     Reset : BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	Arbiter	: FB_Arbiter;
+    Arbiter	: FB_Arbiter;
     fbFFHWO : FB_HardwareFFOutput;
 END_VAR
 VAR
-    
-	i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
+
+    i_RequestedBP AT %I*	:	ST_BeamParams_IO; // Requested BP from subsystem
     {attribute 'pytmc' := '
         pv: RequestedBP:FromSubSys
     '}
     RequestedBP: ST_BeamParams;
-    
-	o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
-    
+
+    o_CurrentBP AT %Q* : ST_BeamParams_IO; // Current BP set
+
     // EL6692 Diagnostics
     i_Connected AT %I* : BOOL; // SYNC Inputs^External device not connected !!! Doesn't really work.
     {attribute 'pytmc' := 'pv: WcState
@@ -71,14 +71,14 @@ VAR
         field: ZNAM OK
         field: ONAM Error'}
     i_TxPDOToggle AT %I* : BOOL; // TxPDO toggle
-    
+
     // Fast faults
     ffPMPSIO_Disconnect : FB_FastFault := (i_Desc:='Issue w/ arbiter interface to subsystem, verify subsystem is OK, or ethercat connection.'); // Fast fault for ethercat issues
     nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
     nRequestedCohort : UDINT := 0;
     rtToggle : R_TRIG;
 
-	
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -91,13 +91,13 @@ rtToggle(CLK:= i_RequestedBP.xValid); // If interface resumes, reset/catch up
 // xValid will go false if the PLC program on the other side is stopped. Ironically the ethercat interface continues happily.
 // If subsystem cohort has incremented, update beam parameter request with our arbiter
 IF rtToggle.Q THEN
-    nActiveCohort := 0;    
+    nActiveCohort := 0;
 END_IF
 
-IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN 
+IF i_RequestedBP.nCohortInt > nRequestedCohort OR rtToggle.Q THEN
     Arbiter.RemoveRequest(RequestingSystemID);
     Arbiter.AddRequest(RequestingSystemID, RequestedBP,sName);
-    nRequestedCohort := i_RequestedBP.nCohortInt;    
+    nRequestedCohort := i_RequestedBP.nCohortInt;
 END_IF
 
 
@@ -108,7 +108,7 @@ IF Arbiter.CheckRequest(RequestingSystemID) THEN
     nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
 END_IF
 
-// Sending current beam parameter set to subsystems 
+// Sending current beam parameter set to subsystems
 o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
 o_CurrentBP.nCohortInt := nActiveCohort;
 

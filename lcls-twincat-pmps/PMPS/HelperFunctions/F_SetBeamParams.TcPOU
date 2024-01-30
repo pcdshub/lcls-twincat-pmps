@@ -6,12 +6,12 @@ VAR_INPUT
     nTran    :    REAL := 0;
     neVRange    :    DWORD := 0;
     nRate    :    UDINT := 0;
-	nBCRange : WORD := 0;
+    nBCRange : WORD := 0;
     astAuxAtt : ARRAY [1..PMPS_GVL.AUX_ATTENUATORS] OF ST_PMPS_Attenuator;
 END_VAR
 VAR
     BeamParams    :    ST_BeamParams;
-    
+
 END_VAR
 ]]></Declaration>
     <Implementation>

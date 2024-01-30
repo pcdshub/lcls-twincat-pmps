@@ -14,7 +14,7 @@ to determine the safest combination of all sets, provide this set as an output.
 
 To these ends, the arbiter uses a hash-table, the rows being a state-id as the key, and a corresponding
  beam parameter set to be evaluated against all the other sets (or rows), in the table.
- 
+
 The hash table can be thought of as an array on steriods, they are worth reading about, suffice to say
 the hash table will tell you when you reach the end of all the entries, and enables us to find entries quickly.
 
@@ -24,7 +24,7 @@ These features efficiently address the addition, removal, and verification of be
 FUNCTION_BLOCK FB_Arbiter IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR
     nRequestsCount : UDINT; // How many requests are currently in the arbiter
-    
+
     {attribute 'pytmc' := '
         pv: AP
         io: i
@@ -32,15 +32,15 @@ VAR
      '}
     fbBPAssertionPool    :    FB_BeamParamAssertionPool; //Table of active beam parameter assertions
 
-    xRequestMade : BOOL; // Arbiter has confirmed its request has made it into the beam parameter request    
-    
+    xRequestMade : BOOL; // Arbiter has confirmed its request has made it into the beam parameter request
+
     {attribute 'pytmc' := '
         pv: ArbiterID
         io: i
         field: DESC Arbiter ID for elev. req.
      '}
     nArbiterID : UDINT; // Arbiter ID, used for making higher-level BP requests
-    
+
     nNextCohort : UDINT := 1; // The cohort ID any new requests will adopt, will become ReqInProgCohort at the start of the next acknowledgement cycle
     nAckInProgCohort : UDINT := 0; // The cohort ID currently being acknowledged, will become nActiveCohort after acknowledgement from HA
     {attribute 'pytmc' := '
@@ -49,23 +49,23 @@ VAR
         field: DESC Intrnl cohort counter
      '}
     nActiveCohort : UDINT := 0; // Requests with cohorts <= to this value will be considered active in CheckRequest
-    
+
     bStartNewAckRequest : BOOL; // Set by an add or remove method call, triggers an ack cycle
     bAckInProgress : BOOL; // Set by ElevateReq when there is a new ack request and reset when the ack cycle is complete
-    		
-	// The following IDs are set by the last BP request that was most conservative
-	// ie. other requests may limit the parameter, but this one is the most recent to limit it
-	idTransmission : DWORD; // ID of BP limiting transmission
-	idRate : DWORD; // ID of BP limiting rate
-    
+
+    // The following IDs are set by the last BP request that was most conservative
+    // ie. other requests may limit the parameter, but this one is the most recent to limit it
+    idTransmission : DWORD; // ID of BP limiting transmission
+    idRate : DWORD; // ID of BP limiting rate
+
     {attribute 'instance-path'}
     {attribute 'noinit'}
     sPath    :    T_MaxString;
-    
+
     sArbName : T_MaxString;
-    
+
     InfoStringFmtr : FB_FormatString;
-    
+
     bVerbose : BOOL := FALSE;
 END_VAR
 VAR_INPUT
@@ -77,7 +77,7 @@ VAR_OUTPUT
         field: DESC Arbitrated BP
      '}
     q_stBeamParams    :    ST_BeamParams := PMPS_GVL.cstFullBeam; //Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set
-    
+
     q_xStateIDFound    :    BOOL; //Set true if a state-id is found in the assertion pool after calling A_VerifyAssertion
 END_VAR
 
@@ -92,10 +92,10 @@ METHOD AddRequest : BOOL
 VAR_INPUT
     nReqID    :    DWORD; // Unique ID within aribter for the request. Make sure this is unique for every device + state combination
     stReqBP        :    ST_BeamParams; //Requested beam params
-	sDevName: STRING; // Name of the device making the request
+    sDevName: STRING; // Name of the device making the request
 END_VAR
 VAR
-	BP_Int : ST_BP_ArbInternal;
+    BP_Int : ST_BP_ArbInternal;
 END_VAR
 VAR_INST
     fbLog : FB_LogMessage;
@@ -103,9 +103,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// If the request is already in the pool, then skip the rest.
 // This is flawed, needs to update the request if it's already in the pool, despite having the same ID
-IF THIS^.CheckRequestInPool(nReqID) 
-	OR nReqID = PMPS_GVL.EXCLUDED_ASSERTION_ID 
-	OR nReqID = 0 THEN
+IF THIS^.CheckRequestInPool(nReqID)
+    OR nReqID = PMPS_GVL.EXCLUDED_ASSERTION_ID
+    OR nReqID = 0 THEN
     AddRequest := FALSE;
     RETURN;
 END_IF
@@ -117,14 +117,14 @@ stReqBP.nCohortInt := nNextCohort; // Set the cohort number for this BP request.
 MEMCPY(ADR(BP_Int), ADR(stReqBP), SIZEOF(stReqBP));
 BP_Int.nId := nReqID;
 BP_Int.LiveInTable := TRUE;
-BP_Int.sDevName := sDevName; 
+BP_Int.sDevName := sDevName;
 
 THIS^.fbBPAssertionPool.A_Add(
-	key := nReqID,
-	putValue := BP_Int
+    key := nReqID,
+    putValue := BP_Int
 );
 
-    
+
 IF NOT THIS^.fbBPAssertionPool.bOk THEN
     fbLog(sMsg:=CONCAT('Addition to arbiter assertion pool failed ', DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
             eSevr:=TcEventSeverity.Warning,
@@ -134,7 +134,7 @@ IF NOT THIS^.fbBPAssertionPool.bOk THEN
                         sPath,
                         PMPS_CODES.ARB_FULL));
 ELSIF THIS^.fbBPAssertionPool.bOk AND bVerbose THEN
-	fbLog(sMsg:=CONCAT('Added to pool ',DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
+    fbLog(sMsg:=CONCAT('Added to pool ',DWORD_TO_HEXSTR(nReqID, 4, FALSE)),
             eSevr:=TcEventSeverity.Verbose,
             eSubsystem:=E_Subsystem.MPS);
 END_IF
@@ -157,7 +157,7 @@ VAR_INPUT
 END_VAR
 VAR
     idx : UINT := 1;
-	bcBitmask : WORD:=0;
+    bcBitmask : WORD:=0;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//<TODO>Add something here to register the key that won for each param
@@ -175,13 +175,13 @@ FOR idx := 1 TO PMPS_GVL.MAX_APERTURES DO
         ArbitrateBP.astApertures[idx].Height := MAX(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
     ELSE
         ArbitrateBP.astApertures[idx].Height := MIN(stBP1.astApertures[idx].Height, stBP2.astApertures[idx].Height);
-	END_IF
-    
+    END_IF
+
     IF stBP1.astApertures[idx].Width = 0 OR stBP2.astApertures[idx].Width =0 THEN
         ArbitrateBP.astApertures[idx].Width := MAX(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
     ELSE
         ArbitrateBP.astApertures[idx].Width := MIN(stBP1.astApertures[idx].Width, stBP2.astApertures[idx].Width);
-	END_IF
+    END_IF
 END_FOR
 
 //Photon energy ranges
@@ -190,15 +190,15 @@ ArbitrateBP.neVRange := stBP1.neVRange AND stBP2.neVRange;
 //Beam Class ranges
 ArbitrateBP.nBCRange := stBP1.nBCRange AND stBP2.nBCRange;
 
-//Beam Class 
+//Beam Class
 //Assert the highest allowed beamclass
 IF (ArbitrateBP.nBCRange = 0) THEN ArbitrateBP.nBeamClass := 0; END_IF
 FOR idx:=1 TO 15 BY 1 DO
-	IF (idx =1 ) THEN bcBitmask :=1; END_IF
-	IF (ArbitrateBP.nBCRange AND bcBitmask) = bcBitmask THEN 
-		ArbitrateBP.nBeamClass := TO_USINT(idx);
-	END_IF
-	bcBitmask := ROL(bcBitmask,1);
+    IF (idx =1 ) THEN bcBitmask :=1; END_IF
+    IF (ArbitrateBP.nBCRange AND bcBitmask) = bcBitmask THEN
+        ArbitrateBP.nBeamClass := TO_USINT(idx);
+    END_IF
+    bcBitmask := ROL(bcBitmask,1);
 END_FOR
 
 
@@ -232,7 +232,7 @@ BP := fbBPAssertionPool.getValue;
 // Did we find the assertion in the pool?
 // Is the assertion cohort number less than the current cohort and greater than zero?
 // Is the Aribter itself active in arbitration?
-CheckRequest := fbBPAssertionPool.bOk AND 
+CheckRequest := fbBPAssertionPool.bOk AND
                 BP.nCohortInt <= nActiveCohort AND
                 BP.nCohortInt > 0;
 ]]></ST>
@@ -256,9 +256,9 @@ CheckRequestInPool := THIS^.fbBPAssertionPool.bOk;]]></ST>
     <Method Name="ElevateRequest" Id="{7ff662cb-d23f-49f5-854d-1d5b340251d9}">
       <Declaration><![CDATA[// <Arbiter Internal>
 // Elevates the arbitrated BP set to something above.
-// Could be another arbiter, or a BP requester/ IO, 
+// Could be another arbiter, or a BP requester/ IO,
 // or an FB that locks in a specific portion of the BP set.
-METHOD ElevateRequest : BOOL 
+METHOD ElevateRequest : BOOL
 VAR_INPUT
     HigherAuthority : I_HigherAuthority;
 END_VAR
@@ -273,7 +273,7 @@ IF bAckInProgress THEN
     IF HigherAuthority.CheckRequest(nReqID := nArbiterID) THEN
         nActiveCohort := nAckInProgCohort;
         bAckInProgress := FALSE;
-	END_IF
+    END_IF
 END_IF
 
 // Kick off another ack cycle
@@ -292,8 +292,8 @@ END_IF
     <Method Name="FB_init" Id="{c4038514-f5a2-484f-a41c-567aa0b6c31b}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
     nID : DWORD := PMPS_GVL.EXCLUDED_ASSERTION_ID; // Arbiter ID, must be globally unique cannot be zero or 16#FFFF
 END_VAR
 ]]></Declaration>
@@ -312,7 +312,7 @@ END_VAR
 VAR
     getPosPtr    : POINTER TO T_HashTableEntry := 0;
     getBPStructInt    :    ST_BP_ArbInternal;
-	stOutputBP    :    ST_BP_ArbInternal; //Holding struct for arbitration process
+    stOutputBP    :    ST_BP_ArbInternal; //Holding struct for arbitration process
 END_VAR
 VAR_INST
     xFirstPass : BOOL := TRUE;
@@ -335,7 +335,7 @@ all asserters.
 
 THIS^.fbBPAssertionPool.A_GetFirst( putPosPtr := 0, getPosPtr=>getPosPtr, getValue=>getBPStructInt );
 IF THIS^.fbBPAssertionPool.bOk THEN //If the table is empty (not OK), we are left with the default stOutputBP set above.
-    
+
     //The first entry in the hash table is taken as the setting to arbitrate against
     stOutputBP := getBPStructInt;
 
@@ -351,7 +351,7 @@ ELSE
     MEMCPY(ADR(stOutputBP), ADR(PMPS_GVL.cstFullBeam), SIZEOF(PMPS_GVL.cstFullBeam));
 END_IF
 
-MEMCPY(ADR(q_stBeamParams),ADR(stOutputBP), SIZEOF(q_stBeamParams)); 
+MEMCPY(ADR(q_stBeamParams),ADR(stOutputBP), SIZEOF(q_stBeamParams));
 
 GetArbitratedBP := stOutputBP;
 
@@ -370,7 +370,7 @@ END_VAR
         <Implementation>
           <ST><![CDATA[fbBPAssertionPool.A_Count();
 IF fbBPAssertionPool.bOk THEN
-	nEntryCount := fbBPAssertionPool.nCount ;
+    nEntryCount := fbBPAssertionPool.nCount ;
 END_IF]]></ST>
         </Implementation>
       </Get>
@@ -396,18 +396,18 @@ VAR_INST
     fbLog : FB_LogMessage;
 END_VAR
 VAR CONSTANT
-	BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
+    BP_Int : ST_BP_ArbInternal := (nId:=0, LiveInTable:=FALSE);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nReqId <> PMPS_GVL.EXCLUDED_ASSERTION_ID AND CheckRequestInPool(nReqId) THEN
-	// Include an A_Add action here to
-	// update this entry with a dummy filler (ID = 0, LiveInTable= False)
-	// before removing it since this hash
-	// table needs to be viewed with a diagnostic
-	// and so the entries need to appear clean.
-	THIS^.fbBPAssertionPool.A_Add(key := nReqID, putValue := BP_Int);
+    // Include an A_Add action here to
+    // update this entry with a dummy filler (ID = 0, LiveInTable= False)
+    // before removing it since this hash
+    // table needs to be viewed with a diagnostic
+    // and so the entries need to appear clean.
+    THIS^.fbBPAssertionPool.A_Add(key := nReqID, putValue := BP_Int);
     THIS^.fbBPAssertionPool.A_Remove(key := nReqId);
-    
+
     IF bVerbose THEN
         IF THIS^.fbBPAssertionPool.bOk THEN
                 fbLog(sMsg:=CONCAT('Removed from pool: ', DWORD_TO_HEXSTR(nReqID,4,FALSE)),
@@ -419,14 +419,14 @@ END_VAR]]></Declaration>
                 eSubsystem:=E_Subsystem.MPS);
         END_IF
     END_IF
-    
+
     // With any new request reset the internal arbiter "done" flag
     bStartNewAckRequest S= THIS^.fbBPAssertionPool.bOk;
-    
+
     RemoveRequest := THIS^.fbBPAssertionPool.bOk;
-    
+
     nRequestsCount := nEntryCount;
-    
+
 END_IF
 ]]></ST>
       </Implementation>
@@ -434,10 +434,10 @@ END_IF
     <Method Name="RequestBP" Id="{d19219fe-34dd-4096-83ea-674a98690de1}">
       <Declaration><![CDATA[METHOD RequestBP : BOOL
 VAR_INPUT
-	(*StateID of state requesting beam parameter set*)
-	nReqID	: DWORD;
-	(*Requested beam params*)
-	stReqBP	: ST_BeamParams;
+    (*StateID of state requesting beam parameter set*)
+    nReqID	: DWORD;
+    (*Requested beam params*)
+    stReqBP	: ST_BeamParams;
 END_VAR
 ]]></Declaration>
       <Implementation>
