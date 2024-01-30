@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <POU Name="FB_LVetoDevice" Id="{f83060cc-e1ae-4bcb-917a-d946c9ef1939}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LVetoDevice EXTENDS FB_VetoDevice
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^(stCurrentBP:=SUPER^.stCurrentBP);]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{ce2889e2-5f2e-4f97-b355-57c5e9634681}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    eVetoDeviceIN : L_Stopper := L_Stopper.DEFAULT;
+    eVetoDeviceOUT : L_Stopper := L_Stopper.DEFAULT;
+    sVetoDeviceName : STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[VetoDevice_IN := eVetoDeviceIN;
+VetoDevice_OUT := eVetoDeviceOUT;
+VetoDeviceName := sVetoDeviceName;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

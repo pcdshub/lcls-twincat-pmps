@@ -370,6 +370,9 @@
     <Compile Include="MajorComponents\Stoppers\FB_KVetoDevice.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\Stoppers\FB_LVetoDevice.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\Stoppers\FB_LStopper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
