@@ -164,6 +164,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#fb-lineargovernor">FB_LinearGovernor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lphotonenergy">FB_LPhotonEnergy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-lstopper">FB_LStopper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fb-lvetodevice">FB_LVetoDevice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-machinemodefromepics">FB_MachineModeFromEPICS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-machinesimulator">FB_MachineSimulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fb-photonenergy">FB_PhotonEnergy</a></li>
@@ -7721,6 +7722,41 @@ END_FUNCTION_BLOCK
 <dl class="simple">
 <dt>Related:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#fb-stopperwatcher">FB_StopperWatcher</a></p></li>
+<li><p><a class="reference internal" href="#l-stopper">L_Stopper</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="fb-lvetodevice">
+<h2>FB_LVetoDevice<a class="headerlink" href="#fb-lvetodevice" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FUNCTION_BLOCK</span> <span class="n">FB_LVetoDevice</span> <span class="n">EXTENDS</span> <span class="n">FB_VetoDevice</span>
+<span class="n">VAR_INPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR_OUTPUT</span>
+<span class="n">END_VAR</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+<span class="n">SUPER</span><span class="o">^</span><span class="p">(</span><span class="n">stCurrentBP</span><span class="o">:=</span><span class="n">SUPER</span><span class="o">^.</span><span class="n">stCurrentBP</span><span class="p">);</span>
+
+<span class="n">END_FUNCTION_BLOCK</span>
+
+<span class="n">METHOD</span> <span class="n">FB_init</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR_INPUT</span>
+    <span class="n">bInitRetains</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span> <span class="o">//</span> <span class="k">if</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">the</span> <span class="n">retain</span> <span class="n">variables</span> <span class="n">are</span> <span class="n">initialized</span> <span class="p">(</span><span class="n">warm</span> <span class="n">start</span> <span class="o">/</span> <span class="n">cold</span> <span class="n">start</span><span class="p">)</span>
+    <span class="n">bInCopyCode</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>  <span class="o">//</span> <span class="k">if</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">the</span> <span class="n">instance</span> <span class="n">afterwards</span> <span class="n">gets</span> <span class="n">moved</span> <span class="n">into</span> <span class="n">the</span> <span class="n">copy</span> <span class="n">code</span> <span class="p">(</span><span class="n">online</span> <span class="n">change</span><span class="p">)</span>
+    <span class="n">eVetoDeviceIN</span> <span class="p">:</span> <span class="n">L_Stopper</span> <span class="o">:=</span> <span class="n">L_Stopper</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">;</span>
+    <span class="n">eVetoDeviceOUT</span> <span class="p">:</span> <span class="n">L_Stopper</span> <span class="o">:=</span> <span class="n">L_Stopper</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">;</span>
+    <span class="n">sVetoDeviceName</span> <span class="p">:</span> <span class="n">STRING</span><span class="p">;</span>
+<span class="n">END_VAR</span>
+<span class="n">VetoDevice_IN</span> <span class="o">:=</span> <span class="n">eVetoDeviceIN</span><span class="p">;</span>
+<span class="n">VetoDevice_OUT</span> <span class="o">:=</span> <span class="n">eVetoDeviceOUT</span><span class="p">;</span>
+<span class="n">VetoDeviceName</span> <span class="o">:=</span> <span class="n">sVetoDeviceName</span><span class="p">;</span>
+<span class="n">END_METHOD</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Related:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fb-vetodevice">FB_VetoDevice</a></p></li>
 <li><p><a class="reference internal" href="#l-stopper">L_Stopper</a></p></li>
 </ul>
 </dd>

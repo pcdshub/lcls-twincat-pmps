@@ -7651,6 +7651,41 @@ Related:
     * `L_Stopper`_
 
 
+FB_LVetoDevice
+^^^^^^^^^^^^^^
+
+::
+
+    FUNCTION_BLOCK FB_LVetoDevice EXTENDS FB_VetoDevice
+    VAR_INPUT
+    END_VAR
+    VAR_OUTPUT
+    END_VAR
+    VAR
+    END_VAR
+    SUPER^(stCurrentBP:=SUPER^.stCurrentBP);
+
+    END_FUNCTION_BLOCK
+
+    METHOD FB_init : BOOL
+    VAR_INPUT
+        bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+        bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        eVetoDeviceIN : L_Stopper := L_Stopper.DEFAULT;
+        eVetoDeviceOUT : L_Stopper := L_Stopper.DEFAULT;
+        sVetoDeviceName : STRING;
+    END_VAR
+    VetoDevice_IN := eVetoDeviceIN;
+    VetoDevice_OUT := eVetoDeviceOUT;
+    VetoDeviceName := sVetoDeviceName;
+    END_METHOD
+
+
+Related:
+    * `FB_VetoDevice`_
+    * `L_Stopper`_
+
+
 FB_MachineModeFromEPICS
 ^^^^^^^^^^^^^^^^^^^^^^^
 
