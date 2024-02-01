@@ -29,7 +29,7 @@ STRUCT
 
      // Reactive parameters associated with this state
     {attribute 'pytmc' := '
-        pv: ReactiveParams
+        pv: ReParams
         io: i
     '}
     stReactiveParams : ST_ReactiveParams;
