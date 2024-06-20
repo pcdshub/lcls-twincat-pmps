@@ -519,7 +519,7 @@ PMPS_GVL
     :align: center
 
         PMPS_GVL.AccumulatedFF, UDINT, 3072032 (32)
-        PMPS_GVL.AUX_ATTENUATORS, UINT, 641873424 (16)
+        PMPS_GVL.AUX_ATTENUATORS, UINT, 641872912 (16)
         PMPS_GVL.BP_jsonDoc, SJsonValue, 3072064 (32)
         PMPS_GVL.cnMaxStateArrayLen, INT, 641878256 (16)
         PMPS_GVL.cst0RateBeam, ST_BeamParams, 641880096 (1760)

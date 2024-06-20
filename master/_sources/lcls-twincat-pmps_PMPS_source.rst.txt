@@ -185,9 +185,13 @@ K_Stopper
         ST1K2 := 2, // RIX PPS stopper in
         MR1K1_IN := 3, // Monochromator focus optic vertical state
         MR1K1_OUT := 4, // Monochromator focus optic vertical state
-        MR1K3_IN := 5, // TXI Offset Mirror horizontal state
-        MR1K3_OUT := 6, // TXI Offset Mirror horizontal state
+        MR1K3_IN := 5, // TXI MR1K3 Offset Mirror horizontal state
+        MR1K3_OUT := 6, // TXI MR1K3 Offset Mirror horizontal state
         ST4K4 := 7, //TMO ST4K4 Photon Terminator In Limit Switch
+        ST1K4 := 8, //TMO Photon Stopper in the FEE
+        ST1K3 :=9, //TXI Kline PPS stopper in
+        MR2K3_IN := 10, // TXI MR2K3 Offset Mirror state
+        MR2K3_OUT := 11, // TXI MR2K3 Offset Mirror horizontal state
         DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
     );
     END_TYPE
