@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <POU Name="FB_DummyArbIO" Id="{2832ee2c-eae8-4c8f-9ee2-8e9eb8d3e7f9}" SpecialFunc="None">
     <Declaration><![CDATA[(* Use to test other library integrations of PMPS preemptive functionality *)
 (* This block stands in for the FB_SubSysToArb_IO block. *)
@@ -100,6 +100,12 @@ ELSIF bAutoUpdateBP THEN
     tonSatt(PT:=tSattDelay);
     IF tonSatt.Q THEN q_stSimulatedBPReadback.astAttenuators := stReqOutBP.astAttenuators; END_IF
 END_IF
+
+(* Checking the VAR_IN_OUT reference, leave the current method in case of invalid reference *)
+IF NOT __ISVALIDREF(ffo) THEN
+    RETURN;
+END_IF
+(* Access to VAR_IN_OUT reference (only if the reference was confirmed as valid before *)
 
 ffo.ExecuteNoLog();
 
