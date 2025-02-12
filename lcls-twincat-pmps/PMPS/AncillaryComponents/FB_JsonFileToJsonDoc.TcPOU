@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <POU Name="FB_JsonFileToJsonDoc" Id="{b6fe30de-ce9d-4faa-a7ae-6e28ef395974}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_JsonFileToJsonDoc
 VAR_INPUT
@@ -33,7 +33,7 @@ VAR
     fbFileClose          : FB_FileClose;
     fbFileRead           : FB_FileRead;
     hSrcFile             : UINT := 0;(* File handle of the source file *)
-    Step: INT;
+    Step: UINT;
     index: DINT;
     RisingEdge           : R_TRIG;
     (* Buffer *)

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <POU Name="FB_SXU" Id="{23188e56-6a28-4c8b-9089-611f5a306284}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SXU IMPLEMENTS I_UndulatorComplex
 VAR_INPUT
@@ -222,7 +222,7 @@ bInitialized := TRUE;]]></ST>
       </Implementation>
     </Action>
     <Property Name="rCurrentPhotonEnergy" Id="{d6508ae9-62bd-47d4-8045-17d8194bcb0e}">
-      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{4950ba64-6d8a-4cb3-aee3-047f448b2987}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -233,7 +233,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="rTargetPhotonEnergy" Id="{507d5e9d-15ad-4d67-9e3e-af15774112b3}">
-      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{6bd4edd2-5414-41a9-bcdd-1c056c339291}">
         <Declaration><![CDATA[VAR
 END_VAR

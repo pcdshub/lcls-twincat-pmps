@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <POU Name="FB_JsonDocToSafeBP" Id="{be21f50f-6e98-4ce2-92ee-0a1b1ced09d9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_JsonDocToSafeBP
 VAR_INPUT
@@ -29,7 +29,7 @@ VAR
     jsonParam		: SJsonValue;
     jsonnTran      : SJsonValue;
     jsonnRate      : SJsonValue;
-    Step: INT;
+    Step: UINT;
     index: DINT;
     nStateCount:DINT;
     RisingEdge           : R_TRIG;
