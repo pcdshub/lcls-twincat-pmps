@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <DUT Name="L_Stopper" Id="{4f388ccc-0324-4da3-97c4-cae9c87c18e4}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
@@ -12,7 +12,7 @@ TYPE L_Stopper :
     MR1L1_IN:= 5, //  TXI Offset Mirror horizontal state
     MR1L1_OUT:= 6, // TXI Offset Mirror horizontal state
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
-);
+)UINT;
 END_TYPE
 ]]></Declaration>
   </DUT>

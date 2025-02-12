@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <DUT Name="K_Stopper" Id="{7f88e826-563e-4958-8882-316683d3fe67}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
@@ -17,7 +17,7 @@ TYPE K_Stopper :
     MR2K3_IN := 10, // TXI MR2K3 Offset Mirror state
     MR2K3_OUT := 11, // TXI MR2K3 Offset Mirror horizontal state
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
-);
+) UINT;
 END_TYPE
 ]]></Declaration>
   </DUT>

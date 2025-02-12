@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
   <Itf Name="I_UndulatorComplex" Id="{58c10c85-f752-4da9-8bb8-c4aa0534b71a}">
     <Declaration><![CDATA[INTERFACE I_UndulatorComplex
 ]]></Declaration>
     <Property Name="rCurrentPhotonEnergy" Id="{13076688-de6c-46fb-bc96-f35dd9b5072c}">
-      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{7e3c5a1a-1015-44fc-886d-8c84bff5e2e7}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
     <Property Name="rTargetPhotonEnergy" Id="{3d22f590-84aa-487e-934d-179d4b5d185d}">
-      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{3960bfc6-ae2c-4d6a-8d87-eb5698cebc8f}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
