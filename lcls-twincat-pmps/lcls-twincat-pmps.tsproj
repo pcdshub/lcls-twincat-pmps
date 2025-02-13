@@ -139,6 +139,7 @@
 	</DataTypes>
 	<Project ProjectGUID="{975504C8-D07C-40E0-B09A-CB44983E91F3}" Target64Bit="true" ShowHideConfigurations="#x106">
 		<System>
+			<Settings MaxStackSize="128"/>
 			<Licenses>
 				<Target>
 					<ManualSelect>{94C91BCC-DC1F-4EBC-AEFD-2DC25DF4708B}</ManualSelect>
