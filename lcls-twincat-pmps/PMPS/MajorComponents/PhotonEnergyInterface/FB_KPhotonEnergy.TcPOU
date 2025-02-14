@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_KPhotonEnergy" Id="{a3b33140-6a40-4107-8e0d-e87a2f35f3b3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_KPhotonEnergy EXTENDS FB_PhotonEnergy
 VAR_INPUT

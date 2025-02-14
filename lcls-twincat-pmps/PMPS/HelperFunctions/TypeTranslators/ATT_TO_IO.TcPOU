@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="ATT_TO_IO" Id="{18b528b7-b147-4652-8142-65b2d820ca1f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION ATT_TO_IO : ST_PMPS_Attenuator_IO
 VAR_INPUT
