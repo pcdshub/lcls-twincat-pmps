@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="BeamParameterTransitionManager" Id="{f431705f-a58e-48ab-bbd5-262d6c623c7b}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 Implements the procedure for safely transitioning between device states.

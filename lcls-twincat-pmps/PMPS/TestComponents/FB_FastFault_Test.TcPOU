@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_FastFault_Test" Id="{2ec3826d-e723-4fb3-ae0d-bdcd8662dc40}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 {attribute 'no_check'}

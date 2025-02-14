@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.11">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="F_eVRangeCalculator" Id="{a4835126-795e-4742-8c6c-c3fd14467c35}" SpecialFunc="None">
     <Declaration><![CDATA[(*
 A. Wallace 2019-8-8
