@@ -18,8 +18,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 //Update BP
-nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(Undulator.rCurrentPhotonEnergy, nCurrentPhotonEnergyBitmask);
-nTargetPhotonEnergyBitmask := F_eVRangeCalculator(Undulator.rTargetPhotonEnergy, nTargetPhotonEnergyBitmask);
+nCurrentPhotonEnergyBitmask := F_eVRangeCalculator(LREAL_TO_REAL(Undulator.rCurrentPhotonEnergy), nCurrentPhotonEnergyBitmask);
+nTargetPhotonEnergyBitmask := F_eVRangeCalculator(LREAL_TO_REAL(Undulator.rTargetPhotonEnergy), nTargetPhotonEnergyBitmask);
 
 BP.neVRange := nCurrentPhotonEnergyBitmask OR nTargetPhotonEnergyBitmask;]]></ST>
     </Implementation>
