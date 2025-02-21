@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_BPTM_Test" Id="{fb9a456e-191d-4018-903c-95799c9aa22a}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_BPTM_Test EXTENDS TcUnit.FB_TestSuite
@@ -366,7 +366,7 @@ WHILE fbBPTMDiscCycles.eBPTMState <> E_BPTMState.Idle DO
 END_WHILE
 
 IF fbBPTMDiscCycles.eBPTMState = E_BPTMState.Idle THEN
-    AssertTrue(cCycle >= iCount, CONCAT('cCycle is too low, increase it to', INT_TO_STRING(iCount)));
+    AssertTrue(cCycle >= iCount, CONCAT('cCycle is too low, increase it to', UINT_TO_STRING(iCount)));
     TEST_FINISHED_NAMED('CheckBPTM Cycle Count');
 END_IF
 
@@ -387,7 +387,7 @@ FOR nCycleLim := 1 TO cCycle DO
     ArbIO.AutoUpdateBP := TRUE;
 
     // Start the test for this Cycle Limit
-    sCurrentTestName := CONCAT('CycleLimTest:',INT_TO_STRING(nCycleLim));
+    sCurrentTestName := CONCAT('CycleLimTest:',UINT_TO_STRING(nCycleLim));
     TEST(sCurrentTestName);
 
     nAllStepsDone := 0;
