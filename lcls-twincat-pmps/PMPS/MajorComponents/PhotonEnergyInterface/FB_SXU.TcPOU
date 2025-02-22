@@ -42,6 +42,9 @@ END_VAR
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
 
+    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
+    fbSegment_22 : FB_UndulatorSegment;
+
     {attribute 'pytmc' := 'pv: 23; link: 2350:'}
     fbSegment_23 : FB_UndulatorSegment;
 
@@ -129,7 +132,7 @@ VAR CONSTANT
     {attribute 'pytmc' := '
         pv: FirstSegment
         io: i'}
-    iLowBound  : UDINT := 23;
+    iLowBound  : UDINT := 22;
     {attribute 'pytmc' := '
         pv: LastSegment
          io: i'}
