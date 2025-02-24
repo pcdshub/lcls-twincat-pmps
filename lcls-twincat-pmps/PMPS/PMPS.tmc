@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{09D65632-4EAE-DD58-9808-D9977E35731C}" GeneratedBy="TwinCAT XAE Plc">
+<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{037C61AE-BE1D-161C-0F5F-E50C8C1EE006}" GeneratedBy="TwinCAT XAE Plc">
   <DataTypes>
     <DataType>
       <Name Namespace="Tc2_System">T_MaxString</Name>
@@ -8831,31 +8831,31 @@
         <Name>bBusy</Name>
         <Type>BOOL</Type>
         <BitSize>8</BitSize>
-        <GetCodeOffs>80255500</GetCodeOffs>
+        <GetCodeOffs>80255332</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>bError</Name>
         <Type>BOOL</Type>
         <BitSize>8</BitSize>
-        <GetCodeOffs>80255536</GetCodeOffs>
+        <GetCodeOffs>80255368</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>hrErrorCode</Name>
         <Type GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255544</GetCodeOffs>
+        <GetCodeOffs>80255376</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nStringSize</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255524</GetCodeOffs>
+        <GetCodeOffs>80255356</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sResult</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255540</GetCodeOffs>
+        <GetCodeOffs>80255372</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name RpcEnable="plc" VTableIndex="0">__getbBusy</Name>
@@ -10094,15 +10094,15 @@
         <Name>nId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255440</GetCodeOffs>
-        <SetCodeOffs>80255464</SetCodeOffs>
+        <GetCodeOffs>80255272</GetCodeOffs>
+        <SetCodeOffs>80255296</SetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sName</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255480</GetCodeOffs>
-        <SetCodeOffs>80255492</SetCodeOffs>
+        <GetCodeOffs>80255312</GetCodeOffs>
+        <SetCodeOffs>80255324</SetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>ExtendName</Name>
@@ -10348,37 +10348,37 @@
         <Name>eSeverity</Name>
         <Type GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}">TcEventSeverity</Type>
         <BitSize>16</BitSize>
-        <GetCodeOffs>80255592</GetCodeOffs>
+        <GetCodeOffs>80255424</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>ipSourceInfo</Name>
         <Type Namespace="LCLS_General.Tc3_EventLogger">I_TcSourceInfo</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255572</GetCodeOffs>
+        <GetCodeOffs>80255404</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nEventId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255660</GetCodeOffs>
+        <GetCodeOffs>80255492</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nUniqueId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255664</GetCodeOffs>
+        <GetCodeOffs>80255496</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sEventClassName</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255620</GetCodeOffs>
+        <GetCodeOffs>80255452</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sEventText</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255668</GetCodeOffs>
+        <GetCodeOffs>80255500</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>EqualsToEventClass</Name>
@@ -10977,7 +10977,7 @@
         <Name>nTimeSent</Name>
         <Type>ULINT</Type>
         <BitSize>64</BitSize>
-        <GetCodeOffs>80255692</GetCodeOffs>
+        <GetCodeOffs>80255524</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>SetJsonAttribute</Name>
@@ -30466,7 +30466,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641872912</BitOffs>
+            <BitOffs>641873424</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.stRequestedBeamParameters</Name>
@@ -31494,7 +31494,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
         </Property>
         <Property>
           <Name>ChangeDate</Name>
-          <Value>2024-06-18T15:24:12</Value>
+          <Value>2025-02-21T15:58:47</Value>
         </Property>
         <Property>
           <Name>GeneratedCodeSize</Name>

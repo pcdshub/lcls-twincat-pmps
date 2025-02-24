@@ -42,6 +42,17 @@ END_VAR
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
 
+    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
+    fbSegment_22 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 23; link: 2350:'}
+    fbSegment_23 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 24; link: 2450:'}
+    fbSegment_24 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 25; link: 2550:'}
+    fbSegment_25 : FB_UndulatorSegment;
 
     {attribute 'pytmc' := 'pv: 26; link: 2650:'}
     fbSegment_26 : FB_UndulatorSegment;
@@ -121,22 +132,30 @@ VAR CONSTANT
     {attribute 'pytmc' := '
         pv: FirstSegment
         io: i'}
-    iLowBound  : UDINT := 26;
+    iLowBound  : UDINT := 22;
     {attribute 'pytmc' := '
         pv: LastSegment
          io: i'}
     iHighBound : UDINT := 47;
     {attribute 'pytmc' := '
-        pv: Period
+        pv: Period_Short
         io: i
         field: EGU mm
     '}
-    fPeriod_mm : LREAL := 39.0;
+    fPeriod_39_mm : LREAL := 39.0;
+
+    {attribute 'pytmc' := '
+        pv: Period_Long
+        io: i
+        field: EGU mm
+    '}
+    fPeriod_56_mm : LREAL := 56.0;
+
     {attribute 'pytmc' := '
         pv: LowK
         io: i
     '}
-    fLowK : LREAL := 1.5;
+    fLowK : LREAL := 0.8;
 
     {attribute 'pytmc' := '
         pv: HiK
@@ -191,9 +210,11 @@ UndAdrUpdate();
 FOR iIndex := iLowBound TO iHighBound DO
         IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
-        fbCurrentSegment.fPeriod_mm := fPeriod_mm;
         fbCurrentSegment.fLowK := fLowK;
         fbCurrentSegment.fHiK := fHiK;
+        IF (iIndex >= 26)  THEN fbCurrentSegment.fPeriod_mm := fPeriod_39_mm;
+            ELSE fbCurrentSegment.fPeriod_mm := fPeriod_56_mm;
+        END_IF
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>
