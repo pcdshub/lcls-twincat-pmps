@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,22 +7,18 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DUTs &mdash; pcdshub/lcls-twincat-pmps  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/tree.css?v=837a00b9" />
       <link rel="stylesheet" type="text/css" href="_static/width.css?v=ab210c7a" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -474,8 +472,8 @@
 <span class="n">STRUCT</span>
     <span class="n">AtTarget</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>     <span class="o">//</span><span class="mi">0</span>
     <span class="n">Moving</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>       <span class="o">//</span><span class="mi">1</span>
-    <span class="n">LocalMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>    <span class="o">//</span><span class="mi">2</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">ignores</span> <span class="n">PMPS</span> <span class="n">preemptive</span> <span class="n">requests</span> <span class="ow">and</span> <span class="n">operates</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">local</span> <span class="n">setpoint</span> <span class="o">*</span><span class="p">)</span>
-    <span class="n">PMPSMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>     <span class="o">//</span><span class="mi">3</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">taking</span> <span class="n">setpoints</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">pmps</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">LocalMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>    <span class="o">//</span><span class="mi">2</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="n">ignores</span> <span class="n">PMPS</span> <span class="n">preemptive</span> <span class="n">requests</span> <span class="ow">and</span> <span class="n">operates</span> <span class="kn">from</span><span class="w"> </span><span class="nn">a</span> <span class="n">local</span> <span class="n">setpoint</span> <span class="o">*</span><span class="p">)</span>
+    <span class="n">PMPSMode</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>     <span class="o">//</span><span class="mi">3</span>  <span class="p">(</span><span class="o">*</span> <span class="n">means</span> <span class="n">the</span> <span class="n">attenuator</span> <span class="ow">is</span> <span class="n">only</span> <span class="n">taking</span> <span class="n">setpoints</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">pmps</span> <span class="o">*</span><span class="p">)</span>
     <span class="n">OK</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>           <span class="o">//</span><span class="mi">4</span>
     <span class="n">Toggle</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>       <span class="o">//</span><span class="mi">5</span>  <span class="n">just</span> <span class="n">here</span> <span class="k">for</span> <span class="n">fun</span>
     <span class="n">Include</span> <span class="p">:</span> <span class="n">BIT</span><span class="p">;</span>      <span class="o">//</span><span class="mi">6</span>  <span class="n">Consider</span> <span class="n">this</span> <span class="n">device</span> <span class="n">status</span>
@@ -596,7 +594,7 @@
 <section id="st-dbstateparams">
 <h2>ST_DbStateParams<a class="headerlink" href="#st-dbstateparams" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span> <span class="n">ST_DbStateParams</span> <span class="p">:</span>
-     <span class="o">//</span> <span class="n">Defines</span> <span class="n">The</span> <span class="n">parameters</span> <span class="n">that</span> <span class="n">are</span> <span class="n">loaded</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">json</span> <span class="n">db</span> <span class="k">for</span> <span class="n">every</span> <span class="n">state</span> <span class="n">name</span>
+     <span class="o">//</span> <span class="n">Defines</span> <span class="n">The</span> <span class="n">parameters</span> <span class="n">that</span> <span class="n">are</span> <span class="n">loaded</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">json</span> <span class="n">db</span> <span class="k">for</span> <span class="n">every</span> <span class="n">state</span> <span class="n">name</span>
 <span class="n">STRUCT</span>
       <span class="o">//</span> <span class="n">PMPS</span> <span class="n">database</span> <span class="n">lookup</span> <span class="n">name</span> <span class="k">for</span> <span class="n">this</span> <span class="n">state</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
@@ -613,11 +611,11 @@
     <span class="s1">&#39;}</span>
     <span class="n">stBeamParams</span><span class="p">:</span> <span class="n">ST_BeamParams</span> <span class="o">:=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">cst0RateBeam</span><span class="p">;</span>
 
-    <span class="o">//</span> <span class="n">Set</span> <span class="n">to</span> <span class="n">TRUE</span> <span class="n">once</span> <span class="n">the</span> <span class="n">PMPS</span> <span class="n">library</span> <span class="n">has</span> <span class="n">loaded</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">state</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">database</span>
+    <span class="o">//</span> <span class="n">Set</span> <span class="n">to</span> <span class="n">TRUE</span> <span class="n">once</span> <span class="n">the</span> <span class="n">PMPS</span> <span class="n">library</span> <span class="n">has</span> <span class="n">loaded</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">state</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">database</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">PMPS_LOADED</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
-        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">TRUE</span> <span class="k">if</span> <span class="n">PMPS</span> <span class="n">loaded</span> <span class="n">parameters</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">database</span><span class="o">.</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">DESC</span> <span class="n">TRUE</span> <span class="k">if</span> <span class="n">PMPS</span> <span class="n">loaded</span> <span class="n">parameters</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">database</span><span class="o">.</span>
     <span class="s1">&#39;}</span>
     <span class="n">bBeamParamsLoaded</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
@@ -711,7 +709,7 @@
     <span class="n">nStateRef</span>       <span class="p">:</span>       <span class="n">UDINT</span><span class="p">;</span> <span class="o">//</span><span class="n">Primary</span> <span class="n">key</span> <span class="n">of</span> <span class="n">device</span> <span class="n">state</span> <span class="n">database</span>
 
     <span class="o">//////////////////</span>
-    <span class="o">//</span> <span class="n">This</span> <span class="n">stuff</span> <span class="n">may</span> <span class="n">belong</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="k">class</span> <span class="nc">or</span> <span class="n">something</span>
+    <span class="o">//</span> <span class="n">This</span> <span class="n">stuff</span> <span class="n">may</span> <span class="n">belong</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="k">class</span><span class="w"> </span><span class="nc">or</span> <span class="n">something</span>
     <span class="o">//</span><span class="n">Position</span>
     <span class="n">rPosition</span>       <span class="p">:</span>       <span class="n">REAL</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span><span class="n">Center</span> <span class="n">of</span> <span class="n">the</span> <span class="n">state</span>
     <span class="o">//</span><span class="n">Tolerance</span>
@@ -2030,7 +2028,7 @@ END_TYPE
 
 <span class="n">Reference</span> <span class="n">Python</span> <span class="n">implementation</span>
 
-<span class="k">def</span> <span class="nf">calculate_photon_energy</span><span class="p">(</span><span class="n">electron_energy</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_photon_energy</span><span class="p">(</span><span class="n">electron_energy</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate photon energy, in eV.</span>
 
@@ -2155,7 +2153,7 @@ END_FUNCTION
 
     <span class="n">eVs</span> <span class="n">between</span> <span class="n">fLower</span> <span class="ow">and</span> <span class="n">fUpper</span> <span class="n">will</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">unsafe</span><span class="p">,</span> <span class="ow">and</span> <span class="n">eVs</span> <span class="n">outside</span> <span class="n">of</span> <span class="n">this</span> <span class="nb">range</span> <span class="n">will</span> <span class="n">be</span>
     <span class="n">considered</span> <span class="n">safe</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">of</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="ow">and</span> <span class="n">values</span> <span class="n">near</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="k">if</span> <span class="n">they</span> <span class="n">land</span>
-    <span class="n">far</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
+    <span class="n">far</span> <span class="kn">from</span><span class="w"> </span><span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
 
     <span class="n">Call</span> <span class="n">this</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">init</span> <span class="n">cycle</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">your</span> <span class="n">eV</span> <span class="n">bitmasks</span> <span class="k">for</span> <span class="n">more</span> <span class="n">readable</span> <span class="n">code</span>
     <span class="n">that</span> <span class="ow">is</span> <span class="n">also</span> <span class="n">more</span> <span class="n">resiliant</span> <span class="n">to</span> <span class="n">eV</span> <span class="nb">range</span> <span class="n">definition</span> <span class="n">adjustments</span><span class="o">.</span>
@@ -2184,7 +2182,7 @@ END_FUNCTION
     <span class="n">Given</span> <span class="n">an</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">upper</span> <span class="n">end</span> <span class="n">of</span> <span class="n">an</span> <span class="n">inclusion</span> <span class="nb">range</span><span class="p">,</span> <span class="k">return</span> <span class="n">the</span> <span class="n">corresponding</span> <span class="n">eV</span> <span class="n">bitmask</span><span class="o">.</span>
 
     <span class="n">eVs</span> <span class="n">between</span> <span class="n">fLower</span> <span class="ow">and</span> <span class="n">fUpper</span> <span class="n">will</span> <span class="n">be</span> <span class="n">considered</span> <span class="n">safe</span><span class="p">,</span> <span class="k">with</span> <span class="n">the</span> <span class="n">exception</span> <span class="n">of</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="ow">and</span> <span class="n">values</span>
-    <span class="n">near</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="k">if</span> <span class="n">they</span> <span class="n">land</span> <span class="n">far</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
+    <span class="n">near</span> <span class="n">the</span> <span class="n">endpoints</span> <span class="k">if</span> <span class="n">they</span> <span class="n">land</span> <span class="n">far</span> <span class="kn">from</span><span class="w"> </span><span class="nn">an</span> <span class="n">eV</span> <span class="n">boundary</span><span class="o">.</span>
 
     <span class="n">Call</span> <span class="n">this</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">init</span> <span class="n">cycle</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">your</span> <span class="n">eV</span> <span class="n">bitmasks</span> <span class="k">for</span> <span class="n">more</span> <span class="n">readable</span> <span class="n">code</span>
     <span class="n">that</span> <span class="ow">is</span> <span class="n">also</span> <span class="n">more</span> <span class="n">resiliant</span> <span class="n">to</span> <span class="n">eV</span> <span class="nb">range</span> <span class="n">definition</span> <span class="n">adjustments</span><span class="o">.</span>
@@ -2496,7 +2494,7 @@ END_FUNCTION
 
     <span class="o">//</span> <span class="n">Beam</span><span class="o">-</span><span class="n">rate</span> <span class="ow">is</span> <span class="n">zero</span><span class="p">,</span> <span class="n">masks</span> <span class="nb">all</span> <span class="n">others</span> <span class="n">considerations</span><span class="o">.</span>
     <span class="n">xZeroRate</span><span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
-    <span class="o">//</span><span class="n">Beam</span> <span class="k">class</span> <span class="nc">is</span> <span class="n">zero</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span> <span class="n">beam</span> <span class="n">off</span><span class="p">,</span> <span class="n">masks</span> <span class="nb">all</span> <span class="n">other</span> <span class="n">considerations</span><span class="o">.</span>
+    <span class="o">//</span><span class="n">Beam</span> <span class="k">class</span><span class="w"> </span><span class="nc">is</span> <span class="n">zero</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span> <span class="n">beam</span> <span class="n">off</span><span class="p">,</span> <span class="n">masks</span> <span class="nb">all</span> <span class="n">other</span> <span class="n">considerations</span><span class="o">.</span>
     <span class="n">xZeroBC</span> <span class="p">:</span> <span class="n">BOOL</span><span class="p">;</span>
 
 <span class="n">END_VAR</span>
@@ -3798,7 +3796,7 @@ END_FUNCTION_BLOCK
     <span class="n">q_rCurrentAttenuation</span>    <span class="p">:</span>    <span class="n">REAL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_IN_OUT</span>
-    <span class="n">Arbiter</span>    <span class="p">:</span>    <span class="n">FB_Arbiter</span><span class="p">;</span> <span class="o">//</span><span class="n">Higher</span> <span class="n">level</span> <span class="n">arbiter</span> <span class="kn">from</span> <span class="nn">which</span> <span class="n">upstream</span> <span class="n">attenuation</span> <span class="n">can</span> <span class="n">be</span> <span class="n">requested</span>
+    <span class="n">Arbiter</span>    <span class="p">:</span>    <span class="n">FB_Arbiter</span><span class="p">;</span> <span class="o">//</span><span class="n">Higher</span> <span class="n">level</span> <span class="n">arbiter</span> <span class="kn">from</span><span class="w"> </span><span class="nn">which</span> <span class="n">upstream</span> <span class="n">attenuation</span> <span class="n">can</span> <span class="n">be</span> <span class="n">requested</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
     <span class="n">tonDelay</span>    <span class="p">:</span>    <span class="n">TON</span> <span class="o">:=</span> <span class="p">(</span>
@@ -4064,13 +4062,13 @@ END_FUNCTION_BLOCK
 <h2>FB_BeamClassWatcher<a class="headerlink" href="#fb-beamclasswatcher" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span>
 <span class="n">M</span><span class="o">.</span> <span class="n">Ghaly</span>
-<span class="n">The</span> <span class="n">Beam</span> <span class="k">class</span> <span class="nc">watcher</span> <span class="n">ensures</span> <span class="n">the</span> <span class="n">current</span> <span class="ow">and</span> <span class="n">target</span> <span class="n">beam</span> <span class="k">class</span> <span class="nc">is</span> <span class="n">within</span>
+<span class="n">The</span> <span class="n">Beam</span> <span class="k">class</span><span class="w"> </span><span class="nc">watcher</span> <span class="n">ensures</span> <span class="n">the</span> <span class="n">current</span> <span class="ow">and</span> <span class="n">target</span> <span class="n">beam</span> <span class="k">class</span><span class="w"> </span><span class="nc">is</span> <span class="n">within</span>
 <span class="n">the</span> <span class="n">arbirated</span> <span class="n">bounds</span><span class="o">.</span>
 
 
-<span class="n">The</span> <span class="n">abritrated</span> <span class="n">bounds</span> <span class="n">come</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">simple</span> <span class="n">AND</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">permitted</span> <span class="n">beam</span> <span class="k">class</span> <span class="nc">ranges</span><span class="o">.</span> <span class="n">See</span>
+<span class="n">The</span> <span class="n">abritrated</span> <span class="n">bounds</span> <span class="n">come</span> <span class="kn">from</span><span class="w"> </span><span class="nn">a</span> <span class="n">simple</span> <span class="n">AND</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">permitted</span> <span class="n">beam</span> <span class="k">class</span><span class="w"> </span><span class="nc">ranges</span><span class="o">.</span> <span class="n">See</span>
 <span class="n">the</span> <span class="n">arbitrate</span> <span class="n">action</span> <span class="n">of</span> <span class="n">the</span> <span class="n">arbiter</span> <span class="n">FB</span><span class="o">.</span> <span class="n">It</span> <span class="n">also</span> <span class="n">reads</span> <span class="n">a</span> <span class="n">PV</span> <span class="ow">and</span> <span class="n">ensures</span> <span class="n">that</span> <span class="n">the</span> <span class="n">asserted</span> <span class="n">Beam</span> <span class="n">Class</span>
-<span class="ow">is</span> <span class="n">the</span> <span class="n">same</span> <span class="k">as</span> <span class="n">the</span> <span class="n">PV</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">ATCA</span> <span class="n">crate</span>
+<span class="ow">is</span> <span class="n">the</span> <span class="n">same</span> <span class="k">as</span> <span class="n">the</span> <span class="n">PV</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">ATCA</span> <span class="n">crate</span>
 
 <span class="n">Note</span><span class="p">,</span> <span class="n">this</span> <span class="n">protection</span> <span class="n">logic</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">account</span> <span class="k">for</span> <span class="n">beam</span><span class="o">-</span><span class="n">off</span> <span class="n">when</span> <span class="n">determining</span> <span class="n">fast</span><span class="o">-</span><span class="n">fault</span>
 <span class="n">status</span><span class="o">.</span> <span class="n">If</span> <span class="n">a</span> <span class="n">device</span> <span class="ow">is</span> <span class="n">requesting</span> <span class="n">a</span> <span class="n">limited</span> <span class="nb">range</span> <span class="n">of</span> <span class="n">BC</span><span class="p">,</span> <span class="n">this</span> <span class="n">request</span> <span class="n">must</span> <span class="n">be</span> <span class="n">honored</span><span class="p">,</span>
@@ -4309,7 +4307,7 @@ END_FUNCTION_BLOCK
 <section id="fb-bpcontroldevice">
 <h2>FB_BPControlDevice<a class="headerlink" href="#fb-bpcontroldevice" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span>
-<span class="n">Used</span> <span class="n">to</span> <span class="n">request</span> <span class="n">a</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="nb">set</span> <span class="kn">from</span> <span class="nn">EPICS.</span>
+<span class="n">Used</span> <span class="n">to</span> <span class="n">request</span> <span class="n">a</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="nb">set</span> <span class="kn">from</span><span class="w"> </span><span class="nn">EPICS.</span>
 
 <span class="n">Technically</span> <span class="n">just</span> <span class="n">one</span> <span class="n">of</span> <span class="n">these</span> <span class="ow">is</span> <span class="n">needed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">entire</span>
 <span class="n">PMPS</span> <span class="k">for</span> <span class="n">a</span> <span class="n">line</span><span class="o">.</span>
@@ -4397,7 +4395,7 @@ END_FUNCTION_BLOCK
 <section id="fb-bprequestor">
 <h2>FB_BPRequestor<a class="headerlink" href="#fb-bprequestor" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span> <span class="n">BP</span> <span class="n">Requestor</span>
-<span class="n">Elevates</span> <span class="n">the</span> <span class="n">BP</span> <span class="n">request</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">arbiter</span> <span class="n">to</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">stRequestedBP</span>
+<span class="n">Elevates</span> <span class="n">the</span> <span class="n">BP</span> <span class="n">request</span> <span class="kn">from</span><span class="w"> </span><span class="nn">an</span> <span class="n">arbiter</span> <span class="n">to</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">stRequestedBP</span>
 <span class="o">*</span><span class="p">)</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_BPRequestor</span> <span class="n">IMPLEMENTS</span> <span class="n">I_HigherAuthority</span>
 <span class="n">VAR_INPUT</span>
@@ -4461,7 +4459,7 @@ END_FUNCTION_BLOCK
     <span class="n">ReqID</span> <span class="p">:</span> <span class="n">DWORD</span><span class="p">;</span>
     <span class="n">Registered</span> <span class="p">:</span> <span class="n">BOOL</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">;</span>
 <span class="n">END_VAR</span>
-<span class="o">//</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">request</span> <span class="ow">is</span> <span class="n">coming</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">same</span> <span class="n">source</span> <span class="n">we</span><span class="s1">&#39;re used to</span>
+<span class="o">//</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">request</span> <span class="ow">is</span> <span class="n">coming</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">same</span> <span class="n">source</span> <span class="n">we</span><span class="s1">&#39;re used to</span>
 <span class="n">IF</span> <span class="n">NOT</span> <span class="n">Registered</span> <span class="n">THEN</span>
     <span class="n">ReqID</span> <span class="o">:=</span> <span class="n">nReqID</span><span class="p">;</span>
     <span class="n">Registered</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -4757,7 +4755,7 @@ END_FUNCTION_BLOCK
 <span class="n">END_METHOD</span>
 
 <span class="o">//</span> <span class="n">Test</span> <span class="n">the</span> <span class="n">BPTM</span> <span class="n">seamlessly</span> <span class="n">handles</span> <span class="n">new</span> <span class="n">requests</span> <span class="n">at</span> <span class="nb">any</span> <span class="n">stage</span>
-<span class="o">//</span> <span class="n">Verify</span> <span class="n">old</span> <span class="n">requests</span> <span class="n">are</span> <span class="n">removed</span> <span class="kn">from</span> <span class="nn">arbiter</span>
+<span class="o">//</span> <span class="n">Verify</span> <span class="n">old</span> <span class="n">requests</span> <span class="n">are</span> <span class="n">removed</span> <span class="kn">from</span><span class="w"> </span><span class="nn">arbiter</span>
 <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;no_check&#39;</span><span class="p">}</span>
 <span class="n">METHOD</span> <span class="n">InterruptAtAllSteps</span>
 <span class="n">VAR_INPUT</span>
@@ -4944,7 +4942,7 @@ END_FUNCTION_BLOCK
 <span class="n">END_METHOD</span>
 
 <span class="o">//</span> <span class="n">Test</span> <span class="n">the</span> <span class="n">BPTM</span> <span class="n">seamlessly</span> <span class="n">handles</span> <span class="n">new</span> <span class="n">requests</span> <span class="n">at</span> <span class="nb">any</span> <span class="n">stage</span>
-<span class="o">//</span> <span class="n">Verify</span> <span class="n">old</span> <span class="n">requests</span> <span class="n">are</span> <span class="n">removed</span> <span class="kn">from</span> <span class="nn">arbiter</span>
+<span class="o">//</span> <span class="n">Verify</span> <span class="n">old</span> <span class="n">requests</span> <span class="n">are</span> <span class="n">removed</span> <span class="kn">from</span><span class="w"> </span><span class="nn">arbiter</span>
 <span class="n">METHOD</span> <span class="n">InterruptedTransition</span>
 <span class="n">VAR_INPUT</span>
 <span class="n">END_VAR</span>
@@ -5048,7 +5046,7 @@ END_FUNCTION_BLOCK
 <section id="fb-ctls-outputs">
 <h2>FB_CTLS_Outputs<a class="headerlink" href="#fb-ctls-outputs" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">*</span>
-<span class="n">Controls</span> <span class="n">auxiliary</span> <span class="n">beam</span> <span class="k">class</span> <span class="nc">outputs</span><span class="o">.</span>
+<span class="n">Controls</span> <span class="n">auxiliary</span> <span class="n">beam</span> <span class="k">class</span><span class="w"> </span><span class="nc">outputs</span><span class="o">.</span>
 
 <span class="mi">1</span><span class="o">-</span><span class="mi">3</span> <span class="n">are</span> <span class="n">mapped</span> <span class="n">to</span> <span class="n">control</span> <span class="n">the</span> <span class="n">Cu</span> <span class="n">beamline</span> <span class="n">rate</span> <span class="n">via</span> <span class="n">the</span> <span class="n">LCLS</span> <span class="n">II</span> <span class="n">MPS</span><span class="o">.</span>
 
@@ -5276,7 +5274,7 @@ END_FUNCTION_BLOCK
 <span class="n">RemoveRequest</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
 <span class="n">END_METHOD</span>
 
-<span class="o">//</span> <span class="n">Request</span> <span class="n">a</span> <span class="n">BP</span> <span class="kn">from</span> <span class="nn">this</span> <span class="n">higher</span> <span class="n">authority</span>
+<span class="o">//</span> <span class="n">Request</span> <span class="n">a</span> <span class="n">BP</span> <span class="kn">from</span><span class="w"> </span><span class="nn">this</span> <span class="n">higher</span> <span class="n">authority</span>
 <span class="n">METHOD</span> <span class="n">RequestBP</span> <span class="p">:</span> <span class="n">BOOL</span>
 <span class="n">VAR_INPUT</span>
     <span class="p">(</span><span class="o">*</span><span class="n">StateID</span> <span class="n">of</span> <span class="n">state</span> <span class="n">requesting</span> <span class="n">beam</span> <span class="n">parameter</span> <span class="nb">set</span><span class="o">*</span><span class="p">)</span>
@@ -5798,7 +5796,7 @@ END_FUNCTION_BLOCK
 <span class="n">fbFFO</span><span class="p">(</span><span class="n">i_xReset</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">);</span> <span class="o">//</span><span class="n">Reset</span> <span class="n">released</span> <span class="n">at</span> <span class="n">start</span> <span class="n">of</span> <span class="n">cycle</span>
 
 <span class="n">fbFF</span><span class="p">(</span><span class="n">io_fbFFHWO</span> <span class="o">:=</span> <span class="n">fbFFO</span><span class="p">,</span> <span class="o">//</span><span class="n">FF</span> <span class="n">faulted</span>
-    <span class="n">i_xOK</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">);</span> <span class="o">//</span><span class="n">Reset</span> <span class="ow">is</span> <span class="n">still</span> <span class="nb">set</span> <span class="n">true</span> <span class="kn">from</span> <span class="nn">last</span> <span class="n">call</span><span class="o">.</span>
+    <span class="n">i_xOK</span> <span class="o">:=</span> <span class="n">FALSE</span><span class="p">);</span> <span class="o">//</span><span class="n">Reset</span> <span class="ow">is</span> <span class="n">still</span> <span class="nb">set</span> <span class="n">true</span> <span class="kn">from</span><span class="w"> </span><span class="nn">last</span> <span class="n">call</span><span class="o">.</span>
 
 <span class="n">fbFFO</span><span class="o">.</span><span class="n">EvaluateOutput</span><span class="p">();</span> <span class="o">//</span><span class="n">FFO</span> <span class="nb">eval</span> <span class="n">called</span> <span class="n">at</span> <span class="n">end</span> <span class="n">of</span> <span class="n">cycle</span>
 
@@ -7007,7 +7005,7 @@ END_METHOD
                <span class="n">END_IF</span>
           <span class="n">END_IF</span>
 
-    <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="o">*</span> <span class="n">Read</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">source</span> <span class="n">file</span> <span class="n">to</span> <span class="n">buffer</span> <span class="n">string</span><span class="o">*</span><span class="p">)</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="o">*</span> <span class="n">Read</span> <span class="n">data</span> <span class="kn">from</span><span class="w"> </span><span class="nn">source</span> <span class="n">file</span> <span class="n">to</span> <span class="n">buffer</span> <span class="n">string</span><span class="o">*</span><span class="p">)</span>
           <span class="n">cbReadLength</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
           <span class="n">fbFileRead</span><span class="p">(</span> <span class="n">bExecute</span><span class="o">:=</span> <span class="n">FALSE</span> <span class="p">);</span>
           <span class="n">fbFileRead</span><span class="p">(</span> <span class="n">sNetId</span><span class="o">:=</span><span class="n">sSrcNetId</span><span class="p">,</span> <span class="n">hFile</span><span class="o">:=</span><span class="n">hSrcFile</span><span class="p">,</span>
@@ -7930,13 +7928,13 @@ END_FUNCTION_BLOCK
 <span class="n">A</span><span class="o">.</span> <span class="n">Wallace</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">22</span>
 <span class="n">The</span> <span class="n">photon</span> <span class="n">energy</span> <span class="n">watcher</span> <span class="n">ensures</span> <span class="n">the</span> <span class="n">current</span> <span class="ow">and</span> <span class="n">target</span> <span class="n">photon</span> <span class="n">energy</span> <span class="ow">is</span> <span class="n">within</span>
 <span class="n">the</span> <span class="n">arbirated</span> <span class="n">bounds</span><span class="o">.</span> <span class="n">Target</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">case</span> <span class="n">means</span><span class="p">,</span> <span class="n">the</span> <span class="n">calculated</span> <span class="n">target</span> <span class="n">photon</span> <span class="n">energy</span>
-<span class="kn">from</span> <span class="nn">the</span> <span class="n">PVs</span> <span class="n">that</span> <span class="n">control</span> <span class="n">the</span> <span class="n">mechatronics</span> <span class="n">of</span> <span class="n">the</span> <span class="n">undulators</span><span class="o">/</span> <span class="n">the</span> <span class="n">electron</span> <span class="n">energy</span><span class="o">.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">PVs</span> <span class="n">that</span> <span class="n">control</span> <span class="n">the</span> <span class="n">mechatronics</span> <span class="n">of</span> <span class="n">the</span> <span class="n">undulators</span><span class="o">/</span> <span class="n">the</span> <span class="n">electron</span> <span class="n">energy</span><span class="o">.</span>
 
 <span class="n">If</span> <span class="n">there</span> <span class="n">are</span> <span class="n">control</span> <span class="n">PVs</span> <span class="n">that</span> <span class="n">match</span> <span class="n">the</span> <span class="n">monitor</span> <span class="n">PVs</span><span class="p">,</span> <span class="n">the</span> <span class="n">control</span> <span class="n">PVs</span> <span class="n">are</span> <span class="n">used</span> <span class="n">to</span>
 <span class="n">calculate</span> <span class="n">a</span> <span class="s2">&quot;target&quot;</span> <span class="n">photon</span> <span class="n">energy</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">supposed</span> <span class="n">to</span> <span class="n">cover</span> <span class="n">when</span> <span class="n">the</span> <span class="n">undulators</span><span class="o">/</span>
 <span class="n">electron</span> <span class="n">energy</span> <span class="ow">is</span> <span class="n">transitioning</span><span class="o">.</span>
 
-<span class="n">The</span> <span class="n">abritrated</span> <span class="n">bounds</span> <span class="n">come</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">simple</span> <span class="n">AND</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">permitted</span> <span class="n">ranges</span><span class="o">.</span> <span class="n">See</span>
+<span class="n">The</span> <span class="n">abritrated</span> <span class="n">bounds</span> <span class="n">come</span> <span class="kn">from</span><span class="w"> </span><span class="nn">a</span> <span class="n">simple</span> <span class="n">AND</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">permitted</span> <span class="n">ranges</span><span class="o">.</span> <span class="n">See</span>
 <span class="n">the</span> <span class="n">arbitrate</span> <span class="n">action</span> <span class="n">of</span> <span class="n">the</span> <span class="n">arbiter</span> <span class="n">FB</span><span class="o">.</span>
 
 <span class="n">Note</span><span class="p">,</span> <span class="n">this</span> <span class="n">protection</span> <span class="n">logic</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">account</span> <span class="k">for</span> <span class="n">beam</span><span class="o">-</span><span class="n">off</span> <span class="n">when</span> <span class="n">determining</span> <span class="n">fast</span><span class="o">-</span><span class="n">fault</span>
@@ -8771,7 +8769,7 @@ END_FUNCTION_BLOCK
     <span class="n">q_rCurrentAttenuation</span>    <span class="p">:</span>    <span class="n">REAL</span><span class="p">;</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR_IN_OUT</span>
-    <span class="n">Arbiter</span>    <span class="p">:</span>    <span class="n">FB_Arbiter</span><span class="p">;</span> <span class="o">//</span><span class="n">Higher</span> <span class="n">level</span> <span class="n">arbiter</span> <span class="kn">from</span> <span class="nn">which</span> <span class="n">upstream</span> <span class="n">attenuation</span> <span class="n">can</span> <span class="n">be</span> <span class="n">requested</span>
+    <span class="n">Arbiter</span>    <span class="p">:</span>    <span class="n">FB_Arbiter</span><span class="p">;</span> <span class="o">//</span><span class="n">Higher</span> <span class="n">level</span> <span class="n">arbiter</span> <span class="kn">from</span><span class="w"> </span><span class="nn">which</span> <span class="n">upstream</span> <span class="n">attenuation</span> <span class="n">can</span> <span class="n">be</span> <span class="n">requested</span>
 <span class="n">END_VAR</span>
 <span class="n">VAR</span>
     <span class="n">stAttenuator</span>    <span class="p">:</span>    <span class="n">ST_BinarySolidAttenuator</span><span class="p">;</span>
@@ -8948,7 +8946,7 @@ END_FUNCTION_BLOCK
 
 <span class="n">ioCurrentBP</span> <span class="o">:=</span> <span class="n">fbSubSysToArb</span><span class="o">.</span><span class="n">q_stRequestedBP</span><span class="p">;</span>
 <span class="o">//</span> <span class="n">NOTE</span><span class="p">:</span> <span class="n">Setting</span> <span class="n">the</span> <span class="n">returning</span> <span class="n">cohort</span> <span class="n">number</span> <span class="n">to</span> <span class="n">something</span> <span class="n">less</span> <span class="n">than</span> <span class="n">the</span> <span class="n">request</span> <span class="n">cohort</span> <span class="n">number</span>
-<span class="o">//</span> <span class="n">will</span> <span class="n">prevent</span> <span class="n">the</span> <span class="n">sub</span> <span class="n">system</span> <span class="n">arbiter</span> <span class="n">FB</span> <span class="kn">from</span> <span class="nn">considering</span> <span class="n">itself</span> <span class="n">active</span> <span class="ow">in</span> <span class="n">arbitration</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">will</span> <span class="n">prevent</span> <span class="n">the</span> <span class="n">sub</span> <span class="n">system</span> <span class="n">arbiter</span> <span class="n">FB</span> <span class="kn">from</span><span class="w"> </span><span class="nn">considering</span> <span class="n">itself</span> <span class="n">active</span> <span class="ow">in</span> <span class="n">arbitration</span><span class="o">.</span>
 <span class="o">//</span> <span class="n">The</span> <span class="nb">next</span> <span class="nb">set</span> <span class="n">of</span> <span class="n">tests</span> <span class="n">verify</span> <span class="n">this</span><span class="o">.</span>
 <span class="n">ioCurrentBP</span><span class="o">.</span><span class="n">nCohortInt</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
 
@@ -9088,7 +9086,7 @@ END_FUNCTION_BLOCK
 </section>
 <section id="fb-subsystoarbiter-io">
 <h2>FB_SubSysToArbiter_IO<a class="headerlink" href="#fb-subsystoarbiter-io" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Use</span> <span class="n">on</span> <span class="n">a</span> <span class="n">subsystem</span> <span class="n">PLC</span> <span class="n">to</span> <span class="n">request</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">arbiter</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Use</span> <span class="n">on</span> <span class="n">a</span> <span class="n">subsystem</span> <span class="n">PLC</span> <span class="n">to</span> <span class="n">request</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">arbiter</span>
 <span class="o">//</span> <span class="n">Run</span> <span class="n">at</span> <span class="n">the</span> <span class="n">top</span> <span class="n">of</span> <span class="n">your</span> <span class="n">cycle</span> <span class="n">to</span> <span class="n">receive</span> <span class="n">the</span> <span class="n">latest</span> <span class="n">BP</span>
 <span class="n">FUNCTION_BLOCK</span> <span class="n">FB_SubSysToArbiter_IO</span> <span class="n">IMPLEMENTS</span> <span class="n">I_HigherAuthority</span>
 <span class="n">VAR_INPUT</span>
@@ -9126,7 +9124,7 @@ END_FUNCTION_BLOCK
     <span class="n">nRequestCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">Request</span> <span class="n">cohort</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: ActiveCohort</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
-    <span class="n">nActiveCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">Active</span> <span class="n">cohort</span><span class="p">,</span> <span class="n">updated</span> <span class="n">by</span> <span class="n">incoming</span> <span class="n">BP</span> <span class="kn">from</span> <span class="nn">arbiter</span> <span class="n">PLC</span><span class="p">,</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">ElevateRequest</span> <span class="n">arbiter</span> <span class="n">call</span>
+    <span class="n">nActiveCohort</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">//</span> <span class="n">Active</span> <span class="n">cohort</span><span class="p">,</span> <span class="n">updated</span> <span class="n">by</span> <span class="n">incoming</span> <span class="n">BP</span> <span class="kn">from</span><span class="w"> </span><span class="nn">arbiter</span> <span class="n">PLC</span><span class="p">,</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">ElevateRequest</span> <span class="n">arbiter</span> <span class="n">call</span>
 
     <span class="n">fbVetoArb</span> <span class="p">:</span> <span class="n">FB_VetoArbiter</span><span class="p">;</span>
 
@@ -9201,7 +9199,7 @@ END_FUNCTION_BLOCK
     <span class="p">(</span><span class="o">*</span><span class="n">Requested</span> <span class="n">beam</span> <span class="n">params</span><span class="o">*</span><span class="p">)</span>
     <span class="n">stReqBP</span> <span class="p">:</span> <span class="n">ST_BeamParams</span><span class="p">;</span>
 <span class="n">END_VAR</span>
-<span class="o">//</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">request</span> <span class="ow">is</span> <span class="n">coming</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">same</span> <span class="n">source</span> <span class="n">we</span><span class="s1">&#39;re used to</span>
+<span class="o">//</span> <span class="n">Check</span> <span class="n">the</span> <span class="n">request</span> <span class="ow">is</span> <span class="n">coming</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">same</span> <span class="n">source</span> <span class="n">we</span><span class="s1">&#39;re used to</span>
 
 <span class="o">//</span> <span class="n">Update</span> <span class="n">internal</span> <span class="n">BP</span> <span class="n">request</span> <span class="n">struct</span>
 <span class="n">q_stRequestedBP</span> <span class="o">:=</span> <span class="n">BP_TO_IO</span><span class="p">(</span><span class="n">stReqBP</span><span class="p">);</span>
@@ -9272,6 +9270,17 @@ END_FUNCTION_BLOCK
 <span class="n">VAR</span>
     <span class="o">//</span> <span class="n">From</span> <span class="n">lcls</span><span class="o">-</span><span class="n">srv01</span><span class="p">:</span> <span class="n">grep</span> <span class="o">-</span><span class="n">e</span> <span class="n">KDes</span>  <span class="o">/</span><span class="n">u1</span><span class="o">/</span><span class="n">lcls</span><span class="o">/</span><span class="n">epics</span><span class="o">/</span><span class="n">ioc</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">sioc</span><span class="o">-</span><span class="n">unds</span><span class="o">-</span><span class="n">uc</span><span class="o">*/</span><span class="n">iocInfo</span><span class="o">/</span><span class="n">IOC</span><span class="o">.</span><span class="n">pvlist</span> <span class="o">|</span><span class="n">sort</span>
 
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 22; link: 2250:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_22</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 23; link: 2350:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_23</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 24; link: 2450:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_24</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 25; link: 2550:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_25</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 26; link: 2650:&#39;</span><span class="p">}</span>
     <span class="n">fbSegment_26</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
@@ -9351,22 +9360,30 @@ END_FUNCTION_BLOCK
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">FirstSegment</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
-    <span class="n">iLowBound</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">26</span><span class="p">;</span>
+    <span class="n">iLowBound</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">22</span><span class="p">;</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">LastSegment</span>
          <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
     <span class="n">iHighBound</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">47</span><span class="p">;</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
-        <span class="n">pv</span><span class="p">:</span> <span class="n">Period</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Period_Short</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
         <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">mm</span>
     <span class="s1">&#39;}</span>
-    <span class="n">fPeriod_mm</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span> <span class="mf">39.0</span><span class="p">;</span>
+    <span class="n">fPeriod_39_mm</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span> <span class="mf">39.0</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
+        <span class="n">pv</span><span class="p">:</span> <span class="n">Period_Long</span>
+        <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
+        <span class="n">field</span><span class="p">:</span> <span class="n">EGU</span> <span class="n">mm</span>
+    <span class="s1">&#39;}</span>
+    <span class="n">fPeriod_56_mm</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span> <span class="mf">56.0</span><span class="p">;</span>
+
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">LowK</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
-    <span class="n">fLowK</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span> <span class="mf">1.5</span><span class="p">;</span>
+    <span class="n">fLowK</span> <span class="p">:</span> <span class="n">LREAL</span> <span class="o">:=</span> <span class="mf">0.8</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">HiK</span>
@@ -9417,9 +9434,11 @@ END_FUNCTION_BLOCK
 <span class="n">FOR</span> <span class="n">iIndex</span> <span class="o">:=</span> <span class="n">iLowBound</span> <span class="n">TO</span> <span class="n">iHighBound</span> <span class="n">DO</span>
         <span class="n">IF</span> <span class="n">fbSegment</span><span class="p">[</span><span class="n">iIndex</span><span class="p">]</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="n">THEN</span>
         <span class="n">fbCurrentSegment</span> <span class="n">REF</span><span class="o">=</span> <span class="n">fbSegment</span><span class="p">[</span><span class="n">iIndex</span><span class="p">]</span><span class="o">^</span><span class="p">;</span>
-        <span class="n">fbCurrentSegment</span><span class="o">.</span><span class="n">fPeriod_mm</span> <span class="o">:=</span> <span class="n">fPeriod_mm</span><span class="p">;</span>
         <span class="n">fbCurrentSegment</span><span class="o">.</span><span class="n">fLowK</span> <span class="o">:=</span> <span class="n">fLowK</span><span class="p">;</span>
         <span class="n">fbCurrentSegment</span><span class="o">.</span><span class="n">fHiK</span> <span class="o">:=</span> <span class="n">fHiK</span><span class="p">;</span>
+        <span class="n">IF</span> <span class="p">(</span><span class="n">iIndex</span> <span class="o">&gt;=</span> <span class="mi">26</span><span class="p">)</span>  <span class="n">THEN</span> <span class="n">fbCurrentSegment</span><span class="o">.</span><span class="n">fPeriod_mm</span> <span class="o">:=</span> <span class="n">fPeriod_39_mm</span><span class="p">;</span>
+            <span class="n">ELSE</span> <span class="n">fbCurrentSegment</span><span class="o">.</span><span class="n">fPeriod_mm</span> <span class="o">:=</span> <span class="n">fPeriod_56_mm</span><span class="p">;</span>
+        <span class="n">END_IF</span>
     <span class="n">END_IF</span>
 <span class="n">END_FOR</span>
 <span class="n">bInitialized</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
@@ -9869,7 +9888,7 @@ END_FUNCTION_BLOCK
 
 <span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;VetoIn&#39;</span><span class="p">);</span>
 <span class="o">//</span> <span class="n">Veto</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">in</span>
-<span class="o">//</span> <span class="n">This</span> <span class="n">should</span> <span class="n">effectively</span> <span class="n">remove</span> <span class="n">the</span> <span class="n">fbArbiter</span> <span class="n">request</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">higher</span> <span class="n">arbiter</span> <span class="n">pool</span>
+<span class="o">//</span> <span class="n">This</span> <span class="n">should</span> <span class="n">effectively</span> <span class="n">remove</span> <span class="n">the</span> <span class="n">fbArbiter</span> <span class="n">request</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">higher</span> <span class="n">arbiter</span> <span class="n">pool</span>
 
 <span class="o">////////////////////</span> <span class="n">Cycle</span>
 <span class="n">fbHigherArb</span><span class="o">.</span><span class="n">ElevateRequest</span><span class="p">(</span><span class="n">fbHA</span><span class="p">);</span>
@@ -10222,7 +10241,7 @@ END_FUNCTION_BLOCK
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, SLAC National Accelerator Laboratory.</p>
+    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
