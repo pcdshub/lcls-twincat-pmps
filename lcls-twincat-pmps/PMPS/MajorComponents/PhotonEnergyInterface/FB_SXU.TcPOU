@@ -244,7 +244,10 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[fbSegment[22] := ADR(fbSegment_22);
+fbSegment[23] := ADR(fbSegment_23);
+fbSegment[24] := ADR(fbSegment_24);
+fbSegment[25] := ADR(fbSegment_25);
 fbSegment[26] := ADR(fbSegment_26);
 fbSegment[27] := ADR(fbSegment_27);
 fbSegment[28] := ADR(fbSegment_28);
