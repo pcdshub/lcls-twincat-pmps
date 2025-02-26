@@ -42,7 +42,10 @@ END_VAR
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
 
-    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
+    {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+    fbSegment_21 : FB_UndulatorSegment;
+	
+	{attribute 'pytmc' := 'pv: 22; link: 2250:'}
     fbSegment_22 : FB_UndulatorSegment;
 
     {attribute 'pytmc' := 'pv: 23; link: 2350:'}
@@ -132,7 +135,7 @@ VAR CONSTANT
     {attribute 'pytmc' := '
         pv: FirstSegment
         io: i'}
-    iLowBound  : UDINT := 22;
+    iLowBound  : UDINT := 21;
     {attribute 'pytmc' := '
         pv: LastSegment
          io: i'}
@@ -244,7 +247,8 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
-        <ST><![CDATA[fbSegment[22] := ADR(fbSegment_22);
+        <ST><![CDATA[fbSegment[21] := ADR(fbSegment_21);
+fbSegment[22] := ADR(fbSegment_22);
 fbSegment[23] := ADR(fbSegment_23);
 fbSegment[24] := ADR(fbSegment_24);
 fbSegment[25] := ADR(fbSegment_25);
