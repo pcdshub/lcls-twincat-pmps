@@ -44,8 +44,8 @@ VAR
 
     {attribute 'pytmc' := 'pv: 21; link: 2150:'}
     fbSegment_21 : FB_UndulatorSegment;
-	
-	{attribute 'pytmc' := 'pv: 22; link: 2250:'}
+
+    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
     fbSegment_22 : FB_UndulatorSegment;
 
     {attribute 'pytmc' := 'pv: 23; link: 2350:'}
