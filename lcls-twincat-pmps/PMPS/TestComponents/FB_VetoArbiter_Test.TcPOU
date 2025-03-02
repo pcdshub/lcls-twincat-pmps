@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_VetoArbiter_Test" Id="{daba1fa5-6e89-42bf-806d-ba0ef2cd7891}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'call_after_init'}
 FUNCTION_BLOCK FB_VetoArbiter_Test EXTENDS TcUnit.FB_TestSuite
@@ -65,7 +65,7 @@ VetoArb(HigherAuthority:=fbHigherArb,
     FFO:=FFO);
 
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
-
+AssertFalse(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is FALSE the lower authority should not be vetoed.');
 TEST_FINISHED();
 
 TEST('VetoIn');
@@ -91,6 +91,7 @@ VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
 AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
 AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
+AssertTrue(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is TRUE the lower authority should be vetoed.');
 
 TEST_FINISHED();
 
