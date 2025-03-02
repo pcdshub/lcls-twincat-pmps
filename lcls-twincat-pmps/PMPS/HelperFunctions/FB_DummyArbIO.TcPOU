@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_DummyArbIO" Id="{2832ee2c-eae8-4c8f-9ee2-8e9eb8d3e7f9}" SpecialFunc="None">
     <Declaration><![CDATA[(* Use to test other library integrations of PMPS preemptive functionality *)
 (* This block stands in for the FB_SubSysToArb_IO block. *)
@@ -122,6 +122,27 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[bAutoUpdateBP := AutoUpdateBP;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="bLowerAuthorityVetoed" Id="{62e48782-3c3d-4601-b1d4-932850b7d082}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY bLowerAuthorityVetoed : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{720a8ebc-e281-478c-8902-742125a7648a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{bab7ca98-2e20-4241-b440-e45f938fc87c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
         </Implementation>
       </Set>
     </Property>

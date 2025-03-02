@@ -1,8 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_LowerAuthority" Id="{99891ecc-c797-4643-bae6-a2321f534778}">
     <Declaration><![CDATA[INTERFACE I_LowerAuthority
 ]]></Declaration>
+    <Property Name="bLowerAuthorityVetoed" Id="{cd524703-a063-44f0-9757-e03b78361a4a}">
+      <Declaration><![CDATA[PROPERTY bLowerAuthorityVetoed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c3203e12-04a2-494d-b51d-7902dc37d9ee}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{ab1c501b-3928-44aa-ad03-72fc19cff2ce}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
     <Method Name="ElevateRequest" Id="{7b91e0f7-0ecb-4354-af40-944e958abd7b}">
       <Declaration><![CDATA[// <Arbiter Internal>
 // Elevates the arbitrated BP set to something above.
