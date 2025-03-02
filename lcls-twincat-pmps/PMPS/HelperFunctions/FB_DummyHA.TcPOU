@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_DummyHA" Id="{670c3d93-34b2-4592-94f3-5ed3a0dba153}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DummyHA IMPLEMENTS I_HigherAuthority, I_LowerAuthority
 VAR_INPUT
@@ -13,6 +13,27 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Property Name="bLowerAuthorityVetoed" Id="{c841cd9e-fadd-4d74-af9d-27e8b4361582}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY bLowerAuthorityVetoed : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{68caaae7-58b4-45be-afd9-02d6a105c5ed}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{986890dd-6d21-4055-aa3f-584de8de80e4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="CheckRequest" Id="{6032c3d9-45c7-4cc0-b102-000af7719efd}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
 VAR_INPUT

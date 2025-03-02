@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_VetoArbiter" Id="{c3c91f40-d3bf-4445-afff-e5f72e704ac3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_VetoArbiter IMPLEMENTS I_HigherAuthority
 VAR_INPUT
@@ -32,6 +32,7 @@ END_VAR
       <ST><![CDATA[
 rtVeto(CLK:=bVeto);
 ftVeto(CLK:=bVeto);
+LowerAuthority.bLowerAuthorityVetoed := bVeto;
 
 IF rtVeto.Q THEN
     HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
