@@ -9270,6 +9270,9 @@ END_FUNCTION_BLOCK
 <span class="n">VAR</span>
     <span class="o">//</span> <span class="n">From</span> <span class="n">lcls</span><span class="o">-</span><span class="n">srv01</span><span class="p">:</span> <span class="n">grep</span> <span class="o">-</span><span class="n">e</span> <span class="n">KDes</span>  <span class="o">/</span><span class="n">u1</span><span class="o">/</span><span class="n">lcls</span><span class="o">/</span><span class="n">epics</span><span class="o">/</span><span class="n">ioc</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">sioc</span><span class="o">-</span><span class="n">unds</span><span class="o">-</span><span class="n">uc</span><span class="o">*/</span><span class="n">iocInfo</span><span class="o">/</span><span class="n">IOC</span><span class="o">.</span><span class="n">pvlist</span> <span class="o">|</span><span class="n">sort</span>
 
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 21; link: 2150:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_21</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 22; link: 2250:&#39;</span><span class="p">}</span>
     <span class="n">fbSegment_22</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
 
@@ -9360,7 +9363,7 @@ END_FUNCTION_BLOCK
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">FirstSegment</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
-    <span class="n">iLowBound</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">22</span><span class="p">;</span>
+    <span class="n">iLowBound</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">21</span><span class="p">;</span>
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">LastSegment</span>
          <span class="n">io</span><span class="p">:</span> <span class="n">i</span><span class="s1">&#39;}</span>
@@ -9445,6 +9448,11 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 
 <span class="n">ACTION</span> <span class="n">UndAdrUpdate</span><span class="p">:</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_21</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_22</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_23</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_24</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_25</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_26</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_27</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">28</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_28</span><span class="p">);</span>

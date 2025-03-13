@@ -9199,6 +9199,9 @@ FB_SXU
     VAR
         // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
 
+        {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+        fbSegment_21 : FB_UndulatorSegment;
+
         {attribute 'pytmc' := 'pv: 22; link: 2250:'}
         fbSegment_22 : FB_UndulatorSegment;
 
@@ -9289,7 +9292,7 @@ FB_SXU
         {attribute 'pytmc' := '
             pv: FirstSegment
             io: i'}
-        iLowBound  : UDINT := 22;
+        iLowBound  : UDINT := 21;
         {attribute 'pytmc' := '
             pv: LastSegment
              io: i'}
@@ -9374,6 +9377,11 @@ FB_SXU
     END_ACTION
 
     ACTION UndAdrUpdate:
+    fbSegment[21] := ADR(fbSegment_21);
+    fbSegment[22] := ADR(fbSegment_22);
+    fbSegment[23] := ADR(fbSegment_23);
+    fbSegment[24] := ADR(fbSegment_24);
+    fbSegment[25] := ADR(fbSegment_25);
     fbSegment[26] := ADR(fbSegment_26);
     fbSegment[27] := ADR(fbSegment_27);
     fbSegment[28] := ADR(fbSegment_28);
