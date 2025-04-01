@@ -16,7 +16,7 @@
     <Implicit_Jitter_Distribution>{9571b800-3cbb-4490-9af6-a1013ff71bd1}</Implicit_Jitter_Distribution>
     <LibraryReferences>{1c1d8a93-1736-437e-b538-e21ada2f6c38}</LibraryReferences>
     <Company>SLAC - LCLS</Company>
-    <Released>false</Released>
+    <Released>true</Released>
     <Author>Alex Wallace and contributors</Author>
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
     <CombineIds>false</CombineIds>
@@ -33,7 +33,7 @@
         </Event>
       </Events>
     </DeploymentEvents>
-    <ProjectVersion>0.0.0</ProjectVersion>
+    <ProjectVersion>3.5.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AncillaryComponents\FB_JsonDocToSafeBP.TcPOU">

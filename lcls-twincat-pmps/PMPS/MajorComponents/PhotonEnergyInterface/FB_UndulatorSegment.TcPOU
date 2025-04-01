@@ -3,8 +3,9 @@
   <POU Name="FB_UndulatorSegment" Id="{986484f4-a7ca-4f8c-bada-b360e7740d21}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_UndulatorSegment
 VAR_INPUT
-    (* Undulator period in millimeters, to be set by subclasses *)
+    (* Undulator period in millimeters, to be set by subclasses for HXR, read by pv for SXR, left here for backward compatability *)
     fPeriod_mm : LREAL := 1.0;
+
     fbElectronEnergy : REFERENCE TO FB_LREALFromEPICS;
 
     fLowK : LREAL := 0;
@@ -57,7 +58,14 @@ VAR_OUTPUT
     '}
     fKDes : LREAL;
 
-        {attribute 'pytmc' := '
+    {attribute 'pytmc' := '
+        pv: Lambda_U
+        io: i
+        field: DESC Period in m
+    '}
+    fLambda_U : LREAL;
+
+    {attribute 'pytmc' := '
         pv: KActValid
         io: i
         field: DESC Current K Readback Valid
@@ -70,6 +78,14 @@ VAR_OUTPUT
         field: DESC Target K Readback Valid
     '}
     bKDesValid : BOOL;
+
+     {attribute 'pytmc' := '
+        pv: lambdaValid
+        io: i
+        field: DESC lambda_U Readback Valid
+    '}
+    blambdaValid : BOOL;
+
 
 END_VAR
 
@@ -86,20 +102,29 @@ VAR
     '}
     fbKActual : FB_LREALFromEPICS;
 
+    {attribute 'pytmc' := '
+        pv: lambda_U
+        link: lambda_U
+    '}
+    fblambda_U : FB_LREALFromEPICS;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbKDesired();
 fbKActual();
+fblambda_U();
 
 fKAct := fbKActual.fValue;
 bKActValid := fbKActual.bValid;
 fKDes := fbKDesired.fValue;
 bKDesValid := fbKDesired.bvalid;
+fLambda_U := fblambda_U.fValue;
+blambdaValid:= fblambda_U.bValid;
 
 IF __ISVALIDREF(fbElectronEnergy) THEN
 
-    IF fbKActual.bValid AND fbElectronEnergy.bValid THEN
+    IF fbKActual.bValid AND fblambda_U.bValid AND fbElectronEnergy.bValid THEN
         fPhotonEnergyAct := F_CalculatePhotonEnergy(
             fElectronEnergy_GeV:=fbElectronEnergy.fValue,
             fUndulatorPeriod_mm:=fPeriod_mm,
@@ -119,7 +144,7 @@ IF __ISVALIDREF(fbElectronEnergy) THEN
                     (NOT fbKDesired.bValid OR NOT fbKDesired.bValid);
     END_IF
 
-    IF fbKDesired.bValid AND fbElectronEnergy.bValid THEN
+    IF fbKDesired.bValid AND fblambda_U.bValid AND fbElectronEnergy.bValid THEN
         fPhotonEnergyDes := F_CalculatePhotonEnergy(
             fElectronEnergy_GeV:=fbElectronEnergy.fValue,
             fUndulatorPeriod_mm:=fPeriod_mm,

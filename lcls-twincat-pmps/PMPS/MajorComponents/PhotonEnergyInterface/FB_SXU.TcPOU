@@ -183,6 +183,7 @@ FOR iIndex := iLowBound TO iHighBound DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+        fbCurrentSegment.fPeriod_mm := fbCurrentSegment.fLambda_U*1000;
 
         //Mark the seed undulator, first undulator operating within K bounds
         IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
@@ -215,9 +216,6 @@ FOR iIndex := iLowBound TO iHighBound DO
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment.fLowK := fLowK;
         fbCurrentSegment.fHiK := fHiK;
-        IF (iIndex >= 26)  THEN fbCurrentSegment.fPeriod_mm := fPeriod_39_mm;
-            ELSE fbCurrentSegment.fPeriod_mm := fPeriod_56_mm;
-        END_IF
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>
@@ -247,7 +245,7 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
-        <ST><![CDATA[fbSegment[21] := ADR(fbSegment_21);
+        <ST><![CDATA[fbSegment[21] := 0;
 fbSegment[22] := ADR(fbSegment_22);
 fbSegment[23] := ADR(fbSegment_23);
 fbSegment[24] := ADR(fbSegment_24);
