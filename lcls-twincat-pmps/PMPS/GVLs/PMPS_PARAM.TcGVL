@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <GVL Name="PMPS_PARAM" Id="{a73b5237-920e-4906-b8ec-4aaa7f8c0e45}" ParameterList="True">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
     MAX_FAST_FAULTS	:	UINT := 50; // Max fast faults for an FFO
     MAX_ASSERTIONS    :    UDINT := 20; //Maximum number of BP requests in the arbiter
-    TRANS_MARGIN : REAL := REAL#0.05; // Allowed % margin above requested transmission level in SafeBPCompare (0.0500 = 5deci% default). Note: change this value if scaling factor changes.
+    TRANS_MARGIN : REAL := REAL#0.20; // Allowed % margin above requested transmission level in SafeBPCompare (0.2000 = 20deci% default). Note: change this value if scaling factor changes.
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
