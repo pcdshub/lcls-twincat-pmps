@@ -89,8 +89,8 @@ E_MPSBeamClasses
         Kicker_STBY :=  1,
         BC1Hz       :=  2,
         BC10Hz      :=  3,
-        Diagnostic  :=  4,
-        BC120Hz     :=  5,
+        BC120Hz     :=  4,
+        Diagnostic  :=  5,
         Tuning      :=  6,
         MAP_1       :=  7,
         MAP_5       :=  8,
@@ -3756,8 +3756,8 @@ FB_BeamClassFromEPICS
         Kicker STBY =  1,
         BC1Hz       =  2,
         BC10Hz      =  3,
-        Diagnostic  =  4,
-        BC120Hz     =  5,
+        BC120Hz     =  4,
+        Diagnostic  =  5,
         Tuning      =  6,
         1% MAP      =  7,
         5% MAP      = 8,
@@ -8447,7 +8447,7 @@ FB_SafeBPCompare_Test
         PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
     stNotSoSafe := F_SetBeamParams(
-        0.61, //
+        0.62, //
         16#FFFFFFFF,
         1,
         16#0000,
@@ -8462,7 +8462,7 @@ FB_SafeBPCompare_Test
         'Attenuation eval is broken (False)');
 
     // Check at margin threshold
-    stSafer.nTran := stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+    stSafer.nTran := 0.99 * stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
     AssertTrue(
         F_SafeBPCompare(stSafer, stNotSoSafe),
         'Attenuation eval is broken: should be safe up to margin.');
@@ -9375,7 +9375,7 @@ FB_SXU
     END_ACTION
 
     ACTION UndAdrUpdate:
-    fbSegment[21] := 0;
+    fbSegment[21] := ADR(fbSegment_21);
     fbSegment[22] := ADR(fbSegment_22);
     fbSegment[23] := ADR(fbSegment_23);
     fbSegment[24] := ADR(fbSegment_24);

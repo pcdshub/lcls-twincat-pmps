@@ -16,7 +16,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
     <script src="_static/js/theme.js"></script>
@@ -290,8 +290,8 @@
     <span class="n">Kicker_STBY</span> <span class="o">:=</span>  <span class="mi">1</span><span class="p">,</span>
     <span class="n">BC1Hz</span>       <span class="o">:=</span>  <span class="mi">2</span><span class="p">,</span>
     <span class="n">BC10Hz</span>      <span class="o">:=</span>  <span class="mi">3</span><span class="p">,</span>
-    <span class="n">Diagnostic</span>  <span class="o">:=</span>  <span class="mi">4</span><span class="p">,</span>
-    <span class="n">BC120Hz</span>     <span class="o">:=</span>  <span class="mi">5</span><span class="p">,</span>
+    <span class="n">BC120Hz</span>     <span class="o">:=</span>  <span class="mi">4</span><span class="p">,</span>
+    <span class="n">Diagnostic</span>  <span class="o">:=</span>  <span class="mi">5</span><span class="p">,</span>
     <span class="n">Tuning</span>      <span class="o">:=</span>  <span class="mi">6</span><span class="p">,</span>
     <span class="n">MAP_1</span>       <span class="o">:=</span>  <span class="mi">7</span><span class="p">,</span>
     <span class="n">MAP_5</span>       <span class="o">:=</span>  <span class="mi">8</span><span class="p">,</span>
@@ -3831,8 +3831,8 @@ END_FUNCTION_BLOCK
     <span class="n">Kicker</span> <span class="n">STBY</span> <span class="o">=</span>  <span class="mi">1</span><span class="p">,</span>
     <span class="n">BC1Hz</span>       <span class="o">=</span>  <span class="mi">2</span><span class="p">,</span>
     <span class="n">BC10Hz</span>      <span class="o">=</span>  <span class="mi">3</span><span class="p">,</span>
-    <span class="n">Diagnostic</span>  <span class="o">=</span>  <span class="mi">4</span><span class="p">,</span>
-    <span class="n">BC120Hz</span>     <span class="o">=</span>  <span class="mi">5</span><span class="p">,</span>
+    <span class="n">BC120Hz</span>     <span class="o">=</span>  <span class="mi">4</span><span class="p">,</span>
+    <span class="n">Diagnostic</span>  <span class="o">=</span>  <span class="mi">5</span><span class="p">,</span>
     <span class="n">Tuning</span>      <span class="o">=</span>  <span class="mi">6</span><span class="p">,</span>
     <span class="mi">1</span><span class="o">%</span> <span class="n">MAP</span>      <span class="o">=</span>  <span class="mi">7</span><span class="p">,</span>
     <span class="mi">5</span><span class="o">%</span> <span class="n">MAP</span>      <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
@@ -8518,7 +8518,7 @@ END_FUNCTION_BLOCK
     <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">DUMMY_AUX_ATT_ARRAY</span><span class="p">);</span>
 
 <span class="n">stNotSoSafe</span> <span class="o">:=</span> <span class="n">F_SetBeamParams</span><span class="p">(</span>
-    <span class="mf">0.61</span><span class="p">,</span> <span class="o">//</span>
+    <span class="mf">0.62</span><span class="p">,</span> <span class="o">//</span>
     <span class="mi">16</span><span class="c1">#FFFFFFFF,</span>
     <span class="mi">1</span><span class="p">,</span>
     <span class="mi">16</span><span class="c1">#0000,</span>
@@ -8533,7 +8533,7 @@ END_FUNCTION_BLOCK
     <span class="s1">&#39;Attenuation eval is broken (False)&#39;</span><span class="p">);</span>
 
 <span class="o">//</span> <span class="n">Check</span> <span class="n">at</span> <span class="n">margin</span> <span class="n">threshold</span>
-<span class="n">stSafer</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="n">stNotSoSafe</span><span class="o">.</span><span class="n">nTran</span><span class="o">*</span><span class="p">(</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span> <span class="o">+</span> <span class="n">PMPS_PARAM</span><span class="o">.</span><span class="n">TRANS_MARGIN</span><span class="p">)</span><span class="o">/</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">;</span>
+<span class="n">stSafer</span><span class="o">.</span><span class="n">nTran</span> <span class="o">:=</span> <span class="mf">0.99</span> <span class="o">*</span> <span class="n">stNotSoSafe</span><span class="o">.</span><span class="n">nTran</span><span class="o">*</span><span class="p">(</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span> <span class="o">+</span> <span class="n">PMPS_PARAM</span><span class="o">.</span><span class="n">TRANS_MARGIN</span><span class="p">)</span><span class="o">/</span><span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">TRANS_SCALING_FACTOR</span><span class="p">;</span>
 <span class="n">AssertTrue</span><span class="p">(</span>
     <span class="n">F_SafeBPCompare</span><span class="p">(</span><span class="n">stSafer</span><span class="p">,</span> <span class="n">stNotSoSafe</span><span class="p">),</span>
     <span class="s1">&#39;Attenuation eval is broken: should be safe up to margin.&#39;</span><span class="p">);</span>
@@ -9446,7 +9446,7 @@ END_FUNCTION_BLOCK
 <span class="n">END_ACTION</span>
 
 <span class="n">ACTION</span> <span class="n">UndAdrUpdate</span><span class="p">:</span>
-<span class="n">fbSegment</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_21</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_22</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_23</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_24</span><span class="p">);</span>
