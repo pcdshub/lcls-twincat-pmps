@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{037C61AE-BE1D-161C-0F5F-E50C8C1EE006}" GeneratedBy="TwinCAT XAE Plc">
+<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{24D6315C-BA57-26FC-9D4A-34AEE3AC1EB3}" GeneratedBy="TwinCAT XAE Plc">
   <DataTypes>
     <DataType>
       <Name Namespace="Tc2_System">T_MaxString</Name>
@@ -31164,11 +31164,11 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
           </Symbol>
           <Symbol>
             <Name>PMPS_PARAM.TRANS_MARGIN</Name>
-            <Comment> Allowed % margin above requested transmission level in SafeBPCompare (0.0500 = 5deci% default). Note: change this value if scaling factor changes.</Comment>
+            <Comment> Allowed % margin above requested transmission level in SafeBPCompare (0.2000 = 20deci% default). Note: change this value if scaling factor changes.</Comment>
             <BitSize>32</BitSize>
             <BaseType>REAL</BaseType>
             <Default>
-              <Value>0.05</Value>
+              <Value>0.2</Value>
             </Default>
             <Properties>
               <Property>
@@ -31494,7 +31494,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
         </Property>
         <Property>
           <Name>ChangeDate</Name>
-          <Value>2025-04-01T13:46:17</Value>
+          <Value>2025-05-27T08:12:31</Value>
         </Property>
         <Property>
           <Name>GeneratedCodeSize</Name>
