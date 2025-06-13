@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Arbiter" Id="{7464182c-a23a-4d85-9b4a-38e22935bfb9}" SpecialFunc="None">
     <Declaration><![CDATA[(* FB Arbiter
 A. Wallace 2020-6-26
@@ -214,8 +214,7 @@ ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);]]></ST>
       </Implementation>
     </Method>
     <Property Name="bLowerAuthorityVetoed" Id="{eeff2e6e-6276-44ec-a1a4-ca8f886b582f}">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY bLowerAuthorityVetoed : BOOL
+      <Declaration><![CDATA[PROPERTY bLowerAuthorityVetoed : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{7068be3e-45c7-4937-827a-e178145c11e2}">
         <Declaration><![CDATA[VAR
