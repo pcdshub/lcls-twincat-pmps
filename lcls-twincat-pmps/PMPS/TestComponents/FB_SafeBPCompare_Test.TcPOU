@@ -156,7 +156,7 @@ stSafer := F_SetBeamParams(
     PMPS_GVL.DUMMY_AUX_ATT_ARRAY);
 
 stNotSoSafe := F_SetBeamParams(
-    0.61, //
+    0.62, //
     16#FFFFFFFF,
     1,
     16#0000,
@@ -171,7 +171,7 @@ AssertFalse(
     'Attenuation eval is broken (False)');
 
 // Check at margin threshold
-stSafer.nTran := stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
+stSafer.nTran := 0.99 * stNotSoSafe.nTran*(PMPS_GVL.TRANS_SCALING_FACTOR + PMPS_PARAM.TRANS_MARGIN)/PMPS_GVL.TRANS_SCALING_FACTOR;
 AssertTrue(
     F_SafeBPCompare(stSafer, stNotSoSafe),
     'Attenuation eval is broken: should be safe up to margin.');

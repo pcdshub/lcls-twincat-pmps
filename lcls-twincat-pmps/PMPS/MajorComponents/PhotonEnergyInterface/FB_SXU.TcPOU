@@ -42,6 +42,9 @@ END_VAR
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
 
+    {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+    fbSegment_21 : FB_UndulatorSegment;
+
     {attribute 'pytmc' := 'pv: 22; link: 2250:'}
     fbSegment_22 : FB_UndulatorSegment;
 
@@ -132,7 +135,7 @@ VAR CONSTANT
     {attribute 'pytmc' := '
         pv: FirstSegment
         io: i'}
-    iLowBound  : UDINT := 22;
+    iLowBound  : UDINT := 21;
     {attribute 'pytmc' := '
         pv: LastSegment
          io: i'}
@@ -180,6 +183,7 @@ FOR iIndex := iLowBound TO iHighBound DO
     IF fbSegment[iIndex] <> 0 THEN
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment(fbElectronEnergy:=fbElectronEnergy);
+        fbCurrentSegment.fPeriod_mm := fbCurrentSegment.fLambda_U*1000;
 
         //Mark the seed undulator, first undulator operating within K bounds
         IF fbCurrentSegment.xActive AND nSeedUndulator = 0 THEN
@@ -212,9 +216,6 @@ FOR iIndex := iLowBound TO iHighBound DO
         fbCurrentSegment REF= fbSegment[iIndex]^;
         fbCurrentSegment.fLowK := fLowK;
         fbCurrentSegment.fHiK := fHiK;
-        IF (iIndex >= 26)  THEN fbCurrentSegment.fPeriod_mm := fPeriod_39_mm;
-            ELSE fbCurrentSegment.fPeriod_mm := fPeriod_56_mm;
-        END_IF
     END_IF
 END_FOR
 bInitialized := TRUE;]]></ST>
@@ -244,7 +245,11 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
-        <ST><![CDATA[
+        <ST><![CDATA[fbSegment[21] := ADR(fbSegment_21);
+fbSegment[22] := ADR(fbSegment_22);
+fbSegment[23] := ADR(fbSegment_23);
+fbSegment[24] := ADR(fbSegment_24);
+fbSegment[25] := ADR(fbSegment_25);
 fbSegment[26] := ADR(fbSegment_26);
 fbSegment[27] := ADR(fbSegment_27);
 fbSegment[28] := ADR(fbSegment_28);
