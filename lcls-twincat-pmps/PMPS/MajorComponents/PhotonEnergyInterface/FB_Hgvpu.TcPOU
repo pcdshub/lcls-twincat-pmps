@@ -54,22 +54,22 @@ VAR
 
     {attribute 'pytmc' := 'pv: 18; link: 1850:'}
     fbSegment_18 : FB_UndulatorSegment;
-	
+
     {attribute 'pytmc' := 'pv: 19; link: 1950:'}
     fbSegment_19 : FB_UndulatorSegment;
-	
+
     {attribute 'pytmc' := 'pv: 20; link: 2050:'}
     fbSegment_20 : FB_UndulatorSegment;
-	
+
     {attribute 'pytmc' := 'pv: 21; link: 2150:'}
     fbSegment_21 : FB_UndulatorSegment;
-	
-	{attribute 'pytmc' := 'pv: 22; link: 2250:'}
+
+    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
     fbSegment_22 : FB_UndulatorSegment;
-	
+
     {attribute 'pytmc' := 'pv: 23; link: 2350:'}
     fbSegment_23 : FB_UndulatorSegment;
-	
+
     {attribute 'pytmc' := 'pv: 24; link: 2450:'}
     fbSegment_24 : FB_UndulatorSegment;
 
