@@ -2729,6 +2729,13 @@ VAR
     InfoStringFmtr : FB_FormatString;
 
     bVerbose : BOOL := FALSE;
+
+    {attribute &#39;pytmc&#39; := &#39;
+        pv: Vetoed
+        io: i
+        field: DESC Arbiter Veto Status
+    &#39;}
+    bArbiterVetoed : BOOL := FALSE;
 END_VAR
 VAR_INPUT
 END_VAR
@@ -3053,6 +3060,18 @@ VAR_INPUT
 END_VAR
 RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP, sDevName:=sArbName);
 END_METHOD
+
+PROPERTY bLowerAuthorityVetoed : BOOL
+VAR
+END_VAR
+bLowerAuthorityVetoed := bArbiterVetoed;
+END_PROPERTY
+
+PROPERTY bLowerAuthorityVetoed : BOOL
+VAR
+END_VAR
+bArbiterVetoed := bLowerAuthorityVetoed;
+END_PROPERTY
 
 // How many entries are in the arbiter now
 PROPERTY nEntryCount : UDINT
@@ -5304,6 +5323,18 @@ END_FUNCTION_BLOCK
 <span class="n">bAutoUpdateBP</span> <span class="o">:=</span> <span class="n">AutoUpdateBP</span><span class="p">;</span>
 <span class="n">END_PROPERTY</span>
 
+<span class="n">PROPERTY</span> <span class="n">bLowerAuthorityVetoed</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
+<span class="n">END_PROPERTY</span>
+
+<span class="n">PROPERTY</span> <span class="n">bLowerAuthorityVetoed</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
+<span class="n">END_PROPERTY</span>
+
 <span class="n">PROPERTY</span> <span class="n">nLowerAuthorityID</span> <span class="p">:</span> <span class="n">DWORD</span>
 <span class="n">VAR</span>
 <span class="n">END_VAR</span>
@@ -5369,6 +5400,18 @@ END_FUNCTION_BLOCK
 <span class="n">END_VAR</span>
 <span class="n">RequestBP</span> <span class="o">:=</span> <span class="n">TRUE</span><span class="p">;</span>
 <span class="n">END_METHOD</span>
+
+<span class="n">PROPERTY</span> <span class="n">bLowerAuthorityVetoed</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
+<span class="n">END_PROPERTY</span>
+
+<span class="n">PROPERTY</span> <span class="n">bLowerAuthorityVetoed</span> <span class="p">:</span> <span class="n">BOOL</span>
+<span class="n">VAR</span>
+<span class="n">END_VAR</span>
+
+<span class="n">END_PROPERTY</span>
 
 <span class="n">PROPERTY</span> <span class="n">nLowerAuthorityID</span> <span class="p">:</span> <span class="n">DWORD</span>
 <span class="n">VAR</span>
@@ -6395,6 +6438,35 @@ END_METHOD
 
 <span class="n">VAR</span>
     <span class="o">//</span> <span class="n">From</span> <span class="n">lcls</span><span class="o">-</span><span class="n">srv01</span><span class="p">:</span> <span class="n">grep</span> <span class="o">-</span><span class="n">e</span> <span class="n">KDes</span>  <span class="o">/</span><span class="n">u1</span><span class="o">/</span><span class="n">lcls</span><span class="o">/</span><span class="n">epics</span><span class="o">/</span><span class="n">ioc</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ioc</span><span class="o">-</span><span class="n">undh</span><span class="o">-</span><span class="n">uc</span><span class="o">*/</span><span class="n">iocInfo</span><span class="o">/</span><span class="n">IOC</span><span class="o">.</span><span class="n">pvlist</span> <span class="o">|</span><span class="n">sort</span>
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 14; link: 1450:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_14</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 15; link: 1550:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_15</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 16; link: 1650:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_16</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 17; link: 1750:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_17</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 18; link: 1850:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_18</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 19; link: 1950:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_19</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 20; link: 2050:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_20</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 21; link: 2150:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_21</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 22; link: 2250:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_22</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 23; link: 2350:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_23</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 24; link: 2450:&#39;</span><span class="p">}</span>
     <span class="n">fbSegment_24</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
@@ -6476,7 +6548,7 @@ END_METHOD
         <span class="n">pv</span><span class="p">:</span> <span class="n">FirstSegment</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
-    <span class="n">iLowBound_LUnd</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">24</span><span class="p">;</span>
+    <span class="n">iLowBound_LUnd</span>  <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">14</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">LastSegment</span>
@@ -6557,6 +6629,16 @@ END_METHOD
 <span class="n">END_ACTION</span>
 
 <span class="n">ACTION</span> <span class="n">UndAdrUpdate</span><span class="p">:</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_14</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_15</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_16</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_17</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_18</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_19</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_20</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_22</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_23</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_24</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_25</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_26</span><span class="p">);</span>
@@ -9781,6 +9863,7 @@ END_FUNCTION_BLOCK
 <span class="n">END_VAR</span>
 <span class="n">rtVeto</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bVeto</span><span class="p">);</span>
 <span class="n">ftVeto</span><span class="p">(</span><span class="n">CLK</span><span class="o">:=</span><span class="n">bVeto</span><span class="p">);</span>
+<span class="n">LowerAuthority</span><span class="o">.</span><span class="n">bLowerAuthorityVetoed</span> <span class="o">:=</span> <span class="n">bVeto</span><span class="p">;</span>
 
 <span class="n">IF</span> <span class="n">rtVeto</span><span class="o">.</span><span class="n">Q</span> <span class="n">THEN</span>
     <span class="n">HigherAuthority</span><span class="o">.</span><span class="n">RemoveRequest</span><span class="p">(</span><span class="n">LowerAuthority</span><span class="o">.</span><span class="n">nLowerAuthorityID</span><span class="p">);</span>
@@ -9914,7 +9997,7 @@ END_FUNCTION_BLOCK
     <span class="n">FFO</span><span class="o">:=</span><span class="n">FFO</span><span class="p">);</span>
 
 <span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbHigherArb</span><span class="o">.</span><span class="n">q_stBeamParams</span><span class="o">.</span><span class="n">nTran</span> <span class="o">=</span> <span class="n">stReq</span><span class="o">.</span><span class="n">nTran</span><span class="p">,</span> <span class="s1">&#39;We should see the transmission number here, veto device is not in&#39;</span><span class="p">);</span>
-
+<span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbArbiter</span><span class="o">.</span><span class="n">bLowerAuthorityVetoed</span><span class="p">,</span> <span class="s1">&#39;When bVeto is FALSE the lower authority should not be vetoed.&#39;</span><span class="p">);</span>
 <span class="n">TEST_FINISHED</span><span class="p">();</span>
 
 <span class="n">TEST</span><span class="p">(</span><span class="s1">&#39;VetoIn&#39;</span><span class="p">);</span>
@@ -9940,6 +10023,7 @@ END_FUNCTION_BLOCK
 <span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbHigherArb</span><span class="o">.</span><span class="n">q_stBeamParams</span><span class="o">.</span><span class="n">nTran</span> <span class="o">=</span> <span class="n">PMPS_GVL</span><span class="o">.</span><span class="n">cstFullBeam</span><span class="o">.</span><span class="n">nTran</span><span class="p">,</span> <span class="s1">&#39;Veto device is in, trans should be restored to 100&#39;</span><span class="p">);</span>
 <span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbArbiter</span><span class="o">.</span><span class="n">CheckRequest</span><span class="p">(</span><span class="n">nId</span><span class="p">),</span> <span class="s1">&#39;Request should still be considered valid (1)&#39;</span><span class="p">);</span>
 <span class="n">AssertFalse</span><span class="p">(</span><span class="n">fbHigherArb</span><span class="o">.</span><span class="n">CheckRequest</span><span class="p">(</span><span class="n">ArbID</span><span class="p">),</span> <span class="s1">&#39;Lower arb request should be gone from the higher pool&#39;</span><span class="p">);</span>
+<span class="n">AssertTrue</span><span class="p">(</span><span class="n">fbArbiter</span><span class="o">.</span><span class="n">bLowerAuthorityVetoed</span><span class="p">,</span> <span class="s1">&#39;When bVeto is TRUE the lower authority should be vetoed.&#39;</span><span class="p">);</span>
 
 <span class="n">TEST_FINISHED</span><span class="p">();</span>
 

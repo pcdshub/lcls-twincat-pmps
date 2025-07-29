@@ -2654,6 +2654,13 @@ FB_Arbiter
         InfoStringFmtr : FB_FormatString;
 
         bVerbose : BOOL := FALSE;
+
+        {attribute 'pytmc' := '
+            pv: Vetoed
+            io: i
+            field: DESC Arbiter Veto Status
+        '}
+        bArbiterVetoed : BOOL := FALSE;
     END_VAR
     VAR_INPUT
     END_VAR
@@ -2978,6 +2985,18 @@ FB_Arbiter
     END_VAR
     RequestBP := AddRequest(nReqID := nReqID, stReqBP := stReqBP, sDevName:=sArbName);
     END_METHOD
+
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+    bLowerAuthorityVetoed := bArbiterVetoed;
+    END_PROPERTY
+
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+    bArbiterVetoed := bLowerAuthorityVetoed;
+    END_PROPERTY
 
     // How many entries are in the arbiter now
     PROPERTY nEntryCount : UDINT
@@ -5229,6 +5248,18 @@ FB_DummyArbIO
     bAutoUpdateBP := AutoUpdateBP;
     END_PROPERTY
 
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+
+    END_PROPERTY
+
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+
+    END_PROPERTY
+
     PROPERTY nLowerAuthorityID : DWORD
     VAR
     END_VAR
@@ -5294,6 +5325,18 @@ FB_DummyHA
     END_VAR
     RequestBP := TRUE;
     END_METHOD
+
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+
+    END_PROPERTY
+
+    PROPERTY bLowerAuthorityVetoed : BOOL
+    VAR
+    END_VAR
+
+    END_PROPERTY
 
     PROPERTY nLowerAuthorityID : DWORD
     VAR
@@ -6324,6 +6367,35 @@ FB_Hgvpu
 
     VAR
         // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/ioc-undh-uc*/iocInfo/IOC.pvlist |sort
+        {attribute 'pytmc' := 'pv: 14; link: 1450:'}
+        fbSegment_14 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 15; link: 1550:'}
+        fbSegment_15 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 16; link: 1650:'}
+        fbSegment_16 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 17; link: 1750:'}
+        fbSegment_17 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 18; link: 1850:'}
+        fbSegment_18 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 19; link: 1950:'}
+        fbSegment_19 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 20; link: 2050:'}
+        fbSegment_20 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+        fbSegment_21 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 22; link: 2250:'}
+        fbSegment_22 : FB_UndulatorSegment;
+
+        {attribute 'pytmc' := 'pv: 23; link: 2350:'}
+        fbSegment_23 : FB_UndulatorSegment;
 
         {attribute 'pytmc' := 'pv: 24; link: 2450:'}
         fbSegment_24 : FB_UndulatorSegment;
@@ -6405,7 +6477,7 @@ FB_Hgvpu
             pv: FirstSegment
             io: i
         '}
-        iLowBound_LUnd  : UDINT := 24;
+        iLowBound_LUnd  : UDINT := 14;
 
         {attribute 'pytmc' := '
             pv: LastSegment
@@ -6486,6 +6558,16 @@ FB_Hgvpu
     END_ACTION
 
     ACTION UndAdrUpdate:
+    fbSegment[14] := ADR(fbSegment_14);
+    fbSegment[15] := ADR(fbSegment_15);
+    fbSegment[16] := ADR(fbSegment_16);
+    fbSegment[17] := ADR(fbSegment_17);
+    fbSegment[18] := ADR(fbSegment_18);
+    fbSegment[19] := ADR(fbSegment_19);
+    fbSegment[20] := ADR(fbSegment_20);
+    fbSegment[21] := 0;
+    fbSegment[22] := ADR(fbSegment_22);
+    fbSegment[23] := ADR(fbSegment_23);
     fbSegment[24] := ADR(fbSegment_24);
     fbSegment[25] := ADR(fbSegment_25);
     fbSegment[26] := ADR(fbSegment_26);
@@ -9710,6 +9792,7 @@ FB_VetoArbiter
     END_VAR
     rtVeto(CLK:=bVeto);
     ftVeto(CLK:=bVeto);
+    LowerAuthority.bLowerAuthorityVetoed := bVeto;
 
     IF rtVeto.Q THEN
         HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);
@@ -9843,7 +9926,7 @@ FB_VetoArbiter_Test
         FFO:=FFO);
 
     AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
-
+    AssertFalse(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is FALSE the lower authority should not be vetoed.');
     TEST_FINISHED();
 
     TEST('VetoIn');
@@ -9869,6 +9952,7 @@ FB_VetoArbiter_Test
     AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
     AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
     AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
+    AssertTrue(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is TRUE the lower authority should be vetoed.');
 
     TEST_FINISHED();
 

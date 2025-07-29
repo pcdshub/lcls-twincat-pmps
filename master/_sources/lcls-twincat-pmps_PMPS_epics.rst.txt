@@ -3453,6 +3453,12 @@ FB_Arbiter
       - | io: input
 
 
+    * - $(PREFIX):Vetoed_RBV
+      - bi
+      - Arbiter Veto Status
+      - | io: input
+
+
   
 FB_ArbiterToSubSys_IO
 ^^^^^^^^^^^^^^^^^^^^^
