@@ -32,6 +32,7 @@ END_VAR
       <ST><![CDATA[
 rtVeto(CLK:=bVeto);
 ftVeto(CLK:=bVeto);
+LowerAuthority.bLowerAuthorityVetoed := bVeto;
 
 IF rtVeto.Q THEN
     HigherAuthority.RemoveRequest(LowerAuthority.nLowerAuthorityID);

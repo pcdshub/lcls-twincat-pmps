@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{24D6315C-BA57-26FC-9D4A-34AEE3AC1EB3}" GeneratedBy="TwinCAT XAE Plc">
+<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{B497AD30-0914-D29E-CC2F-2DB5B7EDA7D9}" GeneratedBy="TwinCAT XAE Plc">
   <DataTypes>
     <DataType>
       <Name Namespace="Tc2_System">T_MaxString</Name>
@@ -8831,31 +8831,31 @@
         <Name>bBusy</Name>
         <Type>BOOL</Type>
         <BitSize>8</BitSize>
-        <GetCodeOffs>80255332</GetCodeOffs>
+        <GetCodeOffs>80255380</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>bError</Name>
         <Type>BOOL</Type>
         <BitSize>8</BitSize>
-        <GetCodeOffs>80255368</GetCodeOffs>
+        <GetCodeOffs>80255416</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>hrErrorCode</Name>
         <Type GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255376</GetCodeOffs>
+        <GetCodeOffs>80255424</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nStringSize</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255356</GetCodeOffs>
+        <GetCodeOffs>80255404</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sResult</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255372</GetCodeOffs>
+        <GetCodeOffs>80255420</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name RpcEnable="plc" VTableIndex="0">__getbBusy</Name>
@@ -10094,15 +10094,15 @@
         <Name>nId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255272</GetCodeOffs>
-        <SetCodeOffs>80255296</SetCodeOffs>
+        <GetCodeOffs>80255320</GetCodeOffs>
+        <SetCodeOffs>80255344</SetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sName</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255312</GetCodeOffs>
-        <SetCodeOffs>80255324</SetCodeOffs>
+        <GetCodeOffs>80255360</GetCodeOffs>
+        <SetCodeOffs>80255372</SetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>ExtendName</Name>
@@ -10348,37 +10348,37 @@
         <Name>eSeverity</Name>
         <Type GUID="{B57D3F4A-0836-49B0-81C3-BED5F4817EC9}">TcEventSeverity</Type>
         <BitSize>16</BitSize>
-        <GetCodeOffs>80255424</GetCodeOffs>
+        <GetCodeOffs>80255472</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>ipSourceInfo</Name>
         <Type Namespace="LCLS_General.Tc3_EventLogger">I_TcSourceInfo</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255404</GetCodeOffs>
+        <GetCodeOffs>80255452</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nEventId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255492</GetCodeOffs>
+        <GetCodeOffs>80255540</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>nUniqueId</Name>
         <Type>UDINT</Type>
         <BitSize>32</BitSize>
-        <GetCodeOffs>80255496</GetCodeOffs>
+        <GetCodeOffs>80255544</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sEventClassName</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255452</GetCodeOffs>
+        <GetCodeOffs>80255500</GetCodeOffs>
       </PropertyItem>
       <PropertyItem>
         <Name>sEventText</Name>
         <Type>STRING(255)</Type>
         <BitSize>2048</BitSize>
-        <GetCodeOffs>80255500</GetCodeOffs>
+        <GetCodeOffs>80255548</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>EqualsToEventClass</Name>
@@ -10977,7 +10977,7 @@
         <Name>nTimeSent</Name>
         <Type>ULINT</Type>
         <BitSize>64</BitSize>
-        <GetCodeOffs>80255524</GetCodeOffs>
+        <GetCodeOffs>80255572</GetCodeOffs>
       </PropertyItem>
       <Method>
         <Name>SetJsonAttribute</Name>
@@ -13972,9 +13972,32 @@
       <BitSize>32</BitSize>
       <ExtendsType GUID="{18071995-0000-0000-0000-000000000018}">PVOID</ExtendsType>
       <Method>
-        <Name RpcEnable="plc" VTableIndex="1">__getnLowerAuthorityID</Name>
+        <Name RpcEnable="plc" VTableIndex="1">__getbLowerAuthorityVetoed</Name>
+        <ReturnType RpcDirection="out">BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="2">__getnLowerAuthorityID</Name>
         <ReturnType RpcDirection="out">DWORD</ReturnType>
         <ReturnBitSize>32</ReturnBitSize>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="3">__setbLowerAuthorityVetoed</Name>
+        <Parameter>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type RpcDirection="in">BOOL</Type>
+          <BitSize>8</BitSize>
+        </Parameter>
         <Properties>
           <Property>
             <Name>property</Name>
@@ -14892,6 +14915,25 @@ These features efficiently address the addition, removal, and verification of be
         </Default>
       </SubItem>
       <SubItem>
+        <Name>bArbiterVetoed</Name>
+        <Type>BOOL</Type>
+        <BitSize>8</BitSize>
+        <BitOffs>226664</BitOffs>
+        <Default>
+          <Value>0</Value>
+        </Default>
+        <Properties>
+          <Property>
+            <Name>pytmc</Name>
+            <Value>
+        pv: Vetoed
+        io: i
+        field: DESC Arbiter Veto Status
+    </Value>
+          </Property>
+        </Properties>
+      </SubItem>
+      <SubItem>
         <Name>q_stBeamParams</Name>
         <Type>ST_BeamParams</Type>
         <Comment>Updated on each cycle of the arbiter FB with the current arbitrated beam parameter set</Comment>
@@ -14965,7 +15007,24 @@ These features efficiently address the addition, removal, and verification of be
         <BitOffs>392640</BitOffs>
       </SubItem>
       <Method>
-        <Name RpcEnable="plc" VTableIndex="9">__getnEntryCount</Name>
+        <Name>RequestBP</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>nReqID</Name>
+          <Comment>StateID of state requesting beam parameter set</Comment>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+        <Parameter>
+          <Name>stReqBP</Name>
+          <Comment>Requested beam params</Comment>
+          <Type>ST_BeamParams</Type>
+          <BitSize>1760</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="11">__getnEntryCount</Name>
         <ReturnType RpcDirection="out">UDINT</ReturnType>
         <ReturnBitSize>32</ReturnBitSize>
         <Local>
@@ -14993,16 +15052,6 @@ These features efficiently address the addition, removal, and verification of be
           <Type>ST_BeamParams</Type>
           <BitSize>1760</BitSize>
         </Local>
-      </Method>
-      <Method>
-        <Name>ElevateRequest</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>HigherAuthority</Name>
-          <Type>I_HigherAuthority</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
       </Method>
       <Method>
         <Name>GetArbitratedBP</Name>
@@ -15100,7 +15149,17 @@ These features efficiently address the addition, removal, and verification of be
         </Properties>
       </Method>
       <Method>
-        <Name RpcEnable="plc" VTableIndex="5">__getnLowerAuthorityID</Name>
+        <Name>ElevateRequest</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>HigherAuthority</Name>
+          <Type>I_HigherAuthority</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="6">__getnLowerAuthorityID</Name>
         <ReturnType RpcDirection="out">DWORD</ReturnType>
         <ReturnBitSize>32</ReturnBitSize>
         <Local>
@@ -15190,21 +15249,32 @@ These features efficiently address the addition, removal, and verification of be
         </Parameter>
       </Method>
       <Method>
-        <Name>RequestBP</Name>
-        <ReturnType>BOOL</ReturnType>
+        <Name RpcEnable="plc" VTableIndex="7">__setbLowerAuthorityVetoed</Name>
+        <Parameter>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type RpcDirection="in">BOOL</Type>
+          <BitSize>8</BitSize>
+        </Parameter>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="5">__getbLowerAuthorityVetoed</Name>
+        <ReturnType RpcDirection="out">BOOL</ReturnType>
         <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>nReqID</Name>
-          <Comment>StateID of state requesting beam parameter set</Comment>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
-        <Parameter>
-          <Name>stReqBP</Name>
-          <Comment>Requested beam params</Comment>
-          <Type>ST_BeamParams</Type>
-          <BitSize>1760</BitSize>
-        </Parameter>
+        <Local>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type>BOOL</Type>
+          <BitSize>8</BitSize>
+        </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
       </Method>
       <Properties>
         <Property>
@@ -20133,7 +20203,7 @@ The BPTM will throw an error if the arbiter does not have enough space for the t
         <BitOffs>8768</BitOffs>
       </SubItem>
       <Method>
-        <Name RpcEnable="plc" VTableIndex="11">__setAutoUpdateBP</Name>
+        <Name RpcEnable="plc" VTableIndex="13">__setAutoUpdateBP</Name>
         <Parameter>
           <Name>AutoUpdateBP</Name>
           <Type RpcDirection="in">BOOL</Type>
@@ -20144,81 +20214,6 @@ The BPTM will throw an error if the arbiter does not have enough space for the t
             <Name>property</Name>
           </Property>
         </Properties>
-      </Method>
-      <Method>
-        <Name>RemoveRequest</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>nReqID</Name>
-          <Comment>StateID to remove</Comment>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
-      </Method>
-      <Method>
-        <Name>ElevateRequest</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>HigherAuthority</Name>
-          <Type>I_HigherAuthority</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
-      </Method>
-      <Method>
-        <Name RpcEnable="plc" VTableIndex="5">__getnLowerAuthorityID</Name>
-        <ReturnType RpcDirection="out">DWORD</ReturnType>
-        <ReturnBitSize>32</ReturnBitSize>
-        <Local>
-          <Name>nLowerAuthorityID</Name>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
-        </Local>
-        <Properties>
-          <Property>
-            <Name>property</Name>
-          </Property>
-        </Properties>
-      </Method>
-      <Method>
-        <Name RpcEnable="plc" VTableIndex="7">__getAutoUpdateBP</Name>
-        <ReturnType RpcDirection="out">BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Local>
-          <Name>AutoUpdateBP</Name>
-          <Type>BOOL</Type>
-          <BitSize>8</BitSize>
-        </Local>
-        <Properties>
-          <Property>
-            <Name>property</Name>
-          </Property>
-        </Properties>
-      </Method>
-      <Method>
-        <Name>CheckRequest</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>nReqID</Name>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
-      </Method>
-      <Method>
-        <Name>ApplyBPReq</Name>
-        <Parameter>
-          <Name>bUpdateBP</Name>
-          <Comment> Set true and call this method to set q_stSimulatedBPReadback to the request</Comment>
-          <Type>BOOL</Type>
-          <BitSize>8</BitSize>
-        </Parameter>
-        <Local>
-          <Name>BP</Name>
-          <Type ReferenceTo="true">ST_BeamParams</Type>
-          <BitSize>32</BitSize>
-        </Local>
       </Method>
       <Method>
         <Name>RequestBP</Name>
@@ -20236,6 +20231,109 @@ The BPTM will throw an error if the arbiter does not have enough space for the t
           <Type>ST_BeamParams</Type>
           <BitSize>1760</BitSize>
         </Parameter>
+      </Method>
+      <Method>
+        <Name>RemoveRequest</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>nReqID</Name>
+          <Comment>StateID to remove</Comment>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
+        <Name>CheckRequest</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>nReqID</Name>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
+        <Name>ElevateRequest</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>HigherAuthority</Name>
+          <Type>I_HigherAuthority</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="6">__getnLowerAuthorityID</Name>
+        <ReturnType RpcDirection="out">DWORD</ReturnType>
+        <ReturnBitSize>32</ReturnBitSize>
+        <Local>
+          <Name>nLowerAuthorityID</Name>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="9">__getAutoUpdateBP</Name>
+        <ReturnType RpcDirection="out">BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Local>
+          <Name>AutoUpdateBP</Name>
+          <Type>BOOL</Type>
+          <BitSize>8</BitSize>
+        </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name>ApplyBPReq</Name>
+        <Parameter>
+          <Name>bUpdateBP</Name>
+          <Comment> Set true and call this method to set q_stSimulatedBPReadback to the request</Comment>
+          <Type>BOOL</Type>
+          <BitSize>8</BitSize>
+        </Parameter>
+        <Local>
+          <Name>BP</Name>
+          <Type ReferenceTo="true">ST_BeamParams</Type>
+          <BitSize>32</BitSize>
+        </Local>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="5">__getbLowerAuthorityVetoed</Name>
+        <ReturnType RpcDirection="out">BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Local>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type>BOOL</Type>
+          <BitSize>8</BitSize>
+        </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="7">__setbLowerAuthorityVetoed</Name>
+        <Parameter>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type RpcDirection="in">BOOL</Type>
+          <BitSize>8</BitSize>
+        </Parameter>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
       </Method>
       <Properties>
         <Property>
@@ -22245,7 +22343,7 @@ Sets the beam class assertion lines for a given beam class.
         </Parameter>
       </Method>
       <Method>
-        <Name RpcEnable="plc" VTableIndex="5">__getnLowerAuthorityID</Name>
+        <Name RpcEnable="plc" VTableIndex="6">__getnLowerAuthorityID</Name>
         <ReturnType RpcDirection="out">DWORD</ReturnType>
         <ReturnBitSize>32</ReturnBitSize>
         <Local>
@@ -22258,6 +22356,17 @@ Sets the beam class assertion lines for a given beam class.
             <Name>property</Name>
           </Property>
         </Properties>
+      </Method>
+      <Method>
+        <Name>RemoveRequest</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>nReqID</Name>
+          <Comment>StateID to remove</Comment>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
       </Method>
       <Method>
         <Name>RequestBP</Name>
@@ -22277,15 +22386,32 @@ Sets the beam class assertion lines for a given beam class.
         </Parameter>
       </Method>
       <Method>
-        <Name>RemoveRequest</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
+        <Name RpcEnable="plc" VTableIndex="7">__setbLowerAuthorityVetoed</Name>
         <Parameter>
-          <Name>nReqID</Name>
-          <Comment>StateID to remove</Comment>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type RpcDirection="in">BOOL</Type>
+          <BitSize>8</BitSize>
         </Parameter>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="5">__getbLowerAuthorityVetoed</Name>
+        <ReturnType RpcDirection="out">BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Local>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type>BOOL</Type>
+          <BitSize>8</BitSize>
+        </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
       </Method>
       <Properties>
         <Property>
@@ -30395,25 +30521,25 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
             <Name>MAIN.fbSetPERanges</Name>
             <BitSize>32</BitSize>
             <BaseType>PE_Ranges</BaseType>
-            <BitOffs>323976608</BitOffs>
+            <BitOffs>323976800</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbDiffBPTest</Name>
             <BitSize>33551744</BitSize>
             <BaseType>FB_DiffBP_Test</BaseType>
-            <BitOffs>323976640</BitOffs>
+            <BitOffs>323976832</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbBPTMTest</Name>
             <BitSize>38612160</BitSize>
             <BaseType>FB_BPTM_Test</BaseType>
-            <BitOffs>357528384</BitOffs>
+            <BitOffs>357528576</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbSafeBPCompareTest</Name>
             <BitSize>33551744</BitSize>
             <BaseType>FB_SafeBPCompare_Test</BaseType>
-            <BitOffs>396140544</BitOffs>
+            <BitOffs>396140736</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbFFTest</Name>
@@ -30421,37 +30547,37 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
 /fbPEWTest    :    FB_PhotonEnergyWatcher_Test;---</Comment>
             <BitSize>35220288</BitSize>
             <BaseType>FB_FastFault_Test</BaseType>
-            <BitOffs>429692288</BitOffs>
+            <BitOffs>429692480</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbArbiterTest</Name>
             <BitSize>38020224</BitSize>
             <BaseType>FB_Arbiter_Test</BaseType>
-            <BitOffs>464912576</BitOffs>
+            <BitOffs>464912768</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbVetoArbiterTest</Name>
             <BitSize>35025408</BitSize>
             <BaseType>FB_VetoArbiter_Test</BaseType>
-            <BitOffs>502932800</BitOffs>
+            <BitOffs>502932992</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbevRangeCalcTest</Name>
             <BitSize>33551808</BitSize>
             <BaseType>FB_evRangeCalculator_Test</BaseType>
-            <BitOffs>537958208</BitOffs>
+            <BitOffs>537958400</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbSubSysToArbTest</Name>
             <BitSize>35804096</BitSize>
             <BaseType>FB_SubsysToArb_Test</BaseType>
-            <BitOffs>571510016</BitOffs>
+            <BitOffs>571510208</BitOffs>
           </Symbol>
           <Symbol>
             <Name>MAIN.fbArbToSubSysTest</Name>
             <BitSize>34558784</BitSize>
             <BaseType>FB_ArbToSubsys_Test</BaseType>
-            <BitOffs>607314112</BitOffs>
+            <BitOffs>607314304</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.AUX_ATTENUATORS</Name>
@@ -30466,7 +30592,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641873424</BitOffs>
+            <BitOffs>641873616</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.stRequestedBeamParameters</Name>
@@ -30486,7 +30612,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641873440</BitOffs>
+            <BitOffs>641873632</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.stCurrentBeamParameters</Name>
@@ -30506,7 +30632,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641875200</BitOffs>
+            <BitOffs>641875392</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.g_areVBoundaries</Name>
@@ -30531,7 +30657,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641876960</BitOffs>
+            <BitOffs>641877152</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.PERange</Name>
@@ -30543,7 +30669,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641877984</BitOffs>
+            <BitOffs>641878176</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.EXCLUDED_ASSERTION_ID</Name>
@@ -30558,7 +30684,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878016</BitOffs>
+            <BitOffs>641878208</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.MAX_DEVICE_STATES</Name>
@@ -30572,7 +30698,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878048</BitOffs>
+            <BitOffs>641878240</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.VISIBLE_TEST_VELOCITY</Name>
@@ -30586,7 +30712,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878080</BitOffs>
+            <BitOffs>641878272</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.FAST_TEST_VELOCITY</Name>
@@ -30600,7 +30726,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878144</BitOffs>
+            <BitOffs>641878336</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.TRANS_SCALING_FACTOR</Name>
@@ -30615,7 +30741,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878208</BitOffs>
+            <BitOffs>641878400</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.MAX_VETO_DEVICES</Name>
@@ -30629,7 +30755,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878240</BitOffs>
+            <BitOffs>641878432</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.cnMaxStateArrayLen</Name>
@@ -30654,7 +30780,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878256</BitOffs>
+            <BitOffs>641878448</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.stAttenuators</Name>
@@ -30675,7 +30801,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878272</BitOffs>
+            <BitOffs>641878464</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.cstFullBeam</Name>
@@ -30695,7 +30821,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641878336</BitOffs>
+            <BitOffs>641878528</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.cst0RateBeam</Name>
@@ -30715,7 +30841,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641880096</BitOffs>
+            <BitOffs>641880288</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.MAX_APERTURES</Name>
@@ -30730,7 +30856,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641881856</BitOffs>
+            <BitOffs>641882048</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.g_cBoundaries</Name>
@@ -30744,7 +30870,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641881872</BitOffs>
+            <BitOffs>641882064</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.DUMMY_AUX_ATT_ARRAY</Name>
@@ -30763,7 +30889,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641881888</BitOffs>
+            <BitOffs>641882080</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.reVHyst</Name>
@@ -30790,7 +30916,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641882912</BitOffs>
+            <BitOffs>641883104</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.g_areVBoundariesL</Name>
@@ -30945,7 +31071,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641882944</BitOffs>
+            <BitOffs>641883136</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_GVL.g_areVBoundariesK</Name>
@@ -31100,7 +31226,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641883968</BitOffs>
+            <BitOffs>641884160</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_PARAM.MAX_FAST_FAULTS</Name>
@@ -31115,7 +31241,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641884992</BitOffs>
+            <BitOffs>641885184</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.bLittleEndian</Name>
@@ -31130,7 +31256,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885008</BitOffs>
+            <BitOffs>641885200</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.bSimulationMode</Name>
@@ -31145,7 +31271,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885016</BitOffs>
+            <BitOffs>641885208</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_PARAM.MAX_ASSERTIONS</Name>
@@ -31160,7 +31286,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885024</BitOffs>
+            <BitOffs>641885216</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_PARAM.TRANS_MARGIN</Name>
@@ -31175,7 +31301,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885056</BitOffs>
+            <BitOffs>641885248</BitOffs>
           </Symbol>
           <Symbol>
             <Name>PMPS_TOOLS.fbJson</Name>
@@ -31186,7 +31312,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885088</BitOffs>
+            <BitOffs>641885280</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.RuntimeVersion</Name>
@@ -31216,7 +31342,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885344</BitOffs>
+            <BitOffs>641885536</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.CompilerVersion</Name>
@@ -31246,7 +31372,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885408</BitOffs>
+            <BitOffs>641885600</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.nRegisterSize</Name>
@@ -31261,7 +31387,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885472</BitOffs>
+            <BitOffs>641885664</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.nPackMode</Name>
@@ -31276,7 +31402,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885488</BitOffs>
+            <BitOffs>641885680</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.bFPUSupport</Name>
@@ -31290,7 +31416,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885504</BitOffs>
+            <BitOffs>641885696</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.RuntimeVersionNumeric</Name>
@@ -31304,7 +31430,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885536</BitOffs>
+            <BitOffs>641885728</BitOffs>
           </Symbol>
           <Symbol>
             <Name>Constants.CompilerVersionNumeric</Name>
@@ -31318,7 +31444,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885568</BitOffs>
+            <BitOffs>641885760</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TwinCAT_SystemInfoVarList._AppInfo</Name>
@@ -31332,7 +31458,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641885600</BitOffs>
+            <BitOffs>641885792</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TwinCAT_SystemInfoVarList._TaskPouOid_PlcTask</Name>
@@ -31346,7 +31472,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641887648</BitOffs>
+            <BitOffs>641887840</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TwinCAT_SystemInfoVarList._TaskInfo</Name>
@@ -31364,7 +31490,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641887680</BitOffs>
+            <BitOffs>641887872</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TwinCAT_SystemInfoVarList._TaskOid_PlcTask</Name>
@@ -31378,7 +31504,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641888704</BitOffs>
+            <BitOffs>641888896</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TwinCAT_SystemInfoVarList.__PlcTask</Name>
@@ -31399,7 +31525,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641888736</BitOffs>
+            <BitOffs>641888928</BitOffs>
           </Symbol>
           <Symbol>
             <Name>TC_EVENTS.LCLSGeneralEventClass</Name>
@@ -31422,7 +31548,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
                 <Name>TcVarGlobal</Name>
               </Property>
             </Properties>
-            <BitOffs>641936032</BitOffs>
+            <BitOffs>641936224</BitOffs>
           </Symbol>
         </DataArea>
         <DataArea>
@@ -31494,7 +31620,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
         </Property>
         <Property>
           <Name>ChangeDate</Name>
-          <Value>2025-05-27T08:12:31</Value>
+          <Value>2025-06-13T11:04:32</Value>
         </Property>
         <Property>
           <Name>GeneratedCodeSize</Name>

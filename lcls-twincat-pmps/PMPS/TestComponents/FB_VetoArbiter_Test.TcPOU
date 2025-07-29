@@ -65,7 +65,7 @@ VetoArb(HigherAuthority:=fbHigherArb,
     FFO:=FFO);
 
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = stReq.nTran, 'We should see the transmission number here, veto device is not in');
-
+AssertFalse(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is FALSE the lower authority should not be vetoed.');
 TEST_FINISHED();
 
 TEST('VetoIn');
@@ -91,6 +91,7 @@ VetoArb(HigherAuthority:=fbHigherArb, // Veto removed
 AssertTrue(fbHigherArb.q_stBeamParams.nTran = PMPS_GVL.cstFullBeam.nTran, 'Veto device is in, trans should be restored to 100');
 AssertTrue(fbArbiter.CheckRequest(nId), 'Request should still be considered valid (1)');
 AssertFalse(fbHigherArb.CheckRequest(ArbID), 'Lower arb request should be gone from the higher pool');
+AssertTrue(fbArbiter.bLowerAuthorityVetoed, 'When bVeto is TRUE the lower authority should be vetoed.');
 
 TEST_FINISHED();
 
