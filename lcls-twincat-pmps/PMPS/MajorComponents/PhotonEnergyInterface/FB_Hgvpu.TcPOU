@@ -40,7 +40,36 @@ END_VAR
 
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/ioc-undh-uc*/iocInfo/IOC.pvlist |sort
+    {attribute 'pytmc' := 'pv: 14; link: 1450:'}
+    fbSegment_14 : FB_UndulatorSegment;
 
+    {attribute 'pytmc' := 'pv: 15; link: 1550:'}
+    fbSegment_15 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 16; link: 1650:'}
+    fbSegment_16 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 17; link: 1750:'}
+    fbSegment_17 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 18; link: 1850:'}
+    fbSegment_18 : FB_UndulatorSegment;
+	
+    {attribute 'pytmc' := 'pv: 19; link: 1950:'}
+    fbSegment_19 : FB_UndulatorSegment;
+	
+    {attribute 'pytmc' := 'pv: 20; link: 2050:'}
+    fbSegment_20 : FB_UndulatorSegment;
+	
+    {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+    fbSegment_21 : FB_UndulatorSegment;
+	
+	{attribute 'pytmc' := 'pv: 22; link: 2250:'}
+    fbSegment_22 : FB_UndulatorSegment;
+	
+    {attribute 'pytmc' := 'pv: 23; link: 2350:'}
+    fbSegment_23 : FB_UndulatorSegment;
+	
     {attribute 'pytmc' := 'pv: 24; link: 2450:'}
     fbSegment_24 : FB_UndulatorSegment;
 
@@ -121,7 +150,7 @@ VAR CONSTANT
         pv: FirstSegment
         io: i
     '}
-    iLowBound_LUnd  : UDINT := 24;
+    iLowBound_LUnd  : UDINT := 14;
 
     {attribute 'pytmc' := '
         pv: LastSegment
@@ -228,7 +257,17 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{16a3b724-bfc0-464d-94c1-29be51ee924d}">
       <Implementation>
-        <ST><![CDATA[fbSegment[24] := ADR(fbSegment_24);
+        <ST><![CDATA[fbSegment[14] := ADR(fbSegment_14);
+fbSegment[15] := ADR(fbSegment_15);
+fbSegment[16] := ADR(fbSegment_16);
+fbSegment[17] := ADR(fbSegment_17);
+fbSegment[18] := ADR(fbSegment_18);
+fbSegment[19] := ADR(fbSegment_19);
+fbSegment[20] := ADR(fbSegment_20);
+fbSegment[21] := 0;
+fbSegment[22] := ADR(fbSegment_22);
+fbSegment[23] := ADR(fbSegment_23);
+fbSegment[24] := ADR(fbSegment_24);
 fbSegment[25] := ADR(fbSegment_25);
 fbSegment[26] := ADR(fbSegment_26);
 fbSegment[27] := ADR(fbSegment_27);
