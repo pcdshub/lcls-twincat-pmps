@@ -135,6 +135,10 @@ VAR
 
     {attribute 'pytmc' := 'pv: 46; link: 4650:'}
     fbSegment_46 : FB_UndulatorSegment;
+	
+	{attribute 'pytmc' := 'pv: 47; link: 4750:'}
+    fbSegment_47 : FB_UndulatorSegment;
+
 
     fbSegment : ARRAY [iLowBound_LUnd..iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
     fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
@@ -156,7 +160,7 @@ VAR CONSTANT
         pv: LastSegment
         io: i
     '}
-    iHighBound_LUnd : UDINT := 46;
+    iHighBound_LUnd : UDINT := 47;
 
     {attribute 'pytmc' := '
         pv: Period
@@ -289,7 +293,8 @@ fbSegment[42] := ADR(fbSegment_42);
 fbSegment[43] := ADR(fbSegment_43);
 fbSegment[44] := ADR(fbSegment_44);
 fbSegment[45] := ADR(fbSegment_45);
-fbSegment[46] := ADR(fbSegment_46);]]></ST>
+fbSegment[46] := ADR(fbSegment_46);
+fbSegment[47] := ADR(fbSegment_47);]]></ST>
       </Implementation>
     </Action>
   </POU>
