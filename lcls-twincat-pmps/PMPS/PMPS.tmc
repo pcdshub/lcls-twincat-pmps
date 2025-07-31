@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{B497AD30-0914-D29E-CC2F-2DB5B7EDA7D9}" GeneratedBy="TwinCAT XAE Plc">
+<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass" Hash="{F341AFC6-60CF-7873-BC77-B7CF37307052}" GeneratedBy="TwinCAT XAE Plc">
   <DataTypes>
     <DataType>
       <Name Namespace="Tc2_System">T_MaxString</Name>
@@ -15159,6 +15159,16 @@ These features efficiently address the addition, removal, and verification of be
         </Parameter>
       </Method>
       <Method>
+        <Name>CheckRequestInPool</Name>
+        <ReturnType>BOOL</ReturnType>
+        <ReturnBitSize>8</ReturnBitSize>
+        <Parameter>
+          <Name>nReqID</Name>
+          <Type>DWORD</Type>
+          <BitSize>32</BitSize>
+        </Parameter>
+      </Method>
+      <Method>
         <Name RpcEnable="plc" VTableIndex="6">__getnLowerAuthorityID</Name>
         <ReturnType RpcDirection="out">DWORD</ReturnType>
         <ReturnBitSize>32</ReturnBitSize>
@@ -15239,29 +15249,6 @@ These features efficiently address the addition, removal, and verification of be
         </Local>
       </Method>
       <Method>
-        <Name>CheckRequestInPool</Name>
-        <ReturnType>BOOL</ReturnType>
-        <ReturnBitSize>8</ReturnBitSize>
-        <Parameter>
-          <Name>nReqID</Name>
-          <Type>DWORD</Type>
-          <BitSize>32</BitSize>
-        </Parameter>
-      </Method>
-      <Method>
-        <Name RpcEnable="plc" VTableIndex="7">__setbLowerAuthorityVetoed</Name>
-        <Parameter>
-          <Name>bLowerAuthorityVetoed</Name>
-          <Type RpcDirection="in">BOOL</Type>
-          <BitSize>8</BitSize>
-        </Parameter>
-        <Properties>
-          <Property>
-            <Name>property</Name>
-          </Property>
-        </Properties>
-      </Method>
-      <Method>
         <Name RpcEnable="plc" VTableIndex="5">__getbLowerAuthorityVetoed</Name>
         <ReturnType RpcDirection="out">BOOL</ReturnType>
         <ReturnBitSize>8</ReturnBitSize>
@@ -15270,6 +15257,19 @@ These features efficiently address the addition, removal, and verification of be
           <Type>BOOL</Type>
           <BitSize>8</BitSize>
         </Local>
+        <Properties>
+          <Property>
+            <Name>property</Name>
+          </Property>
+        </Properties>
+      </Method>
+      <Method>
+        <Name RpcEnable="plc" VTableIndex="7">__setbLowerAuthorityVetoed</Name>
+        <Parameter>
+          <Name>bLowerAuthorityVetoed</Name>
+          <Type RpcDirection="in">BOOL</Type>
+          <BitSize>8</BitSize>
+        </Parameter>
         <Properties>
           <Property>
             <Name>property</Name>
@@ -31620,7 +31620,7 @@ request loop (two arbiters elevating to each other), or there is a RequestAdd, R
         </Property>
         <Property>
           <Name>ChangeDate</Name>
-          <Value>2025-06-13T11:04:32</Value>
+          <Value>2025-07-29T11:12:16</Value>
         </Property>
         <Property>
           <Name>GeneratedCodeSize</Name>
