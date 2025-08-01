@@ -6463,6 +6463,10 @@ FB_Hgvpu
         {attribute 'pytmc' := 'pv: 46; link: 4650:'}
         fbSegment_46 : FB_UndulatorSegment;
 
+        {attribute 'pytmc' := 'pv: 47; link: 4750:'}
+        fbSegment_47 : FB_UndulatorSegment;
+
+
         fbSegment : ARRAY [iLowBound_LUnd..iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
         fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
 
@@ -6483,7 +6487,7 @@ FB_Hgvpu
             pv: LastSegment
             io: i
         '}
-        iHighBound_LUnd : UDINT := 46;
+        iHighBound_LUnd : UDINT := 47;
 
         {attribute 'pytmc' := '
             pv: Period
@@ -6591,6 +6595,7 @@ FB_Hgvpu
     fbSegment[44] := ADR(fbSegment_44);
     fbSegment[45] := ADR(fbSegment_45);
     fbSegment[46] := ADR(fbSegment_46);
+    fbSegment[47] := ADR(fbSegment_47);
     END_ACTION
 
     PROPERTY rCurrentPhotonEnergy : REAL

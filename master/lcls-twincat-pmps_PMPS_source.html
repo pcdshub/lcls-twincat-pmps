@@ -6534,6 +6534,10 @@ END_METHOD
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 46; link: 4650:&#39;</span><span class="p">}</span>
     <span class="n">fbSegment_46</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
 
+    <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;pv: 47; link: 4750:&#39;</span><span class="p">}</span>
+    <span class="n">fbSegment_47</span> <span class="p">:</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
+
+
     <span class="n">fbSegment</span> <span class="p">:</span> <span class="n">ARRAY</span> <span class="p">[</span><span class="n">iLowBound_LUnd</span><span class="o">..</span><span class="n">iHighBound_LUnd</span><span class="p">]</span> <span class="n">OF</span> <span class="n">POINTER</span> <span class="n">TO</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
     <span class="n">fbCurrentSegment</span> <span class="p">:</span> <span class="n">REFERENCE</span> <span class="n">TO</span> <span class="n">FB_UndulatorSegment</span><span class="p">;</span>
 
@@ -6554,7 +6558,7 @@ END_METHOD
         <span class="n">pv</span><span class="p">:</span> <span class="n">LastSegment</span>
         <span class="n">io</span><span class="p">:</span> <span class="n">i</span>
     <span class="s1">&#39;}</span>
-    <span class="n">iHighBound_LUnd</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">46</span><span class="p">;</span>
+    <span class="n">iHighBound_LUnd</span> <span class="p">:</span> <span class="n">UDINT</span> <span class="o">:=</span> <span class="mi">47</span><span class="p">;</span>
 
     <span class="p">{</span><span class="n">attribute</span> <span class="s1">&#39;pytmc&#39;</span> <span class="o">:=</span> <span class="s1">&#39;</span>
         <span class="n">pv</span><span class="p">:</span> <span class="n">Period</span>
@@ -6662,6 +6666,7 @@ END_METHOD
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">44</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_44</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">45</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_45</span><span class="p">);</span>
 <span class="n">fbSegment</span><span class="p">[</span><span class="mi">46</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_46</span><span class="p">);</span>
+<span class="n">fbSegment</span><span class="p">[</span><span class="mi">47</span><span class="p">]</span> <span class="o">:=</span> <span class="n">ADR</span><span class="p">(</span><span class="n">fbSegment_47</span><span class="p">);</span>
 <span class="n">END_ACTION</span>
 
 <span class="n">PROPERTY</span> <span class="n">rCurrentPhotonEnergy</span> <span class="p">:</span> <span class="n">REAL</span>
