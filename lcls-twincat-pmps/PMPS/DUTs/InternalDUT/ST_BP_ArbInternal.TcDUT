@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_BP_ArbInternal" Id="{cafc2631-22b5-4976-a8a9-7355cd6daf26}">
     <Declaration><![CDATA[TYPE ST_BP_ArbInternal EXTENDS ST_BeamParams :
 STRUCT

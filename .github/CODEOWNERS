@@ -1,0 +1,20 @@
+# default group
+* @pcdshub/pmps-sme
+
+# language-specific group(s)
+## TWINCAT files
+*.tsproj @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.plcproj @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.tmc @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.tpr @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.xti @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcTTO @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcPOU @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcDUT @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcGVL @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcVis @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcVMO @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+*.TcGTLO @pcdshub/twincat-reviewers @pcdshub/pmps-sme
+
+# github folder holds administrative files
+.github/** @pcdshub/software-admin

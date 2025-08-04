@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_Hgvpu" Id="{8947838d-e4b5-4cb8-b661-9299e64a0856}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Hgvpu IMPLEMENTS I_UndulatorComplex
 VAR_INPUT
@@ -40,6 +40,35 @@ END_VAR
 
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/ioc-undh-uc*/iocInfo/IOC.pvlist |sort
+    {attribute 'pytmc' := 'pv: 14; link: 1450:'}
+    fbSegment_14 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 15; link: 1550:'}
+    fbSegment_15 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 16; link: 1650:'}
+    fbSegment_16 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 17; link: 1750:'}
+    fbSegment_17 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 18; link: 1850:'}
+    fbSegment_18 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 19; link: 1950:'}
+    fbSegment_19 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 20; link: 2050:'}
+    fbSegment_20 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 21; link: 2150:'}
+    fbSegment_21 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 22; link: 2250:'}
+    fbSegment_22 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 23; link: 2350:'}
+    fbSegment_23 : FB_UndulatorSegment;
 
     {attribute 'pytmc' := 'pv: 24; link: 2450:'}
     fbSegment_24 : FB_UndulatorSegment;
@@ -107,6 +136,10 @@ VAR
     {attribute 'pytmc' := 'pv: 46; link: 4650:'}
     fbSegment_46 : FB_UndulatorSegment;
 
+    {attribute 'pytmc' := 'pv: 47; link: 4750:'}
+    fbSegment_47 : FB_UndulatorSegment;
+
+
     fbSegment : ARRAY [iLowBound_LUnd..iHighBound_LUnd] OF POINTER TO FB_UndulatorSegment;
     fbCurrentSegment : REFERENCE TO FB_UndulatorSegment;
 
@@ -121,13 +154,13 @@ VAR CONSTANT
         pv: FirstSegment
         io: i
     '}
-    iLowBound_LUnd  : UDINT := 24;
+    iLowBound_LUnd  : UDINT := 14;
 
     {attribute 'pytmc' := '
         pv: LastSegment
         io: i
     '}
-    iHighBound_LUnd : UDINT := 46;
+    iHighBound_LUnd : UDINT := 47;
 
     {attribute 'pytmc' := '
         pv: Period
@@ -205,7 +238,7 @@ UndAdrUpdate();
       </Implementation>
     </Action>
     <Property Name="rCurrentPhotonEnergy" Id="{5a10991f-1e28-4103-8dbb-85afb0be11c7}">
-      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rCurrentPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{f9b50092-f34c-4c40-a9f8-a67e183cea2b}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -216,7 +249,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="rTargetPhotonEnergy" Id="{f0445d6c-05e0-4fa2-82ab-b4db4988aa31}">
-      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : REAL]]></Declaration>
+      <Declaration><![CDATA[PROPERTY rTargetPhotonEnergy : LREAL]]></Declaration>
       <Get Name="Get" Id="{86c41c43-5e84-4843-8700-9c0cd46d6f80}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -228,7 +261,17 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{16a3b724-bfc0-464d-94c1-29be51ee924d}">
       <Implementation>
-        <ST><![CDATA[fbSegment[24] := ADR(fbSegment_24);
+        <ST><![CDATA[fbSegment[14] := ADR(fbSegment_14);
+fbSegment[15] := ADR(fbSegment_15);
+fbSegment[16] := ADR(fbSegment_16);
+fbSegment[17] := ADR(fbSegment_17);
+fbSegment[18] := ADR(fbSegment_18);
+fbSegment[19] := ADR(fbSegment_19);
+fbSegment[20] := ADR(fbSegment_20);
+fbSegment[21] := 0;
+fbSegment[22] := ADR(fbSegment_22);
+fbSegment[23] := ADR(fbSegment_23);
+fbSegment[24] := ADR(fbSegment_24);
 fbSegment[25] := ADR(fbSegment_25);
 fbSegment[26] := ADR(fbSegment_26);
 fbSegment[27] := ADR(fbSegment_27);
@@ -250,7 +293,8 @@ fbSegment[42] := ADR(fbSegment_42);
 fbSegment[43] := ADR(fbSegment_43);
 fbSegment[44] := ADR(fbSegment_44);
 fbSegment[45] := ADR(fbSegment_45);
-fbSegment[46] := ADR(fbSegment_46);]]></ST>
+fbSegment[46] := ADR(fbSegment_46);
+fbSegment[47] := ADR(fbSegment_47);]]></ST>
       </Implementation>
     </Action>
   </POU>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
     <Declaration><![CDATA[// Use on a subsystem PLC to request from the arbiter
 // Run at the top of your cycle to receive the latest BP

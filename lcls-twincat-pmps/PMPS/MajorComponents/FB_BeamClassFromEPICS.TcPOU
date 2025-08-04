@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_BeamClassFromEPICS" Id="{eac1bc42-ed53-4ffd-9869-9f30b0ecc277}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_BeamClassFromEPICS
 
@@ -9,8 +9,8 @@ enum MPSBeamClass {
     Kicker STBY =  1,
     BC1Hz       =  2,
     BC10Hz      =  3,
-    Diagnostic  =  4,
-    BC120Hz     =  5,
+    BC120Hz     =  4,
+    Diagnostic  =  5,
     Tuning      =  6,
     1% MAP      =  7,
     5% MAP      = 8,

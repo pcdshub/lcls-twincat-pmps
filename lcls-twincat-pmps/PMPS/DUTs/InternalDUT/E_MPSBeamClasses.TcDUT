@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="E_MPSBeamClasses" Id="{4ead2a98-c86f-486d-9db2-0c48a25b47a5}">
     <Declaration><![CDATA[
 TYPE E_MPSBeamClasses :
@@ -8,8 +8,8 @@ TYPE E_MPSBeamClasses :
     Kicker_STBY :=  1,
     BC1Hz       :=  2,
     BC10Hz      :=  3,
-    Diagnostic  :=  4,
-    BC120Hz     :=  5,
+    BC120Hz     :=  4,
+    Diagnostic  :=  5,
     Tuning      :=  6,
     MAP_1       :=  7,
     MAP_5       :=  8,
