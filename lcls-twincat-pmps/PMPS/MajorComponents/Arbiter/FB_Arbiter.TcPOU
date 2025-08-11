@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_Arbiter" Id="{7464182c-a23a-4d85-9b4a-38e22935bfb9}" SpecialFunc="None">
     <Declaration><![CDATA[(* FB Arbiter
 A. Wallace 2020-6-26
@@ -67,6 +67,13 @@ VAR
     InfoStringFmtr : FB_FormatString;
 
     bVerbose : BOOL := FALSE;
+
+    {attribute 'pytmc' := '
+        pv: Vetoed
+        io: i
+        field: DESC Arbiter Veto Status
+    '}
+    bArbiterVetoed : BOOL := FALSE;
 END_VAR
 VAR_INPUT
 END_VAR
@@ -206,6 +213,26 @@ END_FOR
 ArbitrateBP.nRate := MIN(stBP1.nRate, stBP2.nRate);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="bLowerAuthorityVetoed" Id="{eeff2e6e-6276-44ec-a1a4-ca8f886b582f}">
+      <Declaration><![CDATA[PROPERTY bLowerAuthorityVetoed : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{7068be3e-45c7-4937-827a-e178145c11e2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[bLowerAuthorityVetoed := bArbiterVetoed;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b5f44e1c-aa62-4cb9-a969-f07ead76d598}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[bArbiterVetoed := bLowerAuthorityVetoed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="CheckRequest" Id="{a64ed6c5-2c93-405e-97a2-fa37d439d3b2}">
       <Declaration><![CDATA[(* Checks request ID is included in arbitration all the way to the accelerator interface
 Use like so:

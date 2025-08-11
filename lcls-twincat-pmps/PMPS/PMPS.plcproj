@@ -8,7 +8,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>PMPS</Name>
-    <ProgramVersion>3.1.4023.0</ProgramVersion>
+    <ProgramVersion>3.1.4026.13</ProgramVersion>
     <Application>{6428df2e-2999-43ce-a331-dbb81b1e1a18}</Application>
     <TypeSystem>{2fd1285f-696d-483d-9280-fd603e1c49c2}</TypeSystem>
     <Implicit_Task_Info>{a21e9553-2e7f-421a-92bd-2819a6941929}</Implicit_Task_Info>
@@ -509,74 +509,20 @@
   <ItemGroup>
     <LibraryReference Include="TcUnit,1.2.0.0,www.tcunit.org">
       <Namespace>TcUnit</Namespace>
-      <Parameters>
-        <Parameter xmlns="">
-          <Key>MAXNUMBEROFTESTSUITES</Key>
-          <Value>500</Value>
-        </Parameter>
-      </Parameters>
     </LibraryReference>
   </ItemGroup>
   <ItemGroup>
-    <PlaceholderResolution Include="LCLS General">
-      <Resolution>LCLS General, * (SLAC)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="SysDir">
-      <Resolution>SysDir, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="SysFile">
-      <Resolution>SysFile, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_EtherCAT">
-      <Resolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_IoFunctions">
-      <Resolution>Tc2_IoFunctions, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
     <PlaceholderResolution Include="Tc2_Math">
-      <Resolution>Tc2_Math, * (Beckhoff Automation GmbH)</Resolution>
+      <Resolution>Tc2_Math, 3.4.4.0 (Beckhoff Automation GmbH)</Resolution>
     </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_MC2">
-      <Resolution>Tc2_MC2, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_ModbusSrv">
-      <Resolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_SerialCom">
-      <Resolution>Tc2_SerialCom, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_Standard">
-      <Resolution>Tc2_Standard, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_System">
-      <Resolution>Tc2_System, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_TcpIp">
-      <Resolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc2_Utilities">
-      <Resolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc3_EventLogger">
-      <Resolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc3_JsonXml">
-      <Resolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="Tc3_Module">
-      <Resolution>Tc3_Module, * (Beckhoff Automation GmbH)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="TcUnit">
-      <Resolution>TcUnit, * (www.tcunit.org)</Resolution>
-    </PlaceholderResolution>
-  </ItemGroup>
-  <ItemGroup>
-    <PinnedGlobalDataType Include="ST_BeamParams_IO" />
-    <PinnedGlobalDataType Include="ST_PMPS_Aperture_IO" />
-    <PinnedGlobalDataType Include="ST_PMPS_Attenuator_IO" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PMPS.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ExternalTypes.tmc">
       <SubType>Content</SubType>
     </None>
   </ItemGroup>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="F_SetStateParams" Id="{f9611d23-4bb5-422d-9f11-2cc94e61fc9e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION F_SetStateParams : BOOL;
 VAR_INPUT

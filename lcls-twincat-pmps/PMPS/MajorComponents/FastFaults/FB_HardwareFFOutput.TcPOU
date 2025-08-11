@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_HardwareFFOutput" Id="{4c5345fc-1911-455c-a3d8-14bade73dcd8}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'reflection'}
 {attribute 'no_check'}
@@ -72,7 +72,7 @@ VAR
     fbLogger : FB_LogMessage := (
         eSevr := TcEventSeverity.Critical,
         eSubsystem := E_Subsystem.MPS,
-        nMinTimeViolationAcceptable := PMPS_PARAM.MAX_FAST_FAULTS);
+        nMinTimeViolationAcceptable := UINT_TO_INT(PMPS_PARAM.MAX_FAST_FAULTS));
 
 END_VAR]]></Declaration>
     <Implementation>
@@ -149,7 +149,7 @@ FOR EvalIdx := 1 TO FF_ARRAY_UPPER_BOUND DO
         FF.Ovrd.tOvrdExpiring(CLK:=FF.Ovrd.Active);
         FF.Ovrd.OvrdExpLogAck S= FF.Ovrd.tOvrdExpiring.Q;
 
-        FF.Ovrd.ElapsedTime := TIME_TO_UDINT(FF.Ovrd.Timer.ET);
+        FF.Ovrd.ElapsedTime := TIME_TO_DINT(FF.Ovrd.Timer.ET);
 
         FF.Ovrd.RemainingTime := MAX(0, TO_DINT(FF.Ovrd.Timer.PT) - FF.Ovrd.ElapsedTime);
 

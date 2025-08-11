@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_LStopper" Id="{bcb76d33-2123-4d3a-9b05-af385ae3e7de}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LStopper EXTENDS FB_StopperWatcher
 VAR_INPUT
