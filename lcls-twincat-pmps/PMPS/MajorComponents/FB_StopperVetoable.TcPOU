@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.12">
+  <POU Name="FB_StopperVetoable" Id="{9114ce33-096d-4859-8327-51a29b1b7c16}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT FB_StopperVetoable
+VAR
+    {attribute 'pytmc' := '
+        pv: StopperMask
+        io: i
+        field: DESC Bitmask of stoppers that veto this
+    '}
+    wStopperMask : WORD;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AddStopper" Id="{dfc9400d-efbb-4f3c-bb34-86649ddea037}">
+      <Declaration><![CDATA[METHOD AddStopper : BOOL
+VAR_INPUT
+    wStopper: WORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddStopper := WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, wStopper));
+wStopperMask := wStopperMask OR SHL(WORD#1, wStopper);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckStoppers" Id="{1e391055-0614-47cf-92fe-50cbf0483ad1}">
+      <Declaration><![CDATA[METHOD CheckStoppers : BOOL
+VAR
+    i: WORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i:=1 TO PMPS_GVL.MAX_VETO_DEVICES BY 1 DO
+    CheckStoppers := CheckStoppers OR (PMPS_GVL.stCurrentBeamParameters.aVetoDevices[i] AND WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, i)));
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveStopper" Id="{00072576-a6e6-4097-9bd8-6246e1ae5421}">
+      <Declaration><![CDATA[METHOD RemoveStopper : BOOL
+VAR_INPUT
+    wStopper: WORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RemoveStopper := WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, wStopper));
+wStopperMask := wStopperMask AND NOT SHL(WORD#1, wStopper);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
