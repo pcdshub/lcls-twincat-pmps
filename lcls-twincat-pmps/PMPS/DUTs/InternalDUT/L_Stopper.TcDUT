@@ -12,7 +12,7 @@ TYPE L_Stopper :
     MR1L1_IN:= 5, //  TXI Offset Mirror horizontal state
     MR1L1_OUT:= 6, // TXI Offset Mirror horizontal state
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
-);
+)WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

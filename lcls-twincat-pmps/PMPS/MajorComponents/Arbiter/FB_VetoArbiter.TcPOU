@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_VetoArbiter" Id="{c3c91f40-d3bf-4445-afff-e5f72e704ac3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_VetoArbiter IMPLEMENTS I_HigherAuthority
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_VetoArbiter EXTENDS FB_StopperVetoable IMPLEMENTS I_HigherAuthority
 VAR_INPUT
     bVeto : BOOL := FALSE; // Rising edge clears request, hold true to veto continuously, falling edge restores request
     HigherAuthority : I_HigherAuthority; // Typically connected to a higher-level arbiter.
@@ -30,6 +30,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+bVeto := bVeto OR CheckStoppers();
 rtVeto(CLK:=bVeto);
 ftVeto(CLK:=bVeto);
 LowerAuthority.bLowerAuthorityVetoed := bVeto;
