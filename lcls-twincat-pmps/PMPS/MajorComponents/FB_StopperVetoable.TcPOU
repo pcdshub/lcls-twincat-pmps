@@ -9,6 +9,7 @@ VAR
         field: DESC Bitmask of stoppers that veto this
     '}
     wStopperMask : WORD;
+    fbLog : FB_LogMessage;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,11 +30,33 @@ wStopperMask := wStopperMask OR SHL(WORD#1, wStopper);]]></ST>
       <Declaration><![CDATA[METHOD CheckStoppers : BOOL
 VAR
     i: WORD;
+
+    StopperPairing : ARRAY[1..PMPS_GVL.MAX_VETO_DEVICES] OF WORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[FOR i:=1 TO PMPS_GVL.MAX_VETO_DEVICES BY 1 DO
-    CheckStoppers := CheckStoppers OR (PMPS_GVL.stCurrentBeamParameters.aVetoDevices[i] AND WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, i)));
+        <ST><![CDATA[CheckStoppers := FALSE;
+{IF defined (K)}
+    StopperPairing := PMPS_GVL.K_Stopper_Pairings;
+{ELSIF defined (L)}
+    StopperPairing := PMPS_GVL.L_Stopper_Pairings;
+{ELSE}
+    fbLog(sMsg := 'K/L compiler definition missing.', eSevr := TcEventSeverity.Critical);
+    RETURN;
+{END_IF}
+
+FOR i:=1 TO (PMPS_GVL.MAX_VETO_DEVICES-1) BY 1 DO
+    IF PMPS_GVL.stCurrentBeamParameters.aVetoDevices[i] AND WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, i)) THEN
+        IF StopperPairing[i] <> 0 AND StopperPairing[i] <> PMPS_GVL.MAX_VETO_DEVICES THEN
+            IF NOT PMPS_GVL.stCurrentBeamParameters.aVetoDevices[StopperPairing[i]] AND NOT WORD_TO_BOOL(wStopperMask AND SHL(WORD#1, StopperPairing[i])) THEN
+                CheckStoppers := TRUE;
+                RETURN;
+            END_IF
+        ELSE
+            CheckStoppers := TRUE;
+            RETURN;
+        END_IF
+    END_IF
 END_FOR
 ]]></ST>
       </Implementation>
