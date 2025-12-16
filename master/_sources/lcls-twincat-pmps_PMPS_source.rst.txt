@@ -2014,7 +2014,6 @@ F_DifferentBeamParams
     END_VAR
     VAR
         xAttOK: BOOL := FALSE;
-        xPPmjOK: BOOL := FALSE;
         xEvOK: BOOL := FALSE;
         xRateOK: BOOL := FALSE;
         xaStopper : BOOL := FALSE;
@@ -2049,7 +2048,7 @@ F_DifferentBeamParams
     END_FOR
 
 
-    F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
+    F_DifferentBeamParams := xAttOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
 
     END_FUNCTION
 

@@ -2097,7 +2097,6 @@ VAR_INPUT
 END_VAR
 VAR
     xAttOK: BOOL := FALSE;
-    xPPmjOK: BOOL := FALSE;
     xEvOK: BOOL := FALSE;
     xRateOK: BOOL := FALSE;
     xaStopper : BOOL := FALSE;
@@ -2132,7 +2131,7 @@ FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
 END_FOR
 
 
-F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
+F_DifferentBeamParams := xAttOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
 
 END_FUNCTION
 </pre></div>
