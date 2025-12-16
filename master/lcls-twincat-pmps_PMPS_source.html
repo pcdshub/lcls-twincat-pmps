@@ -2097,7 +2097,6 @@ VAR_INPUT
 END_VAR
 VAR
     xAttOK: BOOL := FALSE;
-    xPPmjOK: BOOL := FALSE;
     xEvOK: BOOL := FALSE;
     xRateOK: BOOL := FALSE;
     xaStopper : BOOL := FALSE;
@@ -2132,7 +2131,7 @@ FOR idx:=1 TO PMPS_GVL.MAX_APERTURES DO
 END_FOR
 
 
-F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
+F_DifferentBeamParams := xAttOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
 
 END_FUNCTION
 </pre></div>
@@ -3893,8 +3892,8 @@ END_FUNCTION_BLOCK
     <span class="n">BP</span><span class="o">.</span><span class="n">nBeamClass</span> <span class="o">:=</span> <span class="n">cFailSafeBC</span><span class="p">;</span>
 <span class="n">END_IF</span>
 <span class="n">BP</span><span class="o">.</span><span class="n">nBCRange</span> <span class="o">:=</span> <span class="n">TO_WORD</span><span class="p">(</span><span class="n">BP</span><span class="o">.</span><span class="n">nBeamClass</span><span class="p">);</span>
-
-<span class="n">ffBeamClassReadback</span><span class="p">(</span><span class="n">i_xOK</span><span class="o">:=</span><span class="n">fbMPS_BeamClass</span><span class="o">.</span><span class="n">bValid</span><span class="p">,</span> <span class="n">io_fbFFHWO</span><span class="o">:=</span><span class="n">FFO</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">i_xOK</span> <span class="ow">is</span> <span class="n">TRUE</span> <span class="k">if</span> <span class="n">we</span> <span class="n">get</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">reading</span> <span class="kn">from</span><span class="w"> </span><span class="nn">epics</span> <span class="ow">or</span> <span class="n">we</span> <span class="n">are</span> <span class="ow">in</span> <span class="n">NC</span> <span class="n">mode</span><span class="p">,</span> <span class="n">then</span> <span class="n">we</span> <span class="n">ignore</span> <span class="n">the</span> <span class="n">invalid</span> <span class="n">reading</span><span class="o">.</span>
+<span class="n">ffBeamClassReadback</span><span class="p">(</span><span class="n">i_xOK</span><span class="o">:=</span> <span class="p">(</span><span class="n">fbMPS_BeamClass</span><span class="o">.</span><span class="n">bValid</span> <span class="n">OR</span> <span class="n">BP</span><span class="o">.</span><span class="n">nMachineMode</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">,</span> <span class="n">io_fbFFHWO</span><span class="o">:=</span><span class="n">FFO</span><span class="p">);</span>
 
 <span class="n">BP</span><span class="o">.</span><span class="n">xValid</span> <span class="n">R</span><span class="o">=</span> <span class="n">NOT</span> <span class="n">fbMPS_BeamClass</span><span class="o">.</span><span class="n">bValid</span><span class="p">;</span>
 
@@ -10361,7 +10360,7 @@ END_FUNCTION_BLOCK
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
+    <p>&#169; Copyright 2026, SLAC National Accelerator Laboratory.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

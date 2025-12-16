@@ -2014,7 +2014,6 @@ F_DifferentBeamParams
     END_VAR
     VAR
         xAttOK: BOOL := FALSE;
-        xPPmjOK: BOOL := FALSE;
         xEvOK: BOOL := FALSE;
         xRateOK: BOOL := FALSE;
         xaStopper : BOOL := FALSE;
@@ -2049,7 +2048,7 @@ F_DifferentBeamParams
     END_FOR
 
 
-    F_DifferentBeamParams := xAttOK OR xPPmjOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
+    F_DifferentBeamParams := xAttOK OR xEvOK OR xRateOK OR xaStopper OR xaAtt OR xaApt OR xBCOK;
 
     END_FUNCTION
 
@@ -3818,8 +3817,8 @@ FB_BeamClassFromEPICS
         BP.nBeamClass := cFailSafeBC;
     END_IF
     BP.nBCRange := TO_WORD(BP.nBeamClass);
-
-    ffBeamClassReadback(i_xOK:=fbMPS_BeamClass.bValid, io_fbFFHWO:=FFO);
+    // i_xOK is TRUE if we get a valid reading from epics or we are in NC mode, then we ignore the invalid reading.
+    ffBeamClassReadback(i_xOK:= (fbMPS_BeamClass.bValid OR BP.nMachineMode = 0) , io_fbFFHWO:=FFO);
 
     BP.xValid R= NOT fbMPS_BeamClass.bValid;
 
