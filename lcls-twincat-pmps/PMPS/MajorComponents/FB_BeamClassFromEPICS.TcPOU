@@ -55,7 +55,7 @@ ELSE
 END_IF
 BP.nBCRange := TO_WORD(BP.nBeamClass);
 // i_xOK is TRUE if we get a valid reading from epics or we are in NC mode, then we ignore the invalid reading.
-ffBeamClassReadback(i_xOK:= (fbMPS_BeamClass.bValid OR BP.nMachineMode = 0) , io_fbFFHWO:=FFO); 
+ffBeamClassReadback(i_xOK:= (fbMPS_BeamClass.bValid OR BP.nMachineMode = 0) , io_fbFFHWO:=FFO);
 
 BP.xValid R= NOT fbMPS_BeamClass.bValid;]]></ST>
     </Implementation>
