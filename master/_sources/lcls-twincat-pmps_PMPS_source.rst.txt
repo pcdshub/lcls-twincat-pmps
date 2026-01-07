@@ -252,6 +252,12 @@ L_Stopper
         MR1L0_TXI := 4, //MR1L0 Pitch state delivery to TXI line
         MR1L1_IN:= 5, //  TXI Offset Mirror horizontal state
         MR1L1_OUT:= 6, // TXI Offset Mirror horizontal state
+        ST1L2 := 7, // ST1L2 XPP Stopper
+        XPP_SB23_MONO:=8, // Indicates that XPP SB2/3 is in MONO Line
+        XPP_SB23_PINK:=9, //Indicates that XPP SB2/3 is in PINK Line
+        XPP_SB6_MONO:=10, // Indicates that XPP SB6is in MONO Line
+        XPP_SB6_PINK:=11, //Indicates that XPP SB6 is in PINK Line
+        ST2L0 := 12, // ST2L0 XRT Stopper
         DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
     );
     END_TYPE
