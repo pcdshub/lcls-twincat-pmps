@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <GVL Name="Global_Version" Id="{d12bd599-59d6-4053-bde0-b8adcde4a6e9}">
+    <Declaration><![CDATA[{attribute 'TcGenerated'}
+{attribute 'no-analysis'}
+{attribute 'linkalways'}
+// This function has been automatically generated from the project information.
+VAR_GLOBAL CONSTANT
+    {attribute 'const_non_replaced'}
+    stLibVersion_PMPS : ST_LibVersion := (iMajor := 3, iMinor := 10, iBuild := 0, iRevision := 0, nFlags := 1, sVersion := '3.10.0');
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
