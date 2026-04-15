@@ -158,7 +158,7 @@ VAR CONSTANT
         pv: LowK
         io: i
     '}
-    fLowK : LREAL := 0.8;
+    fLowK : LREAL := 1.52;
 
     {attribute 'pytmc' := '
         pv: HiK
