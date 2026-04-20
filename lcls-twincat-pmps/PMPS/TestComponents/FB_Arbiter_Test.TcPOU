@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_Arbiter_Test" Id="{33ac0bc1-5ef2-4a28-bd81-83e3f5956062}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'call_after_init'}
-FUNCTION_BLOCK FB_Arbiter_Test EXTENDS TcUnit.FB_TestSuite
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Arbiter_Test EXTENDS TcUnit.FB_TestSuite
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -330,12 +329,14 @@ END_IF
       <Declaration><![CDATA[METHOD RemoveReq
 VAR
 
-    Arb : FB_Arbiter(20);
-
     DummyHA : FB_DummyHA;
 
     Result : BOOL;
 
+END_VAR
+
+VAR_INST
+    Arb : FB_Arbiter(20);
 END_VAR
 ]]></Declaration>
       <Implementation>
