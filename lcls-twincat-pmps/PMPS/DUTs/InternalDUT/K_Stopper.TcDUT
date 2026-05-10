@@ -17,7 +17,7 @@ TYPE K_Stopper :
     MR2K3_IN := 10, // TXI MR2K3 Offset Mirror state
     MR2K3_OUT := 11, // TXI MR2K3 Offset Mirror horizontal state
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
-);
+)WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

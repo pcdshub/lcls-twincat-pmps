@@ -210,6 +210,30 @@ VAR_GLOBAL CONSTANT
     7.00E3
     ];
 
+    L_Stopper_Pairings : ARRAY[1..PMPS_GVL.MAX_VETO_DEVICES] OF L_STOPPER :=
+    [
+    L_Stopper.DEFAULT,		// L_Stopper.ST1L0
+    L_Stopper.DEFAULT, 		// L_Stopper.ST1L1
+    L_Stopper.MR1L0_TXI, 	// L_Stopper.MR1L0_L0
+    L_Stopper.MR1L0_L0, 	// L_Stopper.MR1L0_TXI
+    L_Stopper.MR1L1_OUT,	// L_Stopper.MR1L1_IN
+    L_Stopper.MR1L1_IN  	// L_Stopper.MR1L1_OUT
+    ];
+
+    K_Stopper_Pairings : ARRAY[1..PMPS_GVL.MAX_VETO_DEVICES] OF K_STOPPER :=
+    [
+    K_Stopper.DEFAULT,		// ST3K4
+    K_Stopper.DEFAULT,		// ST1K2
+    K_Stopper.MR1K1_OUT,	// MR1K1_IN
+    K_Stopper.MR1K1_IN,		// MR1K1_OUT
+    K_Stopper.MR1K3_OUT,	// MR1K3_IN
+    K_Stopper.MR1K3_IN,		// MR1K3_OUT
+    K_Stopper.DEFAULT,		// ST4K4
+    K_Stopper.DEFAULT,		// ST1K4
+    K_Stopper.DEFAULT,		// ST1K3
+    K_Stopper.MR2K3_OUT,	// MR2K3_IN
+    K_Stopper.MR2K3_IN		// MR2K3_OUT
+    ];
 
 END_VAR]]></Declaration>
   </GVL>

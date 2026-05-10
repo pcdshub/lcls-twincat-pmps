@@ -18,7 +18,7 @@ TYPE L_Stopper :
     XPP_SB6_PINK:=11, //Indicates that XPP SB6 is in PINK Line
     ST2L0 := 12, // ST2L0 XRT Stopper
     DEFAULT := PMPS_GVL.MAX_VETO_DEVICES // DO NOT USE FOR ANYTHING
-);
+)WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

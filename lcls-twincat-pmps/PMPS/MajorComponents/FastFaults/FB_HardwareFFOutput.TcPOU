@@ -3,7 +3,7 @@
   <POU Name="FB_HardwareFFOutput" Id="{4c5345fc-1911-455c-a3d8-14bade73dcd8}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'reflection'}
 {attribute 'no_check'}
-FUNCTION_BLOCK FB_HardwareFFOutput
+FUNCTION_BLOCK FB_HardwareFFOutput EXTENDS FB_StopperVetoable
 VAR CONSTANT
     FF_ARRAY_UPPER_BOUND : UINT := PMPS_PARAM.MAX_FAST_FAULTS;
 END_VAR
@@ -324,7 +324,7 @@ stFF.rtReset(CLK:=stFF.Reset (*epics*) OR Reset (*from other PLC logic *) );
 stFF.Reset R= stFF.rtReset.Q;
 stFF.bsFF(SET := stFF.rtReset.Q OR stFF.Info.AutoReset, RESET1:= NOT OK);
 
-BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active OR (i_xVeto AND stFF.Info.Vetoable);
+BeamPermitted := stFF.bsFF.Q1 OR stFF.Ovrd.Active OR ((i_xVeto OR CheckStoppers()) AND stFF.Info.Vetoable);
 
 // Fault generation
 IF NOT BeamPermitted THEN
