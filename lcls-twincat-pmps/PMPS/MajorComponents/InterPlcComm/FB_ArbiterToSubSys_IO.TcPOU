@@ -77,7 +77,8 @@ VAR
     nActiveCohort : UDINT := 0; // Active cohort. Updated to the req. number from the sub system after request is confirmed.
     nRequestedCohort : UDINT := 0;
     rtToggle : R_TRIG;
-
+    fbToggleTimer : TON;
+     tInterval    : TIME := T#100mS;
 
 END_VAR
 ]]></Declaration>
@@ -108,9 +109,12 @@ IF Arbiter.CheckRequest(RequestingSystemID) THEN
     nActiveCohort := nRequestedCohort; // If it is, then the active cohort is set to the requested cohort number.
 END_IF
 
+fbToggleTimer(IN := NOT o_CurrentBP.xValidToggle, PT := tInterval);
 // Sending current beam parameter set to subsystems
 o_CurrentBP := BP_TO_IO(PMPS_GVL.stCurrentBeamParameters);
 o_CurrentBP.nCohortInt := nActiveCohort;
+IF (fbToggleTimer.Q) THEN o_CurrentBP.xValidToggle := NOT o_CurrentBP.xValidToggle; END_IF
+o_CurrentBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
 
 //////////////////////////////////////
