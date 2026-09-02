@@ -91,6 +91,7 @@ VAR
     bSuspect : BOOL;
     nSuspectCycles : UDINT;
     bLiveDiagOk : BOOL;
+    rBridgeBad : R_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -174,7 +175,12 @@ ELSE
     bBridgeOk := bLiveDiagOk;
 END_IF
 
-bBridgeConfirmedBad := NOT bLiveDiagOk;]]></ST>
+bBridgeConfirmedBad := NOT bLiveDiagOk;
+
+rBridgeBad(CLK := bBridgeConfirmedBad);
+IF rBridgeBad.Q THEN
+    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, PMPS_PRE link or data lost'), eSevr := TcEventSeverity.Error);
+END_IF]]></ST>
     </Implementation>
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL
