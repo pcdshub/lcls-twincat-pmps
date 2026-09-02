@@ -17,23 +17,28 @@ END_VAR
 VAR_OUTPUT
     // bridge up and inbound data valid, held FALSE through the post-xValid-drop debounce; gate consumers on this
     {attribute 'pytmc' := 'pv: BridgeOk
-        io: i'}
+        io: i'
+	}
     bBridgeOk : BOOL;
     // raw bad verdict with no debounce hold; use to trip faults
     {attribute 'pytmc' := 'pv: BridgeConfirmedBad
-        io: i'}
+        io: i'
+	}
     bBridgeConfirmedBad : BOOL;
     // bridge establishment state
     {attribute 'pytmc' := 'pv: LinkStatus
-        io: i'}
+        io: i'
+	}
     eLinkStatus : E_BridgeLinkStatus;
     // inbound PDO data quality
     {attribute 'pytmc' := 'pv: DataStatus
-        io: i'}
+        io: i'
+	}
     eDataStatus : E_DataStatus;
     // combined verdict, LinkStatus gates DataStatus
     {attribute 'pytmc' := 'pv: ConnectionStatus
-        io: i'}
+        io: i'
+	}
     eConnectionStatus : E_BridgeStatus;
 END_VAR
 VAR_IN_OUT
@@ -45,12 +50,8 @@ VAR
     i_stCurrentBP    AT %I* :    ST_BeamParams_IO;
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^IO Outputs^RequestedBP'}
     q_stRequestedBP AT %Q* :    ST_BeamParams_IO;
-    {attribute 'pytmc' := 'pv: TxPDO_toggle
-        io: i'}
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO toggle'}
     xTxPDO_toggle    AT     %I* :    BIT;
-    {attribute 'pytmc' := 'pv: TxPDO_state
-        io: i'}
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^SYNC Inputs^TxPDO state'}
     xTxPDO_state    AT    %I*    :    BIT;
 
