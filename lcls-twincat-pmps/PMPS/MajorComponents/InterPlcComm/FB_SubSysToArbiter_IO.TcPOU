@@ -16,29 +16,34 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     // bridge up and inbound data valid, held FALSE through the post-xValid-drop debounce; gate consumers on this
-    {attribute 'pytmc' := 'pv: BridgeOk
-        io: i'
-    }
+    {attribute 'pytmc' := '
+        pv: BridgeOk
+        io: i
+    '}
     bBridgeOk : BOOL;
     // raw bad verdict with no debounce hold; use to trip faults
-    {attribute 'pytmc' := 'pv: BridgeConfirmedBad
-        io: i'
-    }
+    {attribute 'pytmc' := '
+        pv: BridgeConfirmedBad
+        io: i
+    '}
     bBridgeConfirmedBad : BOOL;
     // bridge establishment state
-    {attribute 'pytmc' := 'pv: LinkStatus
-        io: i'
-    }
+    {attribute 'pytmc' := '
+        pv: LinkStatus
+        io: i
+    '}
     eLinkStatus : E_BridgeLinkStatus;
     // inbound PDO data quality
-    {attribute 'pytmc' := 'pv: DataStatus
-        io: i'
-    }
+    {attribute 'pytmc' := '
+        pv: DataStatus
+        io: i
+    '}
     eDataStatus : E_DataStatus;
     // combined verdict, LinkStatus gates DataStatus
-    {attribute 'pytmc' := 'pv: ConnectionStatus
-        io: i'
-    }
+    {attribute 'pytmc' := '
+        pv: ConnectionStatus
+        io: i
+    '}
     eConnectionStatus : E_BridgeStatus;
 END_VAR
 VAR_IN_OUT
