@@ -111,6 +111,18 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="DUTs\UserDUT\E_BridgeLinkStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UserDUT\E_BridgeStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UserDUT\E_DataStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UserDUT\E_EcCommState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\UserDUT\ST_ReactiveParams.TcDUT">
       <SubType>Code</SubType>
     </Compile>
