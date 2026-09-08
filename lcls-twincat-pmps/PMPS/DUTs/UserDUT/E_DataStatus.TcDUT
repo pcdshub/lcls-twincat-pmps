@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+  <DUT Name="E_DataStatus" Id="{d8c2cf4e-e120-4f9f-8b5f-9f3edc2fd6a4}">
+    <Declaration><![CDATA[(* Frame-level PDO data quality, shared by device and bridge diagnostics; only meaningful once the
+respective LinkStatus reports operational/connected. *)
+TYPE E_DataStatus :
+(
+    Ok,
+    WcError,   // working counter reports invalid data
+    Stale      // WC valid but the input toggle hasn't changed for the timeout window
+) UDINT;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
