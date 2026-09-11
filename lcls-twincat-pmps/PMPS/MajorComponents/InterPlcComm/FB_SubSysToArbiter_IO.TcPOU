@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
     <Declaration><![CDATA[// Use on a subsystem PLC to request from the arbiter
 // Run at the top of your cycle to receive the latest BP
@@ -129,7 +129,7 @@ bTxPdoToggle := xTxPDO_toggle;
 IF (nBridgeState AND 16#000F) <> E_EcCommState.eEcState_OP THEN
     eLinkStatus := E_BridgeLinkStatus.LocalNotOperational;
 ELSIF bExternalDeviceNotConnected THEN
-    eLinkStatus := E_BridgeLinkStatus.ExternalDeviceNotConnected;
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotConnected;
 ELSIF bTxPdoState THEN
     eLinkStatus := E_BridgeLinkStatus.RemoteNotOperational;
 ELSE
@@ -150,7 +150,7 @@ END_IF
 
 CASE eLinkStatus OF
     E_BridgeLinkStatus.LocalNotOperational:        eConnectionStatus := E_BridgeStatus.LocalNotOperational;
-    E_BridgeLinkStatus.ExternalDeviceNotConnected: eConnectionStatus := E_BridgeStatus.ExternalDeviceNotConnected;
+    E_BridgeLinkStatus.RemoteNotConnected: eConnectionStatus := E_BridgeStatus.RemoteNotConnected;
     E_BridgeLinkStatus.RemoteNotOperational:       eConnectionStatus := E_BridgeStatus.RemoteNotOperational;
 ELSE
     CASE eDataStatus OF

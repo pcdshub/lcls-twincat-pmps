@@ -26,12 +26,12 @@ VAR_OUTPUT
         io: i
     '}
     bInputNotFinite : BOOL;
-    
+
     {attribute 'pytmc' := '
         pv: Error
         io: i
     '}
-    bError : BOOL;   
+    bError : BOOL;
 END_VAR
 VAR
     tHeartbeatExpirationTime : TIME;
