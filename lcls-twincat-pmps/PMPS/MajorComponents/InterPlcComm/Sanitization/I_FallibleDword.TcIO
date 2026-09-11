@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_FallibleDword" Id="{a1b2c3d4-0002-4001-8001-000000000011}">
+    <Declaration><![CDATA[
+INTERFACE I_FallibleDword
+]]></Declaration>
+    <Property Name="Error" Id="{a1b2c3d4-0002-4001-8001-000000000012}">
+      <Declaration><![CDATA[
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{a1b2c3d4-0002-4001-8001-000000000013}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Value" Id="{a1b2c3d4-0002-4001-8001-000000000014}">
+      <Declaration><![CDATA[
+PROPERTY Value : DWORD
+]]></Declaration>
+      <Get Name="Get" Id="{a1b2c3d4-0002-4001-8001-000000000015}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_FallibleLreal" Id="{39eb1a50-4543-4e7c-b134-b201f0fac44d}">
+    <Declaration><![CDATA[
+INTERFACE I_FallibleLreal
+]]></Declaration>
+    <Property Name="Error" Id="{6b232ec1-7d71-45b4-9246-0c91ab1bd468}">
+      <Declaration><![CDATA[
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{6d56e98b-9a26-40b5-af0c-6bad7fbda8d7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Value" Id="{a6e11785-360b-4b75-99f3-3cdf7544e171}">
+      <Declaration><![CDATA[
+PROPERTY Value : LREAL
+]]></Declaration>
+      <Get Name="Get" Id="{1ce52de1-5625-40e3-8d42-8448fd7286de}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

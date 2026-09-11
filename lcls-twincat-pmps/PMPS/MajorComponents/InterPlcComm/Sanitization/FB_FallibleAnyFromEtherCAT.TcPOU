@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FallibleAnyFromEtherCAT" Id="{a1b2c3d4-0500-4001-8001-000000000501}" SpecialFunc="None">
+    <Declaration><![CDATA[
+(* Generic bridge-value guard for WORD/DWORD/UDINT/USINT in one FB, dispatched at runtime by the
+   T_Arg type tag. T_ARG is compatible with 4022/4024/4026 build compare to ANY type which is only compatible with 4026 compiler.
+   Integers carry no invalid-bit-pattern, so it holds the last trusted value while the bridge is down.
+   bError carries only the test override; fault on bad comms via the bridge FB's bBridgeConfirmedBad in the caller.
+*)
+FUNCTION_BLOCK FB_FallibleAnyFromEtherCAT
+VAR_INPUT
+    i_bBridgeOk : BOOL;
+    tArg : T_Arg; // supplies the type tag, byte length and pointer to the caller's variable
+END_VAR
+VAR_IN_OUT
+    vVariable : BYTE;
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: Error
+        io: i
+    '}
+    bError : BOOL;
+END_VAR
+VAR
+    pWord  : POINTER TO WORD;
+    pDword : POINTER TO DWORD;
+    pUsint : POINTER TO USINT;
+    pUdint : POINTER TO UDINT;
+
+    nLastValidWord  : WORD;
+    nLastValidDword : DWORD;
+    nLastValidUsint : USINT;
+    nLastValidUdint : UDINT;
+
+    bOverride : BOOL;
+    bOverrideError : BOOL;
+    nOverrideValueWord  : WORD;
+    nOverrideValueDword : DWORD;
+    nOverrideValueUsint : USINT;
+    nOverrideValueUdint : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF tArg.pData <> 0 THEN
+    CASE tArg.eType OF
+        E_ArgType.ARGTYPE_WORD:
+            IF tArg.cbLen = SIZEOF(WORD) THEN
+                pWord := tArg.pData;
+                IF i_bBridgeOk THEN
+                    nLastValidWord := pWord^;
+                END_IF
+                IF bOverride THEN
+                    pWord^ := nOverrideValueWord;
+                ELSIF NOT i_bBridgeOk THEN
+                    pWord^ := nLastValidWord;
+                END_IF
+            END_IF
+
+        E_ArgType.ARGTYPE_DWORD:
+            IF tArg.cbLen = SIZEOF(DWORD) THEN
+                pDword := tArg.pData;
+                IF i_bBridgeOk THEN
+                    nLastValidDword := pDword^;
+                END_IF
+                IF bOverride THEN
+                    pDword^ := nOverrideValueDword;
+                ELSIF NOT i_bBridgeOk THEN
+                    pDword^ := nLastValidDword;
+                END_IF
+            END_IF
+
+        E_ArgType.ARGTYPE_USINT:
+            IF tArg.cbLen = SIZEOF(USINT) THEN
+                pUsint := tArg.pData;
+                IF i_bBridgeOk THEN
+                    nLastValidUsint := pUsint^;
+                END_IF
+                IF bOverride THEN
+                    pUsint^ := nOverrideValueUsint;
+                ELSIF NOT i_bBridgeOk THEN
+                    pUsint^ := nLastValidUsint;
+                END_IF
+            END_IF
+
+        E_ArgType.ARGTYPE_UDINT:
+            IF tArg.cbLen = SIZEOF(UDINT) THEN
+                pUdint := tArg.pData;
+                IF i_bBridgeOk THEN
+                    nLastValidUdint := pUdint^;
+                END_IF
+                IF bOverride THEN
+                    pUdint^ := nOverrideValueUdint;
+                ELSIF NOT i_bBridgeOk THEN
+                    pUdint^ := nLastValidUdint;
+                END_IF
+            END_IF
+    END_CASE
+END_IF
+
+bError := SEL(bOverride, FALSE, bOverrideError);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
