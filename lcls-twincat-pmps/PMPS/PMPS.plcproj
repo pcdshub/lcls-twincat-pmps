@@ -348,34 +348,7 @@
     <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleLreal.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleWord.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleDword.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleUdint.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleUsint.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleRealFromEtherCAT.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleWordFromEtherCAT.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleDwordFromEtherCAT.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleUdintFromEtherCAT.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleUsintFromEtherCAT.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleAnyFromEtherCAT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\I_HigherAuthority.TcIO">
