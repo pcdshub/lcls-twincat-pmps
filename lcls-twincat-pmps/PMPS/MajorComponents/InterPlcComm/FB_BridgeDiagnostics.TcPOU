@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_BridgeDiagnostics" Id="{7c6e9f2b-3a5d-4e18-9c7a-1b6f4d8a2e93}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Derives PMPS_PRE/EL669x bridge link and data health from the raw SYNC-input
+diagnostic bits, direction-agnostic (used by both FB_SubSysToArbiter_IO and
+FB_ArbiterToSubSys_IO). Caller passes its own payload struct's xValid field in as
+i_xPayloadValid each cycle; this FB has no knowledge of ST_BeamParams_IO or any other
+concrete payload type.
+
+bBridgeOk gates real-time consumers: it drops the same cycle i_xPayloadValid falls
+(closing the EL6695 early-clear race) and stays low for nDebounceCycles to ride out
+flapping before trusting the live diagnostics again.
+
+bBridgeConfirmedBad is the no-artificial-hold verdict for tripping a fault: bad the
+same cycle either the payload reports invalid or the live diagnostics disagree, and
+recovers as soon as both clear - not tied to the nDebounceCycles hold, so it doesn't
+inherit bBridgeOk's flapping-guard delay on the way back up.
+
+Bench-confirmed (2026-09-12, EL6692 vs EL6695 fault-injection testing): EL6692 latches
+its last-good payload through a secondary-side comm fault and never trips
+i_xPayloadValid; EL6695 clears the payload 3 cycles before the diagnostic bits catch
+up, which is exactly what i_xPayloadValid in bBridgeConfirmedBad closes. Local
+ESM-not-OP faults (nBridgeState) behave identically on both terminal types and are
+already the highest-priority check in eLinkStatus, ahead of any payload or toggle
+state. *)
+FUNCTION_BLOCK FB_BridgeDiagnostics
+VAR_INPUT
+    sName : STRING := 'BridgeDiagnostics';
+    // EL6692/EL6695 local ESM state, low nibble is the EtherCAT state
+    nBridgeState : WORD;
+    // far side of the bridge absent
+    bExternalDeviceNotConnected : BOOL;
+    bTxPdoState : BOOL;
+    bTxPdoToggle : BOOL;
+    // inbound working counter error
+    bWcState : BOOL;
+    // caller's own payload struct xValid field, e.g. i_stCurrentBP.xValid
+    i_xPayloadValid : BOOL;
+    // max time the TxPDO toggle may stay unchanged before inbound data is called stale
+    tStaleTimeout : TIME := T#5S;
+    // hold length after an i_xPayloadValid falling edge before trusting live diagnostics again, in task cycles
+    nDebounceCycles : UDINT := 100;
+END_VAR
+VAR_OUTPUT
+    // bridge up and inbound data valid, held FALSE through the post-payload-drop debounce; gate consumers on this
+    bBridgeOk : BOOL;
+    // raw bad verdict with no debounce hold; use to trip faults
+    bBridgeConfirmedBad : BOOL;
+    // bridge establishment state
+    eLinkStatus : E_BridgeLinkStatus;
+    // inbound PDO data quality
+    eDataStatus : E_DataStatus;
+    // combined verdict, LinkStatus gates DataStatus
+    eConnectionStatus : E_BridgeStatus;
+END_VAR
+VAR
+    rToggleRise : R_TRIG;
+    fToggleFall : F_TRIG;
+    tonStale : TON;
+    fPayloadValidFall : F_TRIG;
+    // TRUE while holding health low after an i_xPayloadValid drop until the debounce window elapses
+    bSuspect : BOOL;
+    nSuspectCycles : UDINT;
+    bLiveDiagOk : BOOL;
+    rBridgeBad : R_TRIG;
+    fbLog : FB_LogMessage;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF (nBridgeState AND 16#000F) <> E_EcCommState.eEcState_OP THEN
+    eLinkStatus := E_BridgeLinkStatus.LocalNotOperational;
+ELSIF bExternalDeviceNotConnected THEN
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotConnected;
+ELSIF bTxPdoState THEN
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotOperational;
+ELSE
+    eLinkStatus := E_BridgeLinkStatus.Connected;
+END_IF
+
+rToggleRise(CLK := bTxPdoToggle);
+fToggleFall(CLK := bTxPdoToggle);
+tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
+
+IF bWcState THEN
+    eDataStatus := E_DataStatus.WcError;
+ELSIF tonStale.Q THEN
+    eDataStatus := E_DataStatus.Stale;
+ELSE
+    eDataStatus := E_DataStatus.Ok;
+END_IF
+
+CASE eLinkStatus OF
+    E_BridgeLinkStatus.LocalNotOperational:        eConnectionStatus := E_BridgeStatus.LocalNotOperational;
+    E_BridgeLinkStatus.RemoteNotConnected: eConnectionStatus := E_BridgeStatus.RemoteNotConnected;
+    E_BridgeLinkStatus.RemoteNotOperational:       eConnectionStatus := E_BridgeStatus.RemoteNotOperational;
+ELSE
+    CASE eDataStatus OF
+        E_DataStatus.WcError: eConnectionStatus := E_BridgeStatus.LinkError;
+        E_DataStatus.Stale:   eConnectionStatus := E_BridgeStatus.DataStale;
+    ELSE
+        eConnectionStatus := E_BridgeStatus.Connected;
+    END_CASE
+END_CASE
+
+bLiveDiagOk := (eLinkStatus = E_BridgeLinkStatus.Connected) AND (eDataStatus = E_DataStatus.Ok);
+
+fPayloadValidFall(CLK := i_xPayloadValid);
+IF fPayloadValidFall.Q THEN
+    bSuspect := TRUE;
+    nSuspectCycles := 0;
+END_IF
+
+IF bSuspect THEN
+    bBridgeOk := FALSE;
+    nSuspectCycles := nSuspectCycles + 1;
+    IF nSuspectCycles >= nDebounceCycles THEN
+        bSuspect := FALSE;
+        bBridgeOk := bLiveDiagOk;
+    END_IF
+ELSE
+    bBridgeOk := bLiveDiagOk;
+END_IF
+
+// Closes the EL6695 gap: payload can report invalid up to 3 cycles before the live
+// diagnostics agree, so this must react to i_xPayloadValid directly rather than only
+// bLiveDiagOk. Deliberately not bSuspect - bSuspect holds for the full nDebounceCycles
+// regardless of real recovery speed, which would make this needlessly slow to clear.
+bBridgeConfirmedBad := (NOT i_xPayloadValid) OR (NOT bLiveDiagOk);
+
+rBridgeBad(CLK := bBridgeConfirmedBad);
+IF rBridgeBad.Q THEN
+    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, link or data lost'), eSevr := TcEventSeverity.Error);
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

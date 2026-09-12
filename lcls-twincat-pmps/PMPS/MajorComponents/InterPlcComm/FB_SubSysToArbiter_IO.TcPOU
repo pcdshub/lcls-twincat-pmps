@@ -3,7 +3,8 @@
   <POU Name="FB_SubSysToArbiter_IO" Id="{98769089-e42b-4685-9f83-c90a3cb7edad}" SpecialFunc="None">
     <Declaration><![CDATA[// Use on a subsystem PLC to request from the arbiter
 // Run at the top of your cycle to receive the latest BP
-// Also derives PMPS_PRE bridge health (bBridgeOk / bBridgeConfirmedBad) from the interface PDOs
+// Bridge health (bBridgeOk / bBridgeConfirmedBad / *Status outputs) is derived by
+// FB_BridgeDiagnostics and forwarded here unchanged, so the PV interface stays stable.
 FUNCTION_BLOCK FB_SubSysToArbiter_IO IMPLEMENTS I_HigherAuthority
 VAR_INPUT
     Reset : BOOL; // Fast fault reset
@@ -86,17 +87,8 @@ VAR
     {attribute 'TcLinkTo' := 'TIIB[PMPS_PRE]^WcState^WcState'}
     bWcState AT %I* : BOOL;
 
-    bTxPdoState : BOOL;
-    bTxPdoToggle : BOOL;
-    rToggleRise : R_TRIG;
-    fToggleFall : F_TRIG;
-    tonStale : TON;
-    fXValidFall : F_TRIG;
-    // TRUE while holding health low after an xValid drop until the debounce window elapses
-    bSuspect : BOOL;
-    nSuspectCycles : UDINT;
-    bLiveDiagOk : BOOL;
-    rBridgeBad : R_TRIG;
+    // Link/data health derivation, shared with FB_ArbiterToSubSys_IO
+    fbDiag : FB_BridgeDiagnostics;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -123,69 +115,22 @@ ffPMPSIO_Disconnect(
     i_xVetoable := FALSE
     );
 
-bTxPdoState := xTxPDO_state;
-bTxPdoToggle := xTxPDO_toggle;
+fbDiag(
+    sName := sName,
+    nBridgeState := nBridgeState,
+    bExternalDeviceNotConnected := bExternalDeviceNotConnected,
+    bTxPdoState := xTxPDO_state,
+    bTxPdoToggle := xTxPDO_toggle,
+    bWcState := bWcState,
+    i_xPayloadValid := i_stCurrentBP.xValid,
+    tStaleTimeout := tStaleTimeout,
+    nDebounceCycles := nDebounceCycles);
 
-IF (nBridgeState AND 16#000F) <> E_EcCommState.eEcState_OP THEN
-    eLinkStatus := E_BridgeLinkStatus.LocalNotOperational;
-ELSIF bExternalDeviceNotConnected THEN
-    eLinkStatus := E_BridgeLinkStatus.RemoteNotConnected;
-ELSIF bTxPdoState THEN
-    eLinkStatus := E_BridgeLinkStatus.RemoteNotOperational;
-ELSE
-    eLinkStatus := E_BridgeLinkStatus.Connected;
-END_IF
-
-rToggleRise(CLK := bTxPdoToggle);
-fToggleFall(CLK := bTxPdoToggle);
-tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
-
-IF bWcState THEN
-    eDataStatus := E_DataStatus.WcError;
-ELSIF tonStale.Q THEN
-    eDataStatus := E_DataStatus.Stale;
-ELSE
-    eDataStatus := E_DataStatus.Ok;
-END_IF
-
-CASE eLinkStatus OF
-    E_BridgeLinkStatus.LocalNotOperational:        eConnectionStatus := E_BridgeStatus.LocalNotOperational;
-    E_BridgeLinkStatus.RemoteNotConnected: eConnectionStatus := E_BridgeStatus.RemoteNotConnected;
-    E_BridgeLinkStatus.RemoteNotOperational:       eConnectionStatus := E_BridgeStatus.RemoteNotOperational;
-ELSE
-    CASE eDataStatus OF
-        E_DataStatus.WcError: eConnectionStatus := E_BridgeStatus.LinkError;
-        E_DataStatus.Stale:   eConnectionStatus := E_BridgeStatus.DataStale;
-    ELSE
-        eConnectionStatus := E_BridgeStatus.Connected;
-    END_CASE
-END_CASE
-
-bLiveDiagOk := (eLinkStatus = E_BridgeLinkStatus.Connected) AND (eDataStatus = E_DataStatus.Ok);
-
-fXValidFall(CLK := i_stCurrentBP.xValid);
-IF fXValidFall.Q THEN
-    bSuspect := TRUE;
-    nSuspectCycles := 0;
-END_IF
-
-IF bSuspect THEN
-    bBridgeOk := FALSE;
-    nSuspectCycles := nSuspectCycles + 1;
-    IF nSuspectCycles >= nDebounceCycles THEN
-        bSuspect := FALSE;
-        bBridgeOk := bLiveDiagOk;
-    END_IF
-ELSE
-    bBridgeOk := bLiveDiagOk;
-END_IF
-
-bBridgeConfirmedBad := NOT bLiveDiagOk;
-
-rBridgeBad(CLK := bBridgeConfirmedBad);
-IF rBridgeBad.Q THEN
-    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, PMPS_PRE link or data lost'), eSevr := TcEventSeverity.Error);
-END_IF]]></ST>
+bBridgeOk := fbDiag.bBridgeOk;
+bBridgeConfirmedBad := fbDiag.bBridgeConfirmedBad;
+eLinkStatus := fbDiag.eLinkStatus;
+eDataStatus := fbDiag.eDataStatus;
+eConnectionStatus := fbDiag.eConnectionStatus;]]></ST>
     </Implementation>
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL

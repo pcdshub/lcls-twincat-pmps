@@ -342,6 +342,9 @@
     <Compile Include="MajorComponents\InterPlcComm\FB_ArbiterToSubSys_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\FB_BridgeDiagnostics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
