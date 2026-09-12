@@ -106,15 +106,6 @@ PMPS_GVL.stRequestedBeamParameters := IO_TO_BP(q_stRequestedBP);
 
 q_stRequestedBP.xValid := TRUE; // This is set and held true here every cycle to prove the PLC on this side is still running
 
-ffPMPSIO_Disconnect(
-    i_xOK := xTxPDO_state = 0,
-    io_fbFFHWO := fbFFHWO,
-    i_xReset := Reset,
-    i_DevName := sName,
-    i_TypeCode := 6,
-    i_xVetoable := FALSE
-    );
-
 fbDiag(
     sName := sName,
     nBridgeState := nBridgeState,
@@ -130,7 +121,18 @@ bBridgeOk := fbDiag.bBridgeOk;
 bBridgeConfirmedBad := fbDiag.bBridgeConfirmedBad;
 eLinkStatus := fbDiag.eLinkStatus;
 eDataStatus := fbDiag.eDataStatus;
-eConnectionStatus := fbDiag.eConnectionStatus;]]></ST>
+eConnectionStatus := fbDiag.eConnectionStatus;
+
+// Routed through fbDiag's corroborated verdict rather than xTxPDO_state alone, which
+// stays 0 (no error) while the local terminal is in PREOP and simply isn't exchanging PDOs.
+ffPMPSIO_Disconnect(
+    i_xOK := NOT bBridgeConfirmedBad,
+    io_fbFFHWO := fbFFHWO,
+    i_xReset := Reset,
+    i_DevName := sName,
+    i_TypeCode := 6,
+    i_xVetoable := FALSE
+    );]]></ST>
     </Implementation>
     <Method Name="CheckRequest" Id="{27cbc3cc-3c51-453f-b2eb-a076b6901ac4}">
       <Declaration><![CDATA[METHOD CheckRequest : BOOL

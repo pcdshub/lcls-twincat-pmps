@@ -7,22 +7,28 @@ FB_ArbiterToSubSys_IO). Caller passes its own payload struct's xValid field in a
 i_xPayloadValid each cycle; this FB has no knowledge of ST_BeamParams_IO or any other
 concrete payload type.
 
-bBridgeOk gates real-time consumers: it drops the same cycle i_xPayloadValid falls
-(closing the EL6695 early-clear race) and stays low for nDebounceCycles to ride out
-flapping before trusting the live diagnostics again.
+bBridgeOk gates real-time consumers (low consequence, fully reversible next good
+cycle): it drops the same cycle i_xPayloadValid falls, closing the EL6695 early-clear
+race, and stays low for nDebounceCycles to ride out flapping before trusting the live
+diagnostics again.
 
-bBridgeConfirmedBad is the no-artificial-hold verdict for tripping a fault: bad the
-same cycle either the payload reports invalid or the live diagnostics disagree, and
-recovers as soon as both clear - not tied to the nDebounceCycles hold, so it doesn't
-inherit bBridgeOk's flapping-guard delay on the way back up.
+bBridgeConfirmedBad trips a hard fault (high consequence, can cost beam) and
+deliberately requires bLiveDiagOk alone: i_xPayloadValid is a single, self-reported
+signal from the far side, not an independent hardware confirmation, and could in
+principle read invalid for a reason unrelated to the link (a stalled far-side task,
+for example). Trusting it alone for a beam-affecting trip, before the link
+diagnostics corroborate it, risks an unnecessary trip. So this waits for the
+independent SYNC-input diagnostics to agree, same as the pre-refactor design intent -
+corroboration over speed for anything that can pull beam permit.
 
-Bench-confirmed (2026-09-12, EL6692 vs EL6695 fault-injection testing): EL6692 latches
-its last-good payload through a secondary-side comm fault and never trips
-i_xPayloadValid; EL6695 clears the payload 3 cycles before the diagnostic bits catch
-up, which is exactly what i_xPayloadValid in bBridgeConfirmedBad closes. Local
-ESM-not-OP faults (nBridgeState) behave identically on both terminal types and are
-already the highest-priority check in eLinkStatus, ahead of any payload or toggle
-state. *)
+Bench-confirmed (2026-09-12, EL6692 vs EL6695 fault-injection testing): EL6692 never
+touches i_xPayloadValid during a secondary-side comm fault (true immediate latch);
+EL6695 clears it 3 cycles before the diagnostic bits catch up. bBridgeOk already
+closes that 3-cycle gap for the low-consequence case; bBridgeConfirmedBad
+deliberately keeps the 3-cycle corroboration wait on EL6695, since that's the
+correct trade-off for a fault trip. Local ESM-not-OP faults (nBridgeState) behave
+identically on both terminal types and are already the highest-priority check in
+eLinkStatus, ahead of any payload or toggle state. *)
 FUNCTION_BLOCK FB_BridgeDiagnostics
 VAR_INPUT
     sName : STRING := 'BridgeDiagnostics';
@@ -121,11 +127,10 @@ ELSE
     bBridgeOk := bLiveDiagOk;
 END_IF
 
-// Closes the EL6695 gap: payload can report invalid up to 3 cycles before the live
-// diagnostics agree, so this must react to i_xPayloadValid directly rather than only
-// bLiveDiagOk. Deliberately not bSuspect - bSuspect holds for the full nDebounceCycles
-// regardless of real recovery speed, which would make this needlessly slow to clear.
-bBridgeConfirmedBad := (NOT i_xPayloadValid) OR (NOT bLiveDiagOk);
+// Deliberately bLiveDiagOk alone, not i_xPayloadValid: a hard fault trip should wait
+// for the independent SYNC-input diagnostics to corroborate before tripping, not act
+// on a single self-reported signal from the far side. See FB doc comment.
+bBridgeConfirmedBad := NOT bLiveDiagOk;
 
 rBridgeBad(CLK := bBridgeConfirmedBad);
 IF rBridgeBad.Q THEN
