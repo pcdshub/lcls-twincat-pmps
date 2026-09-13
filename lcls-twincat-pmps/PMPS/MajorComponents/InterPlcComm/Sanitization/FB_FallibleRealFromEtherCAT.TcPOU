@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_FallibleRealFromEtherCAT" Id="{bf246e22-6c68-455f-b3e3-17c95da6a5c3}" SpecialFunc="None">
     <Declaration><![CDATA[
 (* Sanitizes one REAL read across the arbiter bridge (the native wire type for bridge PDOs). The caller
@@ -38,7 +38,10 @@ VAR
     fLastValidValue : REAL;
     tonNonFiniteInputTimeout : TON;
     rtNonFiniteConfirmed : R_TRIG;
-    fbLog : FB_LogMessage;
+    fbLog : FB_LogMessage := (
+        eSevr := TcEventSeverity.Error,
+        eSubsystem := E_Subsystem.MPS
+    );
 
     bOverride : BOOL;
     bOverrideError : BOOL;
@@ -58,7 +61,7 @@ fValue := SEL(bOverride, SEL(bInputNotFinite OR NOT i_bBridgeOk, i_fValue, fLast
 
 rtNonFiniteConfirmed(CLK := tonNonFiniteInputTimeout.Q);
 IF rtNonFiniteConfirmed.Q THEN
-    fbLog(sMsg := CONCAT(sName, ': input value not finite (NaN/Inf) for longer than timeout'), eSevr := TcEventSeverity.Error);
+    fbLog(sMsg := CONCAT(sName, ': input value not finite (NaN/Inf) for longer than timeout'));
 END_IF
 
 bError :=SEL(bOverride, THIS^.tonNonFiniteInputTimeout.Q, bOverrideError);]]></ST>

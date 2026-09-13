@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_BridgeDiagnostics" Id="{7c6e9f2b-3a5d-4e18-9c7a-1b6f4d8a2e93}" SpecialFunc="None">
     <Declaration><![CDATA[(* Derives PMPS_PRE/EL669x bridge link and data health from the raw SYNC-input
 diagnostic bits, direction-agnostic (used by both FB_SubSysToArbiter_IO and
@@ -69,7 +69,10 @@ VAR
     nSuspectCycles : UDINT;
     bLiveDiagOk : BOOL;
     rBridgeBad : R_TRIG;
-    fbLog : FB_LogMessage;
+    fbLog : FB_LogMessage := (
+        eSevr := TcEventSeverity.Critical,
+        eSubsystem := E_Subsystem.MPS
+    );
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -134,7 +137,7 @@ bBridgeConfirmedBad := NOT bLiveDiagOk;
 
 rBridgeBad(CLK := bBridgeConfirmedBad);
 IF rBridgeBad.Q THEN
-    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, link or data lost'), eSevr := TcEventSeverity.Error);
+    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, link or data lost'));
 END_IF]]></ST>
     </Implementation>
   </POU>
