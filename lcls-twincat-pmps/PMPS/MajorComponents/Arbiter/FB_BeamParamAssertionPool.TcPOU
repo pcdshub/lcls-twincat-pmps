@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_BeamParamAssertionPool" Id="{f4decfdf-ca0a-4e3b-aae3-b33f686ae70e}" SpecialFunc="None">
     <Declaration><![CDATA[(* This function block implements simple database. Data element values are stored in the hash table.  *)
 {attribute 'no_check'}

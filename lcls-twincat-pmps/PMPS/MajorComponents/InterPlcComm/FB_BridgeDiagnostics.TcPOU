@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_BridgeDiagnostics" Id="{7c6e9f2b-3a5d-4e18-9c7a-1b6f4d8a2e93}" SpecialFunc="None">
     <Declaration><![CDATA[(* Derives PMPS_PRE/EL669x bridge link and data health from the raw SYNC-input
 diagnostic bits, direction-agnostic (used by both FB_SubSysToArbiter_IO and

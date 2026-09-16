@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="PE_Ranges" Id="{01042dbd-e3c6-4716-a295-c87f00c152c5}" SpecialFunc="None">
     <Declaration><![CDATA[// Does nothing other than set the gvl for photon energy bitmask to one of two constants, K or L.
 // Workaround for compile defines not fully working for libraries at the time of writing this.

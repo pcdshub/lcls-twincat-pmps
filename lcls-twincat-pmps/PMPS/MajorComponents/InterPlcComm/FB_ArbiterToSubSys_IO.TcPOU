@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_ArbiterToSubSys_IO" Id="{1a7d9761-dced-4384-823d-a5e0b037bf80}" SpecialFunc="None">
     <Declaration><![CDATA[(* Exchanges preemption requests and current beam state with subsystems in arbiter
 network.
