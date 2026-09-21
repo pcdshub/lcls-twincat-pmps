@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="CheckRangeSigned" Id="{a93196d9-49b2-4801-979b-34eb2f83207a}" SpecialFunc="CheckRangeSigned">
     <Declaration><![CDATA[// Implicitly generated code : DO NOT EDIT
 FUNCTION CheckRangeSigned : DINT

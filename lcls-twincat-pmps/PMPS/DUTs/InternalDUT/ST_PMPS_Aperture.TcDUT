@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1">
   <DUT Name="ST_PMPS_Aperture" Id="{2210e112-7522-48f0-a3ee-46a791c14b5e}">
     <Declaration><![CDATA[TYPE ST_PMPS_Aperture EXTENDS ST_PMPS_Aperture_IO :
 STRUCT

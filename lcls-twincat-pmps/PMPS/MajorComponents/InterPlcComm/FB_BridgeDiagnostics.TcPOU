@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_BridgeDiagnostics" Id="{7c6e9f2b-3a5d-4e18-9c7a-1b6f4d8a2e93}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Derives PMPS_PRE/EL669x bridge link and data health from the raw SYNC-input
+diagnostic bits, direction-agnostic (used by both FB_SubSysToArbiter_IO and
+FB_ArbiterToSubSys_IO). Caller passes its own payload struct's xValid field in as
+i_xPayloadValid each cycle; this FB has no knowledge of ST_BeamParams_IO or any other
+concrete payload type.
+
+bBridgeOk gates real-time consumers (low consequence, fully reversible next good
+cycle): it drops the same cycle i_xPayloadValid falls, closing the EL6695 early-clear
+race, and stays low for nDebounceCycles to ride out flapping before trusting the live
+diagnostics again.
+
+bBridgeConfirmedBad trips a hard fault (high consequence, can cost beam) and
+deliberately requires bLiveDiagOk alone: i_xPayloadValid is a single, self-reported
+signal from the far side, not an independent hardware confirmation, and could in
+principle read invalid for a reason unrelated to the link (a stalled far-side task,
+for example). Trusting it alone for a beam-affecting trip, before the link
+diagnostics corroborate it, risks an unnecessary trip. So this waits for the
+independent SYNC-input diagnostics to agree, same as the pre-refactor design intent -
+corroboration over speed for anything that can pull beam permit.
+
+Bench-confirmed (2026-09-12, EL6692 vs EL6695 fault-injection testing): EL6692 never
+touches i_xPayloadValid during a secondary-side comm fault (true immediate latch);
+EL6695 clears it 3 cycles before the diagnostic bits catch up. bBridgeOk already
+closes that 3-cycle gap for the low-consequence case; bBridgeConfirmedBad
+deliberately keeps the 3-cycle corroboration wait on EL6695, since that's the
+correct trade-off for a fault trip. Local ESM-not-OP faults (nBridgeState) behave
+identically on both terminal types and are already the highest-priority check in
+eLinkStatus, ahead of any payload or toggle state. *)
+FUNCTION_BLOCK FB_BridgeDiagnostics
+VAR_INPUT
+    sName : STRING := 'BridgeDiagnostics';
+    // EL6692/EL6695 local ESM state, low nibble is the EtherCAT state
+    nBridgeState : WORD;
+    // far side of the bridge absent
+    bExternalDeviceNotConnected : BOOL;
+    bTxPdoState : BOOL;
+    bTxPdoToggle : BOOL;
+    // inbound working counter error
+    bWcState : BOOL;
+    // caller's own payload struct xValid field, e.g. i_stCurrentBP.xValid
+    i_xPayloadValid : BOOL;
+    // max time the TxPDO toggle may stay unchanged before inbound data is called stale
+    tStaleTimeout : TIME := T#5S;
+    // hold length after an i_xPayloadValid falling edge before trusting live diagnostics again, in task cycles
+    nDebounceCycles : UDINT := 100;
+END_VAR
+VAR_OUTPUT
+    // bridge up and inbound data valid, held FALSE through the post-payload-drop debounce; gate consumers on this
+    bBridgeOk : BOOL;
+    // raw bad verdict with no debounce hold; use to trip faults
+    bBridgeConfirmedBad : BOOL;
+    // bridge establishment state
+    eLinkStatus : E_BridgeLinkStatus;
+    // inbound PDO data quality
+    eDataStatus : E_DataStatus;
+    // combined verdict, LinkStatus gates DataStatus
+    eConnectionStatus : E_BridgeStatus;
+END_VAR
+VAR
+    rToggleRise : R_TRIG;
+    fToggleFall : F_TRIG;
+    tonStale : TON;
+    fPayloadValidFall : F_TRIG;
+    // TRUE while holding health low after an i_xPayloadValid drop until the debounce window elapses
+    bSuspect : BOOL;
+    nSuspectCycles : UDINT;
+    bLiveDiagOk : BOOL;
+    rBridgeBad : R_TRIG;
+    fbLog : FB_LogMessage := (
+        eSevr := TcEventSeverity.Critical,
+        eSubsystem := E_Subsystem.MPS
+    );
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF (nBridgeState AND 16#000F) <> E_EcCommState.eEcState_OP THEN
+    eLinkStatus := E_BridgeLinkStatus.LocalNotOperational;
+ELSIF bExternalDeviceNotConnected THEN
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotConnected;
+ELSIF bTxPdoState THEN
+    eLinkStatus := E_BridgeLinkStatus.RemoteNotOperational;
+ELSE
+    eLinkStatus := E_BridgeLinkStatus.Connected;
+END_IF
+
+rToggleRise(CLK := bTxPdoToggle);
+fToggleFall(CLK := bTxPdoToggle);
+tonStale(IN := NOT (rToggleRise.Q OR fToggleFall.Q), PT := tStaleTimeout);
+
+IF bWcState THEN
+    eDataStatus := E_DataStatus.WcError;
+ELSIF tonStale.Q THEN
+    eDataStatus := E_DataStatus.Stale;
+ELSE
+    eDataStatus := E_DataStatus.Ok;
+END_IF
+
+CASE eLinkStatus OF
+    E_BridgeLinkStatus.LocalNotOperational:        eConnectionStatus := E_BridgeStatus.LocalNotOperational;
+    E_BridgeLinkStatus.RemoteNotConnected: eConnectionStatus := E_BridgeStatus.RemoteNotConnected;
+    E_BridgeLinkStatus.RemoteNotOperational:       eConnectionStatus := E_BridgeStatus.RemoteNotOperational;
+ELSE
+    CASE eDataStatus OF
+        E_DataStatus.WcError: eConnectionStatus := E_BridgeStatus.LinkError;
+        E_DataStatus.Stale:   eConnectionStatus := E_BridgeStatus.DataStale;
+    ELSE
+        eConnectionStatus := E_BridgeStatus.Connected;
+    END_CASE
+END_CASE
+
+bLiveDiagOk := (eLinkStatus = E_BridgeLinkStatus.Connected) AND (eDataStatus = E_DataStatus.Ok);
+
+fPayloadValidFall(CLK := i_xPayloadValid);
+IF fPayloadValidFall.Q THEN
+    bSuspect := TRUE;
+    nSuspectCycles := 0;
+END_IF
+
+IF bSuspect THEN
+    bBridgeOk := FALSE;
+    nSuspectCycles := nSuspectCycles + 1;
+    IF nSuspectCycles >= nDebounceCycles THEN
+        bSuspect := FALSE;
+        bBridgeOk := bLiveDiagOk;
+    END_IF
+ELSE
+    bBridgeOk := bLiveDiagOk;
+END_IF
+
+// Deliberately bLiveDiagOk alone, not i_xPayloadValid: a hard fault trip should wait
+// for the independent SYNC-input diagnostics to corroborate before tripping, not act
+// on a single self-reported signal from the far side. See FB doc comment.
+bBridgeConfirmedBad := NOT bLiveDiagOk;
+
+rBridgeBad(CLK := bBridgeConfirmedBad);
+IF rBridgeBad.Q THEN
+    fbLog(sMsg := CONCAT(sName, ': arbiter bridge confirmed bad, link or data lost'));
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -5,7 +5,7 @@
     <ProjectGuid>{12553481-002f-4f4e-a6cc-b95ac65f55ff}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
-    <WriteProductVersion>true</WriteProductVersion>
+    <WriteProductVersion>false</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>PMPS</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
@@ -342,7 +342,16 @@
     <Compile Include="MajorComponents\InterPlcComm\FB_ArbiterToSubSys_IO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\FB_BridgeDiagnostics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MajorComponents\InterPlcComm\FB_SubSysToArbiter_IO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\Sanitization\I_FallibleLreal.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MajorComponents\InterPlcComm\Sanitization\FB_FallibleRealFromEtherCAT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MajorComponents\I_HigherAuthority.TcIO">
@@ -458,6 +467,7 @@
     <Folder Include="MajorComponents\PhotonEnergyInterface" />
     <Folder Include="MajorComponents\Arbiter" />
     <Folder Include="MajorComponents\InterPlcComm" />
+    <Folder Include="MajorComponents\InterPlcComm\Sanitization" />
     <Folder Include="MajorComponents\FastFaults" />
     <Folder Include="MajorComponents\PMPS_MPS_Interface" />
     <Folder Include="ImplicitChecks" />

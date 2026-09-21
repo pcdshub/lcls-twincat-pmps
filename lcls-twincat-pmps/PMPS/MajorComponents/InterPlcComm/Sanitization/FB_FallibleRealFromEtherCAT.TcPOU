@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_FallibleRealFromEtherCAT" Id="{bf246e22-6c68-455f-b3e3-17c95da6a5c3}" SpecialFunc="None">
+    <Declaration><![CDATA[
+(* Sanitizes one REAL read across the arbiter bridge (the native wire type for bridge PDOs). The caller
+   links the raw PDO value and derives bridge health elsewhere (e.g. FB_SubSysToArbiter_IO.bBridgeOk)
+   and passes both in each cycle; this FB owns no hardware links. It holds the last trusted value while
+   the input reads NaN/Inf or the bridge is down. Error reports only the locally-detected sustained
+   non-finite condition; fault on bad comms via the bridge FB's bBridgeConfirmedBad in the caller.
+   Value widens to LREAL for I_FallibleLreal consumers. *)
+FUNCTION_BLOCK FB_FallibleRealFromEtherCAT
+IMPLEMENTS I_FallibleLreal
+VAR_INPUT
+    i_bBridgeOk : BOOL;
+    i_fValue : REAL;
+    sName : STRING := 'FallibleReal';
+END_VAR
+VAR_OUTPUT
+    {attribute 'pytmc' := '
+        pv: Value
+        io: i
+    '}
+    fValue : REAL;
+    {attribute 'pytmc' := '
+        pv: InputNotFinite
+        io: i
+    '}
+    bInputNotFinite : BOOL;
+
+    {attribute 'pytmc' := '
+        pv: Error
+        io: i
+    '}
+    bError : BOOL;
+END_VAR
+VAR
+    tHeartbeatExpirationTime : TIME;
+    fLastValidValue : REAL;
+    tonNonFiniteInputTimeout : TON;
+    rtNonFiniteConfirmed : R_TRIG;
+    fbLog : FB_LogMessage := (
+        eSevr := TcEventSeverity.Error,
+        eSubsystem := E_Subsystem.MPS
+    );
+
+    bOverride : BOOL;
+    bOverrideError : BOOL;
+    fOverrideValue : REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+bInputNotFinite := NOT IsFinite(x := F_REAL(in := i_fValue));
+tonNonFiniteInputTimeout(IN := bInputNotFinite, PT := tHeartbeatExpirationTime);
+
+IF i_bBridgeOk AND NOT bInputNotFinite THEN
+    fLastValidValue := i_fValue;
+END_IF
+
+fValue := SEL(bOverride, SEL(bInputNotFinite OR NOT i_bBridgeOk, i_fValue, fLastValidValue), fOverrideValue);
+
+rtNonFiniteConfirmed(CLK := tonNonFiniteInputTimeout.Q);
+IF rtNonFiniteConfirmed.Q THEN
+    fbLog(sMsg := CONCAT(sName, ': input value not finite (NaN/Inf) for longer than timeout'));
+END_IF
+
+bError :=SEL(bOverride, THIS^.tonNonFiniteInputTimeout.Q, bOverrideError);]]></ST>
+    </Implementation>
+    <Property Name="Error" Id="{923f5a6d-36ca-4c5b-a726-b6b176323b9c}">
+      <Declaration><![CDATA[PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{830ab532-f9a0-4b67-8fa2-e3cbad57ab6c}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+Error :=  bError;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_Init" Id="{a80c7b01-cf7d-4537-9701-50bbcf70fbc7}">
+      <Declaration><![CDATA[
+METHOD FB_Init: BOOL
+VAR_INPUT
+    bInitRetains: BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+    bInCopyCode: BOOL;  // TRUE: the instance will be copied to the copy code afterward (online change)
+
+    tHeartbeatExpirationTime : TIME;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+THIS^.tHeartbeatExpirationTime := tHeartbeatExpirationTime;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Value" Id="{ac107dc6-e7bd-47e5-9026-99d3152f9d3e}">
+      <Declaration><![CDATA[
+PROPERTY Value : LREAL
+]]></Declaration>
+      <Get Name="Get" Id="{3a649150-cb5c-49d5-a02e-b3f67e06554b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+Value := REAL_TO_LREAL(THIS^.fValue);
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>
