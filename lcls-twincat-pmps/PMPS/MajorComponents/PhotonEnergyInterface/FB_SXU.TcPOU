@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
   <POU Name="FB_SXU" Id="{23188e56-6a28-4c8b-9089-611f5a306284}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SXU IMPLEMENTS I_UndulatorComplex
 VAR_INPUT
@@ -41,6 +41,12 @@ END_VAR
 
 VAR
     // From lcls-srv01: grep -e KDes  /u1/lcls/epics/ioc/data/sioc-unds-uc*/iocInfo/IOC.pvlist |sort
+
+    {attribute 'pytmc' := 'pv: 19; link: 1950:'}
+    fbSegment_19 : FB_UndulatorSegment;
+
+    {attribute 'pytmc' := 'pv: 20; link: 2050:'}
+    fbSegment_20 : FB_UndulatorSegment;
 
     {attribute 'pytmc' := 'pv: 21; link: 2150:'}
     fbSegment_21 : FB_UndulatorSegment;
@@ -135,7 +141,7 @@ VAR CONSTANT
     {attribute 'pytmc' := '
         pv: FirstSegment
         io: i'}
-    iLowBound  : UDINT := 21;
+    iLowBound  : UDINT := 19;
     {attribute 'pytmc' := '
         pv: LastSegment
          io: i'}
@@ -245,7 +251,9 @@ END_VAR
     </Property>
     <Action Name="UndAdrUpdate" Id="{9de2fd9a-9f44-4b71-9e83-edd38b0d7037}">
       <Implementation>
-        <ST><![CDATA[fbSegment[21] := ADR(fbSegment_21);
+        <ST><![CDATA[fbSegment[19] := ADR(fbSegment_19);
+fbSegment[20] := ADR(fbSegment_20);
+fbSegment[21] := ADR(fbSegment_21);
 fbSegment[22] := ADR(fbSegment_22);
 fbSegment[23] := ADR(fbSegment_23);
 fbSegment[24] := ADR(fbSegment_24);

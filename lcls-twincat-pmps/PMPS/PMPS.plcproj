@@ -19,7 +19,7 @@
     <Released>false</Released>
     <Author>Alex Wallace and contributors</Author>
     <Description>Collection of PMPS functionality for LCLS PLCs</Description>
-    <CombineIds>false</CombineIds>
+    <CombineIds>true</CombineIds>
     <Title>PMPS</Title>
     <DefaultNamespace>PMPS</DefaultNamespace>
     <CompilerDefines>L</CompilerDefines>
