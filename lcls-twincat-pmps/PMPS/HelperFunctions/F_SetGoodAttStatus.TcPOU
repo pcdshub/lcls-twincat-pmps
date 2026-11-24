@@ -12,7 +12,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[xStatus.0 := 1;
 xStatus.3 := 1;
-xStatus.4 := 1;]]></ST>
+xStatus.4 := 1;
+F_SetGoodAttStatus := xStatus;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
